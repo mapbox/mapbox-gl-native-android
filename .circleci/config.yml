@@ -255,7 +255,6 @@ jobs:
               make android-ui-test-<< parameters.abi >>
             fi
       - save-dependencies: { gradle: true }
-      - conditionally-skip-firebase
       - login-google-cloud-platform
       - run:
           name: Run instrumentation tests on Firebase
