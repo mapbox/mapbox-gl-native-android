@@ -68,19 +68,6 @@ commands:
           keys:
             - 'node_modules/v1/{{ arch }}/{{ checksum "package.json" }}'
             - 'node_modules/v1/{{ arch }}'
-  save-mason_packages-cache:
-    steps:
-      - save_cache:
-          name: Save mason_packages cache
-          key: 'mason_packages/v3/{{ arch }}/{{ checksum "cmake/mason-dependencies.cmake" }}'
-          paths: [ "mason_packages/.binaries" ]
-  restore-mason_packages-cache:
-    steps:
-      - restore_cache:
-          name: Restore mason_packages cache
-          keys:
-            - 'mason_packages/v3/{{ arch }}/{{ checksum "cmake/mason-dependencies.cmake" }}'
-            - 'mason_packages/v3/{{ arch }}'
   save-ccache:
     steps:
       - save_cache:
@@ -118,9 +105,6 @@ commands:
       ccache:
         type: boolean
         default: true
-      mason:
-        type: boolean
-        default: true
       gradle:
         type: boolean
         default: false
@@ -133,9 +117,6 @@ commands:
           condition: << parameters.ccache >>
           steps: [ prepare-ccache, restore-ccache, reset-ccache-stats ]
       - when:
-          condition: << parameters.mason >>
-          steps: [ restore-mason_packages-cache ]
-      - when:
           condition: << parameters.gradle >>
           steps: [ restore-gradle-cache ]
   save-dependencies:
@@ -144,9 +125,6 @@ commands:
         type: boolean
         default: true
       ccache:
-        type: boolean
-        default: true
-      mason:
         type: boolean
         default: true
       gradle:
@@ -159,9 +137,6 @@ commands:
       - when:
           condition: << parameters.ccache >>
           steps: [ save-ccache, show-ccache-stats ]
-      - when:
-          condition: << parameters.mason >>
-          steps: [ save-mason_packages-cache ]
       - when:
           condition: << parameters.gradle >>
           steps: [ save-gradle-cache ]
