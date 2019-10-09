@@ -25,11 +25,6 @@ commands:
       - run:
           name: npm install
           command: npm install --ignore-scripts
-  prepare-environment:
-    steps:
-      - run:
-          name: Prepare environment
-          command: touch "$BASH_ENV" && ./scripts/environment.js | tee -a "$BASH_ENV"
   prepare-ccache:
     steps:
       - run:
@@ -134,7 +129,6 @@ commands:
       - when:
           condition: << parameters.node_modules >>
           steps: [ restore-node_modules-cache, npm-install ]
-      - prepare-environment
       - when:
           condition: << parameters.ccache >>
           steps: [ prepare-ccache, restore-ccache, reset-ccache-stats ]
@@ -406,7 +400,6 @@ jobs:
     steps:
       - checkout
       - npm-install
-      - prepare-environment
       - run:
           name: Checkout submodules
           command: |
