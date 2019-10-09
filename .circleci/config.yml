@@ -232,7 +232,6 @@ jobs:
       MBGL_ANDROID_STL: << parameters.stl >>
     steps:
       - install-dependencies: { gradle: true }
-      - check-if-this-job-can-be-skipped
       - run:
           name: Initialize vendor submodules
           command: git submodule update --init vendor
@@ -309,7 +308,6 @@ jobs:
       IS_LOCAL_DEVELOPMENT: false
     steps:
       - install-dependencies: { gradle: true }
-      - check-if-this-job-can-be-skipped
       - run:
           name: Initialize vendor submodules
           command: git submodule update --init vendor
@@ -410,7 +408,6 @@ jobs:
       - checkout
       - npm-install
       - prepare-environment
-      - check-if-this-job-can-be-skipped
       - run:
           name: Checkout submodules
           command: |
