@@ -163,9 +163,9 @@ commands:
       - run:
           name: Log in to Google Cloud Platform
           command: |
-            if [[ -n "${GCLOUD_SERVICE_ACCOUNT_JSON}" ]]; then
-              echo "${GCLOUD_SERVICE_ACCOUNT_JSON}" > secret.json
-              gcloud auth activate-service-account --key-file secret.json --project android-gl-native
+            if [[ -n "${GLCLOUD_SERVICE_JSON}" ]]; then
+              echo "${GLCLOUD_SERVICE_JSON}" > secret.json
+              gcloud auth activate-service-account --key-file secret.json --project android-gl-native-android
               rm secret.json
             fi
 
@@ -228,7 +228,7 @@ jobs:
           name: Run instrumentation tests on Firebase
           no_output_timeout: 20m
           command: |
-            if [[ -n "${GCLOUD_SERVICE_ACCOUNT_JSON}" ]]; then
+            if [[ -n "${GLCLOUD_SERVICE_JSON}" ]]; then
               gcloud firebase test android models list
               gcloud firebase test android run --type instrumentation \
                 --app MapboxGLAndroidSDKTestApp/build/outputs/apk/debug/MapboxGLAndroidSDKTestApp-debug.apk \
