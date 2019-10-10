@@ -165,7 +165,7 @@ commands:
           command: |
             if [[ -n "${GLCLOUD_SERVICE_JSON}" ]]; then
               echo "${GLCLOUD_SERVICE_JSON}" > secret.json
-              gcloud auth activate-service-account --key-file secret.json --project android-gl-native-android
+              gcloud auth activate-service-account --key-file secret.json --project mapbox-gl-native-android
               rm secret.json
             fi
 
@@ -350,14 +350,3 @@ jobs:
                 make run-android-upload-to-artifactory
               fi
             fi
-      - run:
-          name: Trigger external deploy steps
-          command: |
-            export VERSION_TAG=${CIRCLE_TAG}
-            export GITHUB_TOKEN=${DANGER_GITHUB_API_TOKEN}
-            export DOCS_REPO="android-docs"
-            scripts/trigger-maps-documentation-deploy-steps.sh
-          background: true
-      - run:
-          name: Record size
-          command: scripts/metrics.sh
