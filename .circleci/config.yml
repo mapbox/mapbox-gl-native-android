@@ -277,7 +277,7 @@ jobs:
       - install-dependencies: { gradle: true }
       - run:
           name: Initialize vendor submodules
-          command: git submodule update --init vendor
+          command: git submodule update --init --recursive vendor
       - run:
           name: Android nitpick
           command: make run-android-nitpick
