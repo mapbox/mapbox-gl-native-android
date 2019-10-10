@@ -203,7 +203,7 @@ jobs:
       - install-dependencies: { gradle: true }
       - run:
           name: Initialize vendor submodules
-          command: git submodule update --init vendor
+          command: git submodule update --init --recursive vendor
       - run:
           name: Check code style
           command: make android-check
@@ -362,26 +362,3 @@ jobs:
       - run:
           name: Record size
           command: scripts/metrics.sh
-  # ------------------------------------------------------------------------------
-  android-debug-arm-v7-buck:
-    docker:
-      - image: mbgl/android-ndk-r17c-buck:07c5ef2e71
-    working_directory: /src
-    environment:
-      LIBSYSCONFCPUS: 2
-      JOBS: 2
-      BUILDTYPE: Debug
-      ANDROID_NDK: /android/sdk/ndk-bundle
-    steps:
-      - checkout
-      - npm-install
-      - run:
-          name: Checkout submodules
-          command: |
-            git submodule update --init
-            git submodule foreach git submodule update --init
-      - run:
-          name: Build Android library
-          command: |
-            cd misc/buck
-            buck build mapbox-gl-native:android-core
