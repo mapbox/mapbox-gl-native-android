@@ -4,7 +4,6 @@ workflows:
   version: 2
   mapbox-gl-native-android:
     jobs:
-      - android-debug-arm-v7-buck
       - android-arm-template:
           name: android-debug-arm-v8
       - android-arm-template:
