@@ -6,6 +6,7 @@ Mapbox welcomes participation and contributions from everyone.  If you'd like to
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v8.5.0-beta.1...android-v8.5.0) since [Mapbox Maps SDK for Android v8.5.0-alpha.4](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v8.5.0-beta.1):
 ### Bug fixes
  - Fixed the rendering bug caused by redundant pending requests for already requested images [#15864](https://github.com/mapbox/mapbox-gl-native/pull/15864)
+ - Use individual textures for line dash patterns [#15862](https://github.com/mapbox/mapbox-gl-native/pull/15862)
 
 ## 8.5.0-beta.1 - November 1, 2019
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v8.5.0-alpha.4...android-v8.5.0-beta.1) since [Mapbox Maps SDK for Android v8.5.0-alpha.4](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v8.5.0-alpha.4):
