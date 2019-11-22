@@ -352,7 +352,15 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
    */
   @UiThread
   public void onStart() {
-    if (!isStarted) {
+    onStart(true);
+  }
+
+  /**
+   * You must call this method from the parent's Activity#onStart() or Fragment#onStart()
+   */
+  @UiThread
+  public void onStart(boolean activateFileSource) {
+    if (!isStarted && activateFileSource) {
       ConnectivityReceiver.instance(getContext()).activate();
       FileSource.getInstance(getContext()).activate();
       isStarted = true;
@@ -391,6 +399,14 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
    */
   @UiThread
   public void onStop() {
+    onStop(true);
+  }
+
+  /**
+   * You must call this method from the parent's Activity#onStop() or Fragment#onStop().
+   */
+  @UiThread
+  public void onStop(boolean deactivateFileSource) {
     if (attributionClickListener != null) {
       attributionClickListener.onStop();
     }
@@ -405,7 +421,7 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
       mapRenderer.onStop();
     }
 
-    if (isStarted) {
+    if (isStarted && deactivateFileSource) {
       ConnectivityReceiver.instance(getContext()).deactivate();
       FileSource.getInstance(getContext()).deactivate();
       isStarted = false;
