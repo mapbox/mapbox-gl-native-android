@@ -36,7 +36,7 @@ ext {
             appcenter        : '1.4',
             ktlint           : '0.34.0',
             commonsIO        : '2.6',
-            mapboxSdkVersions: '1.0.0'
+            mapboxSdkVersions: '1.0.1'
     ]
 
     dependenciesList = [
