@@ -5,6 +5,7 @@ Mapbox welcomes participation and contributions from everyone.  If you'd like to
 ## master
 ### Performance improvements
 - Make network requests for expired resources lower priority than requests for new resources. ([#15950](https://github.com/mapbox/mapbox-gl-native/pull/15950))
+- Execute network requests synchronously from the GL native worker thread. [#88](https://github.com/mapbox/mapbox-gl-native-android/pull/88)
 
 ### Bug fixes
 - Fixed a bug where location camera mode transition callback would not get notified if the requested mode was already set. [#80](https://github.com/mapbox/mapbox-gl-native-android/pull/80)
