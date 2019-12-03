@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.text.TextUtils;
 import android.util.Log;
+
 import com.mapbox.mapboxsdk.BuildConfig;
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
 import com.mapbox.mapboxsdk.http.HttpIdentifier;
@@ -13,22 +14,22 @@ import com.mapbox.mapboxsdk.http.HttpLogger;
 import com.mapbox.mapboxsdk.http.HttpRequest;
 import com.mapbox.mapboxsdk.http.HttpRequestUrl;
 import com.mapbox.mapboxsdk.http.HttpResponder;
+
+import java.io.IOException;
+import java.io.InterruptedIOException;
+import java.net.ProtocolException;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+
+import javax.net.ssl.SSLException;
+
 import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.Dispatcher;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-
-import javax.net.ssl.SSLException;
-import java.io.IOException;
-import java.io.InterruptedIOException;
-import java.net.NoRouteToHostException;
-import java.net.ProtocolException;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 
 import static com.mapbox.mapboxsdk.module.http.HttpRequestUtil.toHumanReadableAscii;
 
@@ -49,12 +50,12 @@ public class HttpRequestImpl implements HttpRequest {
   @VisibleForTesting
   static OkHttpClient client = DEFAULT_CLIENT;
 
+  @Nullable
   private Call call;
 
   @Override
   public void executeRequest(HttpResponder httpRequest, long nativePtr, @NonNull String resourceUrl,
                              @NonNull String etag, @NonNull String modified, boolean offlineUsage) {
-    OkHttpCallback callback = new OkHttpCallback(httpRequest);
     try {
       HttpUrl httpUrl = HttpUrl.parse(resourceUrl);
       if (httpUrl == null) {
@@ -76,11 +77,66 @@ public class HttpRequestImpl implements HttpRequest {
       }
 
       final Request request = builder.build();
+
       call = client.newCall(request);
-      call.enqueue(callback);
+      Response response = call.execute();
+      if (response.isSuccessful()) {
+        HttpLogger.log(Log.VERBOSE, String.format("[HTTP] Request was successful (code = %s).", response.code()));
+      } else {
+        // We don't want to call this unsuccessful because a 304 isn't really an error
+        String message = !TextUtils.isEmpty(response.message()) ? response.message() : "No additional information";
+        HttpLogger.log(Log.DEBUG, String.format("[HTTP] Request with response = %s: %s", response.code(), message));
+      }
+
+      ResponseBody responseBody = response.body();
+      if (responseBody == null) {
+        HttpLogger.log(Log.ERROR, "[HTTP] Received empty response body");
+        return;
+      }
+
+      byte[] body;
+      try {
+        body = responseBody.bytes();
+      } catch (IOException ioException) {
+        handleFailure(httpRequest, call, ioException);
+        return;
+      } finally {
+        response.close();
+      }
+
+      httpRequest.onResponse(response.code(),
+        response.header("ETag"),
+        response.header("Last-Modified"),
+        response.header("Cache-Control"),
+        response.header("Expires"),
+        response.header("Retry-After"),
+        response.header("x-rate-limit-reset"),
+        body);
+
     } catch (Exception exception) {
-      callback.handleFailure(call, exception);
+      handleFailure(httpRequest, call, exception);
     }
+  }
+
+  private void handleFailure(@NonNull HttpResponder httpRequest, @Nullable Call call, Exception e) {
+    String errorMessage = e.getMessage() != null ? e.getMessage() : "Error processing the request";
+    int type = getFailureType(e);
+
+    if (HttpLogger.logEnabled && call != null) {
+      String requestUrl = call.request().url().toString();
+      HttpLogger.logFailure(type, errorMessage, requestUrl);
+    }
+    httpRequest.handleFailure(type, errorMessage);
+  }
+
+  private int getFailureType(Exception e) {
+    if ((e instanceof UnknownHostException) || (e instanceof SocketException)
+      || (e instanceof ProtocolException) || (e instanceof SSLException)) {
+      return CONNECTION_ERROR;
+    } else if ((e instanceof InterruptedIOException)) {
+      return TEMPORARY_ERROR;
+    }
+    return PERMANENT_ERROR;
   }
 
   @Override
@@ -104,78 +160,6 @@ public class HttpRequestImpl implements HttpRequest {
       HttpRequestImpl.client = okHttpClient;
     } else {
       HttpRequestImpl.client = DEFAULT_CLIENT;
-    }
-  }
-
-  private static class OkHttpCallback implements Callback {
-
-    private HttpResponder httpRequest;
-
-    OkHttpCallback(HttpResponder httpRequest) {
-      this.httpRequest = httpRequest;
-    }
-
-    @Override
-    public void onFailure(@NonNull Call call, @NonNull IOException e) {
-      handleFailure(call, e);
-    }
-
-    @Override
-    public void onResponse(@NonNull Call call, @NonNull Response response) {
-      if (response.isSuccessful()) {
-        HttpLogger.log(Log.VERBOSE, String.format("[HTTP] Request was successful (code = %s).", response.code()));
-      } else {
-        // We don't want to call this unsuccessful because a 304 isn't really an error
-        String message = !TextUtils.isEmpty(response.message()) ? response.message() : "No additional information";
-        HttpLogger.log(Log.DEBUG, String.format("[HTTP] Request with response = %s: %s", response.code(), message));
-      }
-
-      ResponseBody responseBody = response.body();
-      if (responseBody == null) {
-        HttpLogger.log(Log.ERROR, "[HTTP] Received empty response body");
-        return;
-      }
-
-      byte[] body;
-      try {
-        body = responseBody.bytes();
-      } catch (IOException ioException) {
-        onFailure(call, ioException);
-        // throw ioException;
-        return;
-      } finally {
-        response.close();
-      }
-
-      httpRequest.onResponse(response.code(),
-        response.header("ETag"),
-        response.header("Last-Modified"),
-        response.header("Cache-Control"),
-        response.header("Expires"),
-        response.header("Retry-After"),
-        response.header("x-rate-limit-reset"),
-        body);
-    }
-
-    private void handleFailure(@Nullable Call call, Exception e) {
-      String errorMessage = e.getMessage() != null ? e.getMessage() : "Error processing the request";
-      int type = getFailureType(e);
-
-      if (HttpLogger.logEnabled && call != null && call.request() != null) {
-        String requestUrl = call.request().url().toString();
-        HttpLogger.logFailure(type, errorMessage, requestUrl);
-      }
-      httpRequest.handleFailure(type, errorMessage);
-    }
-
-    private int getFailureType(Exception e) {
-      if ((e instanceof NoRouteToHostException) || (e instanceof UnknownHostException) || (e instanceof SocketException)
-        || (e instanceof ProtocolException) || (e instanceof SSLException)) {
-        return CONNECTION_ERROR;
-      } else if ((e instanceof InterruptedIOException)) {
-        return TEMPORARY_ERROR;
-      }
-      return PERMANENT_ERROR;
     }
   }
 
