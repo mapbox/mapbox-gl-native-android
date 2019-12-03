@@ -391,6 +391,8 @@ public class OfflineRegion {
    * When the operation is complete or encounters an error, the given callback will be
    * executed on the main thread.
    * </p>
+   * Note that this operation can be potentially slow if packing the database
+   * occurs automatically ({@link OfflineManager#runPackDatabaseAutomatically(boolean)})
    * <p>
    * After you call this method, you may not call any additional methods on this object.
    * </p>
