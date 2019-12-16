@@ -195,6 +195,8 @@ interface NativeMap {
 
   void pixelsForLatLngs(@NonNull double[] input, @NonNull double[] output);
 
+  void getVisibleCoordinateBounds(int width, int height, @NonNull double[] output);
+
   LatLng latLngForPixel(@NonNull PointF pixel);
 
   void latLngsForPixels(@NonNull double[] input, @NonNull double[] output);
