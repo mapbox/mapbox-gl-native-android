@@ -213,7 +213,7 @@ public class Projection {
    *               lonEast, latSouth, lonWest).
    */
   public void getVisibleCoordinateBounds(@NonNull double[] bounds) {
-    nativeMapView.getVisibleCoordinateBounds(mapView.getWidth(), mapView.getHeight(), bounds);
+    nativeMapView.getVisibleCoordinateBounds(bounds);
   }
 
   /**

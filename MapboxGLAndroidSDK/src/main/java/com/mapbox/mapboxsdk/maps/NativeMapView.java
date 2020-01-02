@@ -651,9 +651,9 @@ final class NativeMapView implements NativeMap {
   }
 
   @Override
-  public void getVisibleCoordinateBounds(int width, int height, @NonNull double[] output) {
+  public void getVisibleCoordinateBounds(@NonNull double[] output) {
     if (!checkState("getVisibleCoordinateBounds")) {
-      nativeGetVisibleCoordinateBounds(width, height, output, pixelRatio);
+      nativeGetVisibleCoordinateBounds(output);
     }
   }
 
@@ -1290,7 +1290,7 @@ final class NativeMapView implements NativeMap {
   private native void nativePixelsForLatLngs(double[] input, double[] output, float pixelRatio);
 
   @Keep
-  private native void nativeGetVisibleCoordinateBounds(int width, int height, double[] output, float pixelRatio);
+  private native void nativeGetVisibleCoordinateBounds(double[] output);
 
   @NonNull
   @Keep

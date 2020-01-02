@@ -204,6 +204,30 @@ class VisibleRegionTest : BaseTest() {
   }
 
   @Test
+  fun visibleRegionOverDatelineBigSizeRegionTest() {
+    validateTestSetup()
+    invoke(mapboxMap) { _: UiController, mapboxMap: MapboxMap ->
+      mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(0.0, 180.0), 0.0))
+      val latLngs = listOf(
+        mapboxMap.getLatLngFromScreenCoords(0f, 0f),
+        mapboxMap.getLatLngFromScreenCoords(mapView.width / 2f, 0f),
+        mapboxMap.getLatLngFromScreenCoords(mapView.width.toFloat(), 0f)
+          .also { it.longitude += 360 },
+        mapboxMap.getLatLngFromScreenCoords(mapView.width.toFloat(), mapView.height / 2f)
+          .also { it.longitude += 360 },
+        mapboxMap.getLatLngFromScreenCoords(mapView.width.toFloat(), mapView.height.toFloat())
+          .also { it.longitude += 360 },
+        mapboxMap.getLatLngFromScreenCoords(mapView.width / 2f, mapView.height.toFloat()),
+        mapboxMap.getLatLngFromScreenCoords(0f, mapView.height.toFloat()),
+        mapboxMap.getLatLngFromScreenCoords(0f, mapView.height / 2f),
+        mapboxMap.getLatLngFromScreenCoords(mapView.width / 2f, mapView.height / 2f)
+      )
+      val visibleRegion = mapboxMap.projection.visibleRegion
+      assertTrue(latLngs.all { visibleRegion.latLngBounds.contains(it) })
+    }
+  }
+
+  @Test
   fun paddedVisibleRegionOverDatelineTest() {
     validateTestSetup()
     invoke(mapboxMap) { _: UiController, mapboxMap: MapboxMap ->
@@ -421,7 +445,7 @@ class VisibleRegionTest : BaseTest() {
   }
 
   @Test
-  fun visibleRegionBoundsOverDatelineEqualTest() {
+  fun visibleRegionBoundsOverDatelineTest() {
     validateTestSetup()
     invoke(mapboxMap) { _: UiController, mapboxMap: MapboxMap ->
       mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(0.0, 180.0), 8.0))
@@ -442,9 +466,49 @@ class VisibleRegionTest : BaseTest() {
       val bounds = doubleArrayOf(0.0, 0.0, 0.0, 0.0)
       mapboxMap.projection.getVisibleCoordinateBounds(bounds)
       val latLngBounds = LatLngBounds.from(bounds[0], bounds[1], bounds[2], bounds[3])
+      assertTrue(latLngs.all { latLngBounds.contains(it) })
+    }
+  }
+
+  @Test
+  fun visibleRegionBoundsOverDatelineBigSizeRegionTest() {
+    validateTestSetup()
+    invoke(mapboxMap) { _: UiController, mapboxMap: MapboxMap ->
+      mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(0.0, -180.0), 0.0))
+      val latLngs = listOf(
+        mapboxMap.getLatLngFromScreenCoords(0f, 0f),
+        mapboxMap.getLatLngFromScreenCoords(mapView.width / 2f, 0f),
+        mapboxMap.getLatLngFromScreenCoords(mapView.width.toFloat(), 0f)
+          .also { it.longitude += 360 },
+        mapboxMap.getLatLngFromScreenCoords(mapView.width.toFloat(), mapView.height / 2f)
+          .also { it.longitude += 360 },
+        mapboxMap.getLatLngFromScreenCoords(mapView.width.toFloat(), mapView.height.toFloat())
+          .also { it.longitude += 360 },
+        mapboxMap.getLatLngFromScreenCoords(mapView.width / 2f, mapView.height.toFloat()),
+        mapboxMap.getLatLngFromScreenCoords(0f, mapView.height.toFloat()),
+        mapboxMap.getLatLngFromScreenCoords(0f, mapView.height / 2f),
+        mapboxMap.getLatLngFromScreenCoords(mapView.width / 2f, mapView.height / 2f)
+      )
+      val bounds = doubleArrayOf(0.0, 0.0, 0.0, 0.0)
+      mapboxMap.projection.getVisibleCoordinateBounds(bounds)
+      val latLngBounds = LatLngBounds.from(bounds[0], bounds[1], bounds[2], bounds[3])
+      assertTrue(latLngs.all { latLngBounds.contains(it) })
+    }
+  }
+
+  @Test
+  fun visibleRegionBoundsOverDatelineLatitudeZeroTest() {
+    validateTestSetup()
+    invoke(mapboxMap) { _: UiController, mapboxMap: MapboxMap ->
+      mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(0.0, 180.0), 8.0))
+      val shift = mapboxMap.getLatLngFromScreenCoords(0f, 0f)
+      mapboxMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(0.0, 180.0 - shift.longitude)))
+
+      val bounds = doubleArrayOf(0.0, 0.0, 0.0, 0.0)
+      mapboxMap.projection.getVisibleCoordinateBounds(bounds)
+      val latLngBounds = LatLngBounds.from(bounds[0], bounds[1], bounds[2], bounds[3])
       val visibleRegion = mapboxMap.projection.visibleRegion
       assertTrue(latLngBounds == visibleRegion.latLngBounds)
-      assertTrue(latLngs.all { latLngBounds.contains(it) })
     }
   }
 
@@ -475,7 +539,7 @@ class VisibleRegionTest : BaseTest() {
   }
 
   @Test
-  fun visibleRotatedRegionBoundOverDatelineEqualTest() {
+  fun visibleRotatedRegionBoundsOverDatelineTest() {
     validateTestSetup()
     invoke(mapboxMap) { _: UiController, mapboxMap: MapboxMap ->
       mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(0.0, 180.0), 8.0))
@@ -494,8 +558,6 @@ class VisibleRegionTest : BaseTest() {
         val bounds = doubleArrayOf(0.0, 0.0, 0.0, 0.0)
         mapboxMap.projection.getVisibleCoordinateBounds(bounds)
         val latLngBounds = LatLngBounds.from(bounds[0], bounds[1], bounds[2], bounds[3])
-        val visibleRegion = mapboxMap.projection.visibleRegion
-        assertTrue(latLngBounds == visibleRegion.latLngBounds)
         assertTrue(latLngs.all { latLngBounds.contains(it) })
       }
     }
