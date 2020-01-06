@@ -11,6 +11,7 @@ dependencies {
     api dependenciesList.mapboxAndroidAccounts
     implementation dependenciesList.mapboxJavaTurf
     implementation dependenciesList.supportAnnotations
+    implementation dependenciesList.supportVectorDrawable
     implementation dependenciesList.supportFragmentV4
     implementation dependenciesList.okhttp3
     implementation dependenciesList.soLoader
@@ -34,6 +35,7 @@ android {
         buildConfigField "String", "MAPBOX_VERSION_STRING", String.format("\"Mapbox/%s\"", project.VERSION_NAME)
         buildConfigField "String", "MAPBOX_EVENTS_USER_AGENT", String.format("\"mapbox-maps-android/%s\"", project.VERSION_NAME)
         consumerProguardFiles 'proguard-rules.pro'
+        vectorDrawables.useSupportLibrary = true
     }
 
     // build native libraries

@@ -65,6 +65,7 @@ ext {
             supportDesign          : "com.android.support:design:${versions.supportLib}",
             supportRecyclerView    : "com.android.support:recyclerview-v7:${versions.supportLib}",
             supportConstraintLayout: "com.android.support.constraint:constraint-layout:${versions.constraintLayout}",
+            supportVectorDrawable  : "com.android.support:support-vector-drawable:${versions.supportLib}",
 
             gmsLocation            : "com.google.android.gms:play-services-location:${versions.gms}",
             timber                 : "com.jakewharton.timber:timber:${versions.timber}",

@@ -156,6 +156,12 @@ License: [The Apache Software License](http://www.apache.org/licenses/LICENSE-2.
 
 ===========================================================================
 
+Mapbox GL uses portions of the Android Support VectorDrawable.  
+URL: [http://developer.android.com/tools/extras/support-library.html](http://developer.android.com/tools/extras/support-library.html)  
+License: [The Apache Software License](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+===========================================================================
+
 Mapbox GL uses portions of the Gson.  
 License: [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
