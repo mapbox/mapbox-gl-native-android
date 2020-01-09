@@ -82,6 +82,13 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
   private ImageView attrView;
   private ImageView logoView;
 
+  // callback for focal point invalidation
+  private final FocalPointInvalidator focalInvalidator = new FocalPointInvalidator();
+  // callback for registering touch listeners
+  private final GesturesManagerInteractionListener registerTouchListener = new GesturesManagerInteractionListener();
+  // callback for camera change events
+  private final CameraChangeDispatcher cameraDispatcher = new CameraChangeDispatcher();
+
   @Nullable
   private MapGestureDetector mapGestureDetector;
   @Nullable
@@ -135,9 +142,7 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
     View view = LayoutInflater.from(context).inflate(R.layout.mapbox_mapview_internal, this);
     compassView = view.findViewById(R.id.compassView);
     attrView = view.findViewById(R.id.attributionView);
-    attrView.setImageDrawable(BitmapUtils.getDrawableFromRes(getContext(), R.drawable.mapbox_info_bg_selector));
     logoView = view.findViewById(R.id.logoView);
-    logoView.setImageDrawable(BitmapUtils.getDrawableFromRes(getContext(), R.drawable.mapbox_logo_icon));
 
     // add accessibility support
     setContentDescription(context.getString(R.string.mapbox_mapActionDescription));
@@ -145,22 +150,19 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
     initialiseDrawingSurface(options);
   }
 
+  protected MapboxMapOptions getMapboxMapOptions() {
+    return mapboxMapOptions;
+  }
+
   private void initialiseMap() {
     Context context = getContext();
 
     // callback for focal point invalidation
-    final FocalPointInvalidator focalInvalidator = new FocalPointInvalidator();
     focalInvalidator.addListener(createFocalPointChangeListener());
-
-    // callback for registering touch listeners
-    GesturesManagerInteractionListener registerTouchListener = new GesturesManagerInteractionListener();
-
-    // callback for camera change events
-    final CameraChangeDispatcher cameraDispatcher = new CameraChangeDispatcher();
 
     // setup components for MapboxMap creation
     Projection proj = new Projection(nativeMapView, this);
-    UiSettings uiSettings = new UiSettings(proj, focalInvalidator, compassView, attrView, logoView, getPixelRatio());
+    UiSettings uiSettings = new UiSettings(proj, focalInvalidator, compassView, attrView, logoView, getPixelRatio(), this);
     LongSparseArray<Annotation> annotationsArray = new LongSparseArray<>();
     IconManager iconManager = new IconManager(nativeMapView);
     Annotations annotations = new AnnotationContainer(nativeMapView, annotationsArray);
@@ -183,15 +185,8 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
       annotationManager, cameraDispatcher);
     mapKeyListener = new MapKeyListener(transform, uiSettings, mapGestureDetector);
 
-    // compass
-    compassView.injectCompassAnimationListener(createCompassAnimationListener(cameraDispatcher));
-    compassView.setOnClickListener(createCompassClickListener(cameraDispatcher));
-
     // LocationComponent
     mapboxMap.injectLocationComponent(new LocationComponent(mapboxMap, transform, developerAnimationListeners));
-
-    // inject widgets with MapboxMap
-    attrView.setOnClickListener(attributionClickListener = new AttributionClickListener(context, mapboxMap));
 
     // Ensure this view is interactable
     setClickable(true);
@@ -211,6 +206,21 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
     }
 
     mapCallback.initialised();
+  }
+
+  protected void initialiseCompassHandlers() {
+    // compass
+    if (mapboxMapOptions.getCompassEnabled()) {
+      compassView.injectCompassAnimationListener(createCompassAnimationListener(cameraDispatcher));
+      compassView.setOnClickListener(createCompassClickListener(cameraDispatcher));
+    }
+  }
+
+  protected void initialiseAttributionHandlers() {
+    // inject widgets with MapboxMap
+    if (mapboxMapOptions.getAttributionEnabled()) {
+      attrView.setOnClickListener(attributionClickListener = new AttributionClickListener(getContext(), mapboxMap));
+    }
   }
 
   private FocalPointChangeListener createFocalPointChangeListener() {

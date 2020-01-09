@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import com.mapbox.mapboxsdk.R;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
+import com.mapbox.mapboxsdk.log.Logger;
 import com.mapbox.mapboxsdk.maps.widgets.CompassView;
 import com.mapbox.mapboxsdk.utils.BitmapUtils;
 import com.mapbox.mapboxsdk.utils.ColorUtils;
@@ -34,6 +35,8 @@ public final class UiSettings {
   @NonNull
   private final FocalPointChangeListener focalPointChangeListener;
   @NonNull
+  private final MapView mapView;
+  @NonNull
   private final Projection projection;
   @NonNull
   private final CompassView compassView;
@@ -45,7 +48,7 @@ public final class UiSettings {
   private AttributionDialogManager attributionDialogManager;
 
   @NonNull
-  private final View logoView;
+  private final ImageView logoView;
   private final int[] logoMargins = new int[4];
 
   private final float pixelRatio;
@@ -77,23 +80,36 @@ public final class UiSettings {
   @Nullable
   private PointF userProvidedFocalPoint;
 
+  private MapboxMapOptions mapboxMapOptions;
+  private boolean isCompassInitialized = false;
+  private boolean isAttributionInitialized = false;
+  private boolean isLogoInitialized = false;
+
   UiSettings(@NonNull Projection projection, @NonNull FocalPointChangeListener listener,
-             @NonNull CompassView compassView, @NonNull ImageView attributionsView, @NonNull View logoView,
-             float pixelRatio) {
+             @NonNull CompassView compassView, @NonNull ImageView attributionsView, @NonNull ImageView logoView,
+             float pixelRatio, MapView mapView) {
     this.projection = projection;
     this.focalPointChangeListener = listener;
     this.compassView = compassView;
     this.attributionsView = attributionsView;
     this.logoView = logoView;
     this.pixelRatio = pixelRatio;
+    this.mapView = mapView;
   }
 
   void initialise(@NonNull Context context, @NonNull MapboxMapOptions options) {
+    mapboxMapOptions = options;
     Resources resources = context.getResources();
     initialiseGestures(options);
-    initialiseCompass(options, resources);
-    initialiseLogo(options, resources);
-    initialiseAttribution(context, options);
+    if (options.getCompassEnabled()) {
+      initialiseCompass(options, resources);
+    }
+    if (options.getLogoEnabled()) {
+      initialiseLogo(options, resources);
+    }
+    if (options.getAttributionEnabled()) {
+      initialiseAttribution(context, options);
+    }
   }
 
   void onSaveInstanceState(@NonNull Bundle outState) {
@@ -158,6 +174,8 @@ public final class UiSettings {
   }
 
   private void initialiseCompass(MapboxMapOptions options, @NonNull Resources resources) {
+    isCompassInitialized = true;
+    mapView.initialiseCompassHandlers();
     setCompassEnabled(options.getCompassEnabled());
     setCompassGravity(options.getCompassGravity());
     int[] compassMargins = options.getCompassMargins();
@@ -172,6 +190,7 @@ public final class UiSettings {
       options.compassImage(ResourcesCompat.getDrawable(resources, R.drawable.mapbox_compass_icon, null));
     }
     setCompassImage(options.getCompassImage());
+    Logger.d("uisettings", "initialiseCompass");
   }
 
   private void saveCompass(Bundle outState) {
@@ -187,6 +206,11 @@ public final class UiSettings {
   }
 
   private void restoreCompass(Bundle savedInstanceState) {
+    boolean compassEnabled = savedInstanceState.getBoolean(MapboxConstants.STATE_COMPASS_ENABLED);
+    if (compassEnabled && !isCompassInitialized) {
+      mapView.initialiseCompassHandlers();
+      isCompassInitialized = true;
+    }
     setCompassEnabled(savedInstanceState.getBoolean(MapboxConstants.STATE_COMPASS_ENABLED));
     setCompassGravity(savedInstanceState.getInt(MapboxConstants.STATE_COMPASS_GRAVITY));
     setCompassMargins(savedInstanceState.getInt(MapboxConstants.STATE_COMPASS_MARGIN_LEFT),
@@ -196,12 +220,16 @@ public final class UiSettings {
     setCompassFadeFacingNorth(savedInstanceState.getBoolean(MapboxConstants.STATE_COMPASS_FADE_WHEN_FACING_NORTH));
     setCompassImage(BitmapUtils.getDrawableFromByteArray(
       compassView.getContext(), savedInstanceState.getByteArray(MapboxConstants.STATE_COMPASS_IMAGE_BITMAP)));
+    Logger.d("uisettings", "restoreCompass");
   }
 
   private void initialiseLogo(MapboxMapOptions options, @NonNull Resources resources) {
+    isLogoInitialized = true;
+    setLogoImage();
     setLogoEnabled(options.getLogoEnabled());
     setLogoGravity(options.getLogoGravity());
     setLogoMargins(resources, options.getLogoMargins());
+    Logger.d("uisettings", "initialiseLogo");
   }
 
   private void setLogoMargins(@NonNull Resources resources, @Nullable int[] logoMargins) {
@@ -224,21 +252,31 @@ public final class UiSettings {
   }
 
   private void restoreLogo(Bundle savedInstanceState) {
+    boolean logoEnabled = savedInstanceState.getBoolean(MapboxConstants.STATE_LOGO_ENABLED);
+    if (logoEnabled && !isLogoInitialized) {
+      setLogoImage();
+      isLogoInitialized = true;
+    }
     setLogoEnabled(savedInstanceState.getBoolean(MapboxConstants.STATE_LOGO_ENABLED));
     setLogoGravity(savedInstanceState.getInt(MapboxConstants.STATE_LOGO_GRAVITY));
     setLogoMargins(savedInstanceState.getInt(MapboxConstants.STATE_LOGO_MARGIN_LEFT),
       savedInstanceState.getInt(MapboxConstants.STATE_LOGO_MARGIN_TOP),
       savedInstanceState.getInt(MapboxConstants.STATE_LOGO_MARGIN_RIGHT),
       savedInstanceState.getInt(MapboxConstants.STATE_LOGO_MARGIN_BOTTOM));
+    Logger.d("uisettings", "restoreLogo");
   }
 
   private void initialiseAttribution(@NonNull Context context, MapboxMapOptions options) {
+    isAttributionInitialized = true;
+    setAttributionImage();
+    mapView.initialiseAttributionHandlers();
     setAttributionEnabled(options.getAttributionEnabled());
     setAttributionGravity(options.getAttributionGravity());
     setAttributionMargins(context, options.getAttributionMargins());
     int attributionTintColor = options.getAttributionTintColor();
     setAttributionTintColor(attributionTintColor != -1
       ? attributionTintColor : ColorUtils.getPrimaryColor(context));
+    Logger.d("uisettings", "initialiseAttribution");
   }
 
   private void setAttributionMargins(@NonNull Context context, @Nullable int[] attributionMargins) {
@@ -264,12 +302,27 @@ public final class UiSettings {
   }
 
   private void restoreAttribution(Bundle savedInstanceState) {
+    boolean attributionEnabled = savedInstanceState.getBoolean(MapboxConstants.STATE_ATTRIBUTION_ENABLED);
+    if (attributionEnabled && !isAttributionInitialized) {
+      setAttributionImage();
+      mapView.initialiseAttributionHandlers();
+      isAttributionInitialized = true;
+    }
     setAttributionEnabled(savedInstanceState.getBoolean(MapboxConstants.STATE_ATTRIBUTION_ENABLED));
     setAttributionGravity(savedInstanceState.getInt(MapboxConstants.STATE_ATTRIBUTION_GRAVITY));
     setAttributionMargins(savedInstanceState.getInt(MapboxConstants.STATE_ATTRIBUTION_MARGIN_LEFT),
       savedInstanceState.getInt(MapboxConstants.STATE_ATTRIBUTION_MARGIN_TOP),
       savedInstanceState.getInt(MapboxConstants.STATE_ATTRIBUTION_MARGIN_RIGHT),
       savedInstanceState.getInt(MapboxConstants.STATE_ATTRIBUTION_MARGIN_BOTTOM));
+    Logger.d("uisettings", "restoreAttribution");
+  }
+
+  private void setLogoImage() {
+    logoView.setImageDrawable(BitmapUtils.getDrawableFromRes(logoView.getContext(), R.drawable.mapbox_logo_icon));
+  }
+
+  private void setAttributionImage() {
+    attributionsView.setImageDrawable(BitmapUtils.getDrawableFromRes(attributionsView.getContext(), R.drawable.mapbox_info_bg_selector));
   }
 
   /**
@@ -284,6 +337,9 @@ public final class UiSettings {
    * @param compassEnabled True to enable the compass; false to disable the compass.
    */
   public void setCompassEnabled(boolean compassEnabled) {
+    if (compassEnabled && !isCompassInitialized) {
+      initialiseCompass(mapboxMapOptions, compassView.getContext().getResources());
+    }
     compassView.setEnabled(compassEnabled);
   }
 
@@ -430,6 +486,9 @@ public final class UiSettings {
    * @param enabled True to enable the logo; false to disable the logo.
    */
   public void setLogoEnabled(boolean enabled) {
+    if (enabled && !isLogoInitialized) {
+      initialiseLogo(mapboxMapOptions, logoView.getContext().getResources());
+    }
     logoView.setVisibility(enabled ? View.VISIBLE : View.GONE);
   }
 
@@ -526,6 +585,9 @@ public final class UiSettings {
    * @param enabled True to enable the attribution; false to disable the attribution.
    */
   public void setAttributionEnabled(boolean enabled) {
+    if (enabled && !isAttributionInitialized) {
+      initialiseAttribution(attributionsView.getContext(), mapboxMapOptions);
+    }
     attributionsView.setVisibility(enabled ? View.VISIBLE : View.GONE);
   }
 

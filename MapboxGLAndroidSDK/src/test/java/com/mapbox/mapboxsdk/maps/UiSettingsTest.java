@@ -1,5 +1,7 @@
 package com.mapbox.mapboxsdk.maps;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -21,6 +23,14 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 
 public class UiSettingsTest {
+  @InjectMocks
+  MapView mapview = mock(MapView.class);
+
+  @InjectMocks
+  Context context = mock(Context.class);
+
+  @InjectMocks
+  Resources resources  = mock(Resources.class);
 
   @InjectMocks
   Projection projection = mock(Projection.class);
@@ -32,7 +42,7 @@ public class UiSettingsTest {
   CompassView compassView = mock(CompassView.class);
 
   @InjectMocks
-  ImageView imageView = mock(ImageView.class);
+  ImageView attributionView = mock(ImageView.class);
 
   @InjectMocks
   ImageView logoView = mock(ImageView.class);
@@ -41,10 +51,15 @@ public class UiSettingsTest {
   FrameLayout.LayoutParams layoutParams = mock(FrameLayout.LayoutParams.class);
 
   private UiSettings uiSettings;
+  private MapboxMapOptions mapboxMapOptions;
 
   @Before
   public void beforeTest() {
-    uiSettings = new UiSettings(projection, focalPointChangeListener, compassView, imageView, logoView, 1);
+    uiSettings = new UiSettings(projection, focalPointChangeListener, compassView, attributionView, logoView, 1, mapview);
+    when(compassView.getContext()).thenReturn(context);
+    when(attributionView.getContext()).thenReturn(context);
+    when(logoView.getContext()).thenReturn(context);
+    when(context.getResources()).thenReturn(resources);
   }
 
   @Test
@@ -53,7 +68,17 @@ public class UiSettingsTest {
   }
 
   @Test
+  public void testInitialise() {
+    mapboxMapOptions = new MapboxMapOptions().attributionEnabled(false).logoEnabled(false).compassEnabled(false);
+    uiSettings.initialise(context, mapboxMapOptions);
+    assertFalse(uiSettings.isAttributionEnabled());
+    assertFalse(uiSettings.isLogoEnabled());
+    assertFalse(uiSettings.isCompassEnabled());
+  }
+
+  @Test
   public void testCompassEnabled() {
+    mapboxMapOptions = new MapboxMapOptions().attributionEnabled(false).logoEnabled(false).compassEnabled(true);
     when(compassView.isEnabled()).thenReturn(true);
     uiSettings.setCompassEnabled(true);
     assertEquals("Compass should be enabled", true, uiSettings.isCompassEnabled());
@@ -135,21 +160,21 @@ public class UiSettingsTest {
 
   @Test
   public void testAttributionEnabled() {
-    when(imageView.getVisibility()).thenReturn(View.VISIBLE);
+    when(attributionView.getVisibility()).thenReturn(View.VISIBLE);
     uiSettings.setAttributionEnabled(true);
     assertEquals("Attribution should be enabled", true, uiSettings.isAttributionEnabled());
   }
 
   @Test
   public void testAttributionDisabled() {
-    when(imageView.getVisibility()).thenReturn(View.GONE);
+    when(attributionView.getVisibility()).thenReturn(View.GONE);
     uiSettings.setAttributionEnabled(false);
     assertEquals("Attribution should be disabled", false, uiSettings.isAttributionEnabled());
   }
 
   @Test
   public void testAttributionGravity() {
-    when(imageView.getLayoutParams()).thenReturn(layoutParams);
+    when(attributionView.getLayoutParams()).thenReturn(layoutParams);
     layoutParams.gravity = Gravity.END;
     uiSettings.setAttributionGravity(Gravity.END);
     assertEquals("Attribution gravity should be same", Gravity.END, uiSettings.getAttributionGravity());
@@ -157,7 +182,7 @@ public class UiSettingsTest {
 
   @Test
   public void testAttributionMargins() {
-    when(imageView.getLayoutParams()).thenReturn(layoutParams);
+    when(attributionView.getLayoutParams()).thenReturn(layoutParams);
     when(projection.getContentPadding()).thenReturn(new int[] {0, 0, 0, 0});
     layoutParams.leftMargin = 1;
     layoutParams.topMargin = 2;
