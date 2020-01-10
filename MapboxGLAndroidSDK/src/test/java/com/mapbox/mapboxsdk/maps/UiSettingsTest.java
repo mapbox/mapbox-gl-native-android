@@ -68,20 +68,16 @@ public class UiSettingsTest {
   }
 
   @Test
-  public void testInitialise() {
-    mapboxMapOptions = new MapboxMapOptions().attributionEnabled(false).logoEnabled(false).compassEnabled(false);
-    uiSettings.initialise(context, mapboxMapOptions);
-    assertFalse(uiSettings.isAttributionEnabled());
-    assertFalse(uiSettings.isLogoEnabled());
-    assertFalse(uiSettings.isCompassEnabled());
+  public void testGetCompassEnabled() {
+    when(compassView.isEnabled()).thenReturn(true);
+    assertEquals("Compass should be enabled", true, uiSettings.isCompassEnabled());
   }
 
   @Test
-  public void testCompassEnabled() {
-    mapboxMapOptions = new MapboxMapOptions().attributionEnabled(false).logoEnabled(false).compassEnabled(true);
-    when(compassView.isEnabled()).thenReturn(true);
+  public void testSetCompassEnabled() {
+    uiSettings.isCompassInitialized = true;
     uiSettings.setCompassEnabled(true);
-    assertEquals("Compass should be enabled", true, uiSettings.isCompassEnabled());
+    verify(compassView).setEnabled(true);
   }
 
   @Test
@@ -124,6 +120,7 @@ public class UiSettingsTest {
 
   @Test
   public void testLogoEnabled() {
+    uiSettings.isLogoInitialized = true;
     uiSettings.setLogoEnabled(true);
     assertEquals("Logo should be enabled", true, uiSettings.isLogoEnabled());
   }
@@ -160,6 +157,7 @@ public class UiSettingsTest {
 
   @Test
   public void testAttributionEnabled() {
+    uiSettings.isAttributionInitialized = true;
     when(attributionView.getVisibility()).thenReturn(View.VISIBLE);
     uiSettings.setAttributionEnabled(true);
     assertEquals("Attribution should be enabled", true, uiSettings.isAttributionEnabled());

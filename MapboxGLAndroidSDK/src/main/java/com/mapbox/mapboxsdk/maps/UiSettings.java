@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.Px;
 import androidx.annotation.UiThread;
+import androidx.annotation.VisibleForTesting;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import android.view.View;
@@ -81,9 +82,12 @@ public final class UiSettings {
   private PointF userProvidedFocalPoint;
 
   private MapboxMapOptions mapboxMapOptions;
-  private boolean isCompassInitialized = false;
-  private boolean isAttributionInitialized = false;
-  private boolean isLogoInitialized = false;
+  @VisibleForTesting
+  boolean isCompassInitialized = false;
+  @VisibleForTesting
+  boolean isAttributionInitialized = false;
+  @VisibleForTesting
+  boolean isLogoInitialized = false;
 
   UiSettings(@NonNull Projection projection, @NonNull FocalPointChangeListener listener,
              @NonNull CompassView compassView, @NonNull ImageView attributionsView, @NonNull ImageView logoView,

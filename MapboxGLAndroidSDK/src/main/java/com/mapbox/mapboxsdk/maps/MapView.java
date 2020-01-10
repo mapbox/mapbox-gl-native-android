@@ -150,10 +150,6 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
     initialiseDrawingSurface(options);
   }
 
-  protected MapboxMapOptions getMapboxMapOptions() {
-    return mapboxMapOptions;
-  }
-
   private void initialiseMap() {
     Context context = getContext();
 
