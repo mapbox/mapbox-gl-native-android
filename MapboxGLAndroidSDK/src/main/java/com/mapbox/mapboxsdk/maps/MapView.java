@@ -158,7 +158,8 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
 
     // setup components for MapboxMap creation
     Projection proj = new Projection(nativeMapView, this);
-    UiSettings uiSettings = new UiSettings(proj, focalInvalidator, compassView, attrView, logoView, getPixelRatio(), this);
+    UiSettings uiSettings = new UiSettings(proj, focalInvalidator, compassView, attrView, logoView,
+            getPixelRatio(), this);
     LongSparseArray<Annotation> annotationsArray = new LongSparseArray<>();
     IconManager iconManager = new IconManager(nativeMapView);
     Annotations annotations = new AnnotationContainer(nativeMapView, annotationsArray);

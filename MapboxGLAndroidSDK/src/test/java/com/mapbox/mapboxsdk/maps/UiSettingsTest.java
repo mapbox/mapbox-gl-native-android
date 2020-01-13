@@ -55,7 +55,8 @@ public class UiSettingsTest {
 
   @Before
   public void beforeTest() {
-    uiSettings = new UiSettings(projection, focalPointChangeListener, compassView, attributionView, logoView, 1, mapview);
+    uiSettings = new UiSettings(projection, focalPointChangeListener, compassView, attributionView,
+            logoView, 1, mapview);
     when(compassView.getContext()).thenReturn(context);
     when(attributionView.getContext()).thenReturn(context);
     when(logoView.getContext()).thenReturn(context);

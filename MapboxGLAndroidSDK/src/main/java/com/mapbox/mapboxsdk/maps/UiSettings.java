@@ -326,7 +326,8 @@ public final class UiSettings {
   }
 
   private void setAttributionImage() {
-    attributionsView.setImageDrawable(BitmapUtils.getDrawableFromRes(attributionsView.getContext(), R.drawable.mapbox_info_bg_selector));
+    attributionsView.setImageDrawable(BitmapUtils.getDrawableFromRes(attributionsView.getContext(),
+            R.drawable.mapbox_info_bg_selector));
   }
 
   /**
