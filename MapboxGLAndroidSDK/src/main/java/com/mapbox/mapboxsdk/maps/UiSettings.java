@@ -24,7 +24,6 @@ import androidx.core.content.res.ResourcesCompat;
 import com.mapbox.mapboxsdk.R;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
-import com.mapbox.mapboxsdk.log.Logger;
 import com.mapbox.mapboxsdk.maps.widgets.CompassView;
 import com.mapbox.mapboxsdk.utils.BitmapUtils;
 import com.mapbox.mapboxsdk.utils.ColorUtils;
@@ -193,7 +192,6 @@ public final class UiSettings {
       options.compassImage(ResourcesCompat.getDrawable(resources, R.drawable.mapbox_compass_icon, null));
     }
     setCompassImage(options.getCompassImage());
-    Logger.d("uisettings", "initialiseCompass");
   }
 
   private void saveCompass(Bundle outState) {
@@ -223,7 +221,6 @@ public final class UiSettings {
     setCompassFadeFacingNorth(savedInstanceState.getBoolean(MapboxConstants.STATE_COMPASS_FADE_WHEN_FACING_NORTH));
     setCompassImage(BitmapUtils.getDrawableFromByteArray(
       mapView.getContext(), savedInstanceState.getByteArray(MapboxConstants.STATE_COMPASS_IMAGE_BITMAP)));
-    Logger.d("uisettings", "restoreCompass");
   }
 
   private void initialiseLogo(MapboxMapOptions options, @NonNull Resources resources) {
@@ -232,7 +229,6 @@ public final class UiSettings {
     setLogoEnabled(options.getLogoEnabled());
     setLogoGravity(options.getLogoGravity());
     setLogoMargins(resources, options.getLogoMargins());
-    Logger.d("uisettings", "initialiseLogo");
   }
 
   private void setLogoMargins(@NonNull Resources resources, @Nullable int[] logoMargins) {
@@ -266,7 +262,6 @@ public final class UiSettings {
       savedInstanceState.getInt(MapboxConstants.STATE_LOGO_MARGIN_TOP),
       savedInstanceState.getInt(MapboxConstants.STATE_LOGO_MARGIN_RIGHT),
       savedInstanceState.getInt(MapboxConstants.STATE_LOGO_MARGIN_BOTTOM));
-    Logger.d("uisettings", "restoreLogo");
   }
 
   private void initialiseAttribution(@NonNull Context context, MapboxMapOptions options) {
@@ -278,7 +273,6 @@ public final class UiSettings {
     int attributionTintColor = options.getAttributionTintColor();
     setAttributionTintColor(attributionTintColor != -1
       ? attributionTintColor : ColorUtils.getPrimaryColor(context));
-    Logger.d("uisettings", "initialiseAttribution");
   }
 
   private void setAttributionMargins(@NonNull Context context, @Nullable int[] attributionMargins) {
@@ -315,7 +309,6 @@ public final class UiSettings {
       savedInstanceState.getInt(MapboxConstants.STATE_ATTRIBUTION_MARGIN_TOP),
       savedInstanceState.getInt(MapboxConstants.STATE_ATTRIBUTION_MARGIN_RIGHT),
       savedInstanceState.getInt(MapboxConstants.STATE_ATTRIBUTION_MARGIN_BOTTOM));
-    Logger.d("uisettings", "restoreAttribution");
   }
 
   /**
