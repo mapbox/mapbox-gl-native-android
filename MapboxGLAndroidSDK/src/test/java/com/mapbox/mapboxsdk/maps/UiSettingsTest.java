@@ -30,7 +30,7 @@ public class UiSettingsTest {
   Context context = mock(Context.class);
 
   @InjectMocks
-  Resources resources  = mock(Resources.class);
+  Resources resources = mock(Resources.class);
 
   @InjectMocks
   Projection projection = mock(Projection.class);
@@ -55,8 +55,10 @@ public class UiSettingsTest {
 
   @Before
   public void beforeTest() {
-    uiSettings = new UiSettings(projection, focalPointChangeListener, compassView, attributionView,
-            logoView, 1, mapview);
+    uiSettings = new UiSettings(projection, focalPointChangeListener, 1, mapview);
+    uiSettings.compassView = this.compassView;
+    uiSettings.attributionsView = this.attributionView;
+    uiSettings.logoView = this.logoView;
     when(compassView.getContext()).thenReturn(context);
     when(attributionView.getContext()).thenReturn(context);
     when(logoView.getContext()).thenReturn(context);
@@ -97,7 +99,7 @@ public class UiSettingsTest {
 
   @Test
   public void testCompassMargins() {
-    when(projection.getContentPadding()).thenReturn(new int[] {0, 0, 0, 0});
+    when(projection.getContentPadding()).thenReturn(new int[]{0, 0, 0, 0});
     when(compassView.getLayoutParams()).thenReturn(layoutParams);
     layoutParams.leftMargin = 1;
     layoutParams.topMargin = 2;
@@ -143,7 +145,7 @@ public class UiSettingsTest {
 
   @Test
   public void testLogoMargins() {
-    when(projection.getContentPadding()).thenReturn(new int[] {0, 0, 0, 0});
+    when(projection.getContentPadding()).thenReturn(new int[]{0, 0, 0, 0});
     when(logoView.getLayoutParams()).thenReturn(layoutParams);
     layoutParams.leftMargin = 1;
     layoutParams.topMargin = 2;
@@ -182,7 +184,7 @@ public class UiSettingsTest {
   @Test
   public void testAttributionMargins() {
     when(attributionView.getLayoutParams()).thenReturn(layoutParams);
-    when(projection.getContentPadding()).thenReturn(new int[] {0, 0, 0, 0});
+    when(projection.getContentPadding()).thenReturn(new int[]{0, 0, 0, 0});
     layoutParams.leftMargin = 1;
     layoutParams.topMargin = 2;
     layoutParams.rightMargin = 3;
@@ -370,14 +372,14 @@ public class UiSettingsTest {
   public void testDisableRotateWhenScalingEnabled() {
     uiSettings.setDisableRotateWhenScaling(true);
     assertEquals("Rotate disabling should be enabled", true,
-      uiSettings.isDisableRotateWhenScaling());
+            uiSettings.isDisableRotateWhenScaling());
   }
 
   @Test
   public void testDisableRotateWhenScalingDisabled() {
     uiSettings.setDisableRotateWhenScaling(false);
     assertEquals("Rotate disabling should be disabled", false,
-      uiSettings.isDisableRotateWhenScaling());
+            uiSettings.isDisableRotateWhenScaling());
   }
 
   @Test
@@ -390,7 +392,7 @@ public class UiSettingsTest {
   public void testIncreaseScaleThresholdWhenRotatingDisabled() {
     uiSettings.setIncreaseScaleThresholdWhenRotating(false);
     assertEquals("Scale threshold increase should be disabled", false,
-      uiSettings.isIncreaseScaleThresholdWhenRotating());
+            uiSettings.isIncreaseScaleThresholdWhenRotating());
   }
 
   @Test
@@ -415,7 +417,7 @@ public class UiSettingsTest {
   public void testAreAllGesturesEnabled() {
     uiSettings.setAllGesturesEnabled(true);
     assertEquals("All gestures check should return true", true,
-        uiSettings.areAllGesturesEnabled());
+            uiSettings.areAllGesturesEnabled());
   }
 
   @Test
@@ -423,20 +425,20 @@ public class UiSettingsTest {
     uiSettings.setAllGesturesEnabled(true);
     uiSettings.setScrollGesturesEnabled(false);
     assertEquals("All gestures check should return false", false,
-        uiSettings.areAllGesturesEnabled());
+            uiSettings.areAllGesturesEnabled());
   }
 
   @Test
   public void testZoomRateDefaultValue() {
     assertEquals("Default zoom rate should be 1.0f", 1.0f,
-      uiSettings.getZoomRate(), 0);
+            uiSettings.getZoomRate(), 0);
   }
 
   @Test
   public void testZoomRate() {
     uiSettings.setZoomRate(0.83f);
     assertEquals("Zoom rate should be 0.83f", 0.83f,
-      uiSettings.getZoomRate(), 0);
+            uiSettings.getZoomRate(), 0);
   }
 
   @Test

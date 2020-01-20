@@ -7,6 +7,10 @@ import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+
 import androidx.annotation.ColorInt;
 import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;
@@ -16,9 +20,6 @@ import androidx.annotation.UiThread;
 import androidx.annotation.VisibleForTesting;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
-import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 
 import com.mapbox.mapboxsdk.R;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
@@ -39,17 +40,20 @@ public final class UiSettings {
   private final MapView mapView;
   @NonNull
   private final Projection projection;
-  @NonNull
-  private final CompassView compassView;
+  @VisibleForTesting
+  @Nullable
+  CompassView compassView;
   private final int[] compassMargins = new int[4];
 
-  @NonNull
-  private final ImageView attributionsView;
+  @VisibleForTesting
+  @Nullable
+  ImageView attributionsView;
   private final int[] attributionsMargins = new int[4];
   private AttributionDialogManager attributionDialogManager;
 
-  @NonNull
-  private final ImageView logoView;
+  @VisibleForTesting
+  @Nullable
+  ImageView logoView;
   private final int[] logoMargins = new int[4];
 
   private final float pixelRatio;
@@ -81,28 +85,23 @@ public final class UiSettings {
   @Nullable
   private PointF userProvidedFocalPoint;
 
-  private MapboxMapOptions mapboxMapOptions;
   @VisibleForTesting
   boolean isCompassInitialized = false;
   @VisibleForTesting
   boolean isAttributionInitialized = false;
   @VisibleForTesting
   boolean isLogoInitialized = false;
+  private double clockwiseBearing;
 
   UiSettings(@NonNull Projection projection, @NonNull FocalPointChangeListener listener,
-             @NonNull CompassView compassView, @NonNull ImageView attributionsView, @NonNull ImageView logoView,
              float pixelRatio, MapView mapView) {
     this.projection = projection;
     this.focalPointChangeListener = listener;
-    this.compassView = compassView;
-    this.attributionsView = attributionsView;
-    this.logoView = logoView;
     this.pixelRatio = pixelRatio;
     this.mapView = mapView;
   }
 
   void initialise(@NonNull Context context, @NonNull MapboxMapOptions options) {
-    mapboxMapOptions = options;
     Resources resources = context.getResources();
     initialiseGestures(options);
     if (options.getCompassEnabled()) {
@@ -179,7 +178,7 @@ public final class UiSettings {
 
   private void initialiseCompass(MapboxMapOptions options, @NonNull Resources resources) {
     isCompassInitialized = true;
-    mapView.initialiseCompassHandlers();
+    compassView = mapView.initialiseCompassView();
     setCompassEnabled(options.getCompassEnabled());
     setCompassGravity(options.getCompassGravity());
     int[] compassMargins = options.getCompassMargins();
@@ -212,7 +211,7 @@ public final class UiSettings {
   private void restoreCompass(Bundle savedInstanceState) {
     boolean compassEnabled = savedInstanceState.getBoolean(MapboxConstants.STATE_COMPASS_ENABLED);
     if (compassEnabled && !isCompassInitialized) {
-      mapView.initialiseCompassHandlers();
+      compassView = mapView.initialiseCompassView();
       isCompassInitialized = true;
     }
     setCompassEnabled(savedInstanceState.getBoolean(MapboxConstants.STATE_COMPASS_ENABLED));
@@ -223,13 +222,13 @@ public final class UiSettings {
       savedInstanceState.getInt(MapboxConstants.STATE_COMPASS_MARGIN_BOTTOM));
     setCompassFadeFacingNorth(savedInstanceState.getBoolean(MapboxConstants.STATE_COMPASS_FADE_WHEN_FACING_NORTH));
     setCompassImage(BitmapUtils.getDrawableFromByteArray(
-      compassView.getContext(), savedInstanceState.getByteArray(MapboxConstants.STATE_COMPASS_IMAGE_BITMAP)));
+      mapView.getContext(), savedInstanceState.getByteArray(MapboxConstants.STATE_COMPASS_IMAGE_BITMAP)));
     Logger.d("uisettings", "restoreCompass");
   }
 
   private void initialiseLogo(MapboxMapOptions options, @NonNull Resources resources) {
     isLogoInitialized = true;
-    setLogoImage();
+    logoView = mapView.initialiseLogoView();
     setLogoEnabled(options.getLogoEnabled());
     setLogoGravity(options.getLogoGravity());
     setLogoMargins(resources, options.getLogoMargins());
@@ -258,7 +257,7 @@ public final class UiSettings {
   private void restoreLogo(Bundle savedInstanceState) {
     boolean logoEnabled = savedInstanceState.getBoolean(MapboxConstants.STATE_LOGO_ENABLED);
     if (logoEnabled && !isLogoInitialized) {
-      setLogoImage();
+      logoView = mapView.initialiseLogoView();
       isLogoInitialized = true;
     }
     setLogoEnabled(savedInstanceState.getBoolean(MapboxConstants.STATE_LOGO_ENABLED));
@@ -272,8 +271,7 @@ public final class UiSettings {
 
   private void initialiseAttribution(@NonNull Context context, MapboxMapOptions options) {
     isAttributionInitialized = true;
-    setAttributionImage();
-    mapView.initialiseAttributionHandlers();
+    attributionsView = mapView.initialiseAttributionView();
     setAttributionEnabled(options.getAttributionEnabled());
     setAttributionGravity(options.getAttributionGravity());
     setAttributionMargins(context, options.getAttributionMargins());
@@ -308,8 +306,7 @@ public final class UiSettings {
   private void restoreAttribution(Bundle savedInstanceState) {
     boolean attributionEnabled = savedInstanceState.getBoolean(MapboxConstants.STATE_ATTRIBUTION_ENABLED);
     if (attributionEnabled && !isAttributionInitialized) {
-      setAttributionImage();
-      mapView.initialiseAttributionHandlers();
+      attributionsView = mapView.initialiseAttributionView();
       isAttributionInitialized = true;
     }
     setAttributionEnabled(savedInstanceState.getBoolean(MapboxConstants.STATE_ATTRIBUTION_ENABLED));
@@ -319,15 +316,6 @@ public final class UiSettings {
       savedInstanceState.getInt(MapboxConstants.STATE_ATTRIBUTION_MARGIN_RIGHT),
       savedInstanceState.getInt(MapboxConstants.STATE_ATTRIBUTION_MARGIN_BOTTOM));
     Logger.d("uisettings", "restoreAttribution");
-  }
-
-  private void setLogoImage() {
-    logoView.setImageDrawable(BitmapUtils.getDrawableFromRes(logoView.getContext(), R.drawable.mapbox_logo_icon));
-  }
-
-  private void setAttributionImage() {
-    attributionsView.setImageDrawable(BitmapUtils.getDrawableFromRes(attributionsView.getContext(),
-            R.drawable.mapbox_info_bg_selector));
   }
 
   /**
@@ -343,9 +331,12 @@ public final class UiSettings {
    */
   public void setCompassEnabled(boolean compassEnabled) {
     if (compassEnabled && !isCompassInitialized) {
-      initialiseCompass(mapboxMapOptions, compassView.getContext().getResources());
+      initialiseCompass(mapView.mapboxMapOptions, mapView.getContext().getResources());
     }
-    compassView.setEnabled(compassEnabled);
+    if (compassView != null) {
+      compassView.setEnabled(compassEnabled);
+      compassView.update(clockwiseBearing);
+    }
   }
 
   /**
@@ -354,7 +345,11 @@ public final class UiSettings {
    * @return True if the compass is enabled; false if the compass is disabled.
    */
   public boolean isCompassEnabled() {
-    return compassView.isEnabled();
+    if (compassView != null) {
+      return compassView.isEnabled();
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -368,7 +363,9 @@ public final class UiSettings {
    */
   @UiThread
   public void setCompassGravity(int gravity) {
-    setWidgetGravity(compassView, gravity);
+    if (compassView != null) {
+      setWidgetGravity(compassView, gravity);
+    }
   }
 
   /**
@@ -380,7 +377,9 @@ public final class UiSettings {
    * @param compassFadeFacingNorth True to enable the fading animation; false to disable it
    */
   public void setCompassFadeFacingNorth(boolean compassFadeFacingNorth) {
-    compassView.fadeCompassViewFacingNorth(compassFadeFacingNorth);
+    if (compassView != null) {
+      compassView.fadeCompassViewFacingNorth(compassFadeFacingNorth);
+    }
   }
 
   /**
@@ -392,7 +391,9 @@ public final class UiSettings {
    * @param compass the drawable to show as image compass
    */
   public void setCompassImage(@NonNull Drawable compass) {
-    compassView.setCompassImage(compass);
+    if (compassView != null) {
+      compassView.setCompassImage(compass);
+    }
   }
 
   /**
@@ -401,7 +402,11 @@ public final class UiSettings {
    * @return True if the compass will fade, false if it remains visible
    */
   public boolean isCompassFadeWhenFacingNorth() {
-    return compassView.isFadeCompassViewFacingNorth();
+    if (compassView != null) {
+      return compassView.isFadeCompassViewFacingNorth();
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -410,7 +415,11 @@ public final class UiSettings {
    * @return The gravity
    */
   public int getCompassGravity() {
-    return ((FrameLayout.LayoutParams) compassView.getLayoutParams()).gravity;
+    if (compassView != null) {
+      return ((FrameLayout.LayoutParams) compassView.getLayoutParams()).gravity;
+    } else {
+      return -1;
+    }
   }
 
   /**
@@ -424,7 +433,9 @@ public final class UiSettings {
    */
   @UiThread
   public void setCompassMargins(@Px int left, @Px int top, @Px int right, @Px int bottom) {
-    setWidgetMargins(compassView, compassMargins, left, top, right, bottom);
+    if (compassView != null) {
+      setWidgetMargins(compassView, compassMargins, left, top, right, bottom);
+    }
   }
 
   /**
@@ -472,14 +483,20 @@ public final class UiSettings {
    *
    * @return the drawable used as compass image
    */
-  @NonNull
+  @Nullable
   public Drawable getCompassImage() {
-    return compassView.getCompassImage();
+    if (compassView != null) {
+      return compassView.getCompassImage();
+    } else {
+      return null;
+    }
   }
 
   void update(@NonNull CameraPosition cameraPosition) {
-    double clockwiseBearing = -cameraPosition.bearing;
-    compassView.update(clockwiseBearing);
+    clockwiseBearing = -cameraPosition.bearing;
+    if (compassView != null) {
+      compassView.update(clockwiseBearing);
+    }
   }
 
   /**
@@ -492,9 +509,11 @@ public final class UiSettings {
    */
   public void setLogoEnabled(boolean enabled) {
     if (enabled && !isLogoInitialized) {
-      initialiseLogo(mapboxMapOptions, logoView.getContext().getResources());
+      initialiseLogo(mapView.mapboxMapOptions, mapView.getContext().getResources());
     }
-    logoView.setVisibility(enabled ? View.VISIBLE : View.GONE);
+    if (logoView != null) {
+      logoView.setVisibility(enabled ? View.VISIBLE : View.GONE);
+    }
   }
 
   /**
@@ -503,7 +522,11 @@ public final class UiSettings {
    * @return True if the logo is enabled; false if the logo is disabled.
    */
   public boolean isLogoEnabled() {
-    return logoView.getVisibility() == View.VISIBLE;
+    if (logoView != null) {
+      return logoView.getVisibility() == View.VISIBLE;
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -516,7 +539,9 @@ public final class UiSettings {
    * @param gravity Android SDK Gravity.
    */
   public void setLogoGravity(int gravity) {
-    setWidgetGravity(logoView, gravity);
+    if (logoView != null) {
+      setWidgetGravity(logoView, gravity);
+    }
   }
 
   /**
@@ -525,7 +550,11 @@ public final class UiSettings {
    * @return The gravity
    */
   public int getLogoGravity() {
-    return ((FrameLayout.LayoutParams) logoView.getLayoutParams()).gravity;
+    if (logoView != null) {
+      return ((FrameLayout.LayoutParams) logoView.getLayoutParams()).gravity;
+    } else {
+      return -1;
+    }
   }
 
   /**
@@ -538,7 +567,9 @@ public final class UiSettings {
    * @param bottom The bottom margin in pixels.
    */
   public void setLogoMargins(@Px int left, @Px int top, @Px int right, @Px int bottom) {
-    setWidgetMargins(logoView, logoMargins, left, top, right, bottom);
+    if (logoView != null) {
+      setWidgetMargins(logoView, logoMargins, left, top, right, bottom);
+    }
   }
 
   /**
@@ -591,9 +622,11 @@ public final class UiSettings {
    */
   public void setAttributionEnabled(boolean enabled) {
     if (enabled && !isAttributionInitialized) {
-      initialiseAttribution(attributionsView.getContext(), mapboxMapOptions);
+      initialiseAttribution(mapView.getContext(), mapView.mapboxMapOptions);
     }
-    attributionsView.setVisibility(enabled ? View.VISIBLE : View.GONE);
+    if (attributionsView != null) {
+      attributionsView.setVisibility(enabled ? View.VISIBLE : View.GONE);
+    }
   }
 
   /**
@@ -602,7 +635,11 @@ public final class UiSettings {
    * @return True if the attribution is enabled; false if the attribution is disabled.
    */
   public boolean isAttributionEnabled() {
-    return attributionsView.getVisibility() == View.VISIBLE;
+    if (attributionsView != null) {
+      return attributionsView.getVisibility() == View.VISIBLE;
+    } else {
+      return false;
+    }
   }
 
 
@@ -637,7 +674,9 @@ public final class UiSettings {
    * @param gravity Android SDK Gravity.
    */
   public void setAttributionGravity(int gravity) {
-    setWidgetGravity(attributionsView, gravity);
+    if (attributionsView != null) {
+      setWidgetGravity(attributionsView, gravity);
+    }
   }
 
   /**
@@ -646,7 +685,11 @@ public final class UiSettings {
    * @return The gravity
    */
   public int getAttributionGravity() {
-    return ((FrameLayout.LayoutParams) attributionsView.getLayoutParams()).gravity;
+    if (attributionsView != null) {
+      return ((FrameLayout.LayoutParams) attributionsView.getLayoutParams()).gravity;
+    } else {
+      return -1;
+    }
   }
 
   /**
@@ -658,7 +701,9 @@ public final class UiSettings {
    * @param bottom The bottom margin in pixels.
    */
   public void setAttributionMargins(@Px int left, @Px int top, @Px int right, @Px int bottom) {
-    setWidgetMargins(attributionsView, attributionsMargins, left, top, right, bottom);
+    if (attributionsView != null) {
+      setWidgetMargins(attributionsView, attributionsMargins, left, top, right, bottom);
+    }
   }
 
   /**
@@ -670,6 +715,9 @@ public final class UiSettings {
    */
   public void setAttributionTintColor(@ColorInt int tintColor) {
     // Check that the tint color being passed in isn't transparent.
+    if (attributionsView == null) {
+      return;
+    }
     if (Color.alpha(tintColor) == 0) {
       ColorUtils.setTintList(attributionsView,
         ContextCompat.getColor(attributionsView.getContext(), R.color.mapbox_blue));
