@@ -200,6 +200,7 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
   protected CompassView initialiseCompassView() {
     compassView = new CompassView(this.getContext());
     addView(compassView);
+    compassView.setTag("compassView");
     compassView.getLayoutParams().width = LayoutParams.WRAP_CONTENT;
     compassView.getLayoutParams().height = LayoutParams.WRAP_CONTENT;
     compassView.setContentDescription(getResources().getString(R.string.mapbox_compassContentDescription));
@@ -211,6 +212,7 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
   protected ImageView initialiseAttributionView() {
     ImageView attrView = new ImageView(this.getContext());
     addView(attrView);
+    attrView.setTag("attrView");
     attrView.getLayoutParams().width = LayoutParams.WRAP_CONTENT;
     attrView.getLayoutParams().height = LayoutParams.WRAP_CONTENT;
     attrView.setAdjustViewBounds(true);
@@ -226,6 +228,7 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
   protected ImageView initialiseLogoView() {
     ImageView logoView = new ImageView(this.getContext());
     addView(logoView);
+    logoView.setTag("logoView");
     logoView.getLayoutParams().width = LayoutParams.WRAP_CONTENT;
     logoView.getLayoutParams().height = LayoutParams.WRAP_CONTENT;
     logoView.setImageDrawable(BitmapUtils.getDrawableFromRes(getContext(), R.drawable.mapbox_logo_icon));
