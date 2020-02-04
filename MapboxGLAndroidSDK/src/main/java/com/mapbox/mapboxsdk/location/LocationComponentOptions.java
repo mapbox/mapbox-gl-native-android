@@ -364,8 +364,7 @@ public class LocationComponentOptions implements Parcelable {
     );
 
     builder.pulseAlpha = typedArray.getFloat(
-        R.styleable.mapbox_LocationComponent_mapbox_pulsingLocationCircleAlpha, CIRCLE_PULSING_ALPHA_DEFAULT
-    );
+        R.styleable.mapbox_LocationComponent_mapbox_pulsingLocationCircleAlpha, CIRCLE_PULSING_ALPHA_DEFAULT);
 
     typedArray.recycle();
 

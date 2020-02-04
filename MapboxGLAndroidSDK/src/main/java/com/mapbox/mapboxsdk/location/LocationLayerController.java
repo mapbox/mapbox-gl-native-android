@@ -133,6 +133,13 @@ final class LocationLayerController {
     locationLayerRenderer.show(renderMode, isStale);
   }
 
+  /**
+   * Adjust the visibility of the pulsing LocationComponent circle.
+   */
+  void adjustPulsingCircleLayerVisibility(boolean visible) {
+    setLayerVisibility(PULSING_CIRCLE_LAYER, visible);
+  }
+
   void hide() {
     isHidden = true;
     locationLayerRenderer.hide();
@@ -203,6 +210,24 @@ final class LocationLayerController {
     );
 
     locationLayerRenderer.styleScaling(scaleExpression);
+  }
+
+  /**
+   * Use the Maps SDK's data-driven styling properties to set the pulsing circle location UI.
+   *
+   * @param options The {@link LocationComponentOptions} set upstream during LocationComponent
+   *                initialization.
+   */
+  private void stylePulsingCircle(LocationComponentOptions options) {
+    if (style.getLayer(PULSING_CIRCLE_LAYER) != null) {
+      setLayerVisibility(PULSING_CIRCLE_LAYER, true);
+      style.getLayer(PULSING_CIRCLE_LAYER).setProperties(
+          circleRadius(get(PROPERTY_PULSING_RADIUS)),
+          circleColor(options.pulseColor()),
+          circleStrokeColor(options.pulseColor()),
+          circleOpacity(get(PROPERTY_PULSING_OPACITY))
+      );
+    }
   }
 
   private void determineIconsSource(LocationComponentOptions options) {
