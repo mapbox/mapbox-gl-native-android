@@ -1,7 +1,5 @@
 package com.mapbox.mapboxsdk.style.sources;
 
-import android.text.TextUtils;
-
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -79,8 +77,7 @@ public abstract class Source {
    */
   @Nullable
   public Integer getPrefetchZoomDelta() {
-    String delta = nativeGetPrefetchZoomDelta();
-    return TextUtils.isEmpty(delta) ? null : Integer.valueOf(delta);
+    return nativeGetPrefetchZoomDelta();
   }
 
   /**
@@ -92,7 +89,7 @@ public abstract class Source {
    * @param delta zoom delta
    */
   public void setPrefetchZoomDelta(@Nullable Integer delta) {
-    nativeSetPrefetchZoomDelta(delta == null ? null : String.valueOf(delta));
+    nativeSetPrefetchZoomDelta(delta);
   }
 
   /**
@@ -114,11 +111,11 @@ public abstract class Source {
 
   @NonNull
   @Keep
-  protected native String nativeGetPrefetchZoomDelta();
+  protected native Integer nativeGetPrefetchZoomDelta();
 
   @NonNull
   @Keep
-  protected native void nativeSetPrefetchZoomDelta(String delta);
+  protected native void nativeSetPrefetchZoomDelta(Integer delta);
 
   public void setDetached() {
     detached = true;
