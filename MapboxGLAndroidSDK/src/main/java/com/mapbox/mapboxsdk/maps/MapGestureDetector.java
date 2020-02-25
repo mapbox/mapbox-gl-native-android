@@ -1107,6 +1107,10 @@ final class MapGestureDetector {
     onMapLongClickListenerList.remove(onMapLongClickListener);
   }
 
+  void clearOnMapLongClickListeners() {
+    onMapLongClickListenerList.clear();
+  }
+
   void addOnFlingListener(MapboxMap.OnFlingListener onFlingListener) {
     onFlingListenerList.add(onFlingListener);
   }
