@@ -1801,6 +1801,13 @@ public final class MapboxMap {
   }
 
   /**
+   * Clears callbacks that are invoked when the map is rotated.
+   */
+  public void clearOnRotateListeners() {
+    onGesturesManagerInteractionListener.onClearRotateListeners();
+  }
+
+  /**
    * Adds a callback that's invoked when the map is scaled.
    *
    * @param listener The callback that's invoked when the map is scaled.
@@ -2267,6 +2274,8 @@ public final class MapboxMap {
     void onAddRotateListener(OnRotateListener listener);
 
     void onRemoveRotateListener(OnRotateListener listener);
+
+    void onClearRotateListeners();
 
     void onAddScaleListener(OnScaleListener listener);
 
