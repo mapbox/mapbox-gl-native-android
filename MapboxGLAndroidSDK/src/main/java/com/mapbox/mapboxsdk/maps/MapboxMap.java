@@ -1709,6 +1709,13 @@ public final class MapboxMap {
   }
 
   /**
+   * Clears callbacks that are invoked when camera position changes.
+   */
+  public void clearOnCameraMoveListeners() {
+    cameraChangeDispatcher.clearOnCameraMoveListeners();
+  }
+
+  /**
    * Sets a callback that's invoked on every frame rendered to the map view.
    *
    * @param listener The callback that's invoked on every frame rendered to the map view.
