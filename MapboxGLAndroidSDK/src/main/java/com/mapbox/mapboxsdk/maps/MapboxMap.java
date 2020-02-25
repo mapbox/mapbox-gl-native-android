@@ -1751,6 +1751,13 @@ public final class MapboxMap {
   }
 
   /**
+   * Clears callbacks that are invoked when the map is flinged.
+   */
+  public void clearOnFlingListeners() {
+    onGesturesManagerInteractionListener.onClearFlingListeners();
+  }
+
+  /**
    * Adds a callback that's invoked when the map is moved.
    *
    * @param listener The callback that's invoked when the map is moved.
@@ -2241,6 +2248,8 @@ public final class MapboxMap {
     void onAddFlingListener(OnFlingListener listener);
 
     void onRemoveFlingListener(OnFlingListener listener);
+
+    void onClearFlingListeners();
 
     void onAddMoveListener(OnMoveListener listener);
 

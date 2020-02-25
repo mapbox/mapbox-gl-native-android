@@ -1119,6 +1119,10 @@ final class MapGestureDetector {
     onFlingListenerList.remove(onFlingListener);
   }
 
+  void clearOnFlingListeners() {
+    onFlingListenerList.clear();
+  }
+
   void addOnMoveListener(MapboxMap.OnMoveListener listener) {
     onMoveListenerList.add(listener);
   }
