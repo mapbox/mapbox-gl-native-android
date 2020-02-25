@@ -1167,6 +1167,10 @@ final class MapGestureDetector {
     onShoveListenerList.remove(listener);
   }
 
+  void clearShoveListeners() {
+    onShoveListenerList.clear();
+  }
+
   AndroidGesturesManager getGesturesManager() {
     return gesturesManager;
   }

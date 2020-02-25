@@ -1851,6 +1851,13 @@ public final class MapboxMap {
   }
 
   /**
+   * Clears callbacks that are invoked when the map is tilted.
+   */
+  public void clearOnShoveListeners() {
+    onGesturesManagerInteractionListener.onClearShoveListeners();
+  }
+
+  /**
    * Sets a custom {@link AndroidGesturesManager} to handle {@link android.view.MotionEvent}s
    * registered by the {@link MapView}.
    *
@@ -2293,6 +2300,8 @@ public final class MapboxMap {
     void onAddShoveListener(OnShoveListener listener);
 
     void onRemoveShoveListener(OnShoveListener listener);
+
+    void onClearShoveListeners();
 
     AndroidGesturesManager getGesturesManager();
 

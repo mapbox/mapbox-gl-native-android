@@ -1271,6 +1271,11 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
     }
 
     @Override
+    public void onClearShoveListeners() {
+      mapGestureDetector.clearShoveListeners();
+    }
+
+    @Override
     public AndroidGesturesManager getGesturesManager() {
       return mapGestureDetector.getGesturesManager();
     }
