@@ -1095,6 +1095,10 @@ final class MapGestureDetector {
     onMapClickListenerList.remove(onMapClickListener);
   }
 
+  void clearOnMapClickListeners() {
+    onMapClickListenerList.clear();
+  }
+
   void addOnMapLongClickListener(MapboxMap.OnMapLongClickListener onMapLongClickListener) {
     onMapLongClickListenerList.add(onMapLongClickListener);
   }

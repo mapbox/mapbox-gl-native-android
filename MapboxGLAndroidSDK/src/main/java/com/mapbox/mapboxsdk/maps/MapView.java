@@ -1181,6 +1181,11 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
     }
 
     @Override
+    public void onClearMapClickListeners() {
+      mapGestureDetector.clearOnMapClickListeners();
+    }
+
+    @Override
     public void onAddMapLongClickListener(MapboxMap.OnMapLongClickListener listener) {
       mapGestureDetector.addOnMapLongClickListener(listener);
     }

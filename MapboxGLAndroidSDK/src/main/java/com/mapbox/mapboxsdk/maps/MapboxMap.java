@@ -1876,6 +1876,13 @@ public final class MapboxMap {
   }
 
   /**
+   * Clears callbacks that are invoked when the user clicks on the map view.
+   */
+  public void clearOnMapClickListeners() {
+    onGesturesManagerInteractionListener.onClearMapClickListeners();
+  }
+
+  /**
    * Adds a callback that's invoked when the user long clicks on the map view.
    *
    * @param listener The callback that's invoked when the user long clicks on the map view.
@@ -2215,6 +2222,8 @@ public final class MapboxMap {
     void onAddMapClickListener(OnMapClickListener listener);
 
     void onRemoveMapClickListener(OnMapClickListener listener);
+
+    void onClearMapClickListeners();
 
     void onAddMapLongClickListener(OnMapLongClickListener listener);
 
