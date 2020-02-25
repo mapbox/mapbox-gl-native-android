@@ -100,6 +100,10 @@ class CameraChangeDispatcher implements MapboxMap.OnCameraMoveStartedListener, M
     }
   }
 
+  void clearOnCameraMoveStartedListeners() {
+    onCameraMoveStarted.clear();
+  }
+
   void addOnCameraMoveListener(OnCameraMoveListener listener) {
     onCameraMove.add(listener);
   }
