@@ -1131,6 +1131,10 @@ final class MapGestureDetector {
     onMoveListenerList.remove(listener);
   }
 
+  void clearOnMoveListeners() {
+    onMoveListenerList.clear();
+  }
+
   void addOnRotateListener(MapboxMap.OnRotateListener listener) {
     onRotateListenerList.add(listener);
   }

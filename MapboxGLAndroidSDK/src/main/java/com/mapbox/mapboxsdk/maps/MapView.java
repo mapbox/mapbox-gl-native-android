@@ -1226,6 +1226,11 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
     }
 
     @Override
+    public void onClearMoveListeners() {
+      mapGestureDetector.clearOnMoveListeners();
+    }
+
+    @Override
     public void onAddRotateListener(MapboxMap.OnRotateListener listener) {
       mapGestureDetector.addOnRotateListener(listener);
     }
