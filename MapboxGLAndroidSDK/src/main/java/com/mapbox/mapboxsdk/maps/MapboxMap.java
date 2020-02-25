@@ -1659,6 +1659,13 @@ public final class MapboxMap {
   }
 
   /**
+   * Clears callbacks that are invoked when camera movement was cancelled.
+   */
+  public void clearOnCameraMoveCancelListeners() {
+    cameraChangeDispatcher.clearOnCameraMoveCancelListeners();
+  }
+
+  /**
    * Adds a callback that is invoked when camera movement has started.
    *
    * @param listener the listener to notify
