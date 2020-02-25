@@ -1256,6 +1256,11 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
     }
 
     @Override
+    public void onClearScaleListeners() {
+      mapGestureDetector.clearOnScaleListeners();
+    }
+
+    @Override
     public void onAddShoveListener(MapboxMap.OnShoveListener listener) {
       mapGestureDetector.addShoveListener(listener);
     }

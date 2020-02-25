@@ -1155,6 +1155,10 @@ final class MapGestureDetector {
     onScaleListenerList.remove(listener);
   }
 
+  void clearOnScaleListeners() {
+    onScaleListenerList.clear();
+  }
+
   void addShoveListener(MapboxMap.OnShoveListener listener) {
     onShoveListenerList.add(listener);
   }

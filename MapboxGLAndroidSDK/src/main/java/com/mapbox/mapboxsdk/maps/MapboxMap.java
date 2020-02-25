@@ -1826,6 +1826,13 @@ public final class MapboxMap {
   }
 
   /**
+   * Clears callbacks that are invoked when the map is scaled.
+   */
+  public void clearOnScaleListeners() {
+    onGesturesManagerInteractionListener.onClearScaleListeners();
+  }
+
+  /**
    * Adds a callback that's invoked when the map is tilted.
    *
    * @param listener The callback that's invoked when the map is tilted.
@@ -2280,6 +2287,8 @@ public final class MapboxMap {
     void onAddScaleListener(OnScaleListener listener);
 
     void onRemoveScaleListener(OnScaleListener listener);
+
+    void onClearScaleListeners();
 
     void onAddShoveListener(OnShoveListener listener);
 
