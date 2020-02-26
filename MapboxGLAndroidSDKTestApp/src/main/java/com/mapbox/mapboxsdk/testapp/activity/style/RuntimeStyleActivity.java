@@ -3,12 +3,14 @@ package com.mapbox.mapboxsdk.testapp.activity.style;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.Point;
+import com.mapbox.geojson.Polygon;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
@@ -30,12 +32,15 @@ import com.mapbox.mapboxsdk.style.sources.TileSet;
 import com.mapbox.mapboxsdk.style.sources.VectorSource;
 import com.mapbox.mapboxsdk.testapp.R;
 import com.mapbox.mapboxsdk.testapp.utils.ResourceUtils;
-import timber.log.Timber;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import androidx.appcompat.app.AppCompatActivity;
+import timber.log.Timber;
 
 import static com.mapbox.mapboxsdk.style.expressions.Expression.all;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.color;
@@ -50,6 +55,7 @@ import static com.mapbox.mapboxsdk.style.expressions.Expression.lt;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.stop;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.switchCase;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.toNumber;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.within;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.zoom;
 import static com.mapbox.mapboxsdk.style.layers.Property.FILL_TRANSLATE_ANCHOR_MAP;
 import static com.mapbox.mapboxsdk.style.layers.Property.NONE;
@@ -69,6 +75,7 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.symbolPlacement;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textSize;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
+import static com.mapbox.mapboxsdk.utils.ColorUtils.colorToRgbaString;
 
 /**
  * Test activity showcasing the runtime style API.
@@ -78,6 +85,21 @@ public class RuntimeStyleActivity extends AppCompatActivity {
   private MapView mapView;
   private MapboxMap mapboxMap;
   private boolean styleLoaded;
+
+  List<List<Point>> lngLats = Collections.singletonList(
+    Arrays.asList(
+      Point.fromLngLat(-13.359375,
+        67.60922060496382),
+      Point.fromLngLat(-14.0625,
+        36.1733569352216),
+      Point.fromLngLat(43.59375,
+        36.4566360115962),
+      Point.fromLngLat(-13.359375,
+        67.60922060496382)
+    )
+  );
+
+  Polygon polygon = Polygon.fromLngLats(lngLats);
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -93,13 +115,19 @@ public class RuntimeStyleActivity extends AppCompatActivity {
       mapboxMap = map;
 
       // Center and Zoom (Amsterdam, zoomed to streets)
-      mapboxMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(52.379189, 4.899431), 14));
+      mapboxMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(52.379189, 4.899431), 1));
 
       mapboxMap.setStyle(
         new Style.Builder()
           .fromUri(Style.MAPBOX_STREETS)
           // set custom transition
-          .withTransition(new TransitionOptions(250, 50)), style -> styleLoaded = true
+          .withTransition(new TransitionOptions(250, 50)), style -> {
+          styleLoaded = true;
+          SymbolLayer laber = (SymbolLayer) style.getLayer("country-label");
+          laber.setProperties(
+            textSize(switchCase(within(polygon), literal(25f), literal(15f)))
+          );
+        }
       );
     });
   }

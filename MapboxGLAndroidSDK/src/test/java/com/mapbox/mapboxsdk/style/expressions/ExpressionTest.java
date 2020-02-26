@@ -2,6 +2,8 @@ package com.mapbox.mapboxsdk.style.expressions;
 
 import android.graphics.Color;
 
+import com.mapbox.geojson.Point;
+import com.mapbox.geojson.Polygon;
 import com.mapbox.mapboxsdk.style.layers.PropertyValue;
 import com.mapbox.mapboxsdk.utils.ColorUtils;
 
@@ -9,8 +11,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -94,6 +99,7 @@ import static com.mapbox.mapboxsdk.style.expressions.Expression.toRgba;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.typeOf;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.upcase;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.var;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.within;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.zoom;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineOpacity;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
@@ -449,8 +455,26 @@ public class ExpressionTest {
 
   @Test
   public void testInString() throws Exception {
-    Object[] expected = new Object[] {"in", "one",  "onetwo"};
+    Object[] expected = new Object[] {"in", "one", "onetwo"};
     Object[] actual = in(literal("one"), literal("onetwo")).toArray();
+    assertTrue("expression should match", Arrays.deepEquals(expected, actual));
+  }
+
+  @Test
+  public void testWithIn() throws Exception {
+    List<List<Point>> lngLats = Collections.singletonList(
+      Arrays.asList(
+        Point.fromLngLat(0, 0),
+        Point.fromLngLat(0, 5),
+        Point.fromLngLat(5, 5),
+        Point.fromLngLat(5, 0),
+        Point.fromLngLat(0, 0)
+      )
+    );
+
+    Polygon polygon = Polygon.fromLngLats(lngLats);
+    Object[] expected = new Object[] {"within", polygon};
+    Object[] actual = within(polygon).toArray();
     assertTrue("expression should match", Arrays.deepEquals(expected, actual));
   }
 

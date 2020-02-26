@@ -12,6 +12,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import com.mapbox.geojson.GeoJson;
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.layers.PropertyValue;
 
@@ -1570,6 +1571,11 @@ public class Expression {
    */
   public static Expression in(@NonNull String needle, @NonNull Expression haystack) {
     return new Expression("in", literal(needle), haystack);
+  }
+
+  public static Expression within(@NonNull GeoJson geojson) {
+    String string = geojson.toJson();
+    return new Expression("within", literal(string));
   }
 
   /**
