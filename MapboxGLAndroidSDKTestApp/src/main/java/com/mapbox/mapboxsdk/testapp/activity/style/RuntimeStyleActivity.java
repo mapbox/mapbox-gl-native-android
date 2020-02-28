@@ -75,7 +75,6 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.symbolPlacement;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textSize;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
-import static com.mapbox.mapboxsdk.utils.ColorUtils.colorToRgbaString;
 
 /**
  * Test activity showcasing the runtime style API.
@@ -88,14 +87,16 @@ public class RuntimeStyleActivity extends AppCompatActivity {
 
   List<List<Point>> lngLats = Collections.singletonList(
     Arrays.asList(
-      Point.fromLngLat(-13.359375,
-        67.60922060496382),
-      Point.fromLngLat(-14.0625,
-        36.1733569352216),
-      Point.fromLngLat(43.59375,
-        36.4566360115962),
-      Point.fromLngLat(-13.359375,
-        67.60922060496382)
+      Point.fromLngLat(-15.468749999999998,
+        41.77131167976407),
+      Point.fromLngLat(15.468749999999998,
+        41.77131167976407),
+      Point.fromLngLat(15.468749999999998,
+        58.26328705248601),
+      Point.fromLngLat(-15.468749999999998,
+        58.26328705248601),
+      Point.fromLngLat(-15.468749999999998,
+        41.77131167976407)
     )
   );
 
@@ -575,7 +576,7 @@ public class RuntimeStyleActivity extends AppCompatActivity {
         states.setProperties(
           textSize(switchCase(
             in(get("name"), literal("Texas")), literal(25.0f),
-            in(get("name"), literal(new Object[] {"California","Illinois"})), literal(25.0f),
+            in(get("name"), literal(new Object[] {"California", "Illinois"})), literal(25.0f),
             literal(6.0f) // default value
             )
           )
