@@ -61,6 +61,8 @@ public final class Transform implements MapView.OnCameraDidChangeListener {
     }
     setMinZoom(options.getMinZoomPreference());
     setMaxZoom(options.getMaxZoomPreference());
+    setMinPitch(options.getMinPitchPreference());
+    setMaxPitch(options.getMaxPitchPreference());
   }
 
   //
