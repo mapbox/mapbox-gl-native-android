@@ -73,6 +73,7 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineJoin;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineOpacity;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.symbolPlacement;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textOpacity;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textSize;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
 
@@ -126,7 +127,7 @@ public class RuntimeStyleActivity extends AppCompatActivity {
           styleLoaded = true;
           SymbolLayer laber = (SymbolLayer) style.getLayer("country-label");
           laber.setProperties(
-            textSize(switchCase(within(polygon), literal(25f), literal(15f)))
+            textOpacity(switchCase(within(polygon), literal(1.0f), literal(0.5f)))
           );
         }
       );
