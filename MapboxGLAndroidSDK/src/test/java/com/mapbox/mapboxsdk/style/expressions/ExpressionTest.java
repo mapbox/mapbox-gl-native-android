@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -473,7 +472,10 @@ public class ExpressionTest {
     );
 
     Polygon polygon = Polygon.fromLngLats(lngLats);
-    Object[] expected = new Object[] {"within", polygon};
+    HashMap<String, String> map = new HashMap<>();
+    map.put("type", "Polygon");
+    map.put("json", polygon.toJson());
+    Object[] expected = new Object[] {"within", map};
     Object[] actual = within(polygon).toArray();
     assertTrue("expression should match", Arrays.deepEquals(expected, actual));
   }
