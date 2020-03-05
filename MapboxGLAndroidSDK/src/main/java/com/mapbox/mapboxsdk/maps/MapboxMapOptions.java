@@ -7,14 +7,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import androidx.annotation.ColorInt;
-import androidx.annotation.IntRange;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
-import androidx.core.content.res.ResourcesCompat;
-
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -26,6 +18,13 @@ import com.mapbox.mapboxsdk.utils.BitmapUtils;
 import com.mapbox.mapboxsdk.utils.FontUtils;
 
 import java.util.Arrays;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.IntRange;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
+import androidx.core.content.res.ResourcesCompat;
 
 /**
  * Defines configuration MapboxMapMapOptions for a MapboxMap. These options can be used when adding a
@@ -74,6 +73,8 @@ public class MapboxMapOptions implements Parcelable {
   private boolean zoomGesturesEnabled = true;
   private boolean doubleTapGesturesEnabled = true;
   private boolean quickZoomGesturesEnabled = true;
+
+  private boolean locationComponentOptedIn = true;
 
   private boolean prefetchesTiles = true;
   private int prefetchZoomDelta = 4;
@@ -793,6 +794,18 @@ public class MapboxMapOptions implements Parcelable {
   }
 
   /**
+   * Opts LocationComponent in or out
+   *
+   * @param optedIn True is LocationComponent is opted in
+   * @return This
+   */
+  @NonNull
+  public MapboxMapOptions locationComponentOptedIn(boolean optedIn) {
+    locationComponentOptedIn = optedIn;
+    return this;
+  }
+
+  /**
    * Check whether tile pre-fetching is enabled.
    *
    * @return true if enabled
@@ -1125,6 +1138,15 @@ public class MapboxMapOptions implements Parcelable {
   @Nullable
   public String getLocalIdeographFontFamily() {
     return localIdeographFontFamilyEnabled ? localIdeographFontFamily : null;
+  }
+
+  /**
+   * Get whether the location component is opted in.
+   *
+   * @return True indicates location component is opted in
+   */
+  public boolean getLocationComponentOptedIn() {
+    return locationComponentOptedIn;
   }
 
   /**
