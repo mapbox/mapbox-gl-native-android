@@ -1,5 +1,6 @@
 package com.mapbox.mapboxsdk.testapp.activity.snapshot;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.ViewTreeObserver;
@@ -12,6 +13,7 @@ import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.snapshotter.MapSnapshotter;
+import com.mapbox.mapboxsdk.style.layers.FillLayer;
 import com.mapbox.mapboxsdk.testapp.R;
 
 import java.util.ArrayList;
@@ -19,6 +21,9 @@ import java.util.List;
 import java.util.Random;
 
 import timber.log.Timber;
+
+import static com.mapbox.mapboxsdk.style.expressions.Expression.color;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillColor;
 
 /**
  * Test activity showing how to use a the {@link com.mapbox.mapboxsdk.snapshotter.MapSnapshotter}
@@ -96,6 +101,10 @@ public class MapSnapshotterActivity extends AppCompatActivity {
 
     MapSnapshotter snapshotter = new MapSnapshotter(MapSnapshotterActivity.this, options);
 
+    FillLayer water = new FillLayer("water","mapbox");
+    water.setProperties(fillColor(color(Color.GREEN)));
+
+    snapshotter.addLayer(water);
     snapshotter.start(snapshot -> {
       Timber.i("Got the snapshot");
       ImageView imageView = new ImageView(MapSnapshotterActivity.this);

@@ -31,6 +31,7 @@ import com.mapbox.mapboxsdk.log.Logger;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.maps.TelemetryDefinition;
 import com.mapbox.mapboxsdk.storage.FileSource;
+import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.utils.FontUtils;
 import com.mapbox.mapboxsdk.utils.ThreadUtils;
 
@@ -413,6 +414,15 @@ public class MapSnapshotter {
   public native void setStyleJson(String styleJson);
 
   /**
+   * Add a new layer to snapshotter before snapshotter starts.
+   *
+   * @param layer the layer to add.
+   */
+  public void addLayer(Layer layer){
+    nativeAddLayer(layer.getNativePtr());
+  }
+
+  /**
    * Must be called in on the thread
    * the object was created on.
    */
@@ -630,6 +640,9 @@ public class MapSnapshotter {
 
   @Keep
   protected native void nativeCancel();
+
+  @Keep
+  protected native void nativeAddLayer(long id);
 
   @Override
   @Keep
