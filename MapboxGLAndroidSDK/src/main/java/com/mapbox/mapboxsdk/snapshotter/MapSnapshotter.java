@@ -6,12 +6,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.PointF;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
-import androidx.annotation.Keep;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.UiThread;
-import androidx.core.content.res.ResourcesCompat;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -32,8 +28,21 @@ import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.maps.TelemetryDefinition;
 import com.mapbox.mapboxsdk.storage.FileSource;
 import com.mapbox.mapboxsdk.style.layers.Layer;
+import com.mapbox.mapboxsdk.style.layers.TransitionOptions;
+import com.mapbox.mapboxsdk.style.light.Light;
+import com.mapbox.mapboxsdk.style.sources.Source;
 import com.mapbox.mapboxsdk.utils.FontUtils;
 import com.mapbox.mapboxsdk.utils.ThreadUtils;
+
+import java.util.HashMap;
+import java.util.List;
+
+import androidx.annotation.IntRange;
+import androidx.annotation.Keep;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
+import androidx.core.content.res.ResourcesCompat;
 
 /**
  * The map snapshotter creates a large of the map, rendered
@@ -59,6 +68,92 @@ public class MapSnapshotter {
      */
     void onSnapshotReady(MapSnapshot snapshot);
 
+    void onDidFailLoadingStyle(String error);
+
+    void onDidFinishLoadingStyle(MapSnapshotStyle style);
+
+    void onStyleImageMissing(String error);
+  }
+
+  public class MapSnapshotStyle {
+    private MapSnapshotStyle() {
+    }
+
+    public void addLayer(@NonNull Layer layer) {
+      MapSnapshotter.this.addLayer(layer);
+    }
+
+    public void addLayerBelow(@NonNull Layer layer, @NonNull String below) {
+    }
+
+    public void addLayerAbove(@NonNull Layer layer, @NonNull String above) {
+    }
+
+    public void addLayerAt(@NonNull Layer layer, @IntRange(from = 0) int index) {
+    }
+
+    @NonNull
+    public List<Layer> getLayers() {
+    }
+
+    public Layer getLayer(String layerId) {
+    }
+
+    public boolean removeLayer(@NonNull String layerId) {
+    }
+
+    public boolean removeLayer(@NonNull Layer layer) {
+    }
+
+    public boolean removeLayerAt(@IntRange(from = 0) int index) {
+    }
+
+    public void addSource(@NonNull Source source) {
+    }
+
+    @NonNull
+    public List<Source> getSources() {
+    }
+
+    public Source getSource(@NonNull String sourceId) {
+    }
+
+    public boolean removeSource(@NonNull String sourceId) {
+    }
+
+    public boolean removeSource(@NonNull Source source) {
+    }
+
+    public void setTransitionOptions(@NonNull TransitionOptions transitionOptions) {
+    }
+
+    public void addImage(@NonNull String name, @NonNull Bitmap image) {
+      addImage(name, image, false);
+    }
+
+    public void addImage(@NonNull String name, @NonNull Drawable drawable) {
+
+    }
+
+    public void addImage(@NonNull final String name, @NonNull Bitmap bitmap, boolean sdf) {
+    }
+
+    public void addImages(@NonNull HashMap<String, Bitmap> images) {
+      addImages(images, false);
+    }
+
+    public void addImages(@NonNull HashMap<String, Bitmap> images, boolean sdf) {
+
+    }
+
+    public Bitmap getImage(String name) {
+    }
+
+    public void removeImage(String name) {
+    }
+
+    public Light getLight() {
+    }
   }
 
   /**
@@ -188,6 +283,7 @@ public class MapSnapshotter {
      * Default system fonts are defined in &#x27;/system/etc/fonts.xml&#x27;
      * Default font for local ideograph font family is {@link MapboxConstants#DEFAULT_FONT}.
      * </p>
+     *
      * @param fontFamily font family for local ideograph generation.
      * @return the mutated {@link Options}
      */
@@ -205,6 +301,7 @@ public class MapSnapshotter {
      * &#x27;/system/etc/fonts.xml&#x27;. Default font for local ideograph font family is
      * {@link MapboxConstants#DEFAULT_FONT}.
      * </p>
+     *
      * @param fontFamilies font families for local ideograph generation.
      * @return the mutated {@link Options}
      */
@@ -418,8 +515,16 @@ public class MapSnapshotter {
    *
    * @param layer the layer to add.
    */
-  public void addLayer(Layer layer){
+  private void addLayer(Layer layer) {
     nativeAddLayer(layer.getNativePtr());
+  }
+
+  private boolean removeLayer(@NonNull Layer layer) {
+
+  }
+
+  private void addImage() {
+
   }
 
   /**
