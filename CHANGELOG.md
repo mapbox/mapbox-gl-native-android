@@ -2,7 +2,7 @@
 
 Mapbox welcomes participation and contributions from everyone.  If you'd like to do so please see the [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) first to get started.
 
-## 9.0.1 - March 6, 2020
+## 9.0.1 - March 11, 2020
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.0.0...android-v9.0.1) since [Mapbox Maps SDK for Android v9.0.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.0.0):
 ### Bug fixes
  - Fix Proguard configuration to prevent obfuscation of telemetry event classes. [#195](https://github.com/mapbox/mapbox-gl-native-android/pull/195)
