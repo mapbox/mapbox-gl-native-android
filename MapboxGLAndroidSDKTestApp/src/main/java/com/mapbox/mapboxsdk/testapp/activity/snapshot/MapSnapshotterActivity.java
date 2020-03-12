@@ -104,7 +104,7 @@ public class MapSnapshotterActivity extends AppCompatActivity {
     FillLayer water = new FillLayer("water","mapbox");
     water.setProperties(fillColor(color(Color.GREEN)));
 
-    snapshotter.addLayer(water);
+    //snapshotter.addLayer(water);
     snapshotter.start(snapshot -> {
       Timber.i("Got the snapshot");
       ImageView imageView = new ImageView(MapSnapshotterActivity.this);

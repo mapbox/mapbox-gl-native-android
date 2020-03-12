@@ -67,94 +67,96 @@ public class MapSnapshotter {
      * @param snapshot the snapshot
      */
     void onSnapshotReady(MapSnapshot snapshot);
-
-    void onDidFailLoadingStyle(String error);
-
-    void onDidFinishLoadingStyle(MapSnapshotStyle style);
-
-    void onStyleImageMissing(String error);
   }
 
-  public class MapSnapshotStyle {
-    private MapSnapshotStyle() {
-    }
+  public interface MapSnapshotterObserver {
+    void onDidFailLoadingStyle(String reason);
 
-    public void addLayer(@NonNull Layer layer) {
-      MapSnapshotter.this.addLayer(layer);
-    }
+    void onDidFinishLoadingStyle();
 
-    public void addLayerBelow(@NonNull Layer layer, @NonNull String below) {
-    }
-
-    public void addLayerAbove(@NonNull Layer layer, @NonNull String above) {
-    }
-
-    public void addLayerAt(@NonNull Layer layer, @IntRange(from = 0) int index) {
-    }
-
-    @NonNull
-    public List<Layer> getLayers() {
-    }
-
-    public Layer getLayer(String layerId) {
-    }
-
-    public boolean removeLayer(@NonNull String layerId) {
-    }
-
-    public boolean removeLayer(@NonNull Layer layer) {
-    }
-
-    public boolean removeLayerAt(@IntRange(from = 0) int index) {
-    }
-
-    public void addSource(@NonNull Source source) {
-    }
-
-    @NonNull
-    public List<Source> getSources() {
-    }
-
-    public Source getSource(@NonNull String sourceId) {
-    }
-
-    public boolean removeSource(@NonNull String sourceId) {
-    }
-
-    public boolean removeSource(@NonNull Source source) {
-    }
-
-    public void setTransitionOptions(@NonNull TransitionOptions transitionOptions) {
-    }
-
-    public void addImage(@NonNull String name, @NonNull Bitmap image) {
-      addImage(name, image, false);
-    }
-
-    public void addImage(@NonNull String name, @NonNull Drawable drawable) {
-
-    }
-
-    public void addImage(@NonNull final String name, @NonNull Bitmap bitmap, boolean sdf) {
-    }
-
-    public void addImages(@NonNull HashMap<String, Bitmap> images) {
-      addImages(images, false);
-    }
-
-    public void addImages(@NonNull HashMap<String, Bitmap> images, boolean sdf) {
-
-    }
-
-    public Bitmap getImage(String name) {
-    }
-
-    public void removeImage(String name) {
-    }
-
-    public Light getLight() {
-    }
+    void onStyleImageMissing(String imageName);
   }
+
+//  public class MapSnapshotStyle {
+//    private MapSnapshotStyle() {
+//    }
+//
+//    public void addLayer(@NonNull Layer layer) {
+//      MapSnapshotter.this.addLayer(layer);
+//    }
+//
+//    public void addLayerBelow(@NonNull Layer layer, @NonNull String below) {
+//    }
+//
+//    public void addLayerAbove(@NonNull Layer layer, @NonNull String above) {
+//    }
+//
+//    public void addLayerAt(@NonNull Layer layer, @IntRange(from = 0) int index) {
+//    }
+//
+//    @NonNull
+//    public List<Layer> getLayers() {
+//    }
+//
+//    public Layer getLayer(String layerId) {
+//    }
+//
+//    public boolean removeLayer(@NonNull String layerId) {
+//    }
+//
+//    public boolean removeLayer(@NonNull Layer layer) {
+//    }
+//
+//    public boolean removeLayerAt(@IntRange(from = 0) int index) {
+//    }
+//
+//    public void addSource(@NonNull Source source) {
+//    }
+//
+//    @NonNull
+//    public List<Source> getSources() {
+//    }
+//
+//    public Source getSource(@NonNull String sourceId) {
+//    }
+//
+//    public boolean removeSource(@NonNull String sourceId) {
+//    }
+//
+//    public boolean removeSource(@NonNull Source source) {
+//    }
+//
+//    public void setTransitionOptions(@NonNull TransitionOptions transitionOptions) {
+//    }
+//
+//    public void addImage(@NonNull String name, @NonNull Bitmap image) {
+//      addImage(name, image, false);
+//    }
+//
+//    public void addImage(@NonNull String name, @NonNull Drawable drawable) {
+//
+//    }
+//
+//    public void addImage(@NonNull final String name, @NonNull Bitmap bitmap, boolean sdf) {
+//    }
+//
+//    public void addImages(@NonNull HashMap<String, Bitmap> images) {
+//      addImages(images, false);
+//    }
+//
+//    public void addImages(@NonNull HashMap<String, Bitmap> images, boolean sdf) {
+//
+//    }
+//
+//    public Bitmap getImage(String name) {
+//    }
+//
+//    public void removeImage(String name) {
+//    }
+//
+//    public Light getLight() {
+//    }
+//  }
 
   /**
    * Can be used to get notified of errors
@@ -184,6 +186,8 @@ public class MapSnapshotter {
   private SnapshotReadyCallback callback;
   @Nullable
   private ErrorHandler errorHandler;
+  @Nullable
+  private MapSnapshotterObserver observer;
 
   /**
    * MapSnapshotter options
@@ -425,8 +429,13 @@ public class MapSnapshotter {
    * @param options the options to use for the snapshot
    */
   public MapSnapshotter(@NonNull Context context, @NonNull Options options) {
+    this(context, options, null);
+  }
+
+  public MapSnapshotter(@NonNull Context context, @NonNull Options options, MapSnapshotterObserver observer_) {
     checkThread();
     this.context = context.getApplicationContext();
+    observer = observer_;
     TelemetryDefinition telemetry = Mapbox.getTelemetry();
     if (telemetry != null) {
       telemetry.onAppUserTurnstileEvent();
@@ -441,6 +450,8 @@ public class MapSnapshotter {
       options.height, options.styleUri, options.styleJson, options.region, options.cameraPosition,
       options.showLogo, options.localIdeographFontFamily);
   }
+
+
 
   /**
    * Starts loading and rendering the snapshot. The callback will be fired
@@ -509,23 +520,6 @@ public class MapSnapshotter {
    */
   @Keep
   public native void setStyleJson(String styleJson);
-
-  /**
-   * Add a new layer to snapshotter before snapshotter starts.
-   *
-   * @param layer the layer to add.
-   */
-  private void addLayer(Layer layer) {
-    nativeAddLayer(layer.getNativePtr());
-  }
-
-  private boolean removeLayer(@NonNull Layer layer) {
-
-  }
-
-  private void addImage() {
-
-  }
 
   /**
    * Must be called in on the thread
@@ -723,6 +717,36 @@ public class MapSnapshotter {
       reset();
     }
   }
+
+  // TODO: add documentation
+  @Keep
+  protected void onDidFailLoadingStyle(String reason) {
+    if (observer != null) {
+      observer.onDidFailLoadingStyle(reason);
+      reset();
+    }
+  }
+
+  // TODO: add documentation
+  @Keep
+  protected void onDidFinishLoadingStyle() {
+    if (observer != null) {
+      observer.onDidFinishLoadingStyle();
+    }
+  }
+
+  // TODO: add documentation
+  @Keep
+  protected void onStyleImageMissing(String imageName) {
+    if (observer != null) {
+      observer.onStyleImageMissing(imageName);
+    }
+  }
+
+  // TODO: add documentation
+  @Keep
+  public native void addLayer(long layerPtr, String before);
+
 
   private void checkThread() {
     ThreadUtils.checkThread(TAG);
