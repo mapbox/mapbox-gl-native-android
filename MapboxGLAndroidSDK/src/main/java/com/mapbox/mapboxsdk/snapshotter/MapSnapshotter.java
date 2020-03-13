@@ -70,11 +70,11 @@ public class MapSnapshotter {
   }
 
   public interface MapSnapshotterObserver {
-    void onDidFailLoadingStyle(String reason);
+    void onDidFailLoadingStyle(MapSnapshotter snapshotter, String reason);
 
-    void onDidFinishLoadingStyle();
+    void onDidFinishLoadingStyle(MapSnapshotter snapshotter);
 
-    void onStyleImageMissing(String imageName);
+    void onStyleImageMissing(MapSnapshotter snapshotter, String imageName);
   }
 
 //  public class MapSnapshotStyle {
@@ -531,6 +531,10 @@ public class MapSnapshotter {
     nativeCancel();
   }
 
+  public void addLayer(@NonNull Layer layer) {
+      nativeAddLayer(layer.getNativePtr(), null);
+  }
+
   /**
    * Draw an overlay on the map snapshot.
    *
@@ -722,7 +726,7 @@ public class MapSnapshotter {
   @Keep
   protected void onDidFailLoadingStyle(String reason) {
     if (observer != null) {
-      observer.onDidFailLoadingStyle(reason);
+      observer.onDidFailLoadingStyle(this, reason);
       reset();
     }
   }
@@ -731,7 +735,7 @@ public class MapSnapshotter {
   @Keep
   protected void onDidFinishLoadingStyle() {
     if (observer != null) {
-      observer.onDidFinishLoadingStyle();
+      observer.onDidFinishLoadingStyle(this);
     }
   }
 
@@ -739,14 +743,9 @@ public class MapSnapshotter {
   @Keep
   protected void onStyleImageMissing(String imageName) {
     if (observer != null) {
-      observer.onStyleImageMissing(imageName);
+      observer.onStyleImageMissing(this, imageName);
     }
   }
-
-  // TODO: add documentation
-  @Keep
-  public native void addLayer(long layerPtr, String before);
-
 
   private void checkThread() {
     ThreadUtils.checkThread(TAG);
@@ -771,7 +770,7 @@ public class MapSnapshotter {
   protected native void nativeCancel();
 
   @Keep
-  protected native void nativeAddLayer(long id);
+  public native void nativeAddLayer(long layerPtr, String before);
 
   @Override
   @Keep

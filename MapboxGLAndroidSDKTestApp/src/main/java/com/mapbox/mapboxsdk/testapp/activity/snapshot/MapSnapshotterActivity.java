@@ -13,6 +13,7 @@ import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.snapshotter.MapSnapshotter;
+import com.mapbox.mapboxsdk.style.layers.BackgroundLayer;
 import com.mapbox.mapboxsdk.style.layers.FillLayer;
 import com.mapbox.mapboxsdk.testapp.R;
 
@@ -23,6 +24,7 @@ import java.util.Random;
 import timber.log.Timber;
 
 import static com.mapbox.mapboxsdk.style.expressions.Expression.color;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.backgroundColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillColor;
 
 /**
@@ -30,7 +32,7 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillColor;
  */
 public class MapSnapshotterActivity extends AppCompatActivity {
 
-  private GridLayout grid;
+  public GridLayout grid;
   private List<MapSnapshotter> snapshotters = new ArrayList<>();
 
   @Override
@@ -59,6 +61,42 @@ public class MapSnapshotterActivity extends AppCompatActivity {
       for (int column = 0; column < grid.getColumnCount(); column++) {
         startSnapShot(row, column);
       }
+    }
+  }
+
+  class SnapshotterObserver implements MapSnapshotter.MapSnapshotterObserver {
+    private MapSnapshotterActivity mapSnapshotterActivity;
+    private int row;
+    private int column;
+    public SnapshotterObserver(MapSnapshotterActivity mapSnapshotterActivity, int row, int column) {
+      this.mapSnapshotterActivity = mapSnapshotterActivity;
+      this.row = row;
+      this.column = column;
+    }
+
+    @Override
+    public void onDidFailLoadingStyle(MapSnapshotter snapshotter, String error) {
+    }
+
+    @Override
+    public void onDidFinishLoadingStyle(MapSnapshotter snapshotter) {
+      BackgroundLayer bg = new BackgroundLayer("green_tint");
+      bg.setProperties(backgroundColor(Color.valueOf(randomInRange(0.0f, 1.0f), randomInRange(0.0f, 1.0f), randomInRange(0.0f, 1.0f), 0.2f).toArgb()));
+      snapshotter.addLayer(bg);
+      snapshotter.start(snapshot -> {
+        Timber.i("Got the snapshot");
+        ImageView imageView = new ImageView(MapSnapshotterActivity.this);
+        imageView.setImageBitmap(snapshot.getBitmap());
+        grid.addView(
+                imageView,
+                new GridLayout.LayoutParams(GridLayout.spec(row), GridLayout.spec(column))
+        );
+      });
+    }
+
+    @Override
+    public void onStyleImageMissing(MapSnapshotter snapshotter, String imageName) {
+
     }
   }
 
@@ -99,21 +137,7 @@ public class MapSnapshotterActivity extends AppCompatActivity {
       );
     }
 
-    MapSnapshotter snapshotter = new MapSnapshotter(MapSnapshotterActivity.this, options);
-
-    FillLayer water = new FillLayer("water","mapbox");
-    water.setProperties(fillColor(color(Color.GREEN)));
-
-    //snapshotter.addLayer(water);
-    snapshotter.start(snapshot -> {
-      Timber.i("Got the snapshot");
-      ImageView imageView = new ImageView(MapSnapshotterActivity.this);
-      imageView.setImageBitmap(snapshot.getBitmap());
-      grid.addView(
-        imageView,
-        new GridLayout.LayoutParams(GridLayout.spec(row), GridLayout.spec(column))
-      );
-    });
+    MapSnapshotter snapshotter = new MapSnapshotter(MapSnapshotterActivity.this, options, new SnapshotterObserver(this, row, column));
     snapshotters.add(snapshotter);
   }
 

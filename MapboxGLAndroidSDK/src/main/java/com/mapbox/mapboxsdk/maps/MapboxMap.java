@@ -93,6 +93,10 @@ public final class MapboxMap {
     this.developerAnimationStartedListeners = developerAnimationStartedListeners;
   }
 
+  public void triggerRepaint() {
+    nativeMapView.triggerRepaint();
+  }
+
   void initialise(@NonNull Context context, @NonNull MapboxMapOptions options) {
     transform.initialise(this, options);
     uiSettings.initialise(context, options);

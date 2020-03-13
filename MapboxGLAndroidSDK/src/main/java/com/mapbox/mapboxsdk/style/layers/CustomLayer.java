@@ -20,15 +20,8 @@ public class CustomLayer extends Layer {
     super(nativePtr);
   }
 
-  public void update() {
-    nativeUpdate();
-  }
-
   @Keep
   protected native void initialize(String id, long host);
-
-  @Keep
-  protected native void nativeUpdate();
 
   @Override
   @Keep
