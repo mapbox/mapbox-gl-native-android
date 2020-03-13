@@ -1,12 +1,12 @@
 # Changelog for the Mapbox Maps SDK for Android
 
-Mapbox welcomes participation and contributions from everyone.  If you'd like to do so please see the [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) first to get started.
+Mapbox welcomes participation and contributions from everyone. Please read [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) to get started.
 
 ## 9.1.0
 This beta release includes a feature with a known issue: the `within` expression evaluates point features inconsistently across zoom levels if the point lies near the boundary of a GeoJSON object ([#16301](https://github.com/mapbox/mapbox-gl-native/issues/16301])).
 ### Features
  - Added `within` expression for testing whether an evaluated feature lies within a given GeoJSON object. `within` accepts `"Feature"`, `"FeatureCollection"`, `"Polygon"`, and `"MultiPolygon"` as valid GeoJSON objects. ([#198](https://github.com/mapbox/mapbox-gl-native-android/pull/198))
- - Introduced `in` expression for testing whether an item exists in an array or a substring exists in a string. ([#171](https://github.com/mapbox/mapbox-gl-native-android/pull/171))
+ - Added `in` expression for testing whether an item exists in an array or a substring exists in a string. ([#171](https://github.com/mapbox/mapbox-gl-native-android/pull/171))
  - Added `FillLayer.sortKey` and `LineLayer.sortKey` properties. Features with a higher sort key will appear above features with a lower sort key. ([#209](https://github.com/mapbox/mapbox-gl-native-android/pull/209))
  - Introduced option to set the minimum and maximum pitch of a map. ([#199](https://github.com/mapbox/mapbox-gl-native-android/pull/199))
  - Introduced ability to configure the zoom level(s) that tiles are prefetched from by `Source`. This overrides the  tile prefetch setting defined by the `Map` instance. ([#184](https://github.com/mapbox/mapbox-gl-native-android/pull/184))
