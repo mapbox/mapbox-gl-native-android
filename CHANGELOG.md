@@ -4,7 +4,7 @@ Mapbox welcomes participation and contributions from everyone.  If you'd like to
 
 ## 9.1.0
 
-This beta release includes a feature with a known issue: the `within` expression evaluates point features inconsistently across zoom levels if the point lies near the boundary of a GeoJSON object ((#16301)[https://github.com/mapbox/mapbox-gl-native/issues/16301]).
+This beta release includes a feature with a known issue: the `within` expression evaluates point features inconsistently across zoom levels if the point lies near the boundary of a GeoJSON object ([#16301](https://github.com/mapbox/mapbox-gl-native/issues/16301])).
 
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.1.0-alpha.1...android-v9.1.0-beta.1) since [Mapbox Maps SDK for Android v9.1.0-alpha.1](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.1.0-alpha.1):
 
