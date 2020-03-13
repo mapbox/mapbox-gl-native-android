@@ -2,6 +2,15 @@
 
 Mapbox welcomes participation and contributions from everyone.  If you'd like to do so please see the [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) first to get started.
 
+## 9.1.0-alpha.1 - March 13, 2020
+[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.1.0-alpha.1...android-v9.1.0-beta.1) since [Mapbox Maps SDK for Android v9.1.0-alpha.1](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.1.0-alpha.1):
+### Features
+ - Introduce `within` expression for testing whether an item exists in an polygon. [#198](https://github.com/mapbox/mapbox-gl-native-android/pull/198)
+ - Introduce `sortKey` api in LineLayer and FillLayer to set and get layer's sort key. [#209](https://github.com/mapbox/mapbox-gl-native-android/pull/209)
+
+### Bug fixes
+ - Fix expression `in` not works in expression `filter`. [#16272](https://github.com/mapbox/mapbox-gl-native/pull/16272)
+
 ## 9.0.1 - March 11, 2020
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.0.0...android-v9.0.1) since [Mapbox Maps SDK for Android v9.0.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.0.0):
 ### Bug fixes
