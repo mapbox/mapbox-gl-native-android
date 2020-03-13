@@ -5,11 +5,15 @@ Mapbox welcomes participation and contributions from everyone.  If you'd like to
 ## 9.1.0-alpha.1 - March 13, 2020
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.1.0-alpha.1...android-v9.1.0-beta.1) since [Mapbox Maps SDK for Android v9.1.0-alpha.1](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.1.0-alpha.1):
 ### Features
- - Introduce `within` expression for testing whether an item exists in an polygon. [#198](https://github.com/mapbox/mapbox-gl-native-android/pull/198)
- - Introduce `sortKey` api in LineLayer and FillLayer to set and get layer's sort key. [#209](https://github.com/mapbox/mapbox-gl-native-android/pull/209)
+ - Added `within` expression for testing whether an evaluated feature lies within a given GeoJSON object. `within` accepts `"Feature"`, `"FeatureCollection"`, `"Polygon"`, and `"MultiPolygon"` as valid GeoJSON objects. ([#198](https://github.com/mapbox/mapbox-gl-native-android/pull/198))
+ - Added `FillLayer.sortKey` and `LineLayer.sortKey` properties. Features with a higher sort key will appear above features with a lower sort key. ([#209](https://github.com/mapbox/mapbox-gl-native-android/pull/209))
+
+### Performance improvements
+- Increased stability of label placement when the map is tilted. ([#16287](https://github.com/mapbox/mapbox-gl-native/pull/16287))
 
 ### Bug fixes
- - Fix expression `in` not works in expression `filter`. [#16272](https://github.com/mapbox/mapbox-gl-native/pull/16272)
+- Setting the ambient cache size now correctly ignores the size of any offline regions in the database. ([#15622](https://github.com/mapbox/mapbox-gl-native/pull/15622))
+- Fixed conversion of a `Map` object into a GeoJSON object. ([#16243](https://github.com/mapbox/mapbox-gl-native/pull/16243))
 
 ## 9.0.1 - March 11, 2020
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.0.0...android-v9.0.1) since [Mapbox Maps SDK for Android v9.0.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.0.0):
