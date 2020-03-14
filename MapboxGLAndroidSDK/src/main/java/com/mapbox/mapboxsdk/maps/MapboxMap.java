@@ -93,6 +93,7 @@ public final class MapboxMap {
     this.developerAnimationStartedListeners = developerAnimationStartedListeners;
   }
 
+  // TODO: Add documentation
   public void triggerRepaint() {
     nativeMapView.triggerRepaint();
   }
