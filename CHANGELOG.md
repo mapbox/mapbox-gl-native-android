@@ -4,8 +4,8 @@ Mapbox welcomes participation and contributions from everyone. Please read [`Con
 
 ## 9.1.0
 This beta release includes a regression and a new feature with a known issue. Both will be addressed in the stable release.
-- the `MapSnapshotter` will attempt to be created with a styleJSON regardless of whether a styleURL or styleJSON is passed in. (regressed in [#16268](https://github.com/mapbox/mapbox-gl-native/pull/16268), fixed in [#16308](https://github.com/mapbox/mapbox-gl-native/pull/16308))
-- the `within` expression evaluates point features inconsistently across zoom levels if the point lies near the boundary of a GeoJSON object. ([#16301](https://github.com/mapbox/mapbox-gl-native/issues/16301]))
+- The `MapSnapshotter` will attempt to be created with a styleJSON regardless of whether a styleURL or styleJSON is passed in. (regressed in [#16268](https://github.com/mapbox/mapbox-gl-native/pull/16268), fixed in [#16308](https://github.com/mapbox/mapbox-gl-native/pull/16308))
+- The `within` expression evaluates point features inconsistently across zoom levels if the point lies near the boundary of a GeoJSON object. ([#16301](https://github.com/mapbox/mapbox-gl-native/issues/16301]))
 ### Features
  - Added `within` expression for testing whether an evaluated feature lies within a given GeoJSON object. `within` accepts `Feature`, `FeatureCollection`, `Polygon`, and `MultiPolygon` as valid GeoJSON objects. ([#198](https://github.com/mapbox/mapbox-gl-native-android/pull/198))
  - Added `in` expression for testing whether an item exists in an array or a substring exists in a string. ([#171](https://github.com/mapbox/mapbox-gl-native-android/pull/171))
