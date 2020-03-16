@@ -13,6 +13,9 @@ import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.snapshotter.MapSnapshotter;
 import com.mapbox.mapboxsdk.style.layers.BackgroundLayer;
+import com.mapbox.mapboxsdk.style.layers.RasterLayer;
+import com.mapbox.mapboxsdk.style.sources.RasterSource;
+import com.mapbox.mapboxsdk.style.sources.Source;
 import com.mapbox.mapboxsdk.testapp.R;
 
 import java.util.ArrayList;
@@ -99,6 +102,7 @@ public class MapSnapshotterActivity extends AppCompatActivity {
     // Optionally the style
     Style.Builder builder = new Style.Builder()
       .fromUri((column + row) % 2 == 0 ? Style.MAPBOX_STREETS : Style.DARK);
+
     // Define the dimensions
     MapSnapshotter.Options options = new MapSnapshotter.Options(
       grid.getMeasuredWidth() / grid.getColumnCount(),
@@ -125,15 +129,20 @@ public class MapSnapshotterActivity extends AppCompatActivity {
           : new LatLng(randomInRange(-80, 80), randomInRange(-160, 160)))
         .bearing(randomInRange(0, 360))
         .tilt(randomInRange(0, 60))
-        .zoom(randomInRange(0, 20))
+        .zoom(randomInRange(0, 10))
         .padding(1, 1, 1, 1)
         .build()
       );
     }
-
+    if (row == 0 && column == 0) {
+      // Add a source
+      Source source = new RasterSource("my-raster-source", "mapbox://mapbox.satellite", 512);
+      builder.withLayerAbove(new RasterLayer("satellite-layer", "my-raster-source"), "country-label");
+      builder.withSource(source);
+    }
     BackgroundLayer bg = new BackgroundLayer("green_tint");
     bg.setProperties(backgroundColor(Color.valueOf(randomInRange(0.0f, 1.0f), randomInRange(0.0f, 1.0f), randomInRange(0.0f, 1.0f), 0.2f).toArgb()));
-    builder.withLayerAbove(bg,"country-label");
+    builder.withLayerAbove(bg, "country-label");
     options.withStyleBuilder(builder);
     MapSnapshotter snapshotter = new MapSnapshotter(MapSnapshotterActivity.this, options, new SnapshotterObserver(this, row, column));
     snapshotters.add(snapshotter);

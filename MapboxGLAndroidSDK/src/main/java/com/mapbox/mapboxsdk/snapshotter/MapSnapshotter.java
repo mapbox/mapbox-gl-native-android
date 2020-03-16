@@ -660,7 +660,7 @@ public class MapSnapshotter {
         return;
       }
       for (Source source : builder.getSources()) {
-//        nativeAddSource(source, source.getNativePtr());
+        nativeAddSource(source, source.getNativePtr());
       }
 
       for (Style.Builder.LayerWrapper layerWrapper : builder.getLayers()) {
@@ -722,12 +722,12 @@ public class MapSnapshotter {
   @Keep
   private native void nativeAddLayerAt(long layerPtr, int index);
 
-//  @NonNull
+  //  @NonNull
 //  @Keep
 //  private native Source nativeGetSource(String sourceId);
 //
-//  @Keep
-//  private native void nativeAddSource(Source source, long sourcePtr);
+  @Keep
+  private native void nativeAddSource(Source source, long sourcePtr);
 
   //  @Keep
 //  private native void nativeAddImages(Image[] images);
