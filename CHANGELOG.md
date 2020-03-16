@@ -7,7 +7,7 @@ This beta release includes a feature with a known issue: the `within` expression
 ### Features
  - Added `within` expression for testing whether an evaluated feature lies within a given GeoJSON object. `within` accepts `Feature`, `FeatureCollection`, `Polygon`, and `MultiPolygon` as valid GeoJSON objects. ([#198](https://github.com/mapbox/mapbox-gl-native-android/pull/198))
  - Added `in` expression for testing whether an item exists in an array or a substring exists in a string. ([#171](https://github.com/mapbox/mapbox-gl-native-android/pull/171))
- - Added `FillLayer.getFillSortKey` and `LineLayer.getLineSortKey` methods to get the sort key of features in a layer.  Added `PropertyFactory.fillSortKey` and `PropertyFactory.lineSortKey` to set the sort key in a layer. Features with a higher sort key will appear above features with a lower sort key. ([#209](https://github.com/mapbox/mapbox-gl-native-android/pull/209))
+ - Added methods to set and get the sort key of features in a `fill-layer` and `line-layer` at runtime. Features with a higher sort key will appear above features with a lower sort key. ([#209](https://github.com/mapbox/mapbox-gl-native-android/pull/209))
  - Introduced option to set the minimum and maximum pitch of a map. ([#199](https://github.com/mapbox/mapbox-gl-native-android/pull/199))
  - Introduced ability to configure the zoom level(s) that tiles are prefetched from by `Source`. This overrides the  tile prefetch setting defined by the `Map` instance. ([#184](https://github.com/mapbox/mapbox-gl-native-android/pull/184))
 
