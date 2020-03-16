@@ -2,30 +2,27 @@ package com.mapbox.mapboxsdk.testapp.activity.snapshot;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.ViewTreeObserver;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
-import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
+import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.snapshotter.MapSnapshotter;
 import com.mapbox.mapboxsdk.style.layers.BackgroundLayer;
-import com.mapbox.mapboxsdk.style.layers.FillLayer;
 import com.mapbox.mapboxsdk.testapp.R;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import androidx.appcompat.app.AppCompatActivity;
 import timber.log.Timber;
 
-import static com.mapbox.mapboxsdk.style.expressions.Expression.color;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.backgroundColor;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillColor;
 
 /**
  * Test activity showing how to use a the {@link com.mapbox.mapboxsdk.snapshotter.MapSnapshotter}
@@ -68,6 +65,7 @@ public class MapSnapshotterActivity extends AppCompatActivity {
     private MapSnapshotterActivity mapSnapshotterActivity;
     private int row;
     private int column;
+
     public SnapshotterObserver(MapSnapshotterActivity mapSnapshotterActivity, int row, int column) {
       this.mapSnapshotterActivity = mapSnapshotterActivity;
       this.row = row;
@@ -80,16 +78,13 @@ public class MapSnapshotterActivity extends AppCompatActivity {
 
     @Override
     public void onDidFinishLoadingStyle(MapSnapshotter snapshotter) {
-      BackgroundLayer bg = new BackgroundLayer("green_tint");
-      bg.setProperties(backgroundColor(Color.valueOf(randomInRange(0.0f, 1.0f), randomInRange(0.0f, 1.0f), randomInRange(0.0f, 1.0f), 0.2f).toArgb()));
-      snapshotter.addLayer(bg);
       snapshotter.start(snapshot -> {
         Timber.i("Got the snapshot");
         ImageView imageView = new ImageView(MapSnapshotterActivity.this);
         imageView.setImageBitmap(snapshot.getBitmap());
         grid.addView(
-                imageView,
-                new GridLayout.LayoutParams(GridLayout.spec(row), GridLayout.spec(column))
+          imageView,
+          new GridLayout.LayoutParams(GridLayout.spec(row), GridLayout.spec(column))
         );
       });
     }
@@ -101,7 +96,9 @@ public class MapSnapshotterActivity extends AppCompatActivity {
   }
 
   private void startSnapShot(final int row, final int column) {
-
+    // Optionally the style
+    Style.Builder builder = new Style.Builder()
+      .fromUri((column + row) % 2 == 0 ? Style.MAPBOX_STREETS : Style.DARK);
     // Define the dimensions
     MapSnapshotter.Options options = new MapSnapshotter.Options(
       grid.getMeasuredWidth() / grid.getColumnCount(),
@@ -109,9 +106,6 @@ public class MapSnapshotterActivity extends AppCompatActivity {
     )
       // Optionally the pixel ratio
       .withPixelRatio(1)
-
-      // Optionally the style
-      .withStyle((column + row) % 2 == 0 ? Style.MAPBOX_STREETS : Style.DARK)
       .withLocalIdeographFontFamily(MapboxConstants.DEFAULT_FONT);
 
     // Optionally the visible region
@@ -137,6 +131,10 @@ public class MapSnapshotterActivity extends AppCompatActivity {
       );
     }
 
+    BackgroundLayer bg = new BackgroundLayer("green_tint");
+    bg.setProperties(backgroundColor(Color.valueOf(randomInRange(0.0f, 1.0f), randomInRange(0.0f, 1.0f), randomInRange(0.0f, 1.0f), 0.2f).toArgb()));
+    builder.withLayerAbove(bg,"country-label");
+    options.withStyleBuilder(builder);
     MapSnapshotter snapshotter = new MapSnapshotter(MapSnapshotterActivity.this, options, new SnapshotterObserver(this, row, column));
     snapshotters.add(snapshotter);
   }

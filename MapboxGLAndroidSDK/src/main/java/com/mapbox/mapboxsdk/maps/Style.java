@@ -932,23 +932,23 @@ public class Style {
       return this;
     }
 
-    String getUri() {
+    public String getUri() {
       return styleUri;
     }
 
-    String getJson() {
+    public String getJson() {
       return styleJson;
     }
 
-    List<Source> getSources() {
+    public List<Source> getSources() {
       return sources;
     }
 
-    List<LayerWrapper> getLayers() {
+    public List<LayerWrapper> getLayers() {
       return layers;
     }
 
-    List<ImageWrapper> getImages() {
+    public List<ImageWrapper> getImages() {
       return images;
     }
 
@@ -963,7 +963,7 @@ public class Style {
       return new Style(this, nativeMap);
     }
 
-    static class ImageWrapper {
+    public static class ImageWrapper {
       Bitmap bitmap;
       String id;
       boolean sdf;
@@ -985,38 +985,54 @@ public class Style {
       }
     }
 
-    class LayerWrapper {
+    public class LayerWrapper {
       Layer layer;
 
       LayerWrapper(Layer layer) {
         this.layer = layer;
       }
+
+      public Layer getLayer() {
+        return layer;
+      }
     }
 
-    class LayerAboveWrapper extends LayerWrapper {
+    public class LayerAboveWrapper extends LayerWrapper {
       String aboveLayer;
 
       LayerAboveWrapper(Layer layer, String aboveLayer) {
         super(layer);
         this.aboveLayer = aboveLayer;
       }
+
+      public String getAboveLayer() {
+        return aboveLayer;
+      }
     }
 
-    class LayerBelowWrapper extends LayerWrapper {
+    public class LayerBelowWrapper extends LayerWrapper {
       String belowLayer;
 
       LayerBelowWrapper(Layer layer, String belowLayer) {
         super(layer);
         this.belowLayer = belowLayer;
       }
+
+      public String getBelowLayer() {
+        return belowLayer;
+      }
     }
 
-    class LayerAtWrapper extends LayerWrapper {
+    public class LayerAtWrapper extends LayerWrapper {
       int index;
 
       LayerAtWrapper(Layer layer, int index) {
         super(layer);
         this.index = index;
+      }
+
+      public int getIndex() {
+        return index;
       }
     }
   }
