@@ -1,36 +1,62 @@
 package com.mapbox.mapboxsdk.testapp.activity.snapshot;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.ViewTreeObserver;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.snapshotter.MapSnapshotter;
-import com.mapbox.mapboxsdk.style.layers.BackgroundLayer;
+import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.mapboxsdk.style.layers.RasterLayer;
+import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.mapboxsdk.style.sources.RasterSource;
 import com.mapbox.mapboxsdk.style.sources.Source;
 import com.mapbox.mapboxsdk.testapp.R;
+import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import timber.log.Timber;
 
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.backgroundColor;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.get;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.literal;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.switchCase;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.toBool;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAnchor;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconColor;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconIgnorePlacement;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconSize;
 
 /**
  * Test activity showing how to use a the {@link com.mapbox.mapboxsdk.snapshotter.MapSnapshotter}
  */
 public class MapSnapshotterActivity extends AppCompatActivity {
+  private static final String ID_FEATURE_PROPERTY = "id";
+  private static final String SELECTED_FEATURE_PROPERTY = "selected";
+  private static final String TITLE_FEATURE_PROPERTY = "title";
+  // layer & source constants
+  private static final String MARKER_SOURCE = "marker-source";
+  private static final String MARKER_LAYER = "marker-layer";
 
   public GridLayout grid;
   private List<MapSnapshotter> snapshotters = new ArrayList<>();
@@ -139,10 +165,40 @@ public class MapSnapshotterActivity extends AppCompatActivity {
       Source source = new RasterSource("my-raster-source", "mapbox://mapbox.satellite", 512);
       builder.withLayerAbove(new RasterLayer("satellite-layer", "my-raster-source"), "country-label");
       builder.withSource(source);
+    } else if (row == 0 && column == 2) {
+
+      Bitmap carBitmap = BitmapUtils.getBitmapFromDrawable(
+        getResources().getDrawable(R.drawable.ic_directions_car_black));
+
+      // marker source
+      FeatureCollection markerCollection = FeatureCollection.fromFeatures(new Feature[] {
+        Feature.fromGeometry(Point.fromLngLat(4.91638, 52.34673), featureProperties("2", "Car"))
+      });
+      Source markerSource = new GeoJsonSource(MARKER_SOURCE, markerCollection);
+
+      // marker layer
+      SymbolLayer markerSymbolLayer = new SymbolLayer(MARKER_LAYER, MARKER_SOURCE)
+        .withProperties(
+          iconImage(get(TITLE_FEATURE_PROPERTY)),
+          iconIgnorePlacement(true),
+          iconAllowOverlap(true),
+          iconSize(switchCase(toBool(get(SELECTED_FEATURE_PROPERTY)), literal(1.5f), literal(1.0f))),
+          iconAnchor(Property.ICON_ANCHOR_BOTTOM),
+          iconColor(Color.BLUE)
+        );
+
+      builder.withImage("Car", Objects.requireNonNull(carBitmap), false)
+        .withSources(markerSource)
+        .withLayers(markerSymbolLayer);
+      options.withCameraPosition(new CameraPosition.Builder()
+        .target(new LatLng(5.537109374999999,
+          52.07950600379697))
+        .zoom(1)
+        .padding(1, 1, 1, 1)
+        .build()
+      );
     }
-    BackgroundLayer bg = new BackgroundLayer("green_tint");
-    bg.setProperties(backgroundColor(Color.valueOf(randomInRange(0.0f, 1.0f), randomInRange(0.0f, 1.0f), randomInRange(0.0f, 1.0f), 0.2f).toArgb()));
-    builder.withLayerAbove(bg, "country-label");
+
     options.withStyleBuilder(builder);
     MapSnapshotter snapshotter = new MapSnapshotter(MapSnapshotterActivity.this, options, new SnapshotterObserver(this, row, column));
     snapshotters.add(snapshotter);
@@ -165,4 +221,11 @@ public class MapSnapshotterActivity extends AppCompatActivity {
     return (random.nextFloat() * (max - min)) + min;
   }
 
+  private JsonObject featureProperties(@NonNull String id, @NonNull String title) {
+    JsonObject object = new JsonObject();
+    object.add(ID_FEATURE_PROPERTY, new JsonPrimitive(id));
+    object.add(TITLE_FEATURE_PROPERTY, new JsonPrimitive(title));
+    object.add(SELECTED_FEATURE_PROPERTY, new JsonPrimitive(false));
+    return object;
+  }
 }

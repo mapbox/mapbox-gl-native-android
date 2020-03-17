@@ -23,6 +23,7 @@ import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.log.Logger;
+import com.mapbox.mapboxsdk.maps.Image;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.maps.TelemetryDefinition;
 import com.mapbox.mapboxsdk.storage.FileSource;
@@ -35,6 +36,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 import androidx.core.content.res.ResourcesCompat;
+
+import static com.mapbox.mapboxsdk.maps.Style.toImage;
 
 /**
  * The map snapshotter creates a large of the map, rendered
@@ -614,7 +617,7 @@ public class MapSnapshotter {
       @Override
       public void run() {
         if (callback != null) {
-//          addOverlay(snapshot);
+          addOverlay(snapshot);
           callback.onSnapshotReady(snapshot);
           reset();
         }
@@ -677,7 +680,7 @@ public class MapSnapshotter {
       }
 
       for (Style.Builder.ImageWrapper image : builder.getImages()) {
-//        addImage(image.getId(), image.getBitmap(), image.isSdf());
+        nativeAddImages(new Image[]{toImage(new Style.Builder.ImageWrapper(image.getId(), image.getBitmap(), image.isSdf()))});
       }
 
     }
@@ -722,15 +725,12 @@ public class MapSnapshotter {
   @Keep
   private native void nativeAddLayerAt(long layerPtr, int index);
 
-  //  @NonNull
-//  @Keep
-//  private native Source nativeGetSource(String sourceId);
-//
   @Keep
   private native void nativeAddSource(Source source, long sourcePtr);
 
-  //  @Keep
-//  private native void nativeAddImages(Image[] images);
+  @Keep
+  private native void nativeAddImages(Image[] images);
+
   @Override
   @Keep
   protected native void finalize() throws Throwable;

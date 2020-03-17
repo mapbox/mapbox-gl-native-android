@@ -343,7 +343,6 @@
         <activity
             android:name=".activity.snapshot.MapSnapshotterActivity"
             android:description="@string/description_map_snapshotter"
-            android:exported="true"
             android:label="@string/activity_map_snapshotter">
             <meta-data
                 android:name="@string/category"
@@ -377,7 +376,6 @@
         <activity
             android:name=".activity.snapshot.MapSnapshotterLocalStyleActivity"
             android:description="@string/description_map_snapshotter_local_style"
-            android:exported="true"
             android:label="@string/activity_map_snapshotter_local_style">
             <meta-data
                 android:name="@string/category"

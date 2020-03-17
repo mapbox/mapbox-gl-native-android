@@ -340,7 +340,7 @@ public class Style {
    */
   public void addImage(@NonNull final String name, @NonNull Bitmap bitmap, boolean sdf) {
     validateState("addImage");
-    nativeMap.addImages(new Image[]{toImage(new Builder.ImageWrapper(name, bitmap, sdf))});
+    nativeMap.addImages(new Image[] {toImage(new Builder.ImageWrapper(name, bitmap, sdf))});
   }
 
   /**
@@ -968,13 +968,25 @@ public class Style {
       String id;
       boolean sdf;
 
-      ImageWrapper(String id, Bitmap bitmap, boolean sdf) {
+      public ImageWrapper(String id, Bitmap bitmap, boolean sdf) {
         this.id = id;
         this.bitmap = bitmap;
         this.sdf = sdf;
       }
 
-      static ImageWrapper[] convertToImageArray(HashMap<String, Bitmap> bitmapHashMap, boolean sdf) {
+      public Bitmap getBitmap() {
+        return bitmap;
+      }
+
+      public String getId() {
+        return id;
+      }
+
+      public boolean isSdf() {
+        return sdf;
+      }
+
+      public static ImageWrapper[] convertToImageArray(HashMap<String, Bitmap> bitmapHashMap, boolean sdf) {
         ImageWrapper[] images = new ImageWrapper[bitmapHashMap.size()];
         List<String> keyList = new ArrayList<>(bitmapHashMap.keySet());
         for (int i = 0; i < bitmapHashMap.size(); i++) {
@@ -1037,7 +1049,7 @@ public class Style {
     }
   }
 
-  private static Image toImage(Builder.ImageWrapper imageWrapper) {
+  public static Image toImage(Builder.ImageWrapper imageWrapper) {
     Bitmap bitmap = imageWrapper.bitmap;
     if (bitmap.getConfig() != Bitmap.Config.ARGB_8888) {
       bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, false);
