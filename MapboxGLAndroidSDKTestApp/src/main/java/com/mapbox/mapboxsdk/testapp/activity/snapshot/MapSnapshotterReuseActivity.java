@@ -38,12 +38,11 @@ public class MapSnapshotterReuseActivity extends AppCompatActivity implements Ma
     fab.setOnClickListener(v -> {
       fab.setVisibility(View.INVISIBLE);
 
-      mapSnapshotter.setStyleUrl(getRandomStyle());
-      mapSnapshotter.setStyleLoadObserver(() -> {
-        BackgroundLayer bg = new BackgroundLayer("rand_tint");
-        bg.setProperties(backgroundColor(Color.valueOf(randomInRange(0.0f, 1.0f), randomInRange(0.0f, 1.0f), randomInRange(0.0f, 1.0f), 0.2f).toArgb()));
-        mapSnapshotter.addLayerAbove(bg, "country-label");
-      });
+      BackgroundLayer bg = new BackgroundLayer("rand_tint");
+      bg.setProperties(backgroundColor(Color.valueOf(randomInRange(0.0f, 1.0f), randomInRange(0.0f, 1.0f), randomInRange(0.0f, 1.0f), 0.2f).toArgb()));
+      mapSnapshotter.setStyle(new Style.Builder()
+              .fromUri(getRandomStyle())
+              .withLayerAbove(bg,"country-label"));
       if (random.nextInt(2) == 0) {
         mapSnapshotter.setCameraPosition(getRandomCameraPosition());
       } else {

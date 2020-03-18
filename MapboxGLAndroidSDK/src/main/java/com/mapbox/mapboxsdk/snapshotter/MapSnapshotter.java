@@ -64,8 +64,6 @@ public class MapSnapshotter {
   private SnapshotReadyCallback callback;
   @Nullable
   private ErrorHandler errorHandler;
-  @Nullable
-  private SnapshotterStyleLoadObserver mapSnapshotterObserver;
 
   /**
    * Get notified on snapshot completion.
@@ -397,7 +395,9 @@ public class MapSnapshotter {
     checkThread();
     this.callback = callback;
     this.errorHandler = errorHandler;
-    nativeStart();
+    if (options.getBuilder() == null) {
+      nativeStart();
+    }
   }
 
   /**
@@ -436,6 +436,20 @@ public class MapSnapshotter {
     nativeSetStyleUrl(styleUrl);
   }
 
+  // TODO: Documentation
+  public void setStyle(Style.Builder builder) {
+    fullyLoaded = false;
+    String uri = builder.getUri() != null ? builder.getUri() : options.builder.getUri();
+    String json = builder.getJson() != null ? builder.getJson() : options.builder.getJson();
+    options.withStyleBuilder(builder);
+
+    if (uri != null) {
+      nativeSetStyleUrl(uri);
+    } else if (json != null) {
+      nativeSetStyleJson(json);
+    }
+  }
+
   /**
    * Updates the snapshotter with a new style json
    *
@@ -445,15 +459,6 @@ public class MapSnapshotter {
     fullyLoaded = false;
     options.withStyleBuilder(null);
     nativeSetStyleJson(styleJson);
-  }
-
-  /**
-   * Set an observer to observe the style load status
-   *
-   * @param observer the observer
-   */
-  public void setStyleLoadObserver(SnapshotterStyleLoadObserver observer) {
-    this.mapSnapshotterObserver = observer;
   }
 
   @Keep
@@ -468,7 +473,7 @@ public class MapSnapshotter {
    * @param layer the layer to add
    * @param below the layer id to add this layer before
    */
-  public void addLayerBelow(Layer layer, String below) {
+  private void addLayerBelow(Layer layer, String below) {
     if (!fullyLoaded) {
       throw new IllegalStateException("addLayerBelow method must be called after style is loaded!");
     }
@@ -481,7 +486,7 @@ public class MapSnapshotter {
    * @param layer the layer to add
    * @param above the layer id to add this layer above
    */
-  public void addLayerAbove(@NonNull Layer layer, @NonNull String above) {
+  private void addLayerAbove(@NonNull Layer layer, @NonNull String above) {
     if (!fullyLoaded) {
       throw new IllegalStateException("addLayerBelow method must be called after style is loaded!");
     }
@@ -495,7 +500,7 @@ public class MapSnapshotter {
    * @param layer the layer to add
    * @param index the index to insert the layer at
    */
-  public void addLayerAt(Layer layer, int index) {
+  private void addLayerAt(Layer layer, int index) {
     if (!fullyLoaded) {
       throw new IllegalStateException("addLayerAt method must be called after style is loaded!");
     }
@@ -507,7 +512,7 @@ public class MapSnapshotter {
    *
    * @param source the source to add
    */
-  public void addSource(Source source) {
+  private void addSource(Source source) {
     if (!fullyLoaded) {
       throw new IllegalStateException("addSource method must be called after style is loaded!");
     }
@@ -521,7 +526,7 @@ public class MapSnapshotter {
    * @param bitmap the pre-multiplied Bitmap
    * @param sdf    the flag indicating image is an SDF or template image
    */
-  public void addImage(@NonNull final String name, @NonNull Bitmap bitmap, boolean sdf) {
+  private void addImage(@NonNull final String name, @NonNull Bitmap bitmap, boolean sdf) {
     if (!fullyLoaded) {
       throw new IllegalStateException("addImages method must be called after style is loaded!");
     }
@@ -761,10 +766,9 @@ public class MapSnapshotter {
         for (Style.Builder.ImageWrapper image : builder.getImages()) {
           nativeAddImages(new Image[] {toImage(new Style.Builder.ImageWrapper(image.getId(), image.getBitmap(), image.isSdf()))});
         }
+
+        nativeStart();
       }
-    }
-    if (mapSnapshotterObserver != null) {
-      mapSnapshotterObserver.onDidFinishLoadingStyle();
     }
   }
 
