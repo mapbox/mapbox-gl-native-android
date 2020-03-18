@@ -27,6 +27,7 @@ import com.mapbox.mapboxsdk.maps.Image;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.maps.TelemetryDefinition;
 import com.mapbox.mapboxsdk.storage.FileSource;
+import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.sources.Source;
 import com.mapbox.mapboxsdk.utils.FontUtils;
 import com.mapbox.mapboxsdk.utils.ThreadUtils;
@@ -63,6 +64,8 @@ public class MapSnapshotter {
   private SnapshotReadyCallback callback;
   @Nullable
   private ErrorHandler errorHandler;
+  @Nullable
+  private SnapshotterStyleLoadObserver mapSnapshotterObserver;
 
   /**
    * Get notified on snapshot completion.
@@ -94,6 +97,17 @@ public class MapSnapshotter {
      * @param error the error message
      */
     void onError(String error);
+  }
+
+
+  /**
+   * Callback to be invoked when a style has finished loading.
+   */
+  public interface SnapshotterStyleLoadObserver {
+    /**
+     * Invoked when a style has finished loading.
+     */
+    void onDidFinishLoadingStyle();
   }
 
   /**
@@ -416,16 +430,103 @@ public class MapSnapshotter {
    *
    * @param styleUrl the style url
    */
-  @Keep
-  public native void setStyleUrl(String styleUrl);
+  public void setStyleUrl(String styleUrl) {
+    fullyLoaded = false;
+    options.withStyleBuilder(null);
+    nativeSetStyleUrl(styleUrl);
+  }
 
   /**
    * Updates the snapshotter with a new style json
    *
    * @param styleJson the style json
    */
+  public void setStyleJson(String styleJson) {
+    fullyLoaded = false;
+    options.withStyleBuilder(null);
+    nativeSetStyleJson(styleJson);
+  }
+
+  /**
+   * Set an observer to observe the style load status
+   *
+   * @param observer the observer
+   */
+  public void setStyleLoadObserver(SnapshotterStyleLoadObserver observer) {
+    this.mapSnapshotterObserver = observer;
+  }
+
   @Keep
-  public native void setStyleJson(String styleJson);
+  public native void nativeSetStyleUrl(String styleUrl);
+
+  @Keep
+  public native void nativeSetStyleJson(String styleJson);
+
+  /**
+   * Adds the layer to the map. The layer must be newly created and not added to the snapshotter before
+   *
+   * @param layer the layer to add
+   * @param below the layer id to add this layer before
+   */
+  public void addLayerBelow(Layer layer, String below) {
+    if (!fullyLoaded) {
+      throw new IllegalStateException("addLayerBelow method must be called after style is loaded!");
+    }
+    nativeAddLayerBelow(layer.getNativePtr(), below);
+  }
+
+  /**
+   * Adds the layer to the map. The layer must be newly created and not added to the snapshotter before
+   *
+   * @param layer the layer to add
+   * @param above the layer id to add this layer above
+   */
+  public void addLayerAbove(@NonNull Layer layer, @NonNull String above) {
+    if (!fullyLoaded) {
+      throw new IllegalStateException("addLayerBelow method must be called after style is loaded!");
+    }
+    nativeAddLayerAbove(layer.getNativePtr(), above);
+  }
+
+  /**
+   * Adds the layer to the snapshotter at the specified index. The layer must be newly
+   * created and not added to the snapshotter before
+   *
+   * @param layer the layer to add
+   * @param index the index to insert the layer at
+   */
+  public void addLayerAt(Layer layer, int index) {
+    if (!fullyLoaded) {
+      throw new IllegalStateException("addLayerAt method must be called after style is loaded!");
+    }
+    nativeAddLayerAt(layer.getNativePtr(), index);
+  }
+
+  /**
+   * Adds the source to the map. The source must be newly created and not added to the map before
+   *
+   * @param source the source to add
+   */
+  public void addSource(Source source) {
+    if (!fullyLoaded) {
+      throw new IllegalStateException("addSource method must be called after style is loaded!");
+    }
+    nativeAddSource(source, source.getNativePtr());
+  }
+
+  /**
+   * Adds an image to be used in the snapshotter's style
+   *
+   * @param name   the name of the image
+   * @param bitmap the pre-multiplied Bitmap
+   * @param sdf    the flag indicating image is an SDF or template image
+   */
+  public void addImage(@NonNull final String name, @NonNull Bitmap bitmap, boolean sdf) {
+    if (!fullyLoaded) {
+      throw new IllegalStateException("addImages method must be called after style is loaded!");
+    }
+    nativeAddImages(new Image[] {toImage(new Style.Builder.ImageWrapper(name, bitmap, sdf))});
+  }
 
   /**
    * Must be called in on the thread
@@ -640,29 +741,30 @@ public class MapSnapshotter {
     if (!fullyLoaded) {
       fullyLoaded = true;
       Style.Builder builder = options.getBuilder();
-      if (builder == null) {
-        return;
-      }
-      for (Source source : builder.getSources()) {
-        nativeAddSource(source, source.getNativePtr());
-      }
+      if (builder != null) {
+        for (Source source : builder.getSources()) {
+          nativeAddSource(source, source.getNativePtr());
+        }
 
-      for (Style.Builder.LayerWrapper layerWrapper : builder.getLayers()) {
-        if (layerWrapper instanceof Style.Builder.LayerAtWrapper) {
-          nativeAddLayerAt(layerWrapper.getLayer().getNativePtr(), ((Style.Builder.LayerAtWrapper) layerWrapper).getIndex());
-        } else if (layerWrapper instanceof Style.Builder.LayerAboveWrapper) {
-          nativeAddLayerAbove(layerWrapper.getLayer().getNativePtr(), ((Style.Builder.LayerAboveWrapper) layerWrapper).getAboveLayer());
-        } else if (layerWrapper instanceof Style.Builder.LayerBelowWrapper) {
-          nativeAddLayerBelow(layerWrapper.getLayer().getNativePtr(), ((Style.Builder.LayerBelowWrapper) layerWrapper).getBelowLayer());
-        } else {
-          nativeAddLayerBelow(layerWrapper.getLayer().getNativePtr(), MapboxConstants.LAYER_ID_ANNOTATIONS);
+        for (Style.Builder.LayerWrapper layerWrapper : builder.getLayers()) {
+          if (layerWrapper instanceof Style.Builder.LayerAtWrapper) {
+            nativeAddLayerAt(layerWrapper.getLayer().getNativePtr(), ((Style.Builder.LayerAtWrapper) layerWrapper).getIndex());
+          } else if (layerWrapper instanceof Style.Builder.LayerAboveWrapper) {
+            nativeAddLayerAbove(layerWrapper.getLayer().getNativePtr(), ((Style.Builder.LayerAboveWrapper) layerWrapper).getAboveLayer());
+          } else if (layerWrapper instanceof Style.Builder.LayerBelowWrapper) {
+            nativeAddLayerBelow(layerWrapper.getLayer().getNativePtr(), ((Style.Builder.LayerBelowWrapper) layerWrapper).getBelowLayer());
+          } else {
+            nativeAddLayerBelow(layerWrapper.getLayer().getNativePtr(), MapboxConstants.LAYER_ID_ANNOTATIONS);
+          }
+        }
+
+        for (Style.Builder.ImageWrapper image : builder.getImages()) {
+          nativeAddImages(new Image[] {toImage(new Style.Builder.ImageWrapper(image.getId(), image.getBitmap(), image.isSdf()))});
         }
       }
-
-      for (Style.Builder.ImageWrapper image : builder.getImages()) {
-        nativeAddImages(new Image[] {toImage(new Style.Builder.ImageWrapper(image.getId(), image.getBitmap(), image.isSdf()))});
-      }
-
+    }
+    if (mapSnapshotterObserver != null) {
+      mapSnapshotterObserver.onDidFinishLoadingStyle();
     }
   }
 
@@ -697,7 +799,7 @@ public class MapSnapshotter {
   protected native void nativeCancel();
 
   @Keep
-  public native void nativeAddLayerBelow(long layerPtr, String before);
+  private native void nativeAddLayerBelow(long layerPtr, String below);
 
   @Keep
   private native void nativeAddLayerAbove(long layerPtr, String above);

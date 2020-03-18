@@ -1,19 +1,24 @@
 package com.mapbox.mapboxsdk.testapp.activity.snapshot;
 
+import android.graphics.Color;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.mapbox.mapboxsdk.camera.CameraPosition;
-import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
+import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.snapshotter.MapSnapshot;
 import com.mapbox.mapboxsdk.snapshotter.MapSnapshotter;
+import com.mapbox.mapboxsdk.style.layers.BackgroundLayer;
 import com.mapbox.mapboxsdk.testapp.R;
 
 import java.util.Random;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.backgroundColor;
 
 /**
  * Test activity showing how to use a the {@link MapSnapshotter}
@@ -34,6 +39,11 @@ public class MapSnapshotterReuseActivity extends AppCompatActivity implements Ma
       fab.setVisibility(View.INVISIBLE);
 
       mapSnapshotter.setStyleUrl(getRandomStyle());
+      mapSnapshotter.setStyleLoadObserver(() -> {
+        BackgroundLayer bg = new BackgroundLayer("rand_tint");
+        bg.setProperties(backgroundColor(Color.valueOf(randomInRange(0.0f, 1.0f), randomInRange(0.0f, 1.0f), randomInRange(0.0f, 1.0f), 0.2f).toArgb()));
+        mapSnapshotter.addLayerAbove(bg, "country-label");
+      });
       if (random.nextInt(2) == 0) {
         mapSnapshotter.setCameraPosition(getRandomCameraPosition());
       } else {
@@ -49,7 +59,7 @@ public class MapSnapshotterReuseActivity extends AppCompatActivity implements Ma
 
     mapSnapshotter = new MapSnapshotter(
       getApplicationContext(),
-      new MapSnapshotter.Options(512, 512)
+      new MapSnapshotter.Options(512, 512).withStyleBuilder(new Style.Builder().fromUri(getRandomStyle()))
     );
 
     mapSnapshotter.start(MapSnapshotterReuseActivity.this);
