@@ -395,9 +395,7 @@ public class MapSnapshotter {
     checkThread();
     this.callback = callback;
     this.errorHandler = errorHandler;
-    if (options.getBuilder() == null) {
-      nativeStart();
-    }
+    nativeStart();
   }
 
   /**
@@ -766,8 +764,6 @@ public class MapSnapshotter {
         for (Style.Builder.ImageWrapper image : builder.getImages()) {
           nativeAddImages(new Image[] {toImage(new Style.Builder.ImageWrapper(image.getId(), image.getBitmap(), image.isSdf()))});
         }
-
-        nativeStart();
       }
     }
   }
