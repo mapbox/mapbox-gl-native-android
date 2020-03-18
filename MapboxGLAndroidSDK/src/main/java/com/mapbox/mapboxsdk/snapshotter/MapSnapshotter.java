@@ -63,8 +63,6 @@ public class MapSnapshotter {
   private SnapshotReadyCallback callback;
   @Nullable
   private ErrorHandler errorHandler;
-  @Nullable
-  private MapSnapshotterObserver observer;
 
   /**
    * Get notified on snapshot completion.
@@ -79,14 +77,6 @@ public class MapSnapshotter {
      * @param snapshot the snapshot
      */
     void onSnapshotReady(MapSnapshot snapshot);
-  }
-
-  public interface MapSnapshotterObserver {
-    void onDidFailLoadingStyle(MapSnapshotter snapshotter, String reason);
-
-    void onDidFinishLoadingStyle(MapSnapshotter snapshotter);
-
-    void onStyleImageMissing(MapSnapshotter snapshotter, String imageName);
   }
 
   /**
@@ -350,14 +340,9 @@ public class MapSnapshotter {
    * @param options the options to use for the snapshot
    */
   public MapSnapshotter(@NonNull Context context, @NonNull Options options) {
-    this(context, options, null);
-  }
-
-  public MapSnapshotter(@NonNull Context context, @NonNull Options options, MapSnapshotterObserver observer_) {
     checkThread();
     this.context = context.getApplicationContext();
     this.options = options;
-    observer = observer_;
     TelemetryDefinition telemetry = Mapbox.getTelemetry();
     if (telemetry != null) {
       telemetry.onAppUserTurnstileEvent();
@@ -644,18 +629,14 @@ public class MapSnapshotter {
    */
   @Keep
   protected void onDidFailLoadingStyle(String reason) {
-    if (observer != null) {
-      observer.onDidFailLoadingStyle(this, reason);
-      reset();
-    }
+    onSnapshotFailed(reason);
   }
 
-  // TODO: add documentation
+  /**
+   * Called by JNI peer when snapshot style is loaded.
+   */
   @Keep
   protected void onDidFinishLoadingStyle() {
-    if (observer != null) {
-      observer.onDidFinishLoadingStyle(this);
-    }
     if (!fullyLoaded) {
       fullyLoaded = true;
       Style.Builder builder = options.getBuilder();
@@ -674,24 +655,23 @@ public class MapSnapshotter {
         } else if (layerWrapper instanceof Style.Builder.LayerBelowWrapper) {
           nativeAddLayerBelow(layerWrapper.getLayer().getNativePtr(), ((Style.Builder.LayerBelowWrapper) layerWrapper).getBelowLayer());
         } else {
-          // just add layer to map, but below annotations
           nativeAddLayerBelow(layerWrapper.getLayer().getNativePtr(), MapboxConstants.LAYER_ID_ANNOTATIONS);
         }
       }
 
       for (Style.Builder.ImageWrapper image : builder.getImages()) {
-        nativeAddImages(new Image[]{toImage(new Style.Builder.ImageWrapper(image.getId(), image.getBitmap(), image.isSdf()))});
+        nativeAddImages(new Image[] {toImage(new Style.Builder.ImageWrapper(image.getId(), image.getBitmap(), image.isSdf()))});
       }
 
     }
   }
 
-  // TODO: add documentation
+  /**
+   * Called by JNI peer when snapshot style image is missing.
+   */
   @Keep
   protected void onStyleImageMissing(String imageName) {
-    if (observer != null) {
-      observer.onStyleImageMissing(this, imageName);
-    }
+    onSnapshotFailed("style image is missing: " + imageName);
   }
 
   private void checkThread() {
@@ -740,7 +720,7 @@ public class MapSnapshotter {
     private Bitmap small;
     private float scale;
 
-    public Logo(Bitmap large, Bitmap small, float scale) {
+    Logo(Bitmap large, Bitmap small, float scale) {
       this.large = large;
       this.small = small;
       this.scale = scale;

@@ -90,40 +90,6 @@ public class MapSnapshotterActivity extends AppCompatActivity {
     }
   }
 
-  class SnapshotterObserver implements MapSnapshotter.MapSnapshotterObserver {
-    private MapSnapshotterActivity mapSnapshotterActivity;
-    private int row;
-    private int column;
-
-    public SnapshotterObserver(MapSnapshotterActivity mapSnapshotterActivity, int row, int column) {
-      this.mapSnapshotterActivity = mapSnapshotterActivity;
-      this.row = row;
-      this.column = column;
-    }
-
-    @Override
-    public void onDidFailLoadingStyle(MapSnapshotter snapshotter, String error) {
-    }
-
-    @Override
-    public void onDidFinishLoadingStyle(MapSnapshotter snapshotter) {
-      snapshotter.start(snapshot -> {
-        Timber.i("Got the snapshot");
-        ImageView imageView = new ImageView(MapSnapshotterActivity.this);
-        imageView.setImageBitmap(snapshot.getBitmap());
-        grid.addView(
-          imageView,
-          new GridLayout.LayoutParams(GridLayout.spec(row), GridLayout.spec(column))
-        );
-      });
-    }
-
-    @Override
-    public void onStyleImageMissing(MapSnapshotter snapshotter, String imageName) {
-
-    }
-  }
-
   private void startSnapShot(final int row, final int column) {
     // Optionally the style
     Style.Builder builder = new Style.Builder()
@@ -200,7 +166,16 @@ public class MapSnapshotterActivity extends AppCompatActivity {
     }
 
     options.withStyleBuilder(builder);
-    MapSnapshotter snapshotter = new MapSnapshotter(MapSnapshotterActivity.this, options, new SnapshotterObserver(this, row, column));
+    MapSnapshotter snapshotter = new MapSnapshotter(MapSnapshotterActivity.this, options);
+    snapshotter.start(snapshot -> {
+      Timber.i("Got the snapshot");
+      ImageView imageView = new ImageView(MapSnapshotterActivity.this);
+      imageView.setImageBitmap(snapshot.getBitmap());
+      grid.addView(
+        imageView,
+        new GridLayout.LayoutParams(GridLayout.spec(row), GridLayout.spec(column))
+      );
+    });
     snapshotters.add(snapshotter);
   }
 
