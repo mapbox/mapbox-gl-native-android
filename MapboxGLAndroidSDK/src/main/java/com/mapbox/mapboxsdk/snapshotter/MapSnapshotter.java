@@ -97,17 +97,6 @@ public class MapSnapshotter {
     void onError(String error);
   }
 
-
-  /**
-   * Callback to be invoked when a style has finished loading.
-   */
-  public interface SnapshotterStyleLoadObserver {
-    /**
-     * Invoked when a style has finished loading.
-     */
-    void onDidFinishLoadingStyle();
-  }
-
   /**
    * MapSnapshotter options
    */
