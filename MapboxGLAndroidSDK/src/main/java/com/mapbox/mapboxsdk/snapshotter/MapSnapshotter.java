@@ -740,18 +740,18 @@ public class MapSnapshotter {
 
         for (Style.Builder.LayerWrapper layerWrapper : builder.getLayers()) {
           if (layerWrapper instanceof Style.Builder.LayerAtWrapper) {
-            nativeAddLayerAt(layerWrapper.getLayer().getNativePtr(), ((Style.Builder.LayerAtWrapper) layerWrapper).getIndex());
+            addLayerAt(layerWrapper.getLayer(), ((Style.Builder.LayerAtWrapper) layerWrapper).getIndex());
           } else if (layerWrapper instanceof Style.Builder.LayerAboveWrapper) {
-            nativeAddLayerAbove(layerWrapper.getLayer().getNativePtr(), ((Style.Builder.LayerAboveWrapper) layerWrapper).getAboveLayer());
+            addLayerAbove(layerWrapper.getLayer(), ((Style.Builder.LayerAboveWrapper) layerWrapper).getAboveLayer());
           } else if (layerWrapper instanceof Style.Builder.LayerBelowWrapper) {
-            nativeAddLayerBelow(layerWrapper.getLayer().getNativePtr(), ((Style.Builder.LayerBelowWrapper) layerWrapper).getBelowLayer());
+            addLayerBelow(layerWrapper.getLayer(), ((Style.Builder.LayerBelowWrapper) layerWrapper).getBelowLayer());
           } else {
-            nativeAddLayerBelow(layerWrapper.getLayer().getNativePtr(), MapboxConstants.LAYER_ID_ANNOTATIONS);
+            addLayerBelow(layerWrapper.getLayer(), MapboxConstants.LAYER_ID_ANNOTATIONS);
           }
         }
 
         for (Style.Builder.ImageWrapper image : builder.getImages()) {
-          nativeAddImages(new Image[] {toImage(new Style.Builder.ImageWrapper(image.getId(), image.getBitmap(), image.isSdf()))});
+          addImage(image.getId(), image.getBitmap(), image.isSdf());
         }
       }
     }

@@ -1,6 +1,5 @@
 package com.mapbox.mapboxsdk.snapshotter
 
-import android.graphics.Color
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.mapbox.mapboxsdk.camera.CameraPosition
@@ -9,15 +8,14 @@ import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.style.layers.BackgroundLayer
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory
 import com.mapbox.mapboxsdk.testapp.activity.FeatureOverviewActivity
-import com.mapbox.mapboxsdk.testapp.activity.snapshot.MapSnapshotterReuseActivity
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 import junit.framework.Assert.assertNotNull
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.TimeoutException
 
 /**
  * Integration test that validates if a snapshotter creation
@@ -36,7 +34,7 @@ class MapSnapshotterTest {
     var mapSnapshotter: MapSnapshotter?
     rule.activity.runOnUiThread {
       val bg = BackgroundLayer("rand_tint")
-      bg.setProperties(PropertyFactory.backgroundColor(Color.valueOf(MapSnapshotterReuseActivity.randomInRange(0.0f, 1.0f), MapSnapshotterReuseActivity.randomInRange(0.0f, 1.0f), MapSnapshotterReuseActivity.randomInRange(0.0f, 1.0f), 0.2f).toArgb()))
+      bg.setProperties(PropertyFactory.backgroundColor("rgba(255,128,0,0.7)"))
       val options = MapSnapshotter.Options(512, 512)
         .withPixelRatio(1.0f)
         .withStyleBuilder(Style.Builder().fromUri(Style.SATELLITE_STREETS)
