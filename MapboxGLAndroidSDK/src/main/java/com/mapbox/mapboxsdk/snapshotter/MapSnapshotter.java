@@ -141,6 +141,28 @@ public class MapSnapshotter {
     }
 
     /**
+     * @param uri The style URI to use
+     * @return the mutated {@link Options}
+     * @deprecated use {@link  #withStyleBuilder(Style.Builder)} instead
+     */
+    @NonNull
+    public Options withStyle(String uri) {
+      withStyleBuilder(new Style.Builder().fromUri(uri));
+      return this;
+    }
+
+    /**
+     * @param styleJson The style json to use
+     * @return the mutated {@link Options}
+     * @deprecated use {@link  #withStyleBuilder(Style.Builder)} instead
+     */
+    @NonNull
+    public Options withStyleJson(String styleJson) {
+      withStyleBuilder(new Style.Builder().fromJson(styleJson));
+      return this;
+    }
+
+    /**
      * @param region the region to show in the snapshot.
      *               This is applied after the camera position
      * @return the mutated {@link Options}
@@ -417,42 +439,16 @@ public class MapSnapshotter {
    *
    * @param styleUrl the style url
    */
-  public void setStyleUrl(String styleUrl) {
-    fullyLoaded = false;
-    options.withStyleBuilder(null);
-    nativeSetStyleUrl(styleUrl);
-  }
-
-  // TODO: Documentation
-  public void setStyle(Style.Builder builder) {
-    fullyLoaded = false;
-    String uri = builder.getUri() != null ? builder.getUri() : options.builder.getUri();
-    String json = builder.getJson() != null ? builder.getJson() : options.builder.getJson();
-    options.withStyleBuilder(builder);
-
-    if (uri != null) {
-      nativeSetStyleUrl(uri);
-    } else if (json != null) {
-      nativeSetStyleJson(json);
-    }
-  }
+  @Keep
+  public native void setStyleUrl(String styleUrl);
 
   /**
    * Updates the snapshotter with a new style json
    *
    * @param styleJson the style json
    */
-  public void setStyleJson(String styleJson) {
-    fullyLoaded = false;
-    options.withStyleBuilder(null);
-    nativeSetStyleJson(styleJson);
-  }
-
   @Keep
-  public native void nativeSetStyleUrl(String styleUrl);
-
-  @Keep
-  public native void nativeSetStyleJson(String styleJson);
+  public native void setStyleJson(String styleJson);
 
   /**
    * Adds the layer to the map. The layer must be newly created and not added to the snapshotter before
@@ -461,9 +457,6 @@ public class MapSnapshotter {
    * @param below the layer id to add this layer before
    */
   private void addLayerBelow(Layer layer, String below) {
-    if (!fullyLoaded) {
-      throw new IllegalStateException("addLayerBelow method must be called after style is loaded!");
-    }
     nativeAddLayerBelow(layer.getNativePtr(), below);
   }
 
@@ -474,9 +467,6 @@ public class MapSnapshotter {
    * @param above the layer id to add this layer above
    */
   private void addLayerAbove(@NonNull Layer layer, @NonNull String above) {
-    if (!fullyLoaded) {
-      throw new IllegalStateException("addLayerBelow method must be called after style is loaded!");
-    }
     nativeAddLayerAbove(layer.getNativePtr(), above);
   }
 
@@ -488,9 +478,6 @@ public class MapSnapshotter {
    * @param index the index to insert the layer at
    */
   private void addLayerAt(Layer layer, int index) {
-    if (!fullyLoaded) {
-      throw new IllegalStateException("addLayerAt method must be called after style is loaded!");
-    }
     nativeAddLayerAt(layer.getNativePtr(), index);
   }
 
@@ -500,9 +487,6 @@ public class MapSnapshotter {
    * @param source the source to add
    */
   private void addSource(Source source) {
-    if (!fullyLoaded) {
-      throw new IllegalStateException("addSource method must be called after style is loaded!");
-    }
     nativeAddSource(source, source.getNativePtr());
   }
 
@@ -514,9 +498,6 @@ public class MapSnapshotter {
    * @param sdf    the flag indicating image is an SDF or template image
    */
   private void addImage(@NonNull final String name, @NonNull Bitmap bitmap, boolean sdf) {
-    if (!fullyLoaded) {
-      throw new IllegalStateException("addImages method must be called after style is loaded!");
-    }
     nativeAddImages(new Image[] {toImage(new Style.Builder.ImageWrapper(name, bitmap, sdf))});
   }
 
