@@ -11,6 +11,8 @@ This beta release includes a feature with a known issue: the `within` expression
  - Added methods to set and get the sort key of features in a `FillLayer` and `LineLayer` at runtime. Features with a higher sort key will appear above features with a lower sort key. ([#209](https://github.com/mapbox/mapbox-gl-native-android/pull/209))
  - Introduced option to set the minimum and maximum pitch of a map. ([#199](https://github.com/mapbox/mapbox-gl-native-android/pull/199))
  - Introduced ability to configure the zoom level(s) that tiles are prefetched from by `Source`. This overrides the  tile prefetch setting defined by the `Map` instance. ([#184](https://github.com/mapbox/mapbox-gl-native-android/pull/184))
+ - Added new API to add runtime layers/sources/images to MapSnapshotter . ([#268](https://github.com/mapbox/mapbox-gl-native-android/pull/268))
+ - Added new API to get snapshotter's layers and sources and modify them by using the onDidFinishLoadingStyle() callback and APIs to retrieve layer/source properties from a style . ([#292](https://github.com/mapbox/mapbox-gl-native-android/pull/292))
 
 ### Performance improvements
  - Increased stability of label placement when the map is tilted. ([#16287](https://github.com/mapbox/mapbox-gl-native/pull/16287))
@@ -24,9 +26,11 @@ This beta release includes a feature with a known issue: the `within` expression
  - Fixed an issue where a `LineDasharray` value of `[1, 0]` resulted in hairline gaps. ([#16202](https://github.com/mapbox/mapbox-gl-native/pull/16202))
  - Fixed Proguard configuration to prevent obfuscation of telemetry event classes. ([#195](https://github.com/mapbox/mapbox-gl-native-android/pull/195))
  - Fixed a crash that might occur during EGL window surface creation. ([#278](https://github.com/mapbox/mapbox-gl-native-android/pull/278))
+ - Fixed a bug that wrongly generated glyphs when high contrast accessibility mode was active by using RGB values instead of alpha channel. ([#289](https://github.com/mapbox/mapbox-gl-native-android/pull/289))
 
 ### Other changes
  - Updated mapbox-events-android to v4.7.3. ([#201](https://github.com/mapbox/mapbox-gl-native-android/pull/201))
+ - Revert "Transition JobIntentService to WorkManager in telemetry(#453).  ([#467](https://github.com/mapbox/mapbox-events-android/pull/467))
 
 ## 9.0.1 - March 11, 2020
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.0.0...android-v9.0.1) since [Mapbox Maps SDK for Android v9.0.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.0.0):
