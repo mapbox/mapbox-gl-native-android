@@ -4,10 +4,6 @@ Mapbox welcomes participation and contributions from everyone. Please read [`Con
 
 ## 9.1.0
 This beta release includes a feature with a known issue: the `within` expression evaluates point features inconsistently across zoom levels if the point lies near the boundary of a GeoJSON object ([#16301](https://github.com/mapbox/mapbox-gl-native/issues/16301])).
-
-### Snapshotter
- - Added new API to add runtime layers/sources/images to MapSnapshotter . ([#268](https://github.com/mapbox/mapbox-gl-native-android/pull/268))
- - Added new API to get snapshotter's layers and sources and modify them by using the onDidFinishLoadingStyle() callback and APIs to retrieve layer/source properties from a style . ([#292](https://github.com/mapbox/mapbox-gl-native-android/pull/292))
  
 ### Features
  - Added `within` expression for testing whether an evaluated feature lies within a given GeoJSON object. `within` accepts `Feature`, `FeatureCollection`, `Polygon`, and `MultiPolygon` as valid GeoJSON objects. ([#198](https://github.com/mapbox/mapbox-gl-native-android/pull/198))
