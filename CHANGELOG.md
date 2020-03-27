@@ -30,7 +30,6 @@ This beta release includes a feature with a known issue: the `within` expression
 
 ### Other changes
  - Updated mapbox-events-android to v5.0.0. ([#294](https://github.com/mapbox/mapbox-gl-native-android/pull/294))
- - Revert "Transition JobIntentService to WorkManager in telemetry(#453).  ([#467](https://github.com/mapbox/mapbox-events-android/pull/467))
 
 ## 9.0.1 - March 11, 2020
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.0.0...android-v9.0.1) since [Mapbox Maps SDK for Android v9.0.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.0.0):
