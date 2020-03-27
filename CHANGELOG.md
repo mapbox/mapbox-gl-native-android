@@ -5,14 +5,16 @@ Mapbox welcomes participation and contributions from everyone. Please read [`Con
 ## 9.1.0
 This beta release includes a feature with a known issue: the `within` expression evaluates point features inconsistently across zoom levels if the point lies near the boundary of a GeoJSON object ([#16301](https://github.com/mapbox/mapbox-gl-native/issues/16301])).
 
+### Snapshotter
+ - Added new API to add runtime layers/sources/images to MapSnapshotter . ([#268](https://github.com/mapbox/mapbox-gl-native-android/pull/268))
+ - Added new API to get snapshotter's layers and sources and modify them by using the onDidFinishLoadingStyle() callback and APIs to retrieve layer/source properties from a style . ([#292](https://github.com/mapbox/mapbox-gl-native-android/pull/292))
+ 
 ### Features
  - Added `within` expression for testing whether an evaluated feature lies within a given GeoJSON object. `within` accepts `Feature`, `FeatureCollection`, `Polygon`, and `MultiPolygon` as valid GeoJSON objects. ([#198](https://github.com/mapbox/mapbox-gl-native-android/pull/198))
  - Added `in` expression for testing whether an item exists in an array or a substring exists in a string. ([#171](https://github.com/mapbox/mapbox-gl-native-android/pull/171))
  - Added methods to set and get the sort key of features in a `FillLayer` and `LineLayer` at runtime. Features with a higher sort key will appear above features with a lower sort key. ([#209](https://github.com/mapbox/mapbox-gl-native-android/pull/209))
  - Introduced option to set the minimum and maximum pitch of a map. ([#199](https://github.com/mapbox/mapbox-gl-native-android/pull/199))
  - Introduced ability to configure the zoom level(s) that tiles are prefetched from by `Source`. This overrides the  tile prefetch setting defined by the `Map` instance. ([#184](https://github.com/mapbox/mapbox-gl-native-android/pull/184))
- - Added new API to add runtime layers/sources/images to MapSnapshotter . ([#268](https://github.com/mapbox/mapbox-gl-native-android/pull/268))
- - Added new API to get snapshotter's layers and sources and modify them by using the onDidFinishLoadingStyle() callback and APIs to retrieve layer/source properties from a style . ([#292](https://github.com/mapbox/mapbox-gl-native-android/pull/292))
 
 ### Performance improvements
  - Increased stability of label placement when the map is tilted. ([#16287](https://github.com/mapbox/mapbox-gl-native/pull/16287))
