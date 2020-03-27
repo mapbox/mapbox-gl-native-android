@@ -2,6 +2,7 @@ package com.mapbox.mapboxsdk.location;
 
 import android.graphics.Bitmap;
 import android.graphics.PointF;
+
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,11 +14,14 @@ import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
+import com.mapbox.mapboxsdk.log.Logger;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.layers.Layer;
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.mapbox.turf.TurfMeasurement;
 
 import java.util.HashSet;
 import java.util.List;
@@ -54,7 +58,9 @@ import static com.mapbox.mapboxsdk.style.expressions.Expression.stop;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.zoom;
 import static com.mapbox.mapboxsdk.style.layers.Property.NONE;
 import static com.mapbox.mapboxsdk.style.layers.Property.VISIBLE;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconSize;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconTranslate;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
 import static com.mapbox.mapboxsdk.utils.ColorUtils.colorToRgbaString;
 
@@ -231,17 +237,31 @@ final class LocationLayerController {
     }
   }
 
-  private void addLayers() {
-    // positions the top-most reference layer
-    Layer layer = layerSourceProvider.generateLayer(BEARING_LAYER);
-    positionManager.addLayerToMap(layer);
-    layerSet.add(layer.getId());
+  private Layer gpsLayer;
 
-    // adds remaining layers while keeping the order
-    addSymbolLayer(FOREGROUND_LAYER, BEARING_LAYER);
-    addSymbolLayer(BACKGROUND_LAYER, FOREGROUND_LAYER);
-    addSymbolLayer(SHADOW_LAYER, BACKGROUND_LAYER);
-    addAccuracyLayer();
+  private void addLayers() {
+    if (true) {
+      // positions the top-most reference layer
+      Layer layer = layerSourceProvider.generateLayer(BEARING_LAYER);
+      positionManager.addLayerToMap(layer);
+      layerSet.add(layer.getId());
+
+      // adds remaining layers while keeping the order
+      addSymbolLayer(FOREGROUND_LAYER, BEARING_LAYER);
+      addSymbolLayer(BACKGROUND_LAYER, FOREGROUND_LAYER);
+      addSymbolLayer(SHADOW_LAYER, BACKGROUND_LAYER);
+      addAccuracyLayer();
+    } else {
+      if (true) {
+        gpsLayer = layerSourceProvider.generateLayer(FOREGROUND_LAYER);
+        positionManager.addLayerToMap(gpsLayer);
+        layerSet.add(gpsLayer.getId());
+      } else {
+        gpsLayer = layerSourceProvider.generateGpsLayer();
+        positionManager.addLayerToMap(gpsLayer);
+        layerSet.add(gpsLayer.getId());
+      }
+    }
   }
 
   private void addSymbolLayer(@NonNull String layerId, @NonNull String beforeLayerId) {
@@ -267,8 +287,16 @@ final class LocationLayerController {
   }
 
   private void setBearingProperty(@NonNull String propertyId, float bearing) {
-    locationFeature.addNumberProperty(propertyId, bearing);
-    refreshSource();
+    if (true) {
+      locationFeature.addNumberProperty(propertyId, bearing);
+      refreshSource();
+    } else {
+      if (gpsLayer != null) {
+        gpsLayer.setProperties(
+          PropertyFactory.iconRotate(bearing)
+        );
+      }
+    }
   }
 
   private void updateAccuracyRadius(float accuracy) {
@@ -292,11 +320,53 @@ final class LocationLayerController {
     }
   }
 
+  private Point lastLocationPoint;
+  private Point currentLocationPoint;
+
   private void setLocationPoint(Point locationPoint) {
-    JsonObject properties = locationFeature.properties();
-    if (properties != null) {
-      locationFeature = Feature.fromGeometry(locationPoint, properties);
+    currentLocationPoint = locationPoint;
+    if (true) {
+      JsonObject properties = locationFeature.properties();
+      if (properties != null) {
+        locationFeature = Feature.fromGeometry(locationPoint, properties);
+        refreshSource();
+      }
+    } else {
+      JsonObject properties = locationFeature.properties();
+      if (properties != null) {
+        if (lastLocationPoint == null) {
+          locationFeature = Feature.fromGeometry(locationPoint, properties);
+          lastLocationPoint = locationPoint;
+          if (gpsLayer != null) {
+            gpsLayer.setProperties(iconOffset(new Float[] {0f, 0f}));
+          }
+          refreshSource();
+        } else {
+          onCameraMoved();
+        }
+      }
+    }
+  }
+
+  void onCameraMoved() {
+    if (true) {
+      return;
+    }
+    PointF currentPoint = mapboxMap.getProjection().toScreenLocation(new LatLng(currentLocationPoint.latitude(), currentLocationPoint.longitude()));
+    PointF lastPoint = mapboxMap.getProjection().toScreenLocation(new LatLng(lastLocationPoint.latitude(), lastLocationPoint.longitude()));
+    float pixelRatio = mapboxMap.getProjection().getPixelRatio();
+    Float offset[] = new Float[] {(currentPoint.x - lastPoint.x) / pixelRatio, (currentPoint.y - lastPoint.y) / pixelRatio};
+    if (Math.abs(offset[0]) > 1024 || Math.abs(offset[1]) > 1024) {
+      locationFeature = Feature.fromGeometry(currentLocationPoint, locationFeature.properties());
+      lastLocationPoint = currentLocationPoint;
+      if (gpsLayer != null) {
+        gpsLayer.setProperties(iconOffset(new Float[] {0f, 0f}));
+      }
       refreshSource();
+    } else {
+      if (gpsLayer != null) {
+        gpsLayer.setProperties(iconOffset(offset));
+      }
     }
   }
 

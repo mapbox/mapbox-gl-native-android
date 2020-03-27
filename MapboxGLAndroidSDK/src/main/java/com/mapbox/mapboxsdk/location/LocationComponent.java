@@ -1486,6 +1486,7 @@ public final class LocationComponent {
     @Override
     public void onCameraMove() {
       updateLayerOffsets(false);
+      locationLayerController.onCameraMoved();
     }
   };
 

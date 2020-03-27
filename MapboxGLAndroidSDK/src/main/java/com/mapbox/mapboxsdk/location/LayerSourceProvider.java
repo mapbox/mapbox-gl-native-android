@@ -1,6 +1,7 @@
 package com.mapbox.mapboxsdk.location;
 
 import androidx.annotation.NonNull;
+
 import com.mapbox.geojson.Feature;
 import com.mapbox.mapboxsdk.style.layers.CircleLayer;
 import com.mapbox.mapboxsdk.style.layers.Layer;
@@ -12,6 +13,7 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import static com.mapbox.mapboxsdk.location.LocationComponentConstants.ACCURACY_LAYER;
 import static com.mapbox.mapboxsdk.location.LocationComponentConstants.BACKGROUND_LAYER;
 import static com.mapbox.mapboxsdk.location.LocationComponentConstants.BEARING_LAYER;
+import static com.mapbox.mapboxsdk.location.LocationComponentConstants.FOREGROUND_ICON;
 import static com.mapbox.mapboxsdk.location.LocationComponentConstants.FOREGROUND_LAYER;
 import static com.mapbox.mapboxsdk.location.LocationComponentConstants.LOCATION_SOURCE;
 import static com.mapbox.mapboxsdk.location.LocationComponentConstants.PROPERTY_ACCURACY_ALPHA;
@@ -46,6 +48,7 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconRotate;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconRotationAlignment;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconSize;
 
 class LayerSourceProvider {
 
@@ -93,6 +96,19 @@ class LayerSourceProvider {
           stop(literal(SHADOW_LAYER), get(PROPERTY_SHADOW_ICON_OFFSET))
         )
       )
+    );
+    return layer;
+  }
+
+  @NonNull
+  Layer generateGpsLayer() {
+    SymbolLayer layer = new SymbolLayer(FOREGROUND_LAYER, LOCATION_SOURCE);
+    layer.setProperties(
+      iconAllowOverlap(true),
+      iconIgnorePlacement(true),
+      iconRotationAlignment(ICON_ROTATION_ALIGNMENT_MAP),
+      iconImage(FOREGROUND_ICON),
+      iconSize(1f)
     );
     return layer;
   }
