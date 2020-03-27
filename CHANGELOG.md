@@ -26,7 +26,7 @@ This beta release includes a feature with a known issue: the `within` expression
  - Fixed an issue where a `LineDasharray` value of `[1, 0]` resulted in hairline gaps. ([#16202](https://github.com/mapbox/mapbox-gl-native/pull/16202))
  - Fixed Proguard configuration to prevent obfuscation of telemetry event classes. ([#195](https://github.com/mapbox/mapbox-gl-native-android/pull/195))
  - Fixed a crash that might occur during EGL window surface creation. ([#278](https://github.com/mapbox/mapbox-gl-native-android/pull/278))
- - Fixed a bug that wrongly generated glyphs when high contrast accessibility mode was active by using RGB values instead of alpha channel. ([#289](https://github.com/mapbox/mapbox-gl-native-android/pull/289))
+ - Fixed a bug that would cause local CJK glyphs to be rendered incorrectly when generated on a device with the high-contrast accessibility setting enabled. ([#289](https://github.com/mapbox/mapbox-gl-native-android/pull/289))
 
 ### Other changes
  - Updated mapbox-events-android to v5.0.0. ([#294](https://github.com/mapbox/mapbox-gl-native-android/pull/294))
