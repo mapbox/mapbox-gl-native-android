@@ -29,7 +29,7 @@ This beta release includes a feature with a known issue: the `within` expression
  - Fixed a bug that wrongly generated glyphs when high contrast accessibility mode was active by using RGB values instead of alpha channel. ([#289](https://github.com/mapbox/mapbox-gl-native-android/pull/289))
 
 ### Other changes
- - Updated mapbox-events-android to v4.7.3. ([#201](https://github.com/mapbox/mapbox-gl-native-android/pull/201))
+ - Updated mapbox-events-android to v5.0.0. ([#294](https://github.com/mapbox/mapbox-gl-native-android/pull/294))
  - Revert "Transition JobIntentService to WorkManager in telemetry(#453).  ([#467](https://github.com/mapbox/mapbox-events-android/pull/467))
 
 ## 9.0.1 - March 11, 2020
