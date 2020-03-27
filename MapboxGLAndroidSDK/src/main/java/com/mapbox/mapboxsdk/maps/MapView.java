@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.TextureView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -18,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 import androidx.collection.LongSparseArray;
+import androidx.core.content.ContextCompat;
 
 import com.mapbox.android.gestures.AndroidGesturesManager;
 import com.mapbox.mapboxsdk.MapStrictMode;
@@ -65,6 +67,8 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
   private final MapChangeReceiver mapChangeReceiver = new MapChangeReceiver();
   private final MapCallback mapCallback = new MapCallback();
   private final InitialRenderCallback initialRenderCallback = new InitialRenderCallback();
+
+  private ImageView puck;
 
   @Nullable
   private NativeMap nativeMapView;
@@ -132,6 +136,12 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
       throw new MapboxConfigurationException();
     }
 
+    puck = new ImageView(context);
+    this.addView(puck);
+    puck.getLayoutParams().width = LayoutParams.WRAP_CONTENT;
+    puck.getLayoutParams().height = LayoutParams.WRAP_CONTENT;
+    puck.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.mapbox_user_puck_icon));
+
     // hide surface until map is fully loaded #10990
     setForeground(new ColorDrawable(options.getForegroundLoadColor()));
 
@@ -175,7 +185,7 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
     mapKeyListener = new MapKeyListener(transform, uiSettings, mapGestureDetector);
 
     // LocationComponent
-    mapboxMap.injectLocationComponent(new LocationComponent(mapboxMap, transform, developerAnimationListeners));
+    mapboxMap.injectLocationComponent(new LocationComponent(mapboxMap, transform, developerAnimationListeners, puck));
 
     // Ensure this view is interactable
     setClickable(true);

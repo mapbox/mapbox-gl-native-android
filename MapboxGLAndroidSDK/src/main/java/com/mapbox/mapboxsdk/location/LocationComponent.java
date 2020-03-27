@@ -7,6 +7,7 @@ import android.location.Location;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -180,6 +181,7 @@ public final class LocationComponent {
   private long fastestInterval;
   private long lastUpdateTime;
 
+  private ImageView puck;
   /**
    * Internal use.
    * <p>
@@ -187,9 +189,11 @@ public final class LocationComponent {
    */
   public LocationComponent(@NonNull MapboxMap mapboxMap,
                            @NonNull Transform transform,
-                           @NonNull List<MapboxMap.OnDeveloperAnimationListener> developerAnimationListeners) {
+                           @NonNull List<MapboxMap.OnDeveloperAnimationListener> developerAnimationListeners,
+                           ImageView puck) {
     this.mapboxMap = mapboxMap;
     this.transform = transform;
+    this.puck = puck;
     developerAnimationListeners.add(developerAnimationListener);
   }
 
@@ -1276,7 +1280,7 @@ public final class LocationComponent {
     LayerFeatureProvider featureProvider = new LayerFeatureProvider();
     LayerBitmapProvider bitmapProvider = new LayerBitmapProvider(context);
     locationLayerController = new LocationLayerController(mapboxMap, style, sourceProvider, featureProvider,
-      bitmapProvider, options, renderModeChangedListener);
+      bitmapProvider, options, renderModeChangedListener, puck);
     locationCameraController = new LocationCameraController(
       context, mapboxMap, transform, cameraTrackingChangedListener, options, onCameraMoveInvalidateListener);
 
@@ -1486,6 +1490,7 @@ public final class LocationComponent {
     @Override
     public void onCameraMove() {
       updateLayerOffsets(false);
+      locationLayerController.onCameraMoved();
     }
   };
 

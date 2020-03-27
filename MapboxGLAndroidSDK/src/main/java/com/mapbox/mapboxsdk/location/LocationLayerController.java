@@ -2,6 +2,8 @@ package com.mapbox.mapboxsdk.location;
 
 import android.graphics.Bitmap;
 import android.graphics.PointF;
+import android.widget.ImageView;
+
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -79,10 +81,14 @@ final class LocationLayerController {
 
   private LocationComponentPositionManager positionManager;
 
+  private ImageView puck;
+
   LocationLayerController(MapboxMap mapboxMap, Style style, LayerSourceProvider layerSourceProvider,
                           LayerFeatureProvider featureProvider, LayerBitmapProvider bitmapProvider,
                           @NonNull LocationComponentOptions options,
-                          @NonNull OnRenderModeChangedListener internalRenderModeChangedListener) {
+                          @NonNull OnRenderModeChangedListener internalRenderModeChangedListener,
+                          ImageView puck) {
+    this.puck = puck;
     this.mapboxMap = mapboxMap;
     this.style = style;
     this.layerSourceProvider = layerSourceProvider;
@@ -268,6 +274,7 @@ final class LocationLayerController {
 
   private void setBearingProperty(@NonNull String propertyId, float bearing) {
     locationFeature.addNumberProperty(propertyId, bearing);
+    puck.setRotation((float) (bearing - mapboxMap.getCameraPosition().bearing));
     refreshSource();
   }
 
@@ -286,18 +293,28 @@ final class LocationLayerController {
   }
 
   private void refreshSource() {
-    GeoJsonSource source = style.getSourceAs(LOCATION_SOURCE);
-    if (source != null) {
-      locationSource.setGeoJson(locationFeature);
-    }
+//    GeoJsonSource source = style.getSourceAs(LOCATION_SOURCE);
+//    if (source != null) {
+//      locationSource.setGeoJson(locationFeature);
+//    }
   }
 
   private void setLocationPoint(Point locationPoint) {
     JsonObject properties = locationFeature.properties();
     if (properties != null) {
       locationFeature = Feature.fromGeometry(locationPoint, properties);
+      onCameraMoved();
       refreshSource();
     }
+  }
+
+  void onCameraMoved() {
+    Point geometryPoint = (Point) locationFeature.geometry();
+    PointF pointF = mapboxMap.getProjection().toScreenLocation(new LatLng(geometryPoint.latitude(), geometryPoint.longitude()));
+    float x = pointF.x - puck.getWidth() / 2f;
+    puck.setX(x);
+    float y = pointF.y - puck.getHeight() / 2f;
+    puck.setY(y);
   }
 
   //
