@@ -1646,6 +1646,66 @@ public class PropertyFactory {
   }
 
   /**
+   * The color for drawing the accuracy radius, as a circle. To adjust transparency, set the alpha component of the color accordingly.
+   *
+   * @param value a int color value
+   * @return property wrapper around String color
+   */
+  public static PropertyValue<String> accuracyRadiusColor(@ColorInt int value) {
+    return new PaintPropertyValue<>("accuracy-radius-color", colorToRgbaString(value));
+  }
+
+  /**
+   * The color for drawing the accuracy radius, as a circle. To adjust transparency, set the alpha component of the color accordingly.
+   *
+   * @param value a String value
+   * @return property wrapper around String
+   */
+  public static PropertyValue<String> accuracyRadiusColor(String value) {
+    return new PaintPropertyValue<>("accuracy-radius-color", value);
+  }
+
+  /**
+   * The color for drawing the accuracy radius, as a circle. To adjust transparency, set the alpha component of the color accordingly.
+   *
+   * @param expression an expression statement
+   * @return property wrapper around an expression statement
+   */
+  public static PropertyValue<Expression> accuracyRadiusColor(Expression expression) {
+    return new PaintPropertyValue<>("accuracy-radius-color", expression);
+  }
+
+  /**
+   * The color for drawing the accuracy radius border. To adjust transparency, set the alpha component of the color accordingly.
+   *
+   * @param value a int color value
+   * @return property wrapper around String color
+   */
+  public static PropertyValue<String> accuracyRadiusBorderColor(@ColorInt int value) {
+    return new PaintPropertyValue<>("accuracy-radius-border-color", colorToRgbaString(value));
+  }
+
+  /**
+   * The color for drawing the accuracy radius border. To adjust transparency, set the alpha component of the color accordingly.
+   *
+   * @param value a String value
+   * @return property wrapper around String
+   */
+  public static PropertyValue<String> accuracyRadiusBorderColor(String value) {
+    return new PaintPropertyValue<>("accuracy-radius-border-color", value);
+  }
+
+  /**
+   * The color for drawing the accuracy radius border. To adjust transparency, set the alpha component of the color accordingly.
+   *
+   * @param expression an expression statement
+   * @return property wrapper around an expression statement
+   */
+  public static PropertyValue<Expression> accuracyRadiusBorderColor(Expression expression) {
+    return new PaintPropertyValue<>("accuracy-radius-border-color", expression);
+  }
+
+  /**
    * Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
    *
    * @param value a Float value
@@ -1826,7 +1886,7 @@ public class PropertyFactory {
   }
 
   /**
-   * Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key when they overlap. Features with a lower sort key will have priority over other features when doing placement.
+   * Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first.  When {@link PropertyFactory#iconAllowOverlap} or {@link PropertyFactory#textAllowOverlap} is `false`, features with a lower sort key will have priority during placement. When {@link PropertyFactory#iconAllowOverlap} or {@link PropertyFactory#textAllowOverlap} is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
    *
    * @param value a Float value
    * @return property wrapper around Float
@@ -1836,7 +1896,7 @@ public class PropertyFactory {
   }
 
   /**
-   * Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key when they overlap. Features with a lower sort key will have priority over other features when doing placement.
+   * Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first.  When {@link PropertyFactory#iconAllowOverlap} or {@link PropertyFactory#textAllowOverlap} is `false`, features with a lower sort key will have priority during placement. When {@link PropertyFactory#iconAllowOverlap} or {@link PropertyFactory#textAllowOverlap} is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
    *
    * @param value a Float value
    * @return property wrapper around Float
@@ -2593,6 +2653,226 @@ public class PropertyFactory {
    */
   public static PropertyValue<Expression> textOptional(Expression value) {
     return new LayoutPropertyValue<>("text-optional", value);
+  }
+
+  /**
+   * Name of image in sprite to use as the top of the location component.
+   *
+   * @param value a String value
+   * @return property wrapper around String
+   */
+  public static PropertyValue<String> topImage(String value) {
+    return new LayoutPropertyValue<>("top-image", value);
+  }
+
+  /**
+   * Name of image in sprite to use as the top of the location component.
+   *
+   * @param value a String value
+   * @return property wrapper around String
+   */
+  public static PropertyValue<Expression> topImage(Expression value) {
+    return new LayoutPropertyValue<>("top-image", value);
+  }
+
+  /**
+   * Name of image in sprite to use as the middle of the location component.
+   *
+   * @param value a String value
+   * @return property wrapper around String
+   */
+  public static PropertyValue<String> bearingImage(String value) {
+    return new LayoutPropertyValue<>("bearing-image", value);
+  }
+
+  /**
+   * Name of image in sprite to use as the middle of the location component.
+   *
+   * @param value a String value
+   * @return property wrapper around String
+   */
+  public static PropertyValue<Expression> bearingImage(Expression value) {
+    return new LayoutPropertyValue<>("bearing-image", value);
+  }
+
+  /**
+   * Name of image in sprite to use as the background of the location component.
+   *
+   * @param value a String value
+   * @return property wrapper around String
+   */
+  public static PropertyValue<String> shadowImage(String value) {
+    return new LayoutPropertyValue<>("shadow-image", value);
+  }
+
+  /**
+   * Name of image in sprite to use as the background of the location component.
+   *
+   * @param value a String value
+   * @return property wrapper around String
+   */
+  public static PropertyValue<Expression> shadowImage(Expression value) {
+    return new LayoutPropertyValue<>("shadow-image", value);
+  }
+
+  /**
+   * An array of [latitude, longitude, altitude] position of the location component.
+   *
+   * @param value a Float[] value
+   * @return property wrapper around Float[]
+   */
+  public static PropertyValue<Float[]> location(Float[] value) {
+    return new LayoutPropertyValue<>("location", value);
+  }
+
+  /**
+   * An array of [latitude, longitude, altitude] position of the location component.
+   *
+   * @param value a Float[] value
+   * @return property wrapper around Float[]
+   */
+  public static PropertyValue<Expression> location(Expression value) {
+    return new LayoutPropertyValue<>("location", value);
+  }
+
+  /**
+   * The bearing of the location component.
+   *
+   * @param value a Float value
+   * @return property wrapper around Float
+   */
+  public static PropertyValue<Float> bearing(Float value) {
+    return new LayoutPropertyValue<>("bearing", value);
+  }
+
+  /**
+   * The bearing of the location component.
+   *
+   * @param value a Float value
+   * @return property wrapper around Float
+   */
+  public static PropertyValue<Expression> bearing(Expression value) {
+    return new LayoutPropertyValue<>("bearing", value);
+  }
+
+  /**
+   * The accuracy, in meters, of the position source used to retrieve the position of the location component.
+   *
+   * @param value a Float value
+   * @return property wrapper around Float
+   */
+  public static PropertyValue<Float> accuracyRadius(Float value) {
+    return new LayoutPropertyValue<>("accuracy-radius", value);
+  }
+
+  /**
+   * The accuracy, in meters, of the position source used to retrieve the position of the location component.
+   *
+   * @param value a Float value
+   * @return property wrapper around Float
+   */
+  public static PropertyValue<Expression> accuracyRadius(Expression value) {
+    return new LayoutPropertyValue<>("accuracy-radius", value);
+  }
+
+  /**
+   * The size of the top image, in density-independent pixels.
+   *
+   * @param value a Float value
+   * @return property wrapper around Float
+   */
+  public static PropertyValue<Float> topImageSize(Float value) {
+    return new LayoutPropertyValue<>("top-image-size", value);
+  }
+
+  /**
+   * The size of the top image, in density-independent pixels.
+   *
+   * @param value a Float value
+   * @return property wrapper around Float
+   */
+  public static PropertyValue<Expression> topImageSize(Expression value) {
+    return new LayoutPropertyValue<>("top-image-size", value);
+  }
+
+  /**
+   * The size of the bearing image, in density-independent pixels.
+   *
+   * @param value a Float value
+   * @return property wrapper around Float
+   */
+  public static PropertyValue<Float> bearingImageSize(Float value) {
+    return new LayoutPropertyValue<>("bearing-image-size", value);
+  }
+
+  /**
+   * The size of the bearing image, in density-independent pixels.
+   *
+   * @param value a Float value
+   * @return property wrapper around Float
+   */
+  public static PropertyValue<Expression> bearingImageSize(Expression value) {
+    return new LayoutPropertyValue<>("bearing-image-size", value);
+  }
+
+  /**
+   * The size of the shadow image, in density-independent pixels.
+   *
+   * @param value a Float value
+   * @return property wrapper around Float
+   */
+  public static PropertyValue<Float> shadowImageSize(Float value) {
+    return new LayoutPropertyValue<>("shadow-image-size", value);
+  }
+
+  /**
+   * The size of the shadow image, in density-independent pixels.
+   *
+   * @param value a Float value
+   * @return property wrapper around Float
+   */
+  public static PropertyValue<Expression> shadowImageSize(Expression value) {
+    return new LayoutPropertyValue<>("shadow-image-size", value);
+  }
+
+  /**
+   * The amount of the perspective compensation, between 0 and 1. A value of 1 produces a location component of constant width across the screen. A value of 0 makes it scale naturally according to the viewing projection.
+   *
+   * @param value a Float value
+   * @return property wrapper around Float
+   */
+  public static PropertyValue<Float> perspectiveCompensation(Float value) {
+    return new LayoutPropertyValue<>("perspective-compensation", value);
+  }
+
+  /**
+   * The amount of the perspective compensation, between 0 and 1. A value of 1 produces a location component of constant width across the screen. A value of 0 makes it scale naturally according to the viewing projection.
+   *
+   * @param value a Float value
+   * @return property wrapper around Float
+   */
+  public static PropertyValue<Expression> perspectiveCompensation(Expression value) {
+    return new LayoutPropertyValue<>("perspective-compensation", value);
+  }
+
+  /**
+   * The displacement off the center of the top image and the shadow image when the pitch of the map is greater than 0. This helps producing a three-dimensional appearence.
+   *
+   * @param value a Float value
+   * @return property wrapper around Float
+   */
+  public static PropertyValue<Float> imageTiltDisplacement(Float value) {
+    return new LayoutPropertyValue<>("image-tilt-displacement", value);
+  }
+
+  /**
+   * The displacement off the center of the top image and the shadow image when the pitch of the map is greater than 0. This helps producing a three-dimensional appearence.
+   *
+   * @param value a Float value
+   * @return property wrapper around Float
+   */
+  public static PropertyValue<Expression> imageTiltDisplacement(Expression value) {
+    return new LayoutPropertyValue<>("image-tilt-displacement", value);
   }
 
 }
