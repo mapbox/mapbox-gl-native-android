@@ -139,9 +139,13 @@ public class CustomizedLocationPulsingCircleActivity extends AppCompatActivity i
                                                                  float pulsingCircleMaxRadius
   ) {
     currentPulseDuration = pulsingCircleDuration;
+    boolean enablePulsing = true;
+    if (locationComponent  != null && locationComponent.isLocationComponentActivated()) {
+      enablePulsing = locationComponent.isLocationComponentEnabled();
+    }
     return LocationComponentOptions.builder(this)
         .layerBelow(idOfLayerBelow)
-        .pulseEnabled(true)
+        .pulseEnabled(enablePulsing)
         .pulseFadeEnabled(DEFAULT_LOCATION_CIRCLE_PULSE_FADE_MODE)
         .pulseInterpolator(DEFAULT_LOCATION_CIRCLE_INTERPOLATOR_PULSE_MODE)
         .pulseColor(pulsingCircleColor)
