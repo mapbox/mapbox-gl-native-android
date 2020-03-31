@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.location.Location;
 import android.os.SystemClock;
 import android.util.SparseArray;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
 import androidx.annotation.NonNull;
@@ -203,7 +204,7 @@ final class LocationAnimatorCoordinator {
         maxAnimationFps,
         options.pulseSingleDuration(),
         options.pulseMaxRadius(),
-        options.pulseInterpolator());
+        options.pulseInterpolator() == null ? new DecelerateInterpolator() : options.pulseInterpolator());
       animatorArray.put(ANIMATOR_PULSING_CIRCLE, pulsingLocationCircleAnimator);
       playPulsingAnimator();
     }

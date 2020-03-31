@@ -1,6 +1,7 @@
 package com.mapbox.mapboxsdk.location;
 
 import android.animation.ValueAnimator;
+import android.view.animation.Interpolator;
 
 import androidx.annotation.Nullable;
 
@@ -47,7 +48,7 @@ final class MapboxAnimatorProvider {
    * @param pulseSingleDuration the number of milliseconds it takes for the animator to create
    *                            a single pulse.
    * @param pulseMaxRadius the max radius when the circle is finished with a single pulse.
-   * @param desiredInterpolatorFromOptions the type of Android-system interpolator to use for
+   * @param pulseInterpolator the type of Android-system interpolator to use for
    *                                       the pulsing animation (linear, accelerate, bounce, etc.)
    * @return a built {@link PulsingLocationCircleAnimator} object.
    */
@@ -55,15 +56,13 @@ final class MapboxAnimatorProvider {
                                                       int maxAnimationFps,
                                                       float pulseSingleDuration,
                                                       float pulseMaxRadius,
-                                                      String desiredInterpolatorFromOptions) {
+                                                      Interpolator pulseInterpolator) {
     PulsingLocationCircleAnimator pulsingLocationCircleAnimator =
         new PulsingLocationCircleAnimator(updateListener, maxAnimationFps, pulseMaxRadius);
     pulsingLocationCircleAnimator.setDuration((long) pulseSingleDuration);
     pulsingLocationCircleAnimator.setRepeatMode(ValueAnimator.RESTART);
     pulsingLocationCircleAnimator.setRepeatCount(ValueAnimator.INFINITE);
-    pulsingLocationCircleAnimator.retrievePulseInterpolator(desiredInterpolatorFromOptions);
-    pulsingLocationCircleAnimator.setInterpolator(
-        pulsingLocationCircleAnimator.retrievePulseInterpolator(desiredInterpolatorFromOptions));
+    pulsingLocationCircleAnimator.setInterpolator(pulseInterpolator);
     return pulsingLocationCircleAnimator;
   }
 }

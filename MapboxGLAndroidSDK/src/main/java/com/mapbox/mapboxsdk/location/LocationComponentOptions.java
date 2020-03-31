@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.view.animation.Interpolator;
 
 import com.mapbox.android.gestures.AndroidGesturesManager;
 import com.mapbox.mapboxsdk.R;
@@ -136,7 +137,8 @@ public class LocationComponentOptions implements Parcelable {
   private float pulseSingleDuration;
   private float pulseMaxRadius;
   private float pulseAlpha;
-  private String pulseInterpolator;
+  @Nullable
+  private Interpolator pulseInterpolator;
 
   public LocationComponentOptions(
       float accuracyAlpha,
@@ -178,7 +180,7 @@ public class LocationComponentOptions implements Parcelable {
       float pulseSingleDuration,
       float pulseMaxRadius,
       float pulseAlpha,
-      String pulseInterpolator) {
+      @Nullable Interpolator pulseInterpolator) {
     this.accuracyAlpha = accuracyAlpha;
     this.accuracyColor = accuracyColor;
     this.backgroundDrawableStale = backgroundDrawableStale;
@@ -364,9 +366,6 @@ public class LocationComponentOptions implements Parcelable {
     builder.pulseAlpha = typedArray.getFloat(
         R.styleable.mapbox_LocationComponent_mapbox_pulsingLocationCircleAlpha, CIRCLE_PULSING_ALPHA_DEFAULT
     );
-
-    builder.pulseInterpolator = typedArray.getString(
-        R.styleable.mapbox_LocationComponent_mapbox_pulsingLocationCircleInterpolator);
 
     typedArray.recycle();
 
@@ -866,7 +865,8 @@ public class LocationComponentOptions implements Parcelable {
    *
    * @return the current set type of animation interpolator for the pulsing circle
    */
-  public String pulseInterpolator() {
+  @Nullable
+  public Interpolator pulseInterpolator() {
     return pulseInterpolator;
   }
 
@@ -911,7 +911,6 @@ public class LocationComponentOptions implements Parcelable {
         + "pulseSingleDuration=" + pulseSingleDuration
         + "pulseMaxRadius=" + pulseMaxRadius
         + "pulseAlpha=" + pulseAlpha
-        + "pulseInterpolator=" + pulseInterpolator
         + "}";
   }
 
@@ -1054,11 +1053,6 @@ public class LocationComponentOptions implements Parcelable {
       return false;
     }
 
-    if (pulseInterpolator != null ? !pulseInterpolator.equals(options.pulseInterpolator)
-        : options.pulseInterpolator != null) {
-      return false;
-    }
-
     return layerBelow != null ? layerBelow.equals(options.layerBelow) : options.layerBelow == null;
   }
 
@@ -1106,7 +1100,6 @@ public class LocationComponentOptions implements Parcelable {
     result = 31 * result + (pulseSingleDuration != +0.0f ? Float.floatToIntBits(pulseSingleDuration) : 0);
     result = 31 * result + (pulseMaxRadius != +0.0f ? Float.floatToIntBits(pulseMaxRadius) : 0);
     result = 31 * result + (pulseAlpha != +0.0f ? Float.floatToIntBits(pulseAlpha) : 0);
-    result = 31 * result + (pulseInterpolator != null ? pulseInterpolator.hashCode() : 0);
     return result;
   }
 
@@ -1154,7 +1147,7 @@ public class LocationComponentOptions implements Parcelable {
               in.readFloat(),
               in.readFloat(),
               in.readFloat(),
-              in.readString()
+              null
           );
       }
 
@@ -1265,7 +1258,6 @@ public class LocationComponentOptions implements Parcelable {
     dest.writeFloat(pulseSingleDuration());
     dest.writeFloat(pulseMaxRadius());
     dest.writeFloat(pulseAlpha());
-    dest.writeString(pulseInterpolator());
   }
 
   @Override
@@ -1381,7 +1373,8 @@ public class LocationComponentOptions implements Parcelable {
     private float pulseSingleDuration;
     private float pulseMaxRadius;
     private float pulseAlpha;
-    private String pulseInterpolator;
+    @Nullable
+    private Interpolator pulseInterpolator;
 
     Builder() {
     }
@@ -1974,14 +1967,13 @@ public class LocationComponentOptions implements Parcelable {
     }
 
     /**
-     * Sets the pulsing circle's interpolator animation. Pass through a mode constant via the
-     * {@link PulseMode} class.
+     * Sets the pulsing circle's interpolator animation.
      *
      * @param pulseInterpolator the type of Android-system interpolator to use when
      *                                  creating the pulsing animation
      * @return a String which represents the interpolator animation that the pulsing circle will use.
      */
-    public LocationComponentOptions.Builder pulseInterpolator(String pulseInterpolator) {
+    public LocationComponentOptions.Builder pulseInterpolator(Interpolator pulseInterpolator) {
       this.pulseInterpolator = pulseInterpolator;
       return this;
     }

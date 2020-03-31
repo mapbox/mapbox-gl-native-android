@@ -6,6 +6,8 @@ import android.location.Location;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
@@ -16,7 +18,6 @@ import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
 import com.mapbox.mapboxsdk.location.LocationComponentOptions;
-import com.mapbox.mapboxsdk.location.PulseMode;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
@@ -47,7 +48,8 @@ public class CustomizedLocationPulsingCircleActivity extends AppCompatActivity i
   private static final float THIRD_LOCATION_CIRCLE_PULSE_DURATION_MS = 8000;
   private static final float DEFAULT_LOCATION_CIRCLE_PULSE_RADIUS = 35;
   private static final float DEFAULT_LOCATION_CIRCLE_PULSE_ALPHA = .55f;
-  private static final String DEFAULT_LOCATION_CIRCLE_INTERPOLATOR_PULSE_MODE = PulseMode.DECELERATE;
+  private static final Interpolator DEFAULT_LOCATION_CIRCLE_INTERPOLATOR_PULSE_MODE
+      = new DecelerateInterpolator();
   private static final boolean DEFAULT_LOCATION_CIRCLE_PULSE_FADE_MODE = true;
   //endregion
 

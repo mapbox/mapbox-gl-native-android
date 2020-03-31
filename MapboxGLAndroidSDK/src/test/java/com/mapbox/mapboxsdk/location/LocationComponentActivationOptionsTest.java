@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.view.animation.LinearInterpolator;
 
 import androidx.annotation.NonNull;
 
@@ -74,7 +75,7 @@ public class LocationComponentActivationOptionsTest {
 
     LocationComponentOptions locationComponentOptions = LocationComponentOptions.builder(context)
         .accuracyAlpha(0.5f)
-        .pulsingCircleEnabled(true)
+        .pulseEnabled(true)
         .build();
     assertNotNull(locationComponentOptions);
 
@@ -92,9 +93,9 @@ public class LocationComponentActivationOptionsTest {
 
     LocationComponentOptions locationComponentOptions = LocationComponentOptions.builder(context)
         .accuracyAlpha(0.5f)
-        .pulsingCircleEnabled(true)
-        .pulsingCircleColor(Color.RED)
-        .pulsingCircleInterpolator(PulseMode.LINEAR)
+        .pulseEnabled(true)
+        .pulseColor(Color.RED)
+        .pulseInterpolator(new LinearInterpolator())
         .build();
     assertNotNull(locationComponentOptions);
 
