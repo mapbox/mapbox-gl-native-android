@@ -32,6 +32,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.ListPopupWindow;
 
+import static com.mapbox.mapboxsdk.testapp.activity.location.Utils.getNextStyle;
+
 /**
  * This activity shows how to customize the LocationComponent's pulsing circle.
  */
@@ -195,7 +197,7 @@ public class CustomizedLocationPulsingCircleActivity extends AppCompatActivity i
 
     int id = item.getItemId();
     if (id == R.id.action_map_style_change) {
-      toggleMapStyle();
+      loadNewStyle();
       return true;
     } else if (id == R.id.action_component_disable) {
       locationComponent.setLocationComponentEnabled(false);
@@ -213,12 +215,8 @@ public class CustomizedLocationPulsingCircleActivity extends AppCompatActivity i
     return super.onOptionsItemSelected(item);
   }
 
-  private void toggleMapStyle() {
-    if (locationComponent == null) {
-      return;
-    }
-
-    mapboxMap.setStyle(Style.LIGHT);
+  private void loadNewStyle() {
+    mapboxMap.setStyle(new Style.Builder().fromUri(getNextStyle()));
   }
 
   private void checkPermissions() {

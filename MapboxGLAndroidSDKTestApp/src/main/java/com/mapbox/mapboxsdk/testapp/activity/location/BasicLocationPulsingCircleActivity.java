@@ -25,6 +25,8 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import static com.mapbox.mapboxsdk.testapp.activity.location.Utils.getNextStyle;
+
 /**
  * This activity shows a basic usage of the LocationComponent's pulsing circle. There's no
  * customization of the pulsing circle's color, radius, speed, etc.
@@ -107,7 +109,7 @@ public class BasicLocationPulsingCircleActivity extends AppCompatActivity implem
 
     int id = item.getItemId();
     if (id == R.id.action_map_style_change) {
-      toggleMapStyle();
+      loadNewStyle();
       return true;
     } else if (id == R.id.action_component_disable) {
       locationComponent.setLocationComponentEnabled(false);
@@ -125,12 +127,8 @@ public class BasicLocationPulsingCircleActivity extends AppCompatActivity implem
     return super.onOptionsItemSelected(item);
   }
 
-  private void toggleMapStyle() {
-    if (locationComponent == null) {
-      return;
-    }
-
-    mapboxMap.setStyle(Style.LIGHT);
+  private void loadNewStyle() {
+    mapboxMap.setStyle(new Style.Builder().fromUri(getNextStyle()));
   }
 
   private void checkPermissions() {
@@ -156,8 +154,6 @@ public class BasicLocationPulsingCircleActivity extends AppCompatActivity implem
       permissionsManager.requestLocationPermissions(this);
     }
   }
-
-
 
   @Override
   public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
