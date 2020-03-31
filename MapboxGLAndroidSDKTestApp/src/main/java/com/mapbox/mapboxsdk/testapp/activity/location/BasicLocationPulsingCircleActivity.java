@@ -118,10 +118,16 @@ public class BasicLocationPulsingCircleActivity extends AppCompatActivity implem
       locationComponent.setLocationComponentEnabled(true);
       return true;
     } else if (id == R.id.action_stop_pulsing) {
-      locationComponent.stopPulsingLocationCircle();
+      locationComponent.applyStyle(LocationComponentOptions.builder(
+          BasicLocationPulsingCircleActivity.this)
+          .pulseEnabled(false)
+          .build());
       return true;
     } else if (id == R.id.action_start_pulsing) {
-      locationComponent.startPulsingLocationCircle();
+      locationComponent.applyStyle(LocationComponentOptions.builder(
+          BasicLocationPulsingCircleActivity.this)
+          .pulseEnabled(true)
+          .build());
       return true;
     }
     return super.onOptionsItemSelected(item);

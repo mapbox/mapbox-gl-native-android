@@ -728,6 +728,8 @@ public final class LocationComponent {
       locationAnimatorCoordinator.setAccuracyAnimationEnabled(options.accuracyAnimationEnabled());
       if (options.pulseEnabled()) {
         startPulsingLocationCircle();
+      } else {
+        stopPulsingLocationCircle();
       }
       updateMapWithOptions(options);
     }
@@ -736,7 +738,7 @@ public final class LocationComponent {
   /**
    * Starts the LocationComponent's pulsing circle UI.
    */
-  public void startPulsingLocationCircle() {
+  private void startPulsingLocationCircle() {
     locationAnimatorCoordinator.startLocationComponentCirclePulsing(options);
     locationLayerController.adjustPulsingCircleLayerVisibility(true);
   }
@@ -1229,7 +1231,7 @@ public final class LocationComponent {
   /**
    * Stop the LocationComponent's pulsing circle animation.
    */
-  public void stopPulsingLocationCircle() {
+  private void stopPulsingLocationCircle() {
     locationAnimatorCoordinator.stopPulsingCircleAnimation();
     locationLayerController.adjustPulsingCircleLayerVisibility(false);
   }
@@ -1261,6 +1263,8 @@ public final class LocationComponent {
       setCameraMode(locationCameraController.getCameraMode());
       if (options.pulseEnabled()) {
         startPulsingLocationCircle();
+      } else {
+        stopPulsingLocationCircle();
       }
       setLastLocation();
       updateCompassListenerState(true);

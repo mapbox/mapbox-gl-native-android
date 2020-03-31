@@ -57,7 +57,6 @@ public class CustomizedLocationPulsingCircleActivity extends AppCompatActivity i
   private static final String SAVED_STATE_LOCATION = "saved_state_location";
   private static final String SAVED_STATE_LOCATION_CIRCLE_PULSE_COLOR = "saved_state_color";
   private static final String SAVED_STATE_LOCATION_CIRCLE_PULSE_DURATION = "saved_state_duration";
-  private static final String TAG = "Mbgl-CustomizedLocationPulsingCircleActivity";
 
   private Location lastLocation;
   private MapView mapView;
@@ -134,10 +133,10 @@ public class CustomizedLocationPulsingCircleActivity extends AppCompatActivity i
   }
 
   private LocationComponentOptions buildLocationComponentOptions(@Nullable String idOfLayerBelow,
-                                                                 @Nullable int pulsingCircleColor,
-                                                                 @Nullable float pulsingCircleAlpha,
-                                                                 @Nullable float pulsingCircleDuration,
-                                                                 @Nullable float pulsingCircleMaxRadius
+                                                                 int pulsingCircleColor,
+                                                                 float pulsingCircleAlpha,
+                                                                 float pulsingCircleDuration,
+                                                                 float pulsingCircleMaxRadius
   ) {
     currentPulseDuration = pulsingCircleDuration;
     return LocationComponentOptions.builder(this)
@@ -153,19 +152,14 @@ public class CustomizedLocationPulsingCircleActivity extends AppCompatActivity i
   }
 
   @SuppressLint("MissingPermission")
-  private void setNewLocationComponentOptions(@Nullable float newPulsingDuration,
-                                              @Nullable int newPulsingColor) {
-    mapboxMap.getStyle(new Style.OnStyleLoaded() {
-      @Override
-      public void onStyleLoaded(@NonNull Style style) {
-        locationComponent.applyStyle(
-            buildLocationComponentOptions(
-                "waterway-label",
-                newPulsingColor, DEFAULT_LOCATION_CIRCLE_PULSE_ALPHA,
-                newPulsingDuration,
-                DEFAULT_LOCATION_CIRCLE_PULSE_RADIUS));
-      }
-    });
+  private void setNewLocationComponentOptions(float newPulsingDuration,
+                                              int newPulsingColor) {
+    mapboxMap.getStyle(style -> locationComponent.applyStyle(
+        buildLocationComponentOptions(
+            "waterway-label",
+            newPulsingColor, DEFAULT_LOCATION_CIRCLE_PULSE_ALPHA,
+            newPulsingDuration,
+            DEFAULT_LOCATION_CIRCLE_PULSE_RADIUS)));
   }
 
   private LocationComponentActivationOptions buildLocationComponentActivationOptions(
@@ -206,10 +200,18 @@ public class CustomizedLocationPulsingCircleActivity extends AppCompatActivity i
       locationComponent.setLocationComponentEnabled(true);
       return true;
     } else if (id == R.id.action_stop_pulsing) {
-      locationComponent.stopPulsingLocationCircle();
+      locationComponent.applyStyle(LocationComponentOptions.builder(
+          CustomizedLocationPulsingCircleActivity.this)
+          .pulseEnabled(false)
+          .build());
       return true;
     } else if (id == R.id.action_start_pulsing) {
-      locationComponent.startPulsingLocationCircle();
+      locationComponent.applyStyle(buildLocationComponentOptions(
+          "waterway-label",
+          LOCATION_CIRCLE_PULSE_COLOR,
+          DEFAULT_LOCATION_CIRCLE_PULSE_ALPHA,
+          LOCATION_CIRCLE_PULSE_DURATION,
+          DEFAULT_LOCATION_CIRCLE_PULSE_RADIUS));
       return true;
     }
     return super.onOptionsItemSelected(item);
