@@ -2721,7 +2721,7 @@ public class PropertyFactory {
    * @param value a Float[] value
    * @return property wrapper around Float[]
    */
-  public static PropertyValue<Float[]> location(Float[] value) {
+  public static PropertyValue<Double[]> location(Double[] value) {
     return new LayoutPropertyValue<>("location", value);
   }
 

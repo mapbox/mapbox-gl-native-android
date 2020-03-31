@@ -16,6 +16,8 @@ import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.layers.Layer;
+import com.mapbox.mapboxsdk.style.layers.LocationComponentLayer;
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 
@@ -231,17 +233,25 @@ final class LocationLayerController {
     }
   }
 
-  private void addLayers() {
-    // positions the top-most reference layer
-    Layer layer = layerSourceProvider.generateLayer(BEARING_LAYER);
-    positionManager.addLayerToMap(layer);
-    layerSet.add(layer.getId());
+  private LocationComponentLayer locationLayer;
 
-    // adds remaining layers while keeping the order
-    addSymbolLayer(FOREGROUND_LAYER, BEARING_LAYER);
-    addSymbolLayer(BACKGROUND_LAYER, FOREGROUND_LAYER);
-    addSymbolLayer(SHADOW_LAYER, BACKGROUND_LAYER);
-    addAccuracyLayer();
+  private void addLayers() {
+    if (false) {
+      // positions the top-most reference layer
+      Layer layer = layerSourceProvider.generateLayer(BEARING_LAYER);
+      positionManager.addLayerToMap(layer);
+      layerSet.add(layer.getId());
+
+      // adds remaining layers while keeping the order
+      addSymbolLayer(FOREGROUND_LAYER, BEARING_LAYER);
+      addSymbolLayer(BACKGROUND_LAYER, FOREGROUND_LAYER);
+      addSymbolLayer(SHADOW_LAYER, BACKGROUND_LAYER);
+      addAccuracyLayer();
+    } else {
+      locationLayer = layerSourceProvider.generateLocationComponentLayer();
+      positionManager.addLayerToMap(locationLayer);
+      layerSet.add(locationLayer.getId());
+    }
   }
 
   private void addSymbolLayer(@NonNull String layerId, @NonNull String beforeLayerId) {
@@ -268,6 +278,9 @@ final class LocationLayerController {
 
   private void setBearingProperty(@NonNull String propertyId, float bearing) {
     locationFeature.addNumberProperty(propertyId, bearing);
+    locationLayer.setProperties(
+      PropertyFactory.bearing(bearing)
+    );
     refreshSource();
   }
 
@@ -296,6 +309,9 @@ final class LocationLayerController {
     JsonObject properties = locationFeature.properties();
     if (properties != null) {
       locationFeature = Feature.fromGeometry(locationPoint, properties);
+      locationLayer.setProperties(
+        PropertyFactory.location(new Double[]{locationPoint.latitude(), locationPoint.longitude(), 10.0})
+      );
       refreshSource();
     }
   }

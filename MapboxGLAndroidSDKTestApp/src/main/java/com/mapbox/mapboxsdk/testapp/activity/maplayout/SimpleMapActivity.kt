@@ -1,10 +1,14 @@
 package com.mapbox.mapboxsdk.testapp.activity.maplayout
 
 import android.annotation.SuppressLint
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.LineString
 import com.mapbox.mapboxsdk.Mapbox
@@ -32,6 +36,7 @@ import java.io.IOException
  */
 class SimpleMapActivity : AppCompatActivity() {
   private var mapView: MapView? = null
+  @SuppressLint("MissingPermission")
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_map_simple)
@@ -39,6 +44,9 @@ class SimpleMapActivity : AppCompatActivity() {
     mapView?.onCreate(savedInstanceState)
     mapView?.getMapAsync(OnMapReadyCallback { mapboxMap: MapboxMap ->
       mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(35.2090642, 137.03786731), 14.0))
+      mapboxMap.setStyle(Style.MAPBOX_STREETS) {style ->
+        doLP(mapboxMap, style)
+      }
     })
   }
 
@@ -53,6 +61,8 @@ class SimpleMapActivity : AppCompatActivity() {
 //    } catch (ex: IOException) {
 //      ex.printStackTrace();
 //    }
+    val bitmap = AppCompatResources.getDrawable(this, R.drawable.mapbox_user_puck_icon)!!.toBitmap()
+    style.addImage("puck", bitmap)
     val locationComponent = mapboxMap.locationComponent
     locationComponent.activateLocationComponent(
       LocationComponentActivationOptions.builder(this, style)
@@ -61,7 +71,7 @@ class SimpleMapActivity : AppCompatActivity() {
         .locationComponentOptions(
           LocationComponentOptions.builder(this)
             .elevation(150f)
-            .layerAbove("on-labels-daymode")
+//            .layerAbove("on-labels-daymode")
             .accuracyAlpha(0f)
             .trackingGesturesManagement(true)
             .build()
@@ -76,7 +86,7 @@ class SimpleMapActivity : AppCompatActivity() {
       locationComponent.setCameraMode(CameraMode.TRACKING_GPS, 500L, 17.0, null, 45.0, null)
     }
 
-    doFps(mapboxMap, locationComponent)
+//    doFps(mapboxMap, locationComponent)
   }
 
   fun doFps(mapboxMap: MapboxMap, locationComponent: LocationComponent) {

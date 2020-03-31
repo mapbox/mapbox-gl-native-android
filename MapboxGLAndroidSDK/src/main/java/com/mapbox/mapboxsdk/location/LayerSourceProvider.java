@@ -2,9 +2,13 @@ package com.mapbox.mapboxsdk.location;
 
 import androidx.annotation.NonNull;
 import com.mapbox.geojson.Feature;
+import com.mapbox.mapboxsdk.R;
+import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.CircleLayer;
 import com.mapbox.mapboxsdk.style.layers.Layer;
+import com.mapbox.mapboxsdk.style.layers.LocationComponentLayer;
 import com.mapbox.mapboxsdk.style.layers.Property;
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
@@ -93,6 +97,18 @@ class LayerSourceProvider {
           stop(literal(SHADOW_LAYER), get(PROPERTY_SHADOW_ICON_OFFSET))
         )
       )
+    );
+    return layer;
+  }
+
+  LocationComponentLayer generateLocationComponentLayer() {
+    LocationComponentLayer layer = new LocationComponentLayer(FOREGROUND_LAYER);
+    layer.setProperties(
+      PropertyFactory.bearingImage("puck"),
+      PropertyFactory.bearingImageSize(45f),
+      PropertyFactory.perspectiveCompensation(0.9f), // 0.9f
+      PropertyFactory.imageTiltDisplacement(0f), // 0f or 8f
+      PropertyFactory.accuracyRadius(0f)
     );
     return layer;
   }
