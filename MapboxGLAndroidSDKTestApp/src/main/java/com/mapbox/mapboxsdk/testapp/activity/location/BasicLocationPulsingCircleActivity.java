@@ -67,7 +67,7 @@ public class BasicLocationPulsingCircleActivity extends AppCompatActivity implem
 
       LocationComponentOptions locationComponentOptions =
           LocationComponentOptions.builder(BasicLocationPulsingCircleActivity.this)
-              .pulsingCircleEnabled(true)
+              .pulseEnabled(true)
               .build();
 
       LocationComponentActivationOptions locationComponentActivationOptions =
