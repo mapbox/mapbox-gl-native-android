@@ -124,7 +124,7 @@ class LocationLayerControllerTest : EspressoTest() {
         assertThat(mapboxMap.isLayerVisible(SHADOW_LAYER), `is`(true))
         assertThat(mapboxMap.isLayerVisible(ACCURACY_LAYER), `is`(true))
         assertThat(mapboxMap.isLayerVisible(BEARING_LAYER), `is`(false))
-        assertThat(mapboxMap.isLayerVisible(PULSING_CIRCLE_LAYER), `is`(true))
+        assertThat(mapboxMap.isLayerVisible(PULSING_CIRCLE_LAYER), `is`(false))
       }
     }
     executeComponentTest(componentAction)
@@ -144,7 +144,7 @@ class LocationLayerControllerTest : EspressoTest() {
           LocationComponentActivationOptions
             .builder(context, style)
             .locationComponentOptions(LocationComponentOptions.builder(context)
-              .pulsingCircleEnabled(true)
+              .pulseEnabled(true)
               .build())
             .useDefaultLocationEngine(false)
             .build()
@@ -219,7 +219,7 @@ class LocationLayerControllerTest : EspressoTest() {
         TestingAsyncUtils.waitForLayer(uiController, mapView)
 
         component.applyStyle(LocationComponentOptions.builder(context)
-          .pulsingCircleEnabled(true).build())
+          .pulseEnabled(true).build())
 
         assertThat(mapboxMap.isLayerVisible(PULSING_CIRCLE_LAYER), `is`(true))
       }
@@ -274,9 +274,7 @@ class LocationLayerControllerTest : EspressoTest() {
         TestingAsyncUtils.waitForLayer(uiController, mapView)
 
         component.applyStyle(LocationComponentOptions.builder(context)
-          .pulsingCircleEnabled(true).build())
-
-        component.stopPulsingLocationCircle()
+          .pulseEnabled(true).build())
 
         assertThat(mapboxMap.isLayerVisible(PULSING_CIRCLE_LAYER), `is`(false))
       }
@@ -305,13 +303,13 @@ class LocationLayerControllerTest : EspressoTest() {
         TestingAsyncUtils.waitForLayer(uiController, mapView)
 
         component.applyStyle(LocationComponentOptions.builder(context)
-          .pulsingCircleEnabled(true)
-          .pulsingCircleColor(Color.RED)
+          .pulseEnabled(true)
+          .pulseColor(Color.RED)
           .build())
 
         component.applyStyle(LocationComponentOptions.builder(context)
-          .pulsingCircleEnabled(true)
-          .pulsingCircleColor(Color.BLUE)
+          .pulseEnabled(true)
+          .pulseColor(Color.BLUE)
           .build())
 
         mapboxMap.style.apply {
@@ -343,13 +341,13 @@ class LocationLayerControllerTest : EspressoTest() {
         TestingAsyncUtils.waitForLayer(uiController, mapView)
 
         component.applyStyle(LocationComponentOptions.builder(context)
-          .pulsingCircleEnabled(true)
-          .pulsingCircleDuration(8000f)
+          .pulseEnabled(true)
+          .pulseSingleDuration(8000f)
           .build())
 
         component.applyStyle(LocationComponentOptions.builder(context)
-          .pulsingCircleEnabled(true)
-          .pulsingCircleDuration(400f)
+          .pulseEnabled(true)
+          .pulseSingleDuration(400f)
           .build())
 
         mapboxMap.style.apply {
