@@ -22,9 +22,11 @@ Mapbox welcomes participation and contributions from everyone. Please read [`Con
  - Fixed conversion of a `Map` object into a GeoJSON object. ([#16243](https://github.com/mapbox/mapbox-gl-native/pull/16243))
  - Fixed issues that would cause an offline region to stop downloading before completion. ([#16230](https://github.com/mapbox/mapbox-gl-native/pull/16230), [#16240](https://github.com/mapbox/mapbox-gl-native/pull/16240))
  - Fixed an issue where a `LineDasharray` value of `[1, 0]` resulted in hairline gaps. ([#16202](https://github.com/mapbox/mapbox-gl-native/pull/16202))
- - Fixed Proguard configuration to prevent obfuscation of telemetry event classes. ([#195](https://github.com/mapbox/mapbox-gl-native-android/pull/195))
+ - Fixed Proguard configuration to prevent obfuscation of telemetry event classes. ([#306](https://github.com/mapbox/mapbox-gl-native-android/pull/306))
  - Fixed a crash that might occur during EGL window surface creation. ([#278](https://github.com/mapbox/mapbox-gl-native-android/pull/278))
  - Fixed a bug that would cause local CJK glyphs to be rendered incorrectly when generated on a device with the high-contrast accessibility setting enabled. ([#289](https://github.com/mapbox/mapbox-gl-native-android/pull/289))
+ - Fixed a crash that might occur when we try to reset the render backend as part of the map renderer created. ([#300](https://github.com/mapbox/mapbox-gl-native-android/pull/300))
+ - Fixed a crash that will occur if call `SymbolLayer.getFilter()` method after `SymbolLayer.setFilter()` with expression `in`. ([#303](https://github.com/mapbox/mapbox-gl-native-android/pull/303))
 
 ### Other changes
  - Updated mapbox-events-android to v5.0.0. ([#294](https://github.com/mapbox/mapbox-gl-native-android/pull/294))
