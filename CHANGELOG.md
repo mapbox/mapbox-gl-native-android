@@ -9,7 +9,7 @@ Mapbox welcomes participation and contributions from everyone. Please read [`Con
  - Added `in` expression for testing whether an item exists in an array or a substring exists in a string. ([#171](https://github.com/mapbox/mapbox-gl-native-android/pull/171))
  - Introduced APIs and callbacks for customizing the style used in a `MapSnapshotter` snapshotter with runtime styling methods. ([#268](https://www.github.com/mapbox/mapbox-gl-native-android/pull/268), [#292](https://www.github.com/mapbox/mapbox-gl-native-android/pull/292))
  - Added methods to set and get the sort key of features in a `FillLayer` and `LineLayer` at runtime. Features with a higher sort key will appear above features with a lower sort key. ([#209](https://github.com/mapbox/mapbox-gl-native-android/pull/209))
- - Introduced option to set the minimum and maximum pitch of a map. ([#199](https://github.com/mapbox/mapbox-gl-native-android/pull/199))
+ - Introduced `MapboxMap.setMaxPitchPreference` and `MapboxMap.setMinPitchPreference` to constrain a map's pitch. ([#199](https://github.com/mapbox/mapbox-gl-native-android/pull/199))
  - Introduced ability to configure the zoom level(s) that tiles are prefetched from by `Source`. This overrides the  tile prefetch setting defined by the `Map` instance. ([#184](https://github.com/mapbox/mapbox-gl-native-android/pull/184))
 
 ### Performance improvements
@@ -25,8 +25,6 @@ Mapbox welcomes participation and contributions from everyone. Please read [`Con
  - Fixed Proguard configuration to prevent obfuscation of telemetry event classes. ([#306](https://github.com/mapbox/mapbox-gl-native-android/pull/306))
  - Fixed a crash that might occur during EGL window surface creation. ([#278](https://github.com/mapbox/mapbox-gl-native-android/pull/278))
  - Fixed a bug that would cause local CJK glyphs to be rendered incorrectly when generated on a device with the high-contrast accessibility setting enabled. ([#289](https://github.com/mapbox/mapbox-gl-native-android/pull/289))
- - Fixed a crash that might occur when we try to reset the render backend as part of the map renderer created. ([#300](https://github.com/mapbox/mapbox-gl-native-android/pull/300))
- - Fixed a crash that will occur if call `SymbolLayer.getFilter()` method after `SymbolLayer.setFilter()` with expression `in`. ([#303](https://github.com/mapbox/mapbox-gl-native-android/pull/303))
 
 ### Other changes
  - Updated mapbox-events-android to v5.0.0. ([#294](https://github.com/mapbox/mapbox-gl-native-android/pull/294))
