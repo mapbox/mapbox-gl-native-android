@@ -111,6 +111,13 @@ public class MapSnapshotter {
      * Called when snapshotter finishes loading it's style.
      */
     void onDidFinishLoadingStyle();
+
+    /**
+     * Called when shnashotter finds image missing.
+     *
+     * @param imageName the missing image name
+     */
+    void onStyleImageMissing(String imageName);
   }
 
   /**
@@ -513,7 +520,7 @@ public class MapSnapshotter {
    * @param bitmap the pre-multiplied Bitmap
    * @param sdf    the flag indicating image is an SDF or template image
    */
-  private void addImage(@NonNull final String name, @NonNull Bitmap bitmap, boolean sdf) {
+  public void addImage(@NonNull final String name, @NonNull Bitmap bitmap, boolean sdf) {
     nativeAddImages(new Image[] {toImage(new Style.Builder.ImageWrapper(name, bitmap, sdf))});
   }
 
@@ -797,7 +804,9 @@ public class MapSnapshotter {
    */
   @Keep
   protected void onStyleImageMissing(String imageName) {
-    onSnapshotFailed("style image is missing: " + imageName);
+    if (observer != null) {
+      observer.onStyleImageMissing(imageName);
+    }
   }
 
   private void checkThread() {

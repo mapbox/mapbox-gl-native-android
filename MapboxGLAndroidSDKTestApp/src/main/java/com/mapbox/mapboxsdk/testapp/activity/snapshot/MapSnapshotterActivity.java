@@ -139,7 +139,7 @@ public class MapSnapshotterActivity extends AppCompatActivity {
       // marker source
       FeatureCollection markerCollection = FeatureCollection.fromFeatures(new Feature[] {
         Feature.fromGeometry(Point.fromLngLat(4.91638, 52.35673), featureProperties("1", "Android")),
-        Feature.fromGeometry(Point.fromLngLat(3.91638, 52.34673), featureProperties("2", "Car"))
+        Feature.fromGeometry(Point.fromLngLat(4.91638, 12.34673), featureProperties("2", "Car"))
       });
       Source markerSource = new GeoJsonSource(MARKER_SOURCE, markerCollection);
 
@@ -170,6 +170,19 @@ public class MapSnapshotterActivity extends AppCompatActivity {
 
     options.withStyleBuilder(builder);
     MapSnapshotter snapshotter = new MapSnapshotter(MapSnapshotterActivity.this, options);
+    snapshotter.setObserver(new MapSnapshotter.Observer() {
+      @Override
+      public void onDidFinishLoadingStyle() {
+        Timber.i("onDidFinishLoadingStyle");
+      }
+
+      @Override
+      public void onStyleImageMissing(String imageName) {
+        Bitmap androidIcon = BitmapUtils.getBitmapFromDrawable(getResources().getDrawable(R.drawable.ic_android_2));
+        snapshotter.addImage(imageName, androidIcon, false);
+      }
+    });
+
     snapshotter.start(snapshot -> {
       Timber.i("Got the snapshot");
       ImageView imageView = new ImageView(MapSnapshotterActivity.this);
@@ -178,9 +191,6 @@ public class MapSnapshotterActivity extends AppCompatActivity {
         imageView,
         new GridLayout.LayoutParams(GridLayout.spec(row), GridLayout.spec(column))
       );
-    }, error -> {
-      Timber.e(error);
-
     });
     snapshotters.add(snapshotter);
   }
