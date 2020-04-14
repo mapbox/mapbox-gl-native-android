@@ -46,9 +46,9 @@ mbgl::style::Image Image::getImage(jni::JNIEnv& env, const jni::Object<Image>& i
         }
     }
     if (stretchY.get()) {
-        std::size_t sizeX = stretchY.Length(env);
-        for (jni::jsize i = 0; i < sizeX - 1; i += 2) {
-            imageStretchesX.push_back({stretchY.Get(env, i), stretchY.Get(env, i + 1)});
+        std::size_t sizeY = stretchY.Length(env);
+        for (jni::jsize i = 0; i < sizeY - 1; i += 2) {
+            imageStretchesY.push_back({stretchY.Get(env, i), stretchY.Get(env, i + 1)});
         }
     }
 

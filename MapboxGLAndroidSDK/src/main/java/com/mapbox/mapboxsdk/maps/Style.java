@@ -995,6 +995,26 @@ public class Style {
     }
 
     /**
+     * Will add the drawable as image when the map style has loaded.
+     *
+     * @param id       the id for the image
+     * @param drawable the drawable to be converted and added
+     * @param stretchX image stretch areas for x axix
+     * @param stretchY image stretch areas for y axix
+     * @param content  image content for text to fit
+     * @return this
+     */
+    @NonNull
+    public Builder withImage(@NonNull String id, @NonNull Drawable drawable, @NonNull List<ImageStretches> stretchX,
+                             @NonNull List<ImageStretches> stretchY, @Nullable ImageContent content) {
+      Bitmap bitmap = BitmapUtils.getBitmapFromDrawable(drawable);
+      if (bitmap == null) {
+        throw new IllegalArgumentException("Provided drawable couldn't be converted to a Bitmap.");
+      }
+      return this.withImage(id, bitmap, false, stretchX, stretchY, content);
+    }
+
+    /**
      * Will add the drawables as images when the map style has loaded.
      *
      * @param values pairs, where first is the id for te image and second is the drawable
@@ -1015,6 +1035,22 @@ public class Style {
     @NonNull
     public Builder withImage(@NonNull String id, @NonNull Bitmap image) {
       return this.withImage(id, image, false);
+    }
+
+    /**
+     * Will add the image when the map style has loaded.
+     *
+     * @param id       the id for the image
+     * @param image    the image to be added
+     * @param stretchX image stretch areas for x axix
+     * @param stretchY image stretch areas for y axix
+     * @param content  image content for text to fit
+     * @return this
+     */
+    @NonNull
+    public Builder withImage(@NonNull String id, @NonNull Bitmap image, @NonNull List<ImageStretches> stretchX,
+                             @NonNull List<ImageStretches> stretchY, @Nullable ImageContent content) {
+      return this.withImage(id, image, false, stretchX, stretchY, content);
     }
 
     /**
@@ -1047,6 +1083,26 @@ public class Style {
       }
       return this.withImage(id, bitmap, sdf);
     }
+    /**
+     * Will add the drawable as image when the map style has loaded.
+     *
+     * @param id       the id for the image
+     * @param drawable the drawable to be converted and added
+     * @param sdf      the flag indicating image is an SDF or template image
+     * @param stretchX image stretch areas for x axix
+     * @param stretchY image stretch areas for y axix
+     * @param content  image content for text to fit
+     * @return this
+     */
+    @NonNull
+    public Builder withImage(@NonNull String id, @NonNull Drawable drawable, boolean sdf, @NonNull List<ImageStretches> stretchX,
+                             @NonNull List<ImageStretches> stretchY, @Nullable ImageContent content) {
+      Bitmap bitmap = BitmapUtils.getBitmapFromDrawable(drawable);
+      if (bitmap == null) {
+        throw new IllegalArgumentException("Provided drawable couldn't be converted to a Bitmap.");
+      }
+      return this.withImage(id, bitmap, sdf, stretchX, stretchY, content);
+    }
 
     /**
      * Will add the drawables as images when the map style has loaded.
@@ -1078,6 +1134,24 @@ public class Style {
     @NonNull
     public Builder withImage(@NonNull String id, @NonNull Bitmap image, boolean sdf) {
       images.add(new ImageWrapper(id, image, sdf));
+      return this;
+    }
+
+    /**
+     * Will add the image when the map style has loaded.
+     *
+     * @param id       the id for the image
+     * @param image    the image to be added
+     * @param sdf      the flag indicating image is an SDF or template image
+     * @param stretchX image stretch areas for x axix
+     * @param stretchY image stretch areas for y axix
+     * @param content  image content for text to fit
+     * @return this
+     */
+    @NonNull
+    public Builder withImage(@NonNull String id, @NonNull Bitmap image, boolean sdf, @NonNull List<ImageStretches> stretchX,
+                             @NonNull List<ImageStretches> stretchY, @Nullable ImageContent content) {
+      images.add(new ImageWrapper(id, image, sdf, stretchX, stretchY, content));
       return this;
     }
 
@@ -1261,14 +1335,14 @@ public class Style {
     if (imageWrapper.getStretchX() != null && imageWrapper.getStretchY() != null) {
       float[] arrayX = new float[imageWrapper.getStretchX().size() * 2];
       for (int i = 0; i < imageWrapper.getStretchX().size(); i++) {
-        arrayX[i] = imageWrapper.getStretchX().get(i).getFirst();
-        arrayX[i + 1] = imageWrapper.getStretchX().get(i).getSecond();
+        arrayX[i * 2] = imageWrapper.getStretchX().get(i).getFirst();
+        arrayX[i * 2 + 1] = imageWrapper.getStretchX().get(i).getSecond();
       }
 
       float[] arrayY = new float[imageWrapper.getStretchY().size() * 2];
       for (int i = 0; i < imageWrapper.getStretchY().size(); i++) {
-        arrayY[i] = imageWrapper.getStretchY().get(i).getFirst();
-        arrayY[i + 1] = imageWrapper.getStretchY().get(i).getSecond();
+        arrayY[i * 2] = imageWrapper.getStretchY().get(i).getFirst();
+        arrayY[i * 2 + 1] = imageWrapper.getStretchY().get(i).getSecond();
       }
       return new Image(buffer.array(), pixelRatio, imageWrapper.id,
         bitmap.getWidth(), bitmap.getHeight(), imageWrapper.sdf, arrayX, arrayY,
