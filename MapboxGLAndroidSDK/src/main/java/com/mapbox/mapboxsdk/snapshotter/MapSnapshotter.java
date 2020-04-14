@@ -114,8 +114,8 @@ public class MapSnapshotter {
 
     /**
      * Called when the map is missing an icon.The icon should be added synchronously with
-     * {@link MapSnapshotter#addImage(String, Bitmap, boolean)} to be rendered on the current zoom level. When loading icons
-     * asynchronously, you can load a placeholder image and replace it when you icon has loaded.
+     * {@link MapSnapshotter#addImage(String, Bitmap, boolean)} to be rendered on the current zoom level.
+     * When loading icons asynchronously, you can load a placeholder image and replace it when you icon has loaded.
      *
      * @param imageName the id of the icon that is missing
      */
