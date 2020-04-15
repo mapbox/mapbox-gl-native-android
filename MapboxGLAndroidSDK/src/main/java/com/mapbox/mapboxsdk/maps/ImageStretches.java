@@ -35,8 +35,8 @@ public final class ImageStretches {
       return false;
     }
     ImageStretches other = (ImageStretches) obj;
-    return this.first == other.first &&
-      this.second == other.second;
+    return this.first == other.first
+      && this.second == other.second;
   }
 
   @Override

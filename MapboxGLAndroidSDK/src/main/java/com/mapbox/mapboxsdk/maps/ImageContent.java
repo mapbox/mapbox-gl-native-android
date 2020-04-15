@@ -3,7 +3,8 @@ package com.mapbox.mapboxsdk.maps;
 /**
  * Describes the image content, e.g. where text can be fit into an image.
  * <p>
- * When sizing icons with icon-text-fit, the icon size will be adjusted so that the this content box fits exactly around the text.
+ * When sizing icons with icon-text-fit,
+ * the icon size will be adjusted so that the this content box fits exactly around the text.
  */
 public final class ImageContent {
 
@@ -42,10 +43,10 @@ public final class ImageContent {
       return false;
     }
     ImageContent other = (ImageContent) obj;
-    return this.left == other.left &&
-      this.top == other.top &&
-      this.right == other.right &&
-      this.bottom == other.bottom;
+    return this.left == other.left
+      && this.top == other.top
+      && this.right == other.right
+      && this.bottom == other.bottom;
   }
 
   @Override

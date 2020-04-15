@@ -357,7 +357,9 @@ public class Style {
    * @param content  image content for text to fit
    */
   public void addImage(@NonNull String name, @NonNull Drawable drawable,
-                       @NonNull List<ImageStretches> stretchX, @NonNull List<ImageStretches> stretchY, @Nullable ImageContent content) {
+                       @NonNull List<ImageStretches> stretchX,
+                       @NonNull List<ImageStretches> stretchY,
+                       @Nullable ImageContent content) {
     Bitmap bitmap = BitmapUtils.getBitmapFromDrawable(drawable);
     if (bitmap == null) {
       throw new IllegalArgumentException("Provided drawable couldn't be converted to a Bitmap.");
@@ -388,9 +390,12 @@ public class Style {
    * @param content  image content for text to fit
    */
   public void addImage(@NonNull final String name, @NonNull Bitmap bitmap, boolean sdf,
-                       @NonNull List<ImageStretches> stretchX, @NonNull List<ImageStretches> stretchY, @Nullable ImageContent content) {
+                       @NonNull List<ImageStretches> stretchX,
+                       @NonNull List<ImageStretches> stretchY,
+                       @Nullable ImageContent content) {
     validateState("addImage");
-    nativeMap.addImages(new Image[] {toImage(new Builder.ImageWrapper(name, bitmap, sdf, stretchX, stretchY, content))});
+    nativeMap.addImages(new Image[] {
+      toImage(new Builder.ImageWrapper(name, bitmap, sdf, stretchX, stretchY, content))});
   }
 
   /**
@@ -413,7 +418,9 @@ public class Style {
    * @param content  image content for text to fit
    */
   public void addImageAsync(@NonNull String name, @NonNull Bitmap image,
-                            @NonNull List<ImageStretches> stretchX, @NonNull List<ImageStretches> stretchY, @Nullable ImageContent content) {
+                            @NonNull List<ImageStretches> stretchX,
+                            @NonNull List<ImageStretches> stretchY,
+                            @Nullable ImageContent content) {
     addImageAsync(name, image, false, stretchX, stretchY, content);
   }
 
@@ -442,7 +449,9 @@ public class Style {
    * @param content  image content for text to fit
    */
   public void addImageAsync(@NonNull String name, @NonNull Drawable drawable,
-                            @NonNull List<ImageStretches> stretchX, @NonNull List<ImageStretches> stretchY, @Nullable ImageContent content) {
+                            @NonNull List<ImageStretches> stretchX,
+                            @NonNull List<ImageStretches> stretchY,
+                            @Nullable ImageContent content) {
     Bitmap bitmap = BitmapUtils.getBitmapFromDrawable(drawable);
     if (bitmap == null) {
       throw new IllegalArgumentException("Provided drawable couldn't be converted to a Bitmap.");
@@ -473,10 +482,12 @@ public class Style {
    * @param content  image content for text to fit
    */
   public void addImageAsync(@NonNull final String name, @NonNull Bitmap bitmap, boolean sdf,
-                            @NonNull List<ImageStretches> stretchX, @NonNull List<ImageStretches> stretchY,
+                            @NonNull List<ImageStretches> stretchX,
+                            @NonNull List<ImageStretches> stretchY,
                             @Nullable ImageContent content) {
     validateState("addImage");
-    new BitmapImageConversionTask(nativeMap).execute(new Builder.ImageWrapper(name, bitmap, sdf, stretchX, stretchY, content));
+    new BitmapImageConversionTask(nativeMap)
+      .execute(new Builder.ImageWrapper(name, bitmap, sdf, stretchX, stretchY, content));
   }
 
   /**
@@ -528,12 +539,15 @@ public class Style {
    * @param stretchY image stretch areas for y axix
    * @param content  image content for text to fit
    */
-  public void addImages(@NonNull HashMap<String, Bitmap> images, boolean sdf, @NonNull List<ImageStretches> stretchX,
-                        @NonNull List<ImageStretches> stretchY, @Nullable ImageContent content) {
+  public void addImages(@NonNull HashMap<String, Bitmap> images, boolean sdf,
+                        @NonNull List<ImageStretches> stretchX,
+                        @NonNull List<ImageStretches> stretchY,
+                        @Nullable ImageContent content) {
     validateState("addImage");
     Image[] convertedImages = new Image[images.size()];
     int index = 0;
-    for (Builder.ImageWrapper imageWrapper : Builder.ImageWrapper.convertToImageArray(images, sdf, stretchX, stretchY, content)) {
+    for (Builder.ImageWrapper imageWrapper
+      : Builder.ImageWrapper.convertToImageArray(images, sdf, stretchX, stretchY, content)) {
       convertedImages[index] = toImage(imageWrapper);
       index++;
     }
@@ -583,8 +597,10 @@ public class Style {
    * @param stretchY image stretch areas for y axix
    * @param content  image content for text to fit
    */
-  public void addImagesAsync(@NonNull HashMap<String, Bitmap> images, boolean sdf, @NonNull List<ImageStretches> stretchX,
-                             @NonNull List<ImageStretches> stretchY, @Nullable ImageContent content) {
+  public void addImagesAsync(@NonNull HashMap<String, Bitmap> images, boolean sdf,
+                             @NonNull List<ImageStretches> stretchX,
+                             @NonNull List<ImageStretches> stretchY,
+                             @Nullable ImageContent content) {
     validateState("addImages");
     new BitmapImageConversionTask(nativeMap)
       .execute(Builder.ImageWrapper.convertToImageArray(images, sdf, stretchX, stretchY, content));
@@ -1083,6 +1099,7 @@ public class Style {
       }
       return this.withImage(id, bitmap, sdf);
     }
+
     /**
      * Will add the drawable as image when the map style has loaded.
      *
@@ -1095,8 +1112,10 @@ public class Style {
      * @return this
      */
     @NonNull
-    public Builder withImage(@NonNull String id, @NonNull Drawable drawable, boolean sdf, @NonNull List<ImageStretches> stretchX,
-                             @NonNull List<ImageStretches> stretchY, @Nullable ImageContent content) {
+    public Builder withImage(@NonNull String id, @NonNull Drawable drawable, boolean sdf,
+                             @NonNull List<ImageStretches> stretchX,
+                             @NonNull List<ImageStretches> stretchY,
+                             @Nullable ImageContent content) {
       Bitmap bitmap = BitmapUtils.getBitmapFromDrawable(drawable);
       if (bitmap == null) {
         throw new IllegalArgumentException("Provided drawable couldn't be converted to a Bitmap.");
@@ -1149,7 +1168,8 @@ public class Style {
      * @return this
      */
     @NonNull
-    public Builder withImage(@NonNull String id, @NonNull Bitmap image, boolean sdf, @NonNull List<ImageStretches> stretchX,
+    public Builder withImage(@NonNull String id, @NonNull Bitmap image, boolean sdf,
+                             @NonNull List<ImageStretches> stretchX,
                              @NonNull List<ImageStretches> stretchY, @Nullable ImageContent content) {
       images.add(new ImageWrapper(id, image, sdf, stretchX, stretchY, content));
       return this;
@@ -1213,7 +1233,8 @@ public class Style {
         this(id, bitmap, sdf, null, null, null);
       }
 
-      public ImageWrapper(String id, Bitmap bitmap, boolean sdf, List<ImageStretches> stretchX, List<ImageStretches> stretchY, ImageContent content) {
+      public ImageWrapper(String id, Bitmap bitmap, boolean sdf, List<ImageStretches> stretchX,
+                          List<ImageStretches> stretchY, ImageContent content) {
         this.id = id;
         this.bitmap = bitmap;
         this.sdf = sdf;
