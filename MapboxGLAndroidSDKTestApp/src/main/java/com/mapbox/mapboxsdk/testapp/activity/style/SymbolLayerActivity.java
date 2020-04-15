@@ -4,10 +4,11 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.os.Bundle;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.mapbox.geojson.Feature;
@@ -15,8 +16,6 @@ import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.maps.ImageContent;
-import com.mapbox.mapboxsdk.maps.ImageStretches;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
@@ -24,22 +23,17 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.Property;
-import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.mapboxsdk.style.sources.Source;
 import com.mapbox.mapboxsdk.testapp.R;
 import com.mapbox.mapboxsdk.utils.BitmapUtils;
+import timber.log.Timber;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import timber.log.Timber;
 
 import static com.mapbox.mapboxsdk.style.expressions.Expression.FormatOption.formatFontScale;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.FormatOption.formatTextColor;
@@ -64,7 +58,6 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconIgnorePlacem
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOpacity;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconSize;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconTextFit;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textAllowOverlap;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textAnchor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textColor;
@@ -96,8 +89,6 @@ public class SymbolLayerActivity extends AppCompatActivity implements MapboxMap.
   private static final String MAPBOX_SIGN_LAYER = "mapbox-sign-layer";
   private static final String NUMBER_FORMAT_SOURCE = "mapbox-number-source";
   private static final String NUMBER_FORMAT_LAYER = "mapbox-number-layer";
-  private static final String TEXT_FORMAT_SOURCE = "mapbox-text-source";
-  private static final String TEXT_FORMAT_LAYER = "mapbox-text-layer";
 
   private static final Expression TEXT_FIELD_EXPRESSION =
     switchCase(toBool(get(SELECTED_FEATURE_PROPERTY)),
@@ -124,7 +115,6 @@ public class SymbolLayerActivity extends AppCompatActivity implements MapboxMap.
   private SymbolLayer markerSymbolLayer;
   private SymbolLayer mapboxSignSymbolLayer;
   private SymbolLayer numberFormatSymbolLayer;
-  private SymbolLayer textSymbolLayer;
   private MapboxMap mapboxMap;
   private MapView mapView;
 
@@ -197,45 +187,17 @@ public class SymbolLayerActivity extends AppCompatActivity implements MapboxMap.
     // number format layer
     Source numberFormatSource = new GeoJsonSource(NUMBER_FORMAT_SOURCE, Point.fromLngLat(4.92756, 52.3516));
     numberFormatSymbolLayer = new SymbolLayer(NUMBER_FORMAT_LAYER, NUMBER_FORMAT_SOURCE);
-
     numberFormatSymbolLayer.setProperties(
       textField(
         numberFormat(123.456789, locale("nl-NL"), currency("EUR"))
       )
     );
 
-
-    // Stretch image layer
-    Source mapboxTextSource = new GeoJsonSource(TEXT_FORMAT_SOURCE, Point.fromLngLat(4.91638, 52.3410));
-    textSymbolLayer = new SymbolLayer(TEXT_FORMAT_LAYER, TEXT_FORMAT_SOURCE);
-    textSymbolLayer.withProperties(PropertyFactory.iconImage("icon"),
-      textField(
-        literal("mapboxmapbox")
-      ),
-      textColor(Color.BLACK),
-      textFont(BOLD_FONT_STACK),
-      textSize(25f),
-      textRotationAlignment(Property.TEXT_ROTATION_ALIGNMENT_MAP),
-      iconTextFit(literal("both")));
-
-    Bitmap icon = BitmapUtils.getBitmapFromDrawable(getResources().getDrawable(R.drawable.ic_us));
-    float border = 10;
-    int width = icon.getWidth();
-
-    List<ImageStretches> stretchX = new ArrayList<>();
-    stretchX.add(new ImageStretches(border, (width - border) / 2));
-    stretchX.add(new ImageStretches((width + border) / 2, width - border));
-    List<ImageStretches> stretchY = new ArrayList<>();
-    stretchY.add(new ImageStretches(border, (width - border) / 2));
-    stretchY.add(new ImageStretches((width + border) / 2, width - border));
-    ImageContent content = new ImageContent(border, border, width - border, width - border);
-
     mapboxMap.setStyle(new Style.Builder()
       .fromUri("asset://streets.json")
       .withImage("Car", Objects.requireNonNull(carBitmap), false)
-      .withImage("icon", Objects.requireNonNull(icon), false, stretchX, stretchY, content)
-      .withSources(markerSource, mapboxSignSource, numberFormatSource, mapboxTextSource)
-      .withLayers(markerSymbolLayer, mapboxSignSymbolLayer, numberFormatSymbolLayer, textSymbolLayer)
+      .withSources(markerSource, mapboxSignSource, numberFormatSource)
+      .withLayers(markerSymbolLayer, mapboxSignSymbolLayer, numberFormatSymbolLayer)
     );
 
     // Set a click-listener so we can manipulate the map
