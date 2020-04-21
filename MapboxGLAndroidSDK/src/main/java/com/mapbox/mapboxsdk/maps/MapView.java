@@ -27,6 +27,7 @@ import com.mapbox.mapboxsdk.annotations.Annotation;
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
 import com.mapbox.mapboxsdk.exceptions.MapboxConfigurationException;
 import com.mapbox.mapboxsdk.location.LocationComponent;
+import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.maps.renderer.MapRenderer;
 import com.mapbox.mapboxsdk.maps.renderer.glsurfaceview.GLSurfaceViewMapRenderer;
 import com.mapbox.mapboxsdk.maps.renderer.glsurfaceview.MapboxGLSurfaceView;
@@ -267,6 +268,27 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
       @Override
       public void onClick(View v) {
         if (mapboxMap != null && compassView != null) {
+          // Try to keep the tracking mode.
+          LocationComponent locationComponent = mapboxMap.getLocationComponent();
+          if (locationComponent != null && locationComponent.isLocationComponentActivated()
+            && locationComponent.isLocationComponentEnabled()) {
+            switch (locationComponent.getCameraMode()) {
+              case CameraMode.TRACKING_COMPASS:
+              case CameraMode.TRACKING_GPS:
+                locationComponent.setCameraMode(CameraMode.TRACKING);
+                locationComponent.rotateWhileTracking(0, TIME_MAP_NORTH_ANIMATION);
+                return;
+              case CameraMode.TRACKING:
+              case CameraMode.TRACKING_GPS_NORTH:
+                locationComponent.rotateWhileTracking(0, TIME_MAP_NORTH_ANIMATION);
+                return;
+              case CameraMode.NONE:
+              case CameraMode.NONE_COMPASS:
+              case CameraMode.NONE_GPS:
+                break;
+            }
+          }
+
           if (focalPoint != null) {
             mapboxMap.setFocalBearing(0, focalPoint.x, focalPoint.y, TIME_MAP_NORTH_ANIMATION);
           } else {

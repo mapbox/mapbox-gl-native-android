@@ -31,6 +31,7 @@ import com.mapbox.mapboxsdk.constants.MapboxConstants;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.location.LocationComponent;
+import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.log.Logger;
 import com.mapbox.mapboxsdk.offline.OfflineRegionDefinition;
 import com.mapbox.mapboxsdk.style.expressions.Expression;
@@ -44,6 +45,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.Size;
 import androidx.annotation.UiThread;
+
+import static com.mapbox.mapboxsdk.maps.widgets.CompassView.TIME_MAP_NORTH_ANIMATION;
 
 /**
  * The general class to interact with in the Android Mapbox SDK. It exposes the entry point for all
@@ -739,6 +742,26 @@ public final class MapboxMap {
    * Resets the map view to face north.
    */
   public void resetNorth() {
+    // Try to keep the tracking mode.
+    if (locationComponent != null && locationComponent.isLocationComponentActivated()
+      && locationComponent.isLocationComponentEnabled()) {
+      switch (locationComponent.getCameraMode()) {
+        case CameraMode.TRACKING_COMPASS:
+        case CameraMode.TRACKING_GPS:
+          locationComponent.setCameraMode(CameraMode.TRACKING);
+          locationComponent.rotateWhileTracking(0, TIME_MAP_NORTH_ANIMATION);
+          return;
+        case CameraMode.TRACKING:
+        case CameraMode.TRACKING_GPS_NORTH:
+          locationComponent.rotateWhileTracking(0, TIME_MAP_NORTH_ANIMATION);
+          return;
+        case CameraMode.NONE:
+        case CameraMode.NONE_COMPASS:
+        case CameraMode.NONE_GPS:
+          break;
+      }
+    }
+
     notifyDeveloperAnimationListeners();
     transform.resetNorth();
   }
