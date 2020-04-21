@@ -25,6 +25,7 @@ import static com.mapbox.mapboxsdk.location.LocationComponentConstants.ACCURACY_
 import static com.mapbox.mapboxsdk.location.LocationComponentConstants.COMPASS_UPDATE_RATE_MS;
 import static com.mapbox.mapboxsdk.location.LocationComponentConstants.MAX_ANIMATION_DURATION_MS;
 import static com.mapbox.mapboxsdk.location.LocationComponentConstants.TRANSITION_ANIMATION_DURATION_MS;
+import static com.mapbox.mapboxsdk.location.MapboxAnimator.ANIMATOR_BEARING;
 import static com.mapbox.mapboxsdk.location.MapboxAnimator.ANIMATOR_CAMERA_COMPASS_BEARING;
 import static com.mapbox.mapboxsdk.location.MapboxAnimator.ANIMATOR_CAMERA_GPS_BEARING;
 import static com.mapbox.mapboxsdk.location.MapboxAnimator.ANIMATOR_CAMERA_LATLNG;
@@ -188,6 +189,12 @@ final class LocationAnimatorCoordinator {
     playAnimators(animationDuration, ANIMATOR_TILT);
   }
 
+  void feedNewBearing(double targetBearing, @NonNull CameraPosition currentCameraPosition, long animationDuration,
+                      @Nullable MapboxMap.CancelableCallback callback) {
+    updateBearingAnimator((float) targetBearing, (float) currentCameraPosition.bearing, callback);
+    playAnimators(animationDuration, ANIMATOR_BEARING);
+  }
+
   private LatLng getPreviousLayerLatLng() {
     LatLng previousLatLng;
     MapboxAnimator latLngAnimator = animatorArray.get(ANIMATOR_LAYER_LATLNG);
@@ -285,6 +292,13 @@ final class LocationAnimatorCoordinator {
   private void updateTiltAnimator(float targetTilt, float previousTiltLevel,
                                   @Nullable MapboxMap.CancelableCallback cancelableCallback) {
     createNewCameraAdapterAnimator(ANIMATOR_TILT, new Float[] {previousTiltLevel, targetTilt}, cancelableCallback);
+  }
+
+  private void updateBearingAnimator(float targetBearing, float previousBearing,
+                                     @Nullable MapboxMap.CancelableCallback cancelableCallback) {
+    float normalizedCameraBearing = Utils.shortestRotation(targetBearing, previousBearing);
+    createNewCameraAdapterAnimator(ANIMATOR_BEARING, new Float[] {previousBearing, normalizedCameraBearing},
+      cancelableCallback);
   }
 
   private void createNewLatLngAnimator(@MapboxAnimator.Type int animatorType, LatLng previous, LatLng target) {
@@ -428,6 +442,10 @@ final class LocationAnimatorCoordinator {
 
   void cancelTiltAnimation() {
     cancelAnimator(ANIMATOR_TILT);
+  }
+
+  void cancelBearingAnimation() {
+    cancelAnimator(ANIMATOR_BEARING);
   }
 
   void cancelAllAnimations() {

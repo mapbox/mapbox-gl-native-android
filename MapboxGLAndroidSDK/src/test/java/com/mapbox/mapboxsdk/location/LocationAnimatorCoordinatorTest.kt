@@ -6,6 +6,7 @@ import android.util.SparseArray
 import android.view.animation.LinearInterpolator
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
+import com.mapbox.mapboxsdk.location.LocationComponentConstants.DEFAULT_TRACKING_ROTATE_ANIM_DURATION
 import com.mapbox.mapboxsdk.location.LocationComponentConstants.DEFAULT_TRACKING_TILT_ANIM_DURATION
 import com.mapbox.mapboxsdk.location.LocationComponentConstants.DEFAULT_TRACKING_ZOOM_ANIM_DURATION
 import com.mapbox.mapboxsdk.location.MapboxAnimator.*
@@ -48,7 +49,8 @@ class LocationAnimatorCoordinatorTest {
       ANIMATOR_CAMERA_COMPASS_BEARING,
       ANIMATOR_LAYER_ACCURACY,
       ANIMATOR_ZOOM,
-      ANIMATOR_TILT
+      ANIMATOR_TILT,
+      ANIMATOR_BEARING
     ))
   }
 
@@ -456,6 +458,33 @@ class LocationAnimatorCoordinatorTest {
   }
 
   @Test
+  fun feedNewBearing_animatorsCreated() {
+    locationAnimatorCoordinator.feedNewBearing(
+      30.0,
+      cameraPosition,
+      DEFAULT_TRACKING_ROTATE_ANIM_DURATION,
+      null
+    )
+
+    assertTrue(locationAnimatorCoordinator.animatorArray[ANIMATOR_BEARING] != null)
+  }
+
+  @Test
+  fun feedNewBearing_animatorValue() {
+    val bearing = 30.0f
+    locationAnimatorCoordinator.feedNewBearing(
+      bearing.toDouble(),
+      cameraPosition,
+      DEFAULT_TRACKING_ROTATE_ANIM_DURATION,
+      null
+    )
+
+    val animator = locationAnimatorCoordinator.animatorArray[ANIMATOR_BEARING]
+    assertEquals(bearing, animator.target)
+    verify { animatorSetProvider.startAnimation(eq(listOf(animator)), any<LinearInterpolator>(), DEFAULT_TRACKING_ROTATE_ANIM_DURATION) }
+  }
+
+  @Test
   fun cancelAllAnimators() {
     locationAnimatorCoordinator.feedNewLocation(Location(""), cameraPosition, true)
     locationAnimatorCoordinator.cancelAllAnimations()
@@ -488,6 +517,20 @@ class LocationAnimatorCoordinatorTest {
     locationAnimatorCoordinator.cancelTiltAnimation()
 
     assertTrue(locationAnimatorCoordinator.animatorArray[ANIMATOR_TILT] == null)
+  }
+
+  @Test
+  fun cancelBearingAnimation() {
+    locationAnimatorCoordinator.feedNewBearing(
+      30.0,
+      cameraPosition,
+      DEFAULT_TRACKING_ROTATE_ANIM_DURATION,
+      null
+    )
+
+    locationAnimatorCoordinator.cancelBearingAnimation()
+
+    assertTrue(locationAnimatorCoordinator.animatorArray[ANIMATOR_BEARING] == null)
   }
 
   @Test

@@ -1523,6 +1523,180 @@ class LocationComponentTest : EspressoTest() {
   }
 
   @Test
+  fun animators_dontRotateWhileNotTracking() {
+    val componentAction = object : LocationComponentAction.OnPerformLocationComponentAction {
+      override fun onLocationComponentAction(
+        component: LocationComponent,
+        mapboxMap: MapboxMap,
+        style: Style,
+        uiController: UiController,
+        context: Context
+      ) {
+        component.activateLocationComponent(LocationComponentActivationOptions
+          .builder(context, style)
+          .useDefaultLocationEngine(false)
+          .build())
+        component.isLocationComponentEnabled = true
+        component.cameraMode = CameraMode.NONE
+        val bearing = mapboxMap.cameraPosition.bearing
+        component.rotateWhileTracking(30.0)
+        uiController.loopMainThreadForAtLeast(DEFAULT_TRACKING_ROTATE_ANIM_DURATION)
+        TestingAsyncUtils.waitForLayer(uiController, mapView)
+
+        assertEquals(bearing, mapboxMap.cameraPosition.bearing, 0.1)
+      }
+    }
+
+    executeComponentTest(componentAction)
+  }
+
+  @Test
+  fun animators_rotateWhileTracking() {
+    val componentAction = object : LocationComponentAction.OnPerformLocationComponentAction {
+      override fun onLocationComponentAction(
+        component: LocationComponent,
+        mapboxMap: MapboxMap,
+        style: Style,
+        uiController: UiController,
+        context: Context
+      ) {
+        component.activateLocationComponent(LocationComponentActivationOptions
+          .builder(context, style)
+          .useDefaultLocationEngine(false)
+          .build())
+        component.isLocationComponentEnabled = true
+        component.cameraMode = CameraMode.TRACKING
+        component.rotateWhileTracking(30.0)
+        uiController.loopMainThreadForAtLeast(DEFAULT_TRACKING_ROTATE_ANIM_DURATION)
+        TestingAsyncUtils.waitForLayer(uiController, mapView)
+
+        assertEquals(30.0, mapboxMap.cameraPosition.bearing, 0.1)
+      }
+    }
+
+    executeComponentTest(componentAction)
+  }
+
+  @Test
+  @Ignore
+  fun animators_rotateWhileTrackingCanceledOnModeChange() {
+    val componentAction = object : LocationComponentAction.OnPerformLocationComponentAction {
+      override fun onLocationComponentAction(
+        component: LocationComponent,
+        mapboxMap: MapboxMap,
+        style: Style,
+        uiController: UiController,
+        context: Context
+      ) {
+        component.activateLocationComponent(LocationComponentActivationOptions
+          .builder(context, style)
+          .useDefaultLocationEngine(false)
+          .build())
+        component.isLocationComponentEnabled = true
+        component.cameraMode = CameraMode.TRACKING
+        component.rotateWhileTracking(30.0)
+        uiController.loopMainThreadForAtLeast(DEFAULT_TRACKING_ROTATE_ANIM_DURATION / 2)
+        component.cameraMode = CameraMode.NONE
+        uiController.loopMainThreadForAtLeast(DEFAULT_TRACKING_ROTATE_ANIM_DURATION / 2)
+        TestingAsyncUtils.waitForLayer(uiController, mapView)
+
+        assertEquals(30.0 / 2.0, mapboxMap.cameraPosition.bearing, 3.0)
+      }
+    }
+
+    executeComponentTest(componentAction)
+  }
+
+  @Test
+  fun animators_dontRotateWhileStopped() {
+    val componentAction = object : LocationComponentAction.OnPerformLocationComponentAction {
+      override fun onLocationComponentAction(
+        component: LocationComponent,
+        mapboxMap: MapboxMap,
+        style: Style,
+        uiController: UiController,
+        context: Context
+      ) {
+        component.activateLocationComponent(LocationComponentActivationOptions
+          .builder(context, style)
+          .useDefaultLocationEngine(false)
+          .build())
+        component.isLocationComponentEnabled = true
+        component.cameraMode = CameraMode.TRACKING
+        val bearing = mapboxMap.cameraPosition.bearing
+
+        component.onStop()
+        component.rotateWhileTracking(30.0)
+        uiController.loopMainThreadForAtLeast(DEFAULT_TRACKING_ROTATE_ANIM_DURATION)
+        TestingAsyncUtils.waitForLayer(uiController, mapView)
+
+        assertEquals(bearing, mapboxMap.cameraPosition.bearing, 0.1)
+      }
+    }
+
+    executeComponentTest(componentAction)
+  }
+
+  @Test
+  fun animators_dontRotateWhileTransitioning() {
+    val componentAction = object : LocationComponentAction.OnPerformLocationComponentAction {
+      override fun onLocationComponentAction(
+        component: LocationComponent,
+        mapboxMap: MapboxMap,
+        style: Style,
+        uiController: UiController,
+        context: Context
+      ) {
+        component.activateLocationComponent(LocationComponentActivationOptions
+          .builder(context, style)
+          .useDefaultLocationEngine(false)
+          .build())
+        component.isLocationComponentEnabled = true
+        component.forceLocationUpdate(location)
+
+        val bearing = mapboxMap.cameraPosition.bearing
+        component.setCameraMode(CameraMode.TRACKING, 500L, null, null, null, null)
+        component.rotateWhileTracking(30.0, 1000)
+        uiController.loopMainThreadForAtLeast(1000)
+        TestingAsyncUtils.waitForLayer(uiController, mapView)
+
+        assertEquals(bearing, mapboxMap.cameraPosition.bearing, 0.0001)
+      }
+    }
+
+    executeComponentTest(componentAction)
+  }
+
+  @Test
+  @Ignore
+  fun animators_cancelRotateWhileTracking() {
+    val componentAction = object : LocationComponentAction.OnPerformLocationComponentAction {
+      override fun onLocationComponentAction(
+        component: LocationComponent,
+        mapboxMap: MapboxMap,
+        style: Style,
+        uiController: UiController,
+        context: Context
+      ) {
+        component.activateLocationComponent(LocationComponentActivationOptions
+          .builder(context, style)
+          .useDefaultLocationEngine(false)
+          .build())
+        component.isLocationComponentEnabled = true
+        component.cameraMode = CameraMode.TRACKING
+        component.rotateWhileTracking(30.0)
+        uiController.loopMainThreadForAtLeast(DEFAULT_TRACKING_ROTATE_ANIM_DURATION / 2)
+        component.cancelRotateWhileTrackingAnimation()
+        uiController.loopMainThreadForAtLeast(DEFAULT_TRACKING_ROTATE_ANIM_DURATION / 2)
+
+        assertEquals(30.0 / 2.0, mapboxMap.cameraPosition.bearing, 3.0)
+      }
+    }
+
+    executeComponentTest(componentAction)
+  }
+
+  @Test
   fun cameraPositionAdjustedToTrackingModeWhenComponentEnabled() {
     val componentAction = object : LocationComponentAction.OnPerformLocationComponentAction {
       override fun onLocationComponentAction(

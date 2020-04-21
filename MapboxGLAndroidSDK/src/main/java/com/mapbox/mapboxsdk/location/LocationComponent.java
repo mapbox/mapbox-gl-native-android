@@ -45,6 +45,7 @@ import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static com.mapbox.mapboxsdk.location.LocationComponentConstants.DEFAULT_FASTEST_INTERVAL_MILLIS;
 import static com.mapbox.mapboxsdk.location.LocationComponentConstants.DEFAULT_INTERVAL_MILLIS;
+import static com.mapbox.mapboxsdk.location.LocationComponentConstants.DEFAULT_TRACKING_ROTATE_ANIM_DURATION;
 import static com.mapbox.mapboxsdk.location.LocationComponentConstants.DEFAULT_TRACKING_TILT_ANIM_DURATION;
 import static com.mapbox.mapboxsdk.location.LocationComponentConstants.DEFAULT_TRACKING_ZOOM_ANIM_DURATION;
 import static com.mapbox.mapboxsdk.location.LocationComponentConstants.TRANSITION_ANIMATION_DURATION_MS;
@@ -880,6 +881,86 @@ public final class LocationComponent {
   }
 
   /**
+   * Rotates the camera.
+   * This API can only be used in pair with camera modes other than {@link CameraMode#NONE}.
+   * If you are not using any of {@link CameraMode} modes,
+   * use one of {@link MapboxMap#moveCamera(CameraUpdate)},
+   * {@link MapboxMap#easeCamera(CameraUpdate)} or {@link MapboxMap#animateCamera(CameraUpdate)} instead.
+   * <p>
+   * If the camera is transitioning when the bearing change is requested, the call is going to be ignored.
+   * Use {@link CameraTransitionListener} to chain the animations, or provide the bearing as a camera change argument.
+   * </p>
+   *
+   * @param bearing           The desired camera bearing.
+   * @param animationDuration The bearing animation duration.
+   * @param callback          The callback with finish/cancel information
+   */
+  public void rotateWhileTracking(double bearing, long animationDuration,
+                                  @Nullable MapboxMap.CancelableCallback callback) {
+    checkActivationState();
+    if (!isLayerReady) {
+      notifyUnsuccessfulCameraOperation(callback, null);
+      return;
+    } else if (getCameraMode() == CameraMode.NONE) {
+      notifyUnsuccessfulCameraOperation(callback, String.format("%s%s",
+        "LocationComponent#rotateWhileTracking method can only be used",
+        " when a camera mode other than CameraMode#NONE is engaged."));
+      return;
+    } else if (locationCameraController.isTransitioning()) {
+      notifyUnsuccessfulCameraOperation(callback,
+        "LocationComponent#rotateWhileTracking method call is ignored because the camera mode is transitioning");
+      return;
+    }
+    locationAnimatorCoordinator.feedNewBearing(bearing, mapboxMap.getCameraPosition(), animationDuration, callback);
+  }
+
+  /**
+   * Rotates the camera.
+   * This API can only be used in pair with camera modes other than {@link CameraMode#NONE}.
+   * If you are not using any of {@link CameraMode} modes,
+   * use one of {@link MapboxMap#moveCamera(CameraUpdate)},
+   * {@link MapboxMap#easeCamera(CameraUpdate)} or {@link MapboxMap#animateCamera(CameraUpdate)} instead.
+   * <p>
+   * If the camera is transitioning when the bearing change is requested, the call is going to be ignored.
+   * Use {@link CameraTransitionListener} to chain the animations, or provide the bearing as a camera change argument.
+   * </p>
+   *
+   * @param bearing           The desired camera bearing.
+   * @param animationDuration The bearing animation duration.
+   */
+  public void rotateWhileTracking(double bearing, long animationDuration) {
+    checkActivationState();
+    rotateWhileTracking(bearing, animationDuration, null);
+  }
+
+  /**
+   * Rotates the camera.
+   * This API can only be used in pair with camera modes other than {@link CameraMode#NONE}.
+   * If you are not using any of {@link CameraMode} modes,
+   * use one of {@link MapboxMap#moveCamera(CameraUpdate)},
+   * {@link MapboxMap#easeCamera(CameraUpdate)} or {@link MapboxMap#animateCamera(CameraUpdate)} instead.
+   * <p>
+   * If the camera is transitioning when the bearing change is requested, the call is going to be ignored.
+   * Use {@link CameraTransitionListener} to chain the animations, or provide the bearing as a camera change argument.
+   * </p>
+   *
+   * @param bearing The desired camera bearing.
+   */
+  public void rotateWhileTracking(double bearing) {
+    checkActivationState();
+    rotateWhileTracking(bearing,
+      options == null || options.compassAnimationEnabled() ? DEFAULT_TRACKING_ROTATE_ANIM_DURATION : 0, null);
+  }
+
+  /**
+   * Cancels animation started by {@link #rotateWhileTracking(double, long, MapboxMap.CancelableCallback)}.
+   */
+  public void cancelRotateWhileTrackingAnimation() {
+    checkActivationState();
+    locationAnimatorCoordinator.cancelBearingAnimation();
+  }
+
+  /**
    * Use to either force a location update or to manually control when the user location gets
    * updated.
    *
@@ -1616,6 +1697,7 @@ public final class LocationComponent {
     public void onCameraTrackingChanged(int currentMode) {
       locationAnimatorCoordinator.cancelZoomAnimation();
       locationAnimatorCoordinator.cancelTiltAnimation();
+      locationAnimatorCoordinator.cancelBearingAnimation();
       updateAnimatorListenerHolders();
       for (OnCameraTrackingChangedListener listener : onCameraTrackingChangedListeners) {
         listener.onCameraTrackingChanged(currentMode);

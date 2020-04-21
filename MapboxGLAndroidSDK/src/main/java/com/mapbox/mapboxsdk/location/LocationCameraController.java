@@ -282,6 +282,14 @@ final class LocationCameraController {
       }
     };
 
+  private final MapboxAnimator.AnimationsValueChangeListener<Float> bearingValueListener =
+    new MapboxAnimator.AnimationsValueChangeListener<Float>() {
+      @Override
+      public void onNewAnimationValue(Float value) {
+        setBearing(value);
+      }
+    };
+
   Set<AnimatorListenerHolder> getAnimationListeners() {
     Set<AnimatorListenerHolder> holders = new HashSet<>();
     if (isLocationTracking()) {
@@ -300,6 +308,7 @@ final class LocationCameraController {
 
     holders.add(new AnimatorListenerHolder(MapboxAnimator.ANIMATOR_ZOOM, zoomValueListener));
     holders.add(new AnimatorListenerHolder(MapboxAnimator.ANIMATOR_TILT, tiltValueListener));
+    holders.add(new AnimatorListenerHolder(MapboxAnimator.ANIMATOR_BEARING, bearingValueListener));
     return holders;
   }
 

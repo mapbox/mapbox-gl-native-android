@@ -23,6 +23,9 @@ public final class LocationComponentConstants {
   // Default animation duration for tilting while tracking.
   static final long DEFAULT_TRACKING_TILT_ANIM_DURATION = 1250;
 
+  // Default animation duration for rotating while tracking.
+  static final long DEFAULT_TRACKING_ROTATE_ANIM_DURATION = COMPASS_UPDATE_RATE_MS;
+
   // Threshold value to perform immediate camera/layer position update.
   static final double INSTANT_LOCATION_TRANSITION_THRESHOLD = 50_000;
 

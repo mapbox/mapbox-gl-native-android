@@ -442,6 +442,7 @@ class LocationComponentTest {
 
     verify(locationAnimatorCoordinator).cancelZoomAnimation()
     verify(locationAnimatorCoordinator).cancelTiltAnimation()
+    verify(locationAnimatorCoordinator).cancelBearingAnimation()
     verify(locationAnimatorCoordinator).updateAnimatorListenerHolders(eq(setOf(cameraValueListener, layerValueListener)))
     verify(locationAnimatorCoordinator).resetAllCameraAnimations(any(), anyBoolean())
     verify(locationAnimatorCoordinator).resetAllLayerAnimations()
@@ -466,6 +467,66 @@ class LocationComponentTest {
     verify(locationAnimatorCoordinator).resetAllCameraAnimations(any(), anyBoolean())
     verify(locationAnimatorCoordinator).resetAllLayerAnimations()
     verify(renderChangeListener).onRenderModeChanged(RenderMode.NORMAL)
+  }
+
+  @Test
+  fun rotateWhileTracking_notReady() {
+    `when`(mapboxMap.cameraPosition).thenReturn(CameraPosition.DEFAULT)
+    locationComponent.activateLocationComponent(context, mock(Style::class.java), locationEngine, locationEngineRequest, locationComponentOptions)
+    locationComponent.isLocationComponentEnabled = true
+
+    val callback = mock(MapboxMap.CancelableCallback::class.java)
+
+    locationComponent.rotateWhileTracking(30.0, 500L, callback)
+    verify(callback).onCancel()
+    verify(locationAnimatorCoordinator, times(0)).feedNewBearing(anyDouble(), any(), anyLong(), any())
+  }
+
+  @Test
+  fun rotateWhileTracking_notTracking() {
+    `when`(mapboxMap.cameraPosition).thenReturn(CameraPosition.DEFAULT)
+    `when`(locationCameraController.cameraMode).thenReturn(CameraMode.NONE)
+    locationComponent.activateLocationComponent(context, mock(Style::class.java), locationEngine, locationEngineRequest, locationComponentOptions)
+    locationComponent.isLocationComponentEnabled = true
+    locationComponent.onStart()
+
+    val callback = mock(MapboxMap.CancelableCallback::class.java)
+
+    locationComponent.rotateWhileTracking(30.0, 500L, callback)
+    verify(callback).onCancel()
+    verify(locationAnimatorCoordinator, times(0)).feedNewBearing(anyDouble(), any(), anyLong(), any())
+  }
+
+  @Test
+  fun rotateWhileTracking_transitioning() {
+    `when`(mapboxMap.cameraPosition).thenReturn(CameraPosition.DEFAULT)
+    `when`(locationCameraController.cameraMode).thenReturn(CameraMode.TRACKING)
+    `when`(locationCameraController.isTransitioning).thenReturn(true)
+    locationComponent.activateLocationComponent(context, mock(Style::class.java), locationEngine, locationEngineRequest, locationComponentOptions)
+    locationComponent.isLocationComponentEnabled = true
+    locationComponent.onStart()
+
+    val callback = mock(MapboxMap.CancelableCallback::class.java)
+
+    locationComponent.rotateWhileTracking(30.0, 500L, callback)
+    verify(callback).onCancel()
+    verify(locationAnimatorCoordinator, times(0)).feedNewBearing(anyDouble(), any(), anyLong(), any())
+  }
+
+  @Test
+  fun rotateWhileTracking_successful() {
+    `when`(mapboxMap.cameraPosition).thenReturn(CameraPosition.DEFAULT)
+    `when`(locationCameraController.cameraMode).thenReturn(CameraMode.TRACKING)
+    `when`(locationCameraController.isTransitioning).thenReturn(false)
+    locationComponent.activateLocationComponent(context, mock(Style::class.java), locationEngine, locationEngineRequest, locationComponentOptions)
+    locationComponent.isLocationComponentEnabled = true
+    locationComponent.onStart()
+
+    val callback = mock(MapboxMap.CancelableCallback::class.java)
+
+    locationComponent.rotateWhileTracking(30.0, 500L, callback)
+    verify(callback, times(0)).onCancel()
+    verify(locationAnimatorCoordinator).feedNewBearing(30.0, CameraPosition.DEFAULT, 500L, callback)
   }
 
   @Test

@@ -24,6 +24,7 @@ import org.mockito.stubbing.Answer;
 import java.util.Set;
 
 import static com.mapbox.mapboxsdk.location.LocationComponentConstants.TRANSITION_ANIMATION_DURATION_MS;
+import static com.mapbox.mapboxsdk.location.MapboxAnimator.ANIMATOR_BEARING;
 import static com.mapbox.mapboxsdk.location.MapboxAnimator.ANIMATOR_CAMERA_COMPASS_BEARING;
 import static com.mapbox.mapboxsdk.location.MapboxAnimator.ANIMATOR_CAMERA_GPS_BEARING;
 import static com.mapbox.mapboxsdk.location.MapboxAnimator.ANIMATOR_CAMERA_LATLNG;
@@ -437,6 +438,20 @@ public class LocationCameraControllerTest {
 
     verify(transform).moveCamera(any(MapboxMap.class), any(CameraUpdate.class),
       nullable(MapboxMap.CancelableCallback.class));
+  }
+
+  @Test
+  public void onNewBearingValue_cameraIsUpdated() {
+    Transform transform = mock(Transform.class);
+    LocationCameraController camera = buildCamera(transform);
+    camera.initializeOptions(mock(LocationComponentOptions.class));
+    camera.setCameraMode(TRACKING);
+    float bearing = 5f;
+
+    getAnimationListener(ANIMATOR_BEARING, camera.getAnimationListeners()).onNewAnimationValue(bearing);
+
+    verify(transform).moveCamera(any(MapboxMap.class), any(CameraUpdate.class),
+            nullable(MapboxMap.CancelableCallback.class));
   }
 
   @Test
