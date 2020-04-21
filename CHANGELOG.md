@@ -2,6 +2,20 @@
 
 Mapbox welcomes participation and contributions from everyone. Please read [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) to get started.
 
+## 9.2.0-alpha.1 - April 21, 2020
+[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.1.0...android-v9.2.0-alpha.1) since [Mapbox Maps SDK for Android v9.1.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.1.0):
+### Features
+ - Added methods to set and get a limit for how much parent tile can be overscaled for a source.([#299](https://github.com/mapbox/mapbox-gl-native-android/pull/299))
+ - Added API to add stretchable image to a map. Stretchable image could be used as a background for text and be stretched by configuration to adapt the text content. ([#314](https://github.com/mapbox/mapbox-gl-native-android/pull/314))
+ - Added methods to set and get the sort key of features in a `CircleLayer` at runtime. Features with a higher sort key will appear above features with a lower sort key. ([#322](https://github.com/mapbox/mapbox-gl-native-android/pull/322))
+
+### Bug fixes
+ - Fixed issues that `onStyleImageMissing` callback not fired in Snapshotter. ([#317](https://github.com/mapbox/mapbox-gl-native/pull/317))
+ - Reduce cut-off labels (part 2) ([#16369](https://github.com/mapbox/mapbox-gl-native/pull/16369))
+ - Fix variable placement for labels with the `icon-text-fit` property set ([#16382](https://github.com/mapbox/mapbox-gl-native/pull/16382))
+ - Correctly log a warning instead of crashing when a non-existent image is attempted to be removed. ([#16391](https://github.com/mapbox/mapbox-gl-native/pull/16391))
+ - Fixed a segfault resulting from an invalid geometry ([#16409](https://github.com/mapbox/mapbox-gl-native/pull/16409))
+
 ## 9.1.0
 
 ### Features
