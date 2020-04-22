@@ -9,7 +9,7 @@ Mapbox welcomes participation and contributions from everyone. Please read [`Con
  - Enabled setting `Source.maxOverscaleFactor` to define the maximum factor by which a parent tile can be overscaled during rendering. This setting is only needed if a custom source on your map is appearing blurry or distorted when viewed at new zoom levels. ([#299](https://github.com/mapbox/mapbox-gl-native-android/pull/299))
 
 ### Bug fixes
- - Fixed issues that `onStyleImageMissing` callback not fired in Snapshotter. ([#317](https://github.com/mapbox/mapbox-gl-native/pull/317))
+ - Enabled adding missing style images on-demand on `MapSnapshotter`. ([#317](https://github.com/mapbox/mapbox-gl-native-android/pull/317))
  - Correctly log a warning instead of crashing when a nonexistent image is attempted to be removed. ([#16391](https://github.com/mapbox/mapbox-gl-native/pull/16391))
  - Fixed a crash that would occur if an invalid `LineString` were added to a symbol layer. ([#16409](https://github.com/mapbox/mapbox-gl-native/pull/16409))
 
