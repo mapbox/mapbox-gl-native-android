@@ -331,4 +331,8 @@ final class LocationLayerController {
   void cameraTiltUpdated(double tilt) {
     locationLayerRenderer.cameraTiltUpdated(tilt);
   }
+
+  void adjustPulsingCircleLayerVisibility(boolean visible) {
+    locationLayerRenderer.adjustPulsingCircleLayerVisibility(visible);
+  }
 }
