@@ -3,7 +3,6 @@
 Mapbox welcomes participation and contributions from everyone. Please read [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) to get started.
 
 ## 9.2.0-alpha.1 - April 21, 2020
-[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.1.0...android-v9.2.0-alpha.1) since [Mapbox Maps SDK for Android v9.1.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.1.0):
 ### Features
  - Enabled setting `Source.maxOverscaleFactor` to define the maximum factor by which a parent tile can be overscaled during rendering. This setting is only needed if a custom source on your map is appearing blurry or distorted when viewed at new zoom levels. ([#299](https://github.com/mapbox/mapbox-gl-native-android/pull/299))
  -  The [`SymbolLayer.iconTextFit`](https://docs.mapbox.com/android/api/map-sdk/9.1.0/com/mapbox/mapboxsdk/style/layers/PropertyFactory.html#iconTextFit-com.mapbox.mapboxsdk.style.expressions.Expression-) property now respects the stretch metadata of any nine-part stretchable image passed into the `style.addImage` method. You can define the stretchable area of an image by configuring the `stretchX`, `stretchY`, and/or `content` options on `Style.addImage` to append the requisite [metadata](https://github.com/mapbox/mapbox-gl-js/issues/8917). [#314](https://github.com/mapbox/mapbox-gl-native-android/pull/314))
@@ -11,9 +10,7 @@ Mapbox welcomes participation and contributions from everyone. Please read [`Con
 
 ### Bug fixes
  - Fixed issues that `onStyleImageMissing` callback not fired in Snapshotter. ([#317](https://github.com/mapbox/mapbox-gl-native/pull/317))
- - Reduce cut-off labels (part 2) ([#16369](https://github.com/mapbox/mapbox-gl-native/pull/16369))
- - Fix variable placement for labels with the `icon-text-fit` property set ([#16382](https://github.com/mapbox/mapbox-gl-native/pull/16382))
- - Correctly log a warning instead of crashing when a non-existent image is attempted to be removed. ([#16391](https://github.com/mapbox/mapbox-gl-native/pull/16391))
+ - Correctly log a warning instead of crashing when a nonexistent image is attempted to be removed. ([#16391](https://github.com/mapbox/mapbox-gl-native/pull/16391))
  - Fixed a crash that would occur if an invalid `LineString` were added to a symbol layer. ([#16409](https://github.com/mapbox/mapbox-gl-native/pull/16409))
 
 ## 9.1.0
