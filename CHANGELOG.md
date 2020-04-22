@@ -8,7 +8,7 @@ Mapbox welcomes participation and contributions from everyone. Please read [`Con
  - Added methods to set and get the sort key of features in a `CircleLayer` at runtime. Features with a higher sort key will appear above features with a lower sort key. ([#322](https://github.com/mapbox/mapbox-gl-native-android/pull/322))
  - Added `Source.maxOverscaleFactor` for defining the maximum factor by which a parent tile can be overscaled during rendering. This setting is only needed if a custom source on your map appears blurry or distorted when viewed at new zoom levels. ([#299](https://github.com/mapbox/mapbox-gl-native-android/pull/299))
 
-### Bug fixes
+### Improvements and bug fixes
  - Enabled adding style images on-demand on `MapSnapshotter`. ([#317](https://github.com/mapbox/mapbox-gl-native-android/pull/317))
  - Fixed a crash when calling the `Style.removeImage` method with the name of a nonexistent image. ([#16391](https://github.com/mapbox/mapbox-gl-native/pull/16391))
  - Fixed a crash when encountering an invalid polyline. ([#16409](https://github.com/mapbox/mapbox-gl-native/pull/16409))
