@@ -10,8 +10,9 @@ Mapbox welcomes participation and contributions from everyone. Please read [`Con
 
 ### Bug fixes
  - Enabled adding style images on-demand on `MapSnapshotter`. ([#317](https://github.com/mapbox/mapbox-gl-native-android/pull/317))
- - Correctly log a warning instead of crashing when a nonexistent image is attempted to be removed. ([#16391](https://github.com/mapbox/mapbox-gl-native/pull/16391))
- - Fixed a crash that would occur if an invalid `LineString` were added to a symbol layer. ([#16409](https://github.com/mapbox/mapbox-gl-native/pull/16409))
+ - Fixed a crash when calling the `Style.removeImage` method with the name of a nonexistent image. ([#16391](https://github.com/mapbox/mapbox-gl-native/pull/16391))
+ - Fixed a crash when encountering an invalid polyline. ([#16409](https://github.com/mapbox/mapbox-gl-native/pull/16409))
+ - Certain logging statements no longer run on the main thread. ([#16325](https://github.com/mapbox/mapbox-gl-native/pull/16325))
 
 ## 9.1.0
 
