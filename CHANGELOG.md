@@ -5,7 +5,7 @@ Mapbox welcomes participation and contributions from everyone. Please read [`Con
 ## 9.2.0-alpha.1 - April 21, 2020
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.1.0...android-v9.2.0-alpha.1) since [Mapbox Maps SDK for Android v9.1.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.1.0):
 ### Features
- - Added methods to set and get a limit for how much parent tile can be overscaled for a source.([#299](https://github.com/mapbox/mapbox-gl-native-android/pull/299))
+ - Enabled setting `Source.maxOverscaleFactor` to define the maximum factor by which a parent tile can be overscaled during rendering. This setting is only needed if a custom source on your map is appearing blurry or distorted when viewed at new zoom levels. ([#299](https://github.com/mapbox/mapbox-gl-native-android/pull/299))
  - Added API to add stretchable image to a map. Stretchable image could be used as a background for text and be stretched by configuration to adapt the text content. ([#314](https://github.com/mapbox/mapbox-gl-native-android/pull/314))
  - Added methods to set and get the sort key of features in a `CircleLayer` at runtime. Features with a higher sort key will appear above features with a lower sort key. ([#322](https://github.com/mapbox/mapbox-gl-native-android/pull/322))
 
