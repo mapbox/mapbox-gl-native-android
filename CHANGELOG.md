@@ -14,7 +14,7 @@ Mapbox welcomes participation and contributions from everyone. Please read [`Con
  - Reduce cut-off labels (part 2) ([#16369](https://github.com/mapbox/mapbox-gl-native/pull/16369))
  - Fix variable placement for labels with the `icon-text-fit` property set ([#16382](https://github.com/mapbox/mapbox-gl-native/pull/16382))
  - Correctly log a warning instead of crashing when a non-existent image is attempted to be removed. ([#16391](https://github.com/mapbox/mapbox-gl-native/pull/16391))
- - Fixed a segfault resulting from an invalid geometry ([#16409](https://github.com/mapbox/mapbox-gl-native/pull/16409))
+ - Fixed a crash that would occur if an invalid `LineString` were added to a symbol layer. ([#16409](https://github.com/mapbox/mapbox-gl-native/pull/16409))
 
 ## 9.1.0
 
