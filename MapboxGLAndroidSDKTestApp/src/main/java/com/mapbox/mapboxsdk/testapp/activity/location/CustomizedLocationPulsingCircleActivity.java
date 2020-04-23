@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.ListPopupWindow;
 
@@ -59,6 +58,7 @@ public class CustomizedLocationPulsingCircleActivity extends AppCompatActivity i
   private static final String SAVED_STATE_LOCATION = "saved_state_location";
   private static final String SAVED_STATE_LOCATION_CIRCLE_PULSE_COLOR = "saved_state_color";
   private static final String SAVED_STATE_LOCATION_CIRCLE_PULSE_DURATION = "saved_state_duration";
+  private static final String LAYER_BELOW_ID = "waterway-label";
 
   private Location lastLocation;
   private MapView mapView;
@@ -118,11 +118,10 @@ public class CustomizedLocationPulsingCircleActivity extends AppCompatActivity i
 
       LocationComponentOptions locationComponentOptions =
           buildLocationComponentOptions(
-              "waterway-label",
               LOCATION_CIRCLE_PULSE_COLOR,
-              DEFAULT_LOCATION_CIRCLE_PULSE_ALPHA,
-              LOCATION_CIRCLE_PULSE_DURATION,
-              DEFAULT_LOCATION_CIRCLE_PULSE_RADIUS);
+              LOCATION_CIRCLE_PULSE_DURATION)
+              .pulseEnabled(true)
+              .build();
 
       LocationComponentActivationOptions locationComponentActivationOptions =
           buildLocationComponentActivationOptions(style,locationComponentOptions);
@@ -134,27 +133,18 @@ public class CustomizedLocationPulsingCircleActivity extends AppCompatActivity i
     });
   }
 
-  private LocationComponentOptions buildLocationComponentOptions(@Nullable String idOfLayerBelow,
-                                                                 int pulsingCircleColor,
-                                                                 float pulsingCircleAlpha,
-                                                                 float pulsingCircleDuration,
-                                                                 float pulsingCircleMaxRadius
+  private LocationComponentOptions.Builder buildLocationComponentOptions(int pulsingCircleColor,
+                                                                         float pulsingCircleDuration
   ) {
     currentPulseDuration = pulsingCircleDuration;
-    boolean enablePulsing = true;
-    if (locationComponent  != null && locationComponent.isLocationComponentActivated()) {
-      enablePulsing = locationComponent.isLocationComponentEnabled();
-    }
     return LocationComponentOptions.builder(this)
-        .layerBelow(idOfLayerBelow)
-        .pulseEnabled(enablePulsing)
+        .layerBelow(LAYER_BELOW_ID)
         .pulseFadeEnabled(DEFAULT_LOCATION_CIRCLE_PULSE_FADE_MODE)
         .pulseInterpolator(DEFAULT_LOCATION_CIRCLE_INTERPOLATOR_PULSE_MODE)
         .pulseColor(pulsingCircleColor)
-        .pulseAlpha(pulsingCircleAlpha)
+        .pulseAlpha(DEFAULT_LOCATION_CIRCLE_PULSE_ALPHA)
         .pulseSingleDuration(pulsingCircleDuration)
-        .pulseMaxRadius(pulsingCircleMaxRadius)
-        .build();
+        .pulseMaxRadius(DEFAULT_LOCATION_CIRCLE_PULSE_RADIUS);
   }
 
   @SuppressLint("MissingPermission")
@@ -162,10 +152,10 @@ public class CustomizedLocationPulsingCircleActivity extends AppCompatActivity i
                                               int newPulsingColor) {
     mapboxMap.getStyle(style -> locationComponent.applyStyle(
         buildLocationComponentOptions(
-            "waterway-label",
-            newPulsingColor, DEFAULT_LOCATION_CIRCLE_PULSE_ALPHA,
-            newPulsingDuration,
-            DEFAULT_LOCATION_CIRCLE_PULSE_RADIUS)));
+            newPulsingColor,
+            newPulsingDuration)
+            .pulseEnabled(true)
+            .build()));
   }
 
   private LocationComponentActivationOptions buildLocationComponentActivationOptions(
@@ -213,11 +203,10 @@ public class CustomizedLocationPulsingCircleActivity extends AppCompatActivity i
       return true;
     } else if (id == R.id.action_start_pulsing) {
       locationComponent.applyStyle(buildLocationComponentOptions(
-          "waterway-label",
           LOCATION_CIRCLE_PULSE_COLOR,
-          DEFAULT_LOCATION_CIRCLE_PULSE_ALPHA,
-          LOCATION_CIRCLE_PULSE_DURATION,
-          DEFAULT_LOCATION_CIRCLE_PULSE_RADIUS));
+          LOCATION_CIRCLE_PULSE_DURATION)
+          .pulseEnabled(true)
+          .build());
       return true;
     }
     return super.onOptionsItemSelected(item);
