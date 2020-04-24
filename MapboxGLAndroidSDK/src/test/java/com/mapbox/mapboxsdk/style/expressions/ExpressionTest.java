@@ -492,11 +492,13 @@ public class ExpressionTest {
   @Test
   public void testDistance() throws Exception {
     Point point = Point.fromLngLat(1, 2);
-    Object[] expected = new Object[] {"distance", point.toJson()};
+    HashMap<String, String> map = new HashMap<>();
+    map.put("json", point.toJson());
+    Object[] expected = new Object[] {"distance", map};
     Object[] actual = distance(point).toArray();
     assertTrue("expression should match", Arrays.deepEquals(expected, actual));
 
-    Object[] expectedWithUnit = new Object[] {"distance", point.toJson(), "meters"};
+    Object[] expectedWithUnit = new Object[] {"distance", map, "meters"};
     Object[] actualWithUnit = distance(point, "meters").toArray();
     assertTrue("expression should match", Arrays.deepEquals(expectedWithUnit, actualWithUnit));
   }
