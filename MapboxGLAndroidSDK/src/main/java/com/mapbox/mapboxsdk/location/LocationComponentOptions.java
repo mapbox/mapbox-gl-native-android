@@ -1920,7 +1920,7 @@ public class LocationComponentOptions implements Parcelable {
      *
      * @return whether fading of the LocationComponent's pulsing circle is enabled
      */
-    public LocationComponentOptions.Builder pulseFadeEnabled(Boolean pulseFadeEnabled) {
+    public LocationComponentOptions.Builder pulseFadeEnabled(boolean pulseFadeEnabled) {
       this.pulseFadeEnabled = pulseFadeEnabled;
       return this;
     }
