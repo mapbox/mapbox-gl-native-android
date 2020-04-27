@@ -739,7 +739,7 @@ public final class LocationComponent {
    * Starts the LocationComponent's pulsing circle UI.
    */
   private void startPulsingLocationCircle() {
-    if (isEnabled) {
+    if (isEnabled && isLayerReady) {
       locationAnimatorCoordinator.startLocationComponentCirclePulsing(options);
       locationLayerController.adjustPulsingCircleLayerVisibility(true);
     }
