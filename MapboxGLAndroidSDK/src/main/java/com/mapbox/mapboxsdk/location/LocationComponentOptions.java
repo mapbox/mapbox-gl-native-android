@@ -1930,7 +1930,7 @@ public class LocationComponentOptions implements Parcelable {
      *
      * @return the current set color of the circle
      */
-    public LocationComponentOptions.Builder pulseColor(int pulseColor) {
+    public LocationComponentOptions.Builder pulseColor(@ColorInt int pulseColor) {
       this.pulseColor = pulseColor;
       return this;
     }
