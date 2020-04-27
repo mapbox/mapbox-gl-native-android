@@ -851,9 +851,10 @@ public class LocationComponentOptions implements Parcelable {
   }
 
   /**
-   * The opacity of the LocationComponent's circle as it pulses.
+   * The opacity of the LocationComponent's circle as it pulses. The expected range is
+   * 0 to 1. An opacity of 1 makes the layer fully visible.
    *
-   * @return the current set opacity of the LocationComponent's circle
+   * @return the current opacity of the LocationComponent's pulsing circle
    */
   public float pulseAlpha() {
     return pulseAlpha;
@@ -1956,9 +1957,10 @@ public class LocationComponentOptions implements Parcelable {
     }
 
     /**
-     * Sets the opacity of the LocationComponent's pulsing circle.
+     * Sets the opacity of the LocationComponent's pulsing circle. The expected range is
+     * 0 to 1. An opacity of 1 makes the layer fully visible.
      *
-     * @return the current set opacity of the LocationComponent's circle
+     * @return the current opacity of the LocationComponent's pulsing circle
      */
     public LocationComponentOptions.Builder pulseAlpha(float pulseAlpha) {
       this.pulseAlpha = pulseAlpha;
