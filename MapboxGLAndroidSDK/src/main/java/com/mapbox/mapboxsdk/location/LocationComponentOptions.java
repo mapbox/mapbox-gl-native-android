@@ -1899,7 +1899,7 @@ public class LocationComponentOptions implements Parcelable {
      *
      * @return whether smooth animation of the accuracy circle is enabled
      */
-    public LocationComponentOptions.Builder accuracyAnimationEnabled(Boolean accuracyAnimationEnabled) {
+    public LocationComponentOptions.Builder accuracyAnimationEnabled(boolean accuracyAnimationEnabled) {
       this.accuracyAnimationEnabled = accuracyAnimationEnabled;
       return this;
     }
