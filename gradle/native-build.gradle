@@ -58,7 +58,7 @@ ext.nativeBuild = { nativeTargets ->
                         if (abi != 'all') {
                             abiFilters abi.split(' ')
                         } else {
-                            if (project.hasProperty('android.injected.invoked.from.ide')) {
+                            if (project.hasProperty('android.injected.invoked.from.ide') && project.hasProperty('android.injected.build.abi')) {
                                 //Only build the target abi while running from Android studio
                                 abi = project.getProperty("android.injected.build.abi")
                                 abiFilters abi.split(',').first()
