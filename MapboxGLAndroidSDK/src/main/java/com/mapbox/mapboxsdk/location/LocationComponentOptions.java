@@ -1909,7 +1909,7 @@ public class LocationComponentOptions implements Parcelable {
      *
      * @return whether the LocationComponent's pulsing circle is enabled
      */
-    public LocationComponentOptions.Builder pulseEnabled(Boolean pulseEnabled) {
+    public LocationComponentOptions.Builder pulseEnabled(boolean pulseEnabled) {
       this.pulseEnabled = pulseEnabled;
       return this;
     }
