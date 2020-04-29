@@ -118,7 +118,7 @@ public abstract class Source {
   /**
    * Retrieve whether or not the fetched tiles for the given source should be stored in the local cache
    *
-   * @return current setting for volatile, default value is false.
+   @return true if tiles are volatile, false if they will be stored in local cache. Default value is false.
    */
   @NonNull
   public Boolean isVolatile() {
@@ -152,7 +152,6 @@ public abstract class Source {
   public Long getMinimumTileUpdateInterval() {
     return nativeGetMinimumTileUpdateInterval();
   }
-
 
   /**
    * Internal use

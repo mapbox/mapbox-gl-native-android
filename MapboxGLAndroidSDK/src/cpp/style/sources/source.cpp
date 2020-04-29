@@ -180,17 +180,16 @@ static std::unique_ptr<Source> createSourcePeer(jni::JNIEnv& env,
         return ownedSource != nullptr;
     }
 
-    jni::Local<jni::Boolean> Source::isVolatile(jni::JNIEnv &env) {
+    jni::Local<jni::Boolean> Source::isVolatile(jni::JNIEnv& env) {
         return jni::Box(env, jni::jboolean(source.isVolatile()));
     }
 
-    void Source::setVolatile(JNIEnv &env, jni::Boolean & value) {
+    void Source::setVolatile(JNIEnv& env, jni::Boolean& value) {
         source.setVolatile(jni::Unbox(env, value));
     }
 
-    void Source::setMinimumTileUpdateInterval(JNIEnv& env, jni::Long & interval) {
-        jlong i = jni::Unbox(env, interval);
-        source.setMinimumTileUpdateInterval(Milliseconds(i));
+    void Source::setMinimumTileUpdateInterval(JNIEnv& env, jni::Long& interval) {
+        source.setMinimumTileUpdateInterval(Milliseconds(jni::Unbox(env, interval)));
     }
 
     jni::Local<jni::Long> Source::getMinimumTileUpdateInterval(JNIEnv& env) {
@@ -247,8 +246,5 @@ static std::unique_ptr<Source> createSourcePeer(jni::JNIEnv& env,
         CustomGeometrySource::registerNative(env);
         RasterDEMSource::registerNative(env);
     }
-
-
-
 } // namespace android
 } // namespace mbgl
