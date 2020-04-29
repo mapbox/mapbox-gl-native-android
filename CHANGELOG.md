@@ -2,17 +2,22 @@
 
 Mapbox welcomes participation and contributions from everyone. Please read [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) to get started.
 
-## 9.2.0-alpha.1 - April 21, 2020
+## 9.2.0-beta.1 - April 30, 2020
 ### Features
  - The [`SymbolLayer.iconTextFit`](https://docs.mapbox.com/android/api/map-sdk/9.2.0-alpha.1/com/mapbox/mapboxsdk/style/layers/PropertyFactory.html#iconTextFit-com.mapbox.mapboxsdk.style.expressions.Expression-) property now respects the stretch metadata of any nine-part stretchable image passed into the `style.addImage` method. You can define the stretchable area of an image by configuring the `stretchX`, `stretchY`, `content` options on `Style.addImage` to append the requisite [metadata](https://github.com/mapbox/mapbox-gl-js/issues/8917). ([#314](https://github.com/mapbox/mapbox-gl-native-android/pull/314))
  - Added methods to set and get the sort key of features in a `CircleLayer` at runtime. Features with a higher sort key will appear above features with a lower sort key. ([#322](https://github.com/mapbox/mapbox-gl-native-android/pull/322))
  - Added `Source.maxOverscaleFactor` for defining the maximum factor by which a parent tile can be overscaled during rendering. This setting is only needed if a custom source on your map appears blurry or distorted when viewed at new zoom levels. ([#299](https://github.com/mapbox/mapbox-gl-native-android/pull/299))
+ - Added methods to set and get `volatile` in `Source`. Set `volatile` to false will store tiles in local cacje. ([#355](https://github.com/mapbox/mapbox-gl-native-android/pull/355))
+ - Added methods to set and get `minimumTileUpdateInterval` in `Source`. `minimumTileUpdateInterval` is used to throttle the tile update network requests([#355](https://github.com/mapbox/mapbox-gl-native-android/pull/355))
+ - Added `distance` expression that allows to calculate calculates the shortest distance between the geoObject input and the feature geometry.([#339](https://github.com/mapbox/mapbox-gl-native-android/pull/339) ([#352](https://github.com/mapbox/mapbox-gl-native-android/pull/352)))
 
 ### Improvements and bug fixes
  - Enabled adding style images on-demand on `MapSnapshotter`. ([#317](https://github.com/mapbox/mapbox-gl-native-android/pull/317))
  - Fixed a crash when calling the `Style.removeImage` method with the name of a nonexistent image. ([#16391](https://github.com/mapbox/mapbox-gl-native/pull/16391))
  - Fixed a crash when encountering an invalid polyline. ([#16409](https://github.com/mapbox/mapbox-gl-native/pull/16409))
  - Certain logging statements no longer run on the main thread. ([#16325](https://github.com/mapbox/mapbox-gl-native/pull/16325))
+ - Improve the default compass engine's heading calculation and push updates even when uncertain. ([#338](https://github.com/mapbox/mapbox-gl-native-android/pull/338))
+ - Make `MapSnapshotter.ErrorHandler` be called in main thread. ([#341](https://github.com/mapbox/mapbox-gl-native-android/pull/341))
 
 ## 9.1.0
 
