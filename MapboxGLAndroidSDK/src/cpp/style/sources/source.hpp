@@ -54,6 +54,14 @@ public:
 
     void addToStyle(JNIEnv& env, const jni::Object<Source>& obj, mbgl::style::Style& style);
 
+    jni::Local<jni::Boolean > isVolatile(JNIEnv& env);
+
+    void setVolatile(JNIEnv& env, jni::Boolean&);
+
+    void setMinimumTileUpdateInterval(JNIEnv& env, jni::Long &);
+
+    jni::Local<jni::Long> getMinimumTileUpdateInterval(JNIEnv& env);
+
 protected:
     // Set on newly created sources until added to the map.
     std::unique_ptr<mbgl::style::Source> ownedSource;

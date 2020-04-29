@@ -180,6 +180,23 @@ static std::unique_ptr<Source> createSourcePeer(jni::JNIEnv& env,
         return ownedSource != nullptr;
     }
 
+    jni::Local<jni::Boolean> Source::isVolatile(jni::JNIEnv &env) {
+        return jni::Box(env, jni::jboolean(source.isVolatile()));
+    }
+
+    void Source::setVolatile(JNIEnv &env, jni::Boolean & value) {
+        source.setVolatile(jni::Unbox(env, value));
+    }
+
+    void Source::setMinimumTileUpdateInterval(JNIEnv& env, jni::Long & interval) {
+        jlong i = jni::Unbox(env, interval);
+        source.setMinimumTileUpdateInterval(Milliseconds(i));
+    }
+
+    jni::Local<jni::Long> Source::getMinimumTileUpdateInterval(JNIEnv& env) {
+        return jni::Box(env, jni::jlong(source.getMinimumTileUpdateInterval().count() / 1000000));
+    }
+
     void Source::releaseJavaPeer() {
         // We can't release the peer if the source was not removed from the map
         if (!ownedSource) {
@@ -214,7 +231,12 @@ static std::unique_ptr<Source> createSourcePeer(jni::JNIEnv& env,
             METHOD(&Source::setPrefetchZoomDelta, "nativeSetPrefetchZoomDelta"),
             METHOD(&Source::getPrefetchZoomDelta, "nativeGetPrefetchZoomDelta"),
             METHOD(&Source::setMaxOverscaleFactorForParentTiles, "nativeSetMaxOverscaleFactorForParentTiles"),
-            METHOD(&Source::getMaxOverscaleFactorForParentTiles, "nativeGetMaxOverscaleFactorForParentTiles"));
+            METHOD(&Source::getMaxOverscaleFactorForParentTiles, "nativeGetMaxOverscaleFactorForParentTiles"),
+            METHOD(&Source::isVolatile, "nativeIsVolatile"),
+            METHOD(&Source::setVolatile, "nativeSetVolatile"),
+            METHOD(&Source::setMinimumTileUpdateInterval, "nativeSetMinimumTileUpdateInterval"),
+            METHOD(&Source::getMinimumTileUpdateInterval, "nativeGetMinimumTileUpdateInterval"));
+
 
         // Register subclasses
         GeoJSONSource::registerNative(env);
@@ -225,6 +247,8 @@ static std::unique_ptr<Source> createSourcePeer(jni::JNIEnv& env,
         CustomGeometrySource::registerNative(env);
         RasterDEMSource::registerNative(env);
     }
+
+
 
 } // namespace android
 } // namespace mbgl
