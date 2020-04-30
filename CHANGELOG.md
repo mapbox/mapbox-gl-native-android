@@ -11,6 +11,11 @@ Mapbox welcomes participation and contributions from everyone. Please read [`Con
  - Introduced `Source.minimumTileUpdateInterval` to override the expiration time set via HTTP headers with a longer expiration time on the client. ([#355](https://github.com/mapbox/mapbox-gl-native-android/pull/355))
  - Added `Source.maxOverscaleFactor` for defining how much a parent tile can be overscaled during rendering. This setting is only needed if a custom source on your map appears blurry or distorted when viewed at new zoom levels. ([#299](https://github.com/mapbox/mapbox-gl-native-android/pull/299))
 
+### User location indicator
+- Introduced an activation option to render the `LocationComponent` with a dedicated OpenGL layer through `LocationComponentActivationOptions#useSpecializedLocationLayer`, instead of the combined symbol and circle layer implementation used by default. (#319)[https://github.com/mapbox/mapbox-gl-native-android/pull/319]
+- Introduced an option to add an animated pulsing circle around the `LocationComponent` through `LocationComponentOptions#pulseEnabled()` and methods to customize it. [#172](https://github.com/mapbox/mapbox-gl-native-android/pull/172)
+- Introduced an option to set a screen area through `LocationComponentOptions#trackingMultiFingerProtectedMoveArea` where executed gestures will avoid breaking camera tracking when `LocationComponentOptions#trackingGesturesManagement` is enabled. [#356](https://github.com/mapbox/mapbox-gl-native-android/pull/356)
+
 ### Improvements and bug fixes
  - Improved the default compass engine's heading calculation by accounting for device orientation, ensuring accelerometer and magnetic field sensor events are retained, and pushing updates to the heading even if the sensor is unreliable. ([#338](https://github.com/mapbox/mapbox-gl-native-android/pull/338))（h/t [ystsoi](https://github.com/ystsoi))
  - Enabled adding style images on-demand on `MapSnapshotter`. ([#317](https://github.com/mapbox/mapbox-gl-native-android/pull/317))
