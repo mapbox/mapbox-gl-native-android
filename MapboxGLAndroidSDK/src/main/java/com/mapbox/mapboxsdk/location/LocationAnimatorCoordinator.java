@@ -381,7 +381,7 @@ final class LocationAnimatorCoordinator {
   private void playPulsingAnimator() {
     Animator animator = animatorArray.get(ANIMATOR_PULSING_CIRCLE);
     if (animator != null) {
-      animatorSetProvider.startSingleAnimation(animator);
+      animator.start();
     }
   }
 

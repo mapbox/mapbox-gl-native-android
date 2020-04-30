@@ -2,8 +2,9 @@ package com.mapbox.mapboxsdk.location;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
-import androidx.annotation.NonNull;
 import android.view.animation.Interpolator;
+
+import androidx.annotation.NonNull;
 
 import java.util.List;
 
@@ -27,17 +28,6 @@ class MapboxAnimatorSetProvider {
     locationAnimatorSet.playTogether(animators);
     locationAnimatorSet.setInterpolator(interpolator);
     locationAnimatorSet.setDuration(duration);
-    locationAnimatorSet.start();
-  }
-
-  /**
-   * Starts a single animator rather than playing multliple animators all at once.
-   *
-   * @param singleAnimation the {@link Animator} to run.
-   */
-  void startSingleAnimation(@NonNull Animator singleAnimation) {
-    AnimatorSet locationAnimatorSet = new AnimatorSet();
-    locationAnimatorSet.play(singleAnimation);
     locationAnimatorSet.start();
   }
 }
