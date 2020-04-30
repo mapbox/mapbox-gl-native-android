@@ -12,7 +12,7 @@ Mapbox welcomes participation and contributions from everyone. Please read [`Con
  - Added `Source.maxOverscaleFactor` for defining how much a parent tile can be overscaled during rendering. This setting is only needed if a custom source on your map appears blurry or distorted when viewed at new zoom levels. ([#299](https://github.com/mapbox/mapbox-gl-native-android/pull/299))
 
 ### Improvements and bug fixes
- - Improved the default compass engine's heading calculation by accounting for device orientation, ensuring accelerometer and magnetic field sensor events are retained, and pushing updates to the heading even if the sensor is unreliable. ([#338](https://github.com/mapbox/mapbox-gl-native-android/pull/338))（h/t @ystsoi)
+ - Improved the default compass engine's heading calculation by accounting for device orientation, ensuring accelerometer and magnetic field sensor events are retained, and pushing updates to the heading even if the sensor is unreliable. ([#338](https://github.com/mapbox/mapbox-gl-native-android/pull/338))（h/t [ystsoi](https://github.com/ystsoi))
  - Enabled adding style images on-demand on `MapSnapshotter`. ([#317](https://github.com/mapbox/mapbox-gl-native-android/pull/317))
  - Fixed a crash when changing the user interface in `MapSnapshotter.ErrorHandler`. ([#347](https://github.com/mapbox/mapbox-gl-native-android/pull/347))
  - Fixed a crash when calling the `Style.removeImage` method with the name of a nonexistent image. ([#16391](https://github.com/mapbox/mapbox-gl-native/pull/16391))
