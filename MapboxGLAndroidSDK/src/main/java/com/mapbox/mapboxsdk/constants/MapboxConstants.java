@@ -66,7 +66,7 @@ public class MapboxConstants {
   /**
    * Animation time of a fling gesture
    */
-  public static final long ANIMATION_DURATION_FLING_BASE = ANIMATION_DURATION;
+  public static final long ANIMATION_DURATION_FLING_BASE = 500;
 
   /**
    * Velocity threshold for a fling gesture
