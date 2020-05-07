@@ -24,10 +24,12 @@ Mapbox welcomes participation and contributions from everyone. Please read [`Con
  - Fixed a crash when calling the `Style.removeImage` method with the name of a nonexistent image. ([#16391](https://github.com/mapbox/mapbox-gl-native/pull/16391))
  - Fixed a crash when encountering an invalid polyline. ([#16409](https://github.com/mapbox/mapbox-gl-native/pull/16409))
  - Certain logging statements no longer run on the main thread. ([#16325](https://github.com/mapbox/mapbox-gl-native/pull/16325))
- - Fixed library load failure on x86 devices. ([#368](https://github.com/mapbox/mapbox-gl-native-android/pull/368))
- - Fixed a crash caused by JobIntentService in telemetry on devices with API > 26. ([#472](https://github.com/mapbox/mapbox-events-android/pull/472)
 
-## 9.1.0
+### Other changes
+ - Fallback to `System.libraryLoader` if SoLoader fails to load the native library. ([#368](https://github.com/mapbox/mapbox-gl-native-android/pull/368))
+ - Worked around crashes caused by `JobIntentService` on devices >= API 26 by using a network request to report errors instead. ([#472](https://github.com/mapbox/mapbox-events-android/pull/472)
+
+## 9.1.0 - April 7, 2020
 ### Features
  - Added `within` expression for testing whether an evaluated feature lies within a given GeoJSON object. `within` accepts `Feature`, `FeatureCollection`, `Polygon`, and `MultiPolygon` as valid GeoJSON objects. ([#198](https://github.com/mapbox/mapbox-gl-native-android/pull/198))
  - Added `in` expression for testing whether an item exists in an array or a substring exists in a string. ([#171](https://github.com/mapbox/mapbox-gl-native-android/pull/171))
