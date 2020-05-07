@@ -26,7 +26,7 @@ Mapbox welcomes participation and contributions from everyone. Please read [`Con
  - Certain logging statements no longer run on the main thread. ([#16325](https://github.com/mapbox/mapbox-gl-native/pull/16325))
 
 ### Other changes
- - Fallback to `System.libraryLoader` if SoLoader fails to load the native library. ([#368](https://github.com/mapbox/mapbox-gl-native-android/pull/368))
+ - Fallback to `System.libraryLoader` if SoLoader fails to load the native library on x86 devices. ([#368](https://github.com/mapbox/mapbox-gl-native-android/pull/368))
  - Worked around crashes caused by `JobIntentService` on devices >= API 26 by using a network request to report errors instead. ([#472](https://github.com/mapbox/mapbox-events-android/pull/472)
 
 ## 9.1.0 - April 7, 2020
