@@ -31,7 +31,7 @@ public class LocalGlyphRasterizer {
 
     paint = new Paint();
     paint.setAntiAlias(true);
-    paint.setTextSize(24);
+    paint.setTextSize(22);
 
     canvas = new Canvas();
     canvas.setBitmap(bitmap);
