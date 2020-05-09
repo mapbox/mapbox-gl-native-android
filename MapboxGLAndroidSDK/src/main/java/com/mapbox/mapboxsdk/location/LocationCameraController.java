@@ -44,6 +44,7 @@ final class LocationCameraController {
   private final AndroidGesturesManager internalGesturesManager;
 
   private boolean isTransitioning;
+  private LatLng lastLocation;
 
   LocationCameraController(
     Context context,
@@ -61,7 +62,7 @@ final class LocationCameraController {
     mapboxMap.addOnRotateListener(onRotateListener);
     mapboxMap.addOnFlingListener(onFlingListener);
     mapboxMap.addOnMoveListener(onMoveListener);
-
+    mapboxMap.addOnCameraMoveListener(onCameraMoveListener);
     this.internalCameraTrackingChangedListener = internalCameraTrackingChangedListener;
     this.onCameraMoveInvalidateListener = onCameraMoveInvalidateListener;
     initializeOptions(options);
@@ -207,7 +208,7 @@ final class LocationCameraController {
     if (isTransitioning) {
       return;
     }
-
+    lastLocation = latLng;
     transform.moveCamera(mapboxMap, CameraUpdateFactory.newLatLng(latLng), null);
     onCameraMoveInvalidateListener.onInvalidateCameraMove();
 
@@ -354,6 +355,17 @@ final class LocationCameraController {
       internalCameraTrackingChangedListener.onCameraTrackingDismissed();
     }
   }
+
+  private MapboxMap.OnCameraMoveListener onCameraMoveListener = new MapboxMap.OnCameraMoveListener() {
+
+    @Override
+    public void onCameraMove() {
+      if (isLocationTracking()) {
+        adjustFocalPoint = true;
+        setLatLng(lastLocation);
+      }
+    }
+  };
 
   @NonNull
   @VisibleForTesting
