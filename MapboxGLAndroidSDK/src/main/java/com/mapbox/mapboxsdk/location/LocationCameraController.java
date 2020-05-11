@@ -360,9 +360,9 @@ final class LocationCameraController {
 
     @Override
     public void onCameraMove() {
-      if (isLocationTracking()) {
-        adjustFocalPoint = true;
-        setLatLng(lastLocation);
+      if (isLocationTracking() && lastLocation != null) {
+        PointF focalPoint = mapboxMap.getProjection().toScreenLocation(lastLocation);
+        mapboxMap.getUiSettings().setFocalPoint(focalPoint);
       }
     }
   };
