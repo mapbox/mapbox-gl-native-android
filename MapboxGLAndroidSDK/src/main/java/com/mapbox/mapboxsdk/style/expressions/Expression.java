@@ -12,6 +12,7 @@ import com.mapbox.geojson.GeoJson;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.MultiLineString;
 import com.mapbox.geojson.MultiPoint;
+import com.mapbox.geojson.MultiPolygon;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.Polygon;
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
@@ -1587,7 +1588,8 @@ public class Expression {
    * Currently supports `Point`, `MultiPoint`, `LineString`, `MultiLineString` geometry types.
    *
    * @param geoJson the target feature geoJson.
-   *                Currently supports `Point`, `MultiPoint`, `LineString`, `MultiLineString` geometry types
+   *                Currently supports `Point`, `MultiPoint`, `LineString`, `MultiLineString`, `Polygon`, `MultiPolygon`
+   *                geometry types
    * @return the distance in the unit "meters".
    * @see <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-distance">Style specification</a>
    */
@@ -4780,6 +4782,10 @@ public class Expression {
           return distance(LineString.fromJson(json));
         } else if ("MultiPoint".equals(type)) {
           return distance(MultiPoint.fromJson(json));
+        } else if ("Polygon".equals(type)) {
+          return distance(Polygon.fromJson(json));
+        } else if ("MultiPolygon".equals(type)) {
+          return distance(MultiPolygon.fromJson(json));
         } else {
           return distance(MultiLineString.fromJson(json));
         }

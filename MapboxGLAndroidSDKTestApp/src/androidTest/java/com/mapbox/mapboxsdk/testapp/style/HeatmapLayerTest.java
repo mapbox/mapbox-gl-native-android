@@ -9,6 +9,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.MultiLineString;
 import com.mapbox.geojson.MultiPoint;
+import com.mapbox.geojson.MultiPolygon;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.Polygon;
 import com.mapbox.mapboxsdk.maps.BaseLayerTest;
@@ -144,6 +145,17 @@ public class HeatmapLayerTest extends BaseLayerTest {
 
     // distance with MultiPoint
     filter = lt(distance(MultiLineString.fromLngLats(Collections.singletonList(pointsList))), 50);
+    layer.setFilter(filter);
+    assertEquals(layer.getFilter().toString(), filter.toString());
+
+    // distance with Polygon
+    filter = lt(distance(Polygon.fromLngLats(Collections.singletonList(pointsList))), 50);
+    layer.setFilter(filter);
+    assertEquals(layer.getFilter().toString(), filter.toString());
+
+    // distance with MultiPolygon
+    filter = lt(distance(MultiPolygon.fromLngLats(Collections
+      .singletonList(Collections.singletonList(pointsList)))), 50);
     layer.setFilter(filter);
     assertEquals(layer.getFilter().toString(), filter.toString());
   }
