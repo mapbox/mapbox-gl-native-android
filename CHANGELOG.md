@@ -4,9 +4,9 @@ Mapbox welcomes participation and contributions from everyone. Please read [`Con
 
 ## 9.2.1 - May 15, 2020
 ### Improvements and bug fixes
- - Fixed a crash when `Layer.getFilter()` has expression `distance` content. ([#380](https://github.com/mapbox/mapbox-gl-native-android/pull/380))
- - Fixed a crash when rotation on an Android 4.2.2 x86 tablet. ([#381](https://github.com/mapbox/mapbox-gl-native-android/pull/381)（h/t [ystsoi](https://github.com/ystsoi))
  - Added compiler and linker options to reduce binary size for release build. ([#382](https://github.com/mapbox/mapbox-gl-native-android/pull/382))
+ - Fixed a crash when `Layer.getFilter()` is used with the `distance` expression. ([#380](https://github.com/mapbox/mapbox-gl-native-android/pull/380))
+ - Reset AndroidRendererBackend properly to prevent a crash during rotation on an Android 4.2.2 x86 tablet. ([#381](https://github.com/mapbox/mapbox-gl-native-android/pull/381)（h/t [ystsoi](https://github.com/ystsoi))
 
 ## 9.2.0 - May 7, 2020
 ### Features
