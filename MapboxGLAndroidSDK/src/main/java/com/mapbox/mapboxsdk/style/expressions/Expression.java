@@ -15,6 +15,7 @@ import com.mapbox.geojson.MultiPoint;
 import com.mapbox.geojson.MultiPolygon;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.Polygon;
+import com.mapbox.geojson.gson.GeometryGeoJson;
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.layers.PropertyValue;
 
@@ -4774,21 +4775,7 @@ public class Expression {
       if (operator.equals("within")) {
         return within(Polygon.fromJson(jsonArray.get(1).toString()));
       } else if (operator.equals("distance")) {
-        final String type = jsonArray.get(1).getAsJsonObject().get("type").getAsString();
-        String json = jsonArray.get(1).toString();
-        if ("Point".equals(type)) {
-          return distance(Point.fromJson(json));
-        } else if ("LineString".equals(type)) {
-          return distance(LineString.fromJson(json));
-        } else if ("MultiPoint".equals(type)) {
-          return distance(MultiPoint.fromJson(json));
-        } else if ("Polygon".equals(type)) {
-          return distance(Polygon.fromJson(json));
-        } else if ("MultiPolygon".equals(type)) {
-          return distance(MultiPolygon.fromJson(json));
-        } else {
-          return distance(MultiLineString.fromJson(json));
-        }
+        return distance(GeometryGeoJson.fromJson(jsonArray.get(1).toString()));
       }
       for (int i = 1; i < jsonArray.size(); i++) {
         JsonElement jsonElement = jsonArray.get(i);
