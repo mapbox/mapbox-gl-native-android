@@ -3,10 +3,10 @@ package com.mapbox.mapboxsdk;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.support.annotation.Keep;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.UiThread;
+import androidx.annotation.Keep;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
 
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
 import com.mapbox.mapboxsdk.exceptions.MapboxConfigurationException;
@@ -115,7 +115,7 @@ public final class Mapbox {
    * @return the SKU token
    */
   public static String getSkuToken() {
-    if (INSTANCE.accounts == null) {
+    if (!hasInstance() || INSTANCE.accounts == null) {
       throw new MapboxConfigurationException(
         "A valid access token parameter is required when using a Mapbox service."
           + "\nPlease see https://www.mapbox.com/help/create-api-access-token/ to learn how to create one."
@@ -179,7 +179,7 @@ public final class Mapbox {
    */
   @Nullable
   public static TelemetryDefinition getTelemetry() {
-    return INSTANCE.telemetry;
+    return hasInstance() ? INSTANCE.telemetry : null;
   }
 
   /**

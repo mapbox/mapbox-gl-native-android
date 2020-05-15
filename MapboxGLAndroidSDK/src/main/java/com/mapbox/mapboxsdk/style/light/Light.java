@@ -1,11 +1,11 @@
-// This file is generated. Edit android/platform/scripts/generate-style-code.js, then run `make android-style-code`.
+// This file is generated. Edit scripts/generate-style-code.js, then run `make style-code`.
 
 package com.mapbox.mapboxsdk.style.light;
 
-import android.support.annotation.ColorInt;
-import android.support.annotation.Keep;
-import android.support.annotation.NonNull;
-import android.support.annotation.UiThread;
+import androidx.annotation.ColorInt;
+import androidx.annotation.Keep;
+import androidx.annotation.NonNull;
+import androidx.annotation.UiThread;
 
 import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.mapboxsdk.style.layers.TransitionOptions;

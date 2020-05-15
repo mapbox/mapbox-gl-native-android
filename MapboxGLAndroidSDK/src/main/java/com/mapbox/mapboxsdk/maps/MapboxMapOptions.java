@@ -7,12 +7,14 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
-import android.support.v4.content.res.ResourcesCompat;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.IntRange;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
+import androidx.core.content.res.ResourcesCompat;
+
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -62,9 +64,12 @@ public class MapboxMapOptions implements Parcelable {
 
   private double minZoom = MapboxConstants.MINIMUM_ZOOM;
   private double maxZoom = MapboxConstants.MAXIMUM_ZOOM;
+  private double minPitch = MapboxConstants.MINIMUM_PITCH;
+  private double maxPitch = MapboxConstants.MAXIMUM_PITCH;
 
   private boolean rotateGesturesEnabled = true;
   private boolean scrollGesturesEnabled = true;
+  private boolean horizontalScrollGesturesEnabled = true;
   private boolean tiltGesturesEnabled = true;
   private boolean zoomGesturesEnabled = true;
   private boolean doubleTapGesturesEnabled = true;
@@ -124,9 +129,12 @@ public class MapboxMapOptions implements Parcelable {
 
     minZoom = in.readDouble();
     maxZoom = in.readDouble();
+    minPitch = in.readDouble();
+    maxPitch = in.readDouble();
 
     rotateGesturesEnabled = in.readByte() != 0;
     scrollGesturesEnabled = in.readByte() != 0;
+    horizontalScrollGesturesEnabled = in.readByte() != 0;
     tiltGesturesEnabled = in.readByte() != 0;
     zoomGesturesEnabled = in.readByte() != 0;
     doubleTapGesturesEnabled = in.readByte() != 0;
@@ -191,6 +199,8 @@ public class MapboxMapOptions implements Parcelable {
         typedArray.getBoolean(R.styleable.mapbox_MapView_mapbox_uiZoomGestures, true));
       mapboxMapOptions.scrollGesturesEnabled(
         typedArray.getBoolean(R.styleable.mapbox_MapView_mapbox_uiScrollGestures, true));
+      mapboxMapOptions.horizontalScrollGesturesEnabled(
+        typedArray.getBoolean(R.styleable.mapbox_MapView_mapbox_uiHorizontalScrollGestures, true));
       mapboxMapOptions.rotateGesturesEnabled(
         typedArray.getBoolean(R.styleable.mapbox_MapView_mapbox_uiRotateGestures, true));
       mapboxMapOptions.tiltGesturesEnabled(
@@ -204,6 +214,10 @@ public class MapboxMapOptions implements Parcelable {
         MapboxConstants.MAXIMUM_ZOOM));
       mapboxMapOptions.minZoomPreference(typedArray.getFloat(R.styleable.mapbox_MapView_mapbox_cameraZoomMin,
         MapboxConstants.MINIMUM_ZOOM));
+      mapboxMapOptions.maxPitchPreference(typedArray.getFloat(R.styleable.mapbox_MapView_mapbox_cameraPitchMax,
+        MapboxConstants.MAXIMUM_PITCH));
+      mapboxMapOptions.minPitchPreference(typedArray.getFloat(R.styleable.mapbox_MapView_mapbox_cameraPitchMin,
+        MapboxConstants.MINIMUM_PITCH));
 
       mapboxMapOptions.compassEnabled(typedArray.getBoolean(R.styleable.mapbox_MapView_mapbox_uiCompass, true));
       mapboxMapOptions.compassGravity(typedArray.getInt(R.styleable.mapbox_MapView_mapbox_uiCompassGravity,
@@ -261,7 +275,7 @@ public class MapboxMapOptions implements Parcelable {
       mapboxMapOptions.setPrefetchesTiles(
         typedArray.getBoolean(R.styleable.mapbox_MapView_mapbox_enableTilePrefetch, true));
       mapboxMapOptions.setPrefetchZoomDelta(
-              typedArray.getInt(R.styleable.mapbox_MapView_mapbox_prefetchZoomDelta, 4));
+        typedArray.getInt(R.styleable.mapbox_MapView_mapbox_prefetchZoomDelta, 4));
       mapboxMapOptions.renderSurfaceOnTop(
         typedArray.getBoolean(R.styleable.mapbox_MapView_mapbox_enableZMediaOverlay, false));
 
@@ -369,6 +383,31 @@ public class MapboxMapOptions implements Parcelable {
   @NonNull
   public MapboxMapOptions maxZoomPreference(double maxZoom) {
     this.maxZoom = maxZoom;
+    return this;
+  }
+
+
+  /**
+   * Specifies the used minimum pitch for a map view.
+   *
+   * @param minPitch Pitch to be used
+   * @return This
+   */
+  @NonNull
+  public MapboxMapOptions minPitchPreference(double minPitch) {
+    this.minPitch = minPitch;
+    return this;
+  }
+
+  /**
+   * Specifies the used maximum pitch for a map view.
+   *
+   * @param maxPitch Pitch to be used
+   * @return This
+   */
+  @NonNull
+  public MapboxMapOptions maxPitchPreference(double maxPitch) {
+    this.maxPitch = maxPitch;
     return this;
   }
 
@@ -547,6 +586,18 @@ public class MapboxMapOptions implements Parcelable {
   }
 
   /**
+   * Specifies if the horizontal scroll gesture is enabled for a map view.
+   *
+   * @param enabled True and gesture will be enabled
+   * @return This
+   */
+  @NonNull
+  public MapboxMapOptions horizontalScrollGesturesEnabled(boolean enabled) {
+    horizontalScrollGesturesEnabled = enabled;
+    return this;
+  }
+
+  /**
    * Specifies if the tilt gesture is enabled for a map view.
    *
    * @param enabled True and gesture will be enabled
@@ -652,7 +703,7 @@ public class MapboxMapOptions implements Parcelable {
    * tile at the (current_zoom_level - delta) is rendered as soon as possible at the
    * expense of a little bandwidth.
    * Note: This operation will override the MapboxMapOptions#setPrefetchesTiles(boolean)
-   *       Setting zoom delta to 0 will disable pre-fetching.
+   * Setting zoom delta to 0 will disable pre-fetching.
    * Default zoom delta is 4.
    *
    * @param delta zoom delta
@@ -837,6 +888,24 @@ public class MapboxMapOptions implements Parcelable {
   }
 
   /**
+   * Get the current configured min pitch for a map view.
+   *
+   * @return Mininum pitch to be used.
+   */
+  public double getMinPitchPreference() {
+    return minPitch;
+  }
+
+  /**
+   * Get the current configured maximum pitch for a map view.
+   *
+   * @return Maximum pitch to be used.
+   */
+  public double getMaxPitchPreference() {
+    return maxPitch;
+  }
+
+  /**
    * Get the current configured visibility state for mapbox_compass_icon for a map view.
    *
    * @return Visibility state of the mapbox_compass_icon
@@ -924,6 +993,15 @@ public class MapboxMapOptions implements Parcelable {
    */
   public boolean getScrollGesturesEnabled() {
     return scrollGesturesEnabled;
+  }
+
+  /**
+   * Get the current configured horizontal scroll gesture state for a map view.
+   *
+   * @return True indicates horizontal scroll gesture is enabled
+   */
+  public boolean getHorizontalScrollGesturesEnabled() {
+    return horizontalScrollGesturesEnabled;
   }
 
   /**
@@ -1105,9 +1183,12 @@ public class MapboxMapOptions implements Parcelable {
 
     dest.writeDouble(minZoom);
     dest.writeDouble(maxZoom);
+    dest.writeDouble(minPitch);
+    dest.writeDouble(maxPitch);
 
     dest.writeByte((byte) (rotateGesturesEnabled ? 1 : 0));
     dest.writeByte((byte) (scrollGesturesEnabled ? 1 : 0));
+    dest.writeByte((byte) (horizontalScrollGesturesEnabled ? 1 : 0));
     dest.writeByte((byte) (tiltGesturesEnabled ? 1 : 0));
     dest.writeByte((byte) (zoomGesturesEnabled ? 1 : 0));
     dest.writeByte((byte) (doubleTapGesturesEnabled ? 1 : 0));
@@ -1176,10 +1257,19 @@ public class MapboxMapOptions implements Parcelable {
     if (Double.compare(options.maxZoom, maxZoom) != 0) {
       return false;
     }
+    if (Double.compare(options.minPitch, minPitch) != 0) {
+      return false;
+    }
+    if (Double.compare(options.maxPitch, maxPitch) != 0) {
+      return false;
+    }
     if (rotateGesturesEnabled != options.rotateGesturesEnabled) {
       return false;
     }
     if (scrollGesturesEnabled != options.scrollGesturesEnabled) {
+      return false;
+    }
+    if (horizontalScrollGesturesEnabled != options.horizontalScrollGesturesEnabled) {
       return false;
     }
     if (tiltGesturesEnabled != options.tiltGesturesEnabled) {
@@ -1261,8 +1351,13 @@ public class MapboxMapOptions implements Parcelable {
     result = 31 * result + (int) (temp ^ (temp >>> 32));
     temp = Double.doubleToLongBits(maxZoom);
     result = 31 * result + (int) (temp ^ (temp >>> 32));
+    temp = Double.doubleToLongBits(minPitch);
+    result = 31 * result + (int) (temp ^ (temp >>> 32));
+    temp = Double.doubleToLongBits(maxPitch);
+    result = 31 * result + (int) (temp ^ (temp >>> 32));
     result = 31 * result + (rotateGesturesEnabled ? 1 : 0);
     result = 31 * result + (scrollGesturesEnabled ? 1 : 0);
+    result = 31 * result + (horizontalScrollGesturesEnabled ? 1 : 0);
     result = 31 * result + (tiltGesturesEnabled ? 1 : 0);
     result = 31 * result + (zoomGesturesEnabled ? 1 : 0);
     result = 31 * result + (doubleTapGesturesEnabled ? 1 : 0);

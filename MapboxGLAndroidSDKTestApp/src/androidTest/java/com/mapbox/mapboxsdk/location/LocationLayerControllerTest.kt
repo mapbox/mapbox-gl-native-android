@@ -2,17 +2,18 @@ package com.mapbox.mapboxsdk.location
 
 import android.Manifest
 import android.content.Context
+import android.graphics.Color
 import android.location.Location
-import android.support.test.annotation.UiThreadTest
-import android.support.test.espresso.Espresso.onView
-import android.support.test.espresso.IdlingRegistry
-import android.support.test.espresso.UiController
-import android.support.test.espresso.assertion.ViewAssertions.matches
-import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
-import android.support.test.espresso.matcher.ViewMatchers.withId
-import android.support.test.rule.GrantPermissionRule
-import android.support.test.rule.GrantPermissionRule.grant
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.annotation.UiThreadTest
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.UiController
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.rule.GrantPermissionRule
+import androidx.test.rule.GrantPermissionRule.grant
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.location.LocationComponentConstants.*
@@ -123,9 +124,47 @@ class LocationLayerControllerTest : EspressoTest() {
         assertThat(mapboxMap.isLayerVisible(SHADOW_LAYER), `is`(true))
         assertThat(mapboxMap.isLayerVisible(ACCURACY_LAYER), `is`(true))
         assertThat(mapboxMap.isLayerVisible(BEARING_LAYER), `is`(false))
+        assertThat(mapboxMap.isLayerVisible(PULSING_CIRCLE_LAYER), `is`(false))
       }
     }
     executeComponentTest(componentAction)
+  }
+
+  @Test
+  fun onMapChange_locationComponentPulsingCircleLayerGetsRedrawn() {
+    val componentAction = object : LocationComponentAction.OnPerformLocationComponentAction {
+      override fun onLocationComponentAction(
+        component: LocationComponent,
+        mapboxMap: MapboxMap,
+        style: Style,
+        uiController: UiController,
+        context: Context
+      ) {
+        component.activateLocationComponent(
+          LocationComponentActivationOptions
+            .builder(context, style)
+            .locationComponentOptions(LocationComponentOptions.builder(context)
+              .pulseEnabled(true)
+              .build())
+            .useDefaultLocationEngine(false)
+            .build()
+        )
+        component.isLocationComponentEnabled = true
+        component.renderMode = RenderMode.NORMAL
+        component.forceLocationUpdate(location)
+        styleChangeIdlingResource.waitForStyle(mapboxMap, Style.LIGHT)
+        TestingAsyncUtils.waitForLayer(uiController, mapView)
+
+        assertThat(component.renderMode, `is`(equalTo(RenderMode.NORMAL)))
+
+        // Check that the Source has been re-added to the new map style
+        val source: GeoJsonSource? = mapboxMap.style!!.getSourceAs(LOCATION_SOURCE)
+        assertThat(source, notNullValue())
+
+        // Check that the pulsing circle layer visibilities is set to visible
+        assertThat(mapboxMap.isLayerVisible(PULSING_CIRCLE_LAYER), `is`(true))
+      }
+    }
   }
 
   @Test
@@ -154,6 +193,137 @@ class LocationLayerControllerTest : EspressoTest() {
         assertThat(mapboxMap.isLayerVisible(SHADOW_LAYER), `is`(true))
         assertThat(mapboxMap.isLayerVisible(ACCURACY_LAYER), `is`(true))
         assertThat(mapboxMap.isLayerVisible(BEARING_LAYER), `is`(true))
+      }
+    }
+    executeComponentTest(componentAction)
+  }
+
+  @Test
+  fun pulsingCircle_enableLocationComponent_pulsingLayerVisibility() {
+    val componentAction = object : LocationComponentAction.OnPerformLocationComponentAction {
+      override fun onLocationComponentAction(
+        component: LocationComponent,
+        mapboxMap: MapboxMap,
+        style: Style,
+        uiController: UiController,
+        context: Context
+      ) {
+        component.activateLocationComponent(
+          LocationComponentActivationOptions
+            .builder(context, style)
+            .useDefaultLocationEngine(false)
+            .build()
+        )
+        component.isLocationComponentEnabled = true
+        component.forceLocationUpdate(location)
+        TestingAsyncUtils.waitForLayer(uiController, mapView)
+
+        component.applyStyle(LocationComponentOptions.builder(context)
+          .pulseEnabled(true).build())
+
+        assertThat(mapboxMap.isLayerVisible(PULSING_CIRCLE_LAYER), `is`(true))
+      }
+    }
+    executeComponentTest(componentAction)
+  }
+
+  @Test
+  fun pulsingCircle_disableLocationComponent_pulsingLayerVisibility() {
+    val componentAction = object : LocationComponentAction.OnPerformLocationComponentAction {
+      override fun onLocationComponentAction(
+        component: LocationComponent,
+        mapboxMap: MapboxMap,
+        style: Style,
+        uiController: UiController,
+        context: Context
+      ) {
+        component.activateLocationComponent(
+          LocationComponentActivationOptions
+            .builder(context, style)
+            .useDefaultLocationEngine(false)
+            .build()
+        )
+        component.isLocationComponentEnabled = false
+        component.forceLocationUpdate(location)
+        TestingAsyncUtils.waitForLayer(uiController, mapView)
+
+        assertThat(mapboxMap.isLayerVisible(PULSING_CIRCLE_LAYER), `is`(false))
+      }
+    }
+    executeComponentTest(componentAction)
+  }
+
+  @Test
+  fun pulsingCircle_changeColorCheck() {
+    val componentAction = object : LocationComponentAction.OnPerformLocationComponentAction {
+      override fun onLocationComponentAction(
+        component: LocationComponent,
+        mapboxMap: MapboxMap,
+        style: Style,
+        uiController: UiController,
+        context: Context
+      ) {
+        component.activateLocationComponent(
+          LocationComponentActivationOptions
+            .builder(context, style)
+            .useDefaultLocationEngine(false)
+            .build()
+        )
+        component.isLocationComponentEnabled = true
+        component.forceLocationUpdate(location)
+        TestingAsyncUtils.waitForLayer(uiController, mapView)
+
+        component.applyStyle(LocationComponentOptions.builder(context)
+          .pulseEnabled(true)
+          .pulseColor(Color.RED)
+          .build())
+
+        component.applyStyle(LocationComponentOptions.builder(context)
+          .pulseEnabled(true)
+          .pulseColor(Color.BLUE)
+          .build())
+
+        mapboxMap.style.apply {
+          assertThat(component.locationComponentOptions.pulseColor(), `is`(Color.BLUE))
+        }
+      }
+    }
+    executeComponentTest(componentAction)
+  }
+
+  @Test
+  fun pulsingCircle_changeSpeedCheck() {
+    val componentAction = object : LocationComponentAction.OnPerformLocationComponentAction {
+      override fun onLocationComponentAction(
+        component: LocationComponent,
+        mapboxMap: MapboxMap,
+        style: Style,
+        uiController: UiController,
+        context: Context
+      ) {
+        component.activateLocationComponent(
+          LocationComponentActivationOptions
+            .builder(context, style)
+            .useDefaultLocationEngine(false)
+            .build()
+        )
+        component.isLocationComponentEnabled = true
+        component.forceLocationUpdate(location)
+        TestingAsyncUtils.waitForLayer(uiController, mapView)
+
+        component.applyStyle(LocationComponentOptions.builder(context)
+          .pulseEnabled(true)
+          .pulseSingleDuration(8000f)
+          .build())
+
+        component.applyStyle(LocationComponentOptions.builder(context)
+          .pulseEnabled(true)
+          .pulseSingleDuration(400f)
+          .build())
+
+        mapboxMap.style.apply {
+          assertThat(component.locationComponentOptions.pulseSingleDuration(), `is`(400f))
+        }
       }
     }
     executeComponentTest(componentAction)

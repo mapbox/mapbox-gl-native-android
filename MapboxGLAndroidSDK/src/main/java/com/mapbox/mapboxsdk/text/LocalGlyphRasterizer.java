@@ -4,16 +4,16 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Bitmap;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
-import android.support.annotation.Keep;
-import android.support.annotation.NonNull;
-import android.support.annotation.WorkerThread;
+import androidx.annotation.Keep;
+import androidx.annotation.NonNull;
+import androidx.annotation.WorkerThread;
 
 /**
  * LocalGlyphRasterizer is the Android-specific platform implementation used
  * by the portable local_glyph_rasterizer.hpp
  */
+@Keep
 public class LocalGlyphRasterizer {
   private final Bitmap bitmap;
   @NonNull
@@ -49,11 +49,10 @@ public class LocalGlyphRasterizer {
    * @return Return a {@link Bitmap} to be displayed in the requested tile.
    */
   @WorkerThread
-  @Keep
   protected Bitmap drawGlyphBitmap(String fontFamily, boolean bold, char glyphID) {
     paint.setTypeface(Typeface.create(fontFamily, bold ? Typeface.BOLD : Typeface.NORMAL));
-    canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-    canvas.drawText(String.valueOf(glyphID), 0, 20, paint);
+    canvas.drawColor(Color.WHITE);
+    canvas.drawText(String.valueOf(glyphID), 5, 25, paint);
     return bitmap;
   }
 }

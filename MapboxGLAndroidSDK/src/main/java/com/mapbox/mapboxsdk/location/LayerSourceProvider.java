@@ -1,13 +1,18 @@
 package com.mapbox.mapboxsdk.location;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
+
 import com.mapbox.geojson.Feature;
 import com.mapbox.mapboxsdk.style.layers.CircleLayer;
 import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
+import com.mapbox.mapboxsdk.style.layers.TransitionOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.mapbox.mapboxsdk.location.LocationComponentConstants.ACCURACY_LAYER;
 import static com.mapbox.mapboxsdk.location.LocationComponentConstants.BACKGROUND_LAYER;
@@ -27,6 +32,7 @@ import static com.mapbox.mapboxsdk.location.LocationComponentConstants.PROPERTY_
 import static com.mapbox.mapboxsdk.location.LocationComponentConstants.PROPERTY_GPS_BEARING;
 import static com.mapbox.mapboxsdk.location.LocationComponentConstants.PROPERTY_LOCATION_STALE;
 import static com.mapbox.mapboxsdk.location.LocationComponentConstants.PROPERTY_SHADOW_ICON_OFFSET;
+import static com.mapbox.mapboxsdk.location.LocationComponentConstants.PULSING_CIRCLE_LAYER;
 import static com.mapbox.mapboxsdk.location.LocationComponentConstants.SHADOW_ICON;
 import static com.mapbox.mapboxsdk.location.LocationComponentConstants.SHADOW_LAYER;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.get;
@@ -107,5 +113,42 @@ class LayerSourceProvider {
         circleStrokeColor(get(PROPERTY_ACCURACY_COLOR)),
         circlePitchAlignment(Property.CIRCLE_PITCH_ALIGNMENT_MAP)
       );
+  }
+
+  Set<String> getEmptyLayerSet() {
+    return new HashSet<>();
+  }
+
+  LocationLayerRenderer getSymbolLocationLayerRenderer(LayerFeatureProvider featureProvider,
+                                                       boolean isStale) {
+    return new SymbolLocationLayerRenderer(this, featureProvider, isStale);
+  }
+
+  LocationLayerRenderer getIndicatorLocationLayerRenderer() {
+    return new IndicatorLocationLayerRenderer(this);
+  }
+
+  Layer generateLocationComponentLayer() {
+    LocationIndicatorLayer layer = new LocationIndicatorLayer(FOREGROUND_LAYER);
+    layer.setLocationTransition(new TransitionOptions(0, 0));
+    layer.setProperties(
+        LocationPropertyFactory.perspectiveCompensation(0.9f),
+        LocationPropertyFactory.imageTiltDisplacement(4f)
+    );
+    return layer;
+  }
+
+  /**
+   * Adds a {@link CircleLayer} to the map to support the {@link LocationComponent} pulsing UI functionality.
+   *
+   * @return a {@link CircleLayer} with the correct data-driven styling. Tilting the map will keep the pulsing
+   * layer aligned with the map plane.
+   */
+  @NonNull
+  Layer generatePulsingCircleLayer() {
+    return new CircleLayer(PULSING_CIRCLE_LAYER, LOCATION_SOURCE)
+        .withProperties(
+            circlePitchAlignment(Property.CIRCLE_PITCH_ALIGNMENT_MAP)
+        );
   }
 }

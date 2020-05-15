@@ -1,8 +1,8 @@
-// This file is generated. Edit android/platform/scripts/generate-style-code.js, then run `make android-style-code`.
+// This file is generated. Edit scripts/generate-style-code.js, then run `make style-code`.
 
 package com.mapbox.mapboxsdk.style.layers;
 
-import android.support.annotation.ColorInt;
+import androidx.annotation.ColorInt;
 
 import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.types.Formatted;
@@ -1646,6 +1646,26 @@ public class PropertyFactory {
   }
 
   /**
+   * Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
+   *
+   * @param value a Float value
+   * @return property wrapper around Float
+   */
+  public static PropertyValue<Float> fillSortKey(Float value) {
+    return new LayoutPropertyValue<>("fill-sort-key", value);
+  }
+
+  /**
+   * Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
+   *
+   * @param value a Float value
+   * @return property wrapper around Float
+   */
+  public static PropertyValue<Expression> fillSortKey(Expression value) {
+    return new LayoutPropertyValue<>("fill-sort-key", value);
+  }
+
+  /**
    * The display of line endings.
    *
    * @param value a String value
@@ -1726,6 +1746,26 @@ public class PropertyFactory {
   }
 
   /**
+   * Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
+   *
+   * @param value a Float value
+   * @return property wrapper around Float
+   */
+  public static PropertyValue<Float> lineSortKey(Float value) {
+    return new LayoutPropertyValue<>("line-sort-key", value);
+  }
+
+  /**
+   * Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
+   *
+   * @param value a Float value
+   * @return property wrapper around Float
+   */
+  public static PropertyValue<Expression> lineSortKey(Expression value) {
+    return new LayoutPropertyValue<>("line-sort-key", value);
+  }
+
+  /**
    * Label placement relative to its geometry.
    *
    * @param value a String value
@@ -1766,7 +1806,7 @@ public class PropertyFactory {
   }
 
   /**
-   * If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer.
+   * If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer. When using a client that supports global collision detection, like Mapbox GL JS version 0.42.0 or greater, enabling this property is not needed to prevent clipped labels at tile boundaries.
    *
    * @param value a Boolean value
    * @return property wrapper around Boolean
@@ -1776,7 +1816,7 @@ public class PropertyFactory {
   }
 
   /**
-   * If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer.
+   * If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer. When using a client that supports global collision detection, like Mapbox GL JS version 0.42.0 or greater, enabling this property is not needed to prevent clipped labels at tile boundaries.
    *
    * @param value a Boolean value
    * @return property wrapper around Boolean
@@ -1786,7 +1826,7 @@ public class PropertyFactory {
   }
 
   /**
-   * Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key when they overlap. Features with a lower sort key will have priority over other features when doing placement.
+   * Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first.  When {@link PropertyFactory#iconAllowOverlap} or {@link PropertyFactory#textAllowOverlap} is `false`, features with a lower sort key will have priority during placement. When {@link PropertyFactory#iconAllowOverlap} or {@link PropertyFactory#textAllowOverlap} is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
    *
    * @param value a Float value
    * @return property wrapper around Float
@@ -1796,7 +1836,7 @@ public class PropertyFactory {
   }
 
   /**
-   * Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key when they overlap. Features with a lower sort key will have priority over other features when doing placement.
+   * Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first.  When {@link PropertyFactory#iconAllowOverlap} or {@link PropertyFactory#textAllowOverlap} is `false`, features with a lower sort key will have priority during placement. When {@link PropertyFactory#iconAllowOverlap} or {@link PropertyFactory#textAllowOverlap} is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
    *
    * @param value a Float value
    * @return property wrapper around Float
@@ -2316,7 +2356,7 @@ public class PropertyFactory {
   }
 
   /**
-   * To increase the chance of placing high-priority labels on the map, you can provide an array of {@link Property.TEXT_ANCHOR} locations: the render will attempt to place the label at each location, in order, before moving onto the next label. Use `text-justify: auto` to choose justification based on anchor position. To apply an offset, use the {@link PropertyFactory#textRadialOffset} or the two-dimensional {@link PropertyFactory#textOffset}.
+   * To increase the chance of placing high-priority labels on the map, you can provide an array of {@link Property.TEXT_ANCHOR} locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `text-justify: auto` to choose justification based on anchor position. To apply an offset, use the {@link PropertyFactory#textRadialOffset} or the two-dimensional {@link PropertyFactory#textOffset}.
    *
    * @param value a String[] value
    * @return property wrapper around String[]
@@ -2326,7 +2366,7 @@ public class PropertyFactory {
   }
 
   /**
-   * To increase the chance of placing high-priority labels on the map, you can provide an array of {@link Property.TEXT_ANCHOR} locations: the render will attempt to place the label at each location, in order, before moving onto the next label. Use `text-justify: auto` to choose justification based on anchor position. To apply an offset, use the {@link PropertyFactory#textRadialOffset} or the two-dimensional {@link PropertyFactory#textOffset}.
+   * To increase the chance of placing high-priority labels on the map, you can provide an array of {@link Property.TEXT_ANCHOR} locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `text-justify: auto` to choose justification based on anchor position. To apply an offset, use the {@link PropertyFactory#textRadialOffset} or the two-dimensional {@link PropertyFactory#textOffset}.
    *
    * @param value a String[] value
    * @return property wrapper around String[]
@@ -2553,6 +2593,26 @@ public class PropertyFactory {
    */
   public static PropertyValue<Expression> textOptional(Expression value) {
     return new LayoutPropertyValue<>("text-optional", value);
+  }
+
+  /**
+   * Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
+   *
+   * @param value a Float value
+   * @return property wrapper around Float
+   */
+  public static PropertyValue<Float> circleSortKey(Float value) {
+    return new LayoutPropertyValue<>("circle-sort-key", value);
+  }
+
+  /**
+   * Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
+   *
+   * @param value a Float value
+   * @return property wrapper around Float
+   */
+  public static PropertyValue<Expression> circleSortKey(Expression value) {
+    return new LayoutPropertyValue<>("circle-sort-key", value);
   }
 
 }

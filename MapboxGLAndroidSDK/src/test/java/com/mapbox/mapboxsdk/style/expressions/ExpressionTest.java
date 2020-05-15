@@ -2,6 +2,8 @@ package com.mapbox.mapboxsdk.style.expressions;
 
 import android.graphics.Color;
 
+import com.mapbox.geojson.Point;
+import com.mapbox.geojson.Polygon;
 import com.mapbox.mapboxsdk.style.layers.PropertyValue;
 import com.mapbox.mapboxsdk.utils.ColorUtils;
 
@@ -10,7 +12,9 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -33,6 +37,7 @@ import static com.mapbox.mapboxsdk.style.expressions.Expression.color;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.concat;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.cos;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.cubicBezier;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.distance;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.division;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.downcase;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.e;
@@ -48,6 +53,7 @@ import static com.mapbox.mapboxsdk.style.expressions.Expression.gte;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.has;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.heatmapDensity;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.id;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.in;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.interpolate;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.isSupportedScript;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.length;
@@ -93,6 +99,7 @@ import static com.mapbox.mapboxsdk.style.expressions.Expression.toRgba;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.typeOf;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.upcase;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.var;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.within;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.zoom;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineOpacity;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
@@ -443,6 +450,60 @@ public class ExpressionTest {
   public void testAt() throws Exception {
     Object[] expected = new Object[] {"at", 3f, new Object[] {"literal", new Object[] {"one", "two"}}};
     Object[] actual = at(literal(3), literal(new Object[] {"one", "two"})).toArray();
+    assertTrue("expression should match", Arrays.deepEquals(expected, actual));
+  }
+
+  @Test
+  public void testInString() throws Exception {
+    Object[] expected = new Object[] {"in", "one", "onetwo"};
+    Object[] actual = in(literal("one"), literal("onetwo")).toArray();
+    assertTrue("expression should match", Arrays.deepEquals(expected, actual));
+  }
+
+  @Test
+  public void testWithIn() throws Exception {
+    List<List<Point>> lngLats = Collections.singletonList(
+      Arrays.asList(
+        Point.fromLngLat(0, 0),
+        Point.fromLngLat(0, 5),
+        Point.fromLngLat(5, 5),
+        Point.fromLngLat(5, 0),
+        Point.fromLngLat(0, 0)
+      )
+    );
+
+    Polygon polygon = Polygon.fromLngLats(lngLats);
+    HashMap<String, String> map = new HashMap<>();
+    map.put("type", "Polygon");
+    map.put("json", polygon.toJson());
+    Object[] expected = new Object[] {"within", map};
+    Object[] actual = within(polygon).toArray();
+    assertTrue("expression should match", Arrays.deepEquals(expected, actual));
+  }
+
+  @Test
+  public void testInNumber() throws Exception {
+    Object[] expected = new Object[] {"in", 1f, new Object[] {"literal", new Object[] {1f, 2f}}};
+    Object[] actual = in(literal(1f), literal(new Object[] {1f, 2f})).toArray();
+    assertTrue("expression should match", Arrays.deepEquals(expected, actual));
+  }
+
+
+  @Test
+  public void testDistance() throws Exception {
+    Point point = Point.fromLngLat(1, 2);
+    HashMap<String, String> map = new HashMap<>();
+    map.put("json", point.toJson());
+    Object[] expected = new Object[] {"distance", map};
+    Object[] actual = distance(point).toArray();
+    assertTrue("expression should match", Arrays.deepEquals(expected, actual));
+  }
+
+
+  @Test
+  public void testInArray() throws Exception {
+    Object[] expected = new Object[] {"in", "one", new Object[] {"literal", new Object[] {"one", "two"}}};
+    Object[] actual = in(literal("one"), literal(new Object[] {"one", "two"})).toArray();
     assertTrue("expression should match", Arrays.deepEquals(expected, actual));
   }
 

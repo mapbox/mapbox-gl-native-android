@@ -3,9 +3,6 @@ package com.mapbox.mapboxsdk.maps;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.RectF;
-import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.Geometry;
@@ -23,6 +20,10 @@ import com.mapbox.mapboxsdk.style.light.Light;
 import com.mapbox.mapboxsdk.style.sources.Source;
 
 import java.util.List;
+
+import androidx.annotation.IntRange;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 interface NativeMap {
 
@@ -84,6 +85,14 @@ interface NativeMap {
   void setMaxZoom(double zoom);
 
   double getMaxZoom();
+
+  void setMinPitch(double pitch);
+
+  double getMinPitch();
+
+  void setMaxPitch(double pitch);
+
+  double getMaxPitch();
 
   void resetZoom();
 
@@ -193,7 +202,13 @@ interface NativeMap {
   @NonNull
   PointF pixelForLatLng(@NonNull LatLng latLng);
 
+  void pixelsForLatLngs(@NonNull double[] input, @NonNull double[] output);
+
+  void getVisibleCoordinateBounds(@NonNull double[] output);
+
   LatLng latLngForPixel(@NonNull PointF pixel);
+
+  void latLngsForPixels(@NonNull double[] input, @NonNull double[] output);
 
   //
   // Utils API
@@ -204,8 +219,6 @@ interface NativeMap {
   void setDebug(boolean debug);
 
   boolean getDebug();
-
-  void cycleDebugOptions();
 
   void setReachability(boolean status);
 
@@ -223,6 +236,8 @@ interface NativeMap {
   void setGestureInProgress(boolean inProgress);
 
   float getPixelRatio();
+
+  void triggerRepaint();
 
   //
   // Deprecated Annotations API

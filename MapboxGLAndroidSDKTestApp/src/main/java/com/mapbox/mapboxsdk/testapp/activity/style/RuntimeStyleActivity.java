@@ -3,12 +3,14 @@ package com.mapbox.mapboxsdk.testapp.activity.style;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.Point;
+import com.mapbox.geojson.Polygon;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
@@ -30,12 +32,15 @@ import com.mapbox.mapboxsdk.style.sources.TileSet;
 import com.mapbox.mapboxsdk.style.sources.VectorSource;
 import com.mapbox.mapboxsdk.testapp.R;
 import com.mapbox.mapboxsdk.testapp.utils.ResourceUtils;
-import timber.log.Timber;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import androidx.appcompat.app.AppCompatActivity;
+import timber.log.Timber;
 
 import static com.mapbox.mapboxsdk.style.expressions.Expression.all;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.color;
@@ -43,11 +48,14 @@ import static com.mapbox.mapboxsdk.style.expressions.Expression.eq;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.exponential;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.get;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.gte;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.in;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.interpolate;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.literal;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.lt;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.stop;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.switchCase;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.toNumber;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.within;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.zoom;
 import static com.mapbox.mapboxsdk.style.layers.Property.FILL_TRANSLATE_ANCHOR_MAP;
 import static com.mapbox.mapboxsdk.style.layers.Property.NONE;
@@ -65,6 +73,8 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineJoin;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineOpacity;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.symbolPlacement;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textOpacity;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textSize;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
 
 /**
@@ -75,6 +85,23 @@ public class RuntimeStyleActivity extends AppCompatActivity {
   private MapView mapView;
   private MapboxMap mapboxMap;
   private boolean styleLoaded;
+
+  List<List<Point>> lngLats = Collections.singletonList(
+    Arrays.asList(
+      Point.fromLngLat(-15.468749999999998,
+        41.77131167976407),
+      Point.fromLngLat(15.468749999999998,
+        41.77131167976407),
+      Point.fromLngLat(15.468749999999998,
+        58.26328705248601),
+      Point.fromLngLat(-15.468749999999998,
+        58.26328705248601),
+      Point.fromLngLat(-15.468749999999998,
+        41.77131167976407)
+    )
+  );
+
+  Polygon polygon = Polygon.fromLngLats(lngLats);
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -90,13 +117,18 @@ public class RuntimeStyleActivity extends AppCompatActivity {
       mapboxMap = map;
 
       // Center and Zoom (Amsterdam, zoomed to streets)
-      mapboxMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(52.379189, 4.899431), 14));
-
+      mapboxMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(52.379189, 4.899431), 1));
       mapboxMap.setStyle(
         new Style.Builder()
           .fromUri(Style.MAPBOX_STREETS)
           // set custom transition
-          .withTransition(new TransitionOptions(250, 50)), style -> styleLoaded = true
+          .withTransition(new TransitionOptions(250, 50)), style -> {
+          styleLoaded = true;
+          SymbolLayer laber = (SymbolLayer) style.getLayer("country-label");
+          laber.setProperties(
+            textOpacity(switchCase(within(polygon), literal(1.0f), literal(0.5f)))
+          );
+        }
       );
     });
   }
@@ -198,6 +230,9 @@ public class RuntimeStyleActivity extends AppCompatActivity {
       case R.id.action_fill_filter:
         styleFillFilterLayer();
         return true;
+      case R.id.action_textsize_filter:
+        styleTextSizeFilterLayer();
+        return true;
       case R.id.action_line_filter:
         styleLineFilterLayer();
         return true;
@@ -206,6 +241,9 @@ public class RuntimeStyleActivity extends AppCompatActivity {
         return true;
       case R.id.action_bring_water_to_front:
         bringWaterToFront();
+        return true;
+      case R.id.action_fill_filter_color:
+        styleFillColorLayer();
         return true;
       default:
         return super.onOptionsItemSelected(item);
@@ -496,6 +534,11 @@ public class RuntimeStyleActivity extends AppCompatActivity {
     mapboxMap.getStyle().addLayer(lineLayer);
   }
 
+  private void styleFillColorLayer() {
+    mapboxMap.setStyle(new Style.Builder().fromUri("asset://fill_color_style.json"));
+    mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(31, -100), 3));
+  }
+
   private void styleFillFilterLayer() {
     mapboxMap.setStyle(new Style.Builder().fromUri("asset://fill_filter_style.json"));
     mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(31, -100), 3));
@@ -517,6 +560,34 @@ public class RuntimeStyleActivity extends AppCompatActivity {
         states.setProperties(
           fillColor(Color.RED),
           fillOpacity(0.25f)
+        );
+      } else {
+        Toast.makeText(RuntimeStyleActivity.this, "No states layer in this style", Toast.LENGTH_SHORT).show();
+      }
+    }, 2000);
+  }
+
+  private void styleTextSizeFilterLayer() {
+    mapboxMap.setStyle(new Style.Builder().fromUri("asset://fill_filter_style.json"));
+    mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(31, -100), 3));
+
+    Handler handler = new Handler(getMainLooper());
+    handler.postDelayed(() -> {
+      if (mapboxMap == null) {
+        return;
+      }
+
+      Timber.d("Styling text size fill layer");
+      SymbolLayer states = (SymbolLayer) mapboxMap.getStyle().getLayer("state-label-lg");
+
+      if (states != null) {
+        states.setProperties(
+          textSize(switchCase(
+            in(get("name"), literal("Texas")), literal(25.0f),
+            in(get("name"), literal(new Object[] {"California", "Illinois"})), literal(25.0f),
+            literal(6.0f) // default value
+            )
+          )
         );
       } else {
         Toast.makeText(RuntimeStyleActivity.this, "No states layer in this style", Toast.LENGTH_SHORT).show();

@@ -1,12 +1,12 @@
-// This file is generated. Edit android/platform/scripts/generate-style-code.js, then run `make android-style-code`.
+// This file is generated. Edit scripts/generate-style-code.js, then run `make style-code`.
 
 package com.mapbox.mapboxsdk.style.layers;
 
-import android.support.annotation.ColorInt;
-import android.support.annotation.Keep;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.UiThread;
+import androidx.annotation.ColorInt;
+import androidx.annotation.Keep;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
 
 import static com.mapbox.mapboxsdk.utils.ColorUtils.rgbaToColor;
 
@@ -142,6 +142,18 @@ public class CircleLayer extends Layer {
   }
 
   // Property getters
+
+  /**
+   * Get the CircleSortKey property
+   *
+   * @return property wrapper value around Float
+   */
+  @NonNull
+  @SuppressWarnings("unchecked")
+  public PropertyValue<Float> getCircleSortKey() {
+    checkThread();
+    return (PropertyValue<Float>) new PropertyValue("circle-sort-key", nativeGetCircleSortKey());
+  }
 
   /**
    * Get the CircleRadius property
@@ -476,6 +488,10 @@ public class CircleLayer extends Layer {
     checkThread();
     nativeSetCircleStrokeOpacityTransition(options.getDuration(), options.getDelay());
   }
+
+  @NonNull
+  @Keep
+  private native Object nativeGetCircleSortKey();
 
   @NonNull
   @Keep

@@ -1,8 +1,8 @@
-// This file is generated. Edit android/platform/scripts/generate-style-code.js, then run `make android-style-code`.
+// This file is generated. Edit scripts/generate-style-code.js, then run `make style-code`.
 
 package com.mapbox.mapboxsdk.style.layers;
 
-import android.support.annotation.StringDef;
+import androidx.annotation.StringDef;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

@@ -5,10 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.os.Handler;
-import android.support.annotation.IntRange;
-import android.support.annotation.Keep;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.mapbox.geojson.Feature;
@@ -39,6 +35,11 @@ import com.mapbox.mapboxsdk.utils.BitmapUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import androidx.annotation.IntRange;
+import androidx.annotation.Keep;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 // Class that wraps the native methods for convenience
 final class NativeMapView implements NativeMap {
@@ -371,6 +372,38 @@ final class NativeMapView implements NativeMap {
   }
 
   @Override
+  public void setMinPitch(double pitch) {
+    if (checkState("setMinPitch")) {
+      return;
+    }
+    nativeSetMinPitch(pitch);
+  }
+
+  @Override
+  public double getMinPitch() {
+    if (checkState("getMinPitch")) {
+      return 0;
+    }
+    return nativeGetMinPitch();
+  }
+
+  @Override
+  public void setMaxPitch(double pitch) {
+    if (checkState("setMaxPitch")) {
+      return;
+    }
+    nativeSetMaxPitch(pitch);
+  }
+
+  @Override
+  public double getMaxPitch() {
+    if (checkState("getMaxPitch")) {
+      return 0;
+    }
+    return nativeGetMaxPitch();
+  }
+
+  @Override
   public void rotateBy(double sx, double sy, double ex, double ey,
                        long duration) {
     if (checkState("rotateBy")) {
@@ -584,14 +617,6 @@ final class NativeMapView implements NativeMap {
   }
 
   @Override
-  public void cycleDebugOptions() {
-    if (checkState("cycleDebugOptions")) {
-      return;
-    }
-    nativeCycleDebugOptions();
-  }
-
-  @Override
   public boolean getDebug() {
     if (checkState("getDebug")) {
       return false;
@@ -652,12 +677,34 @@ final class NativeMapView implements NativeMap {
   }
 
   @Override
+  public void pixelsForLatLngs(@NonNull double[] input, @NonNull double[] output) {
+    if (!checkState("pixelsForLatLngs")) {
+      nativePixelsForLatLngs(input, output, pixelRatio);
+    }
+  }
+
+  @Override
+  public void getVisibleCoordinateBounds(@NonNull double[] output) {
+    if (!checkState("getVisibleCoordinateBounds")) {
+      nativeGetVisibleCoordinateBounds(output);
+    }
+  }
+
+  @Override
   public LatLng latLngForPixel(@NonNull PointF pixel) {
     if (checkState("latLngForPixel")) {
       return new LatLng();
     }
     return nativeLatLngForPixel(pixel.x / pixelRatio, pixel.y / pixelRatio);
   }
+
+  @Override
+  public void latLngsForPixels(@NonNull double[] input, @NonNull double[] output) {
+    if (!checkState("latLngsForPixels")) {
+      nativeLatLngsForPixels(input, output, pixelRatio);
+    }
+  }
+
 
   @Override
   public double getTopOffsetPixelsForAnnotationSymbol(String symbolName) {
@@ -956,6 +1003,11 @@ final class NativeMapView implements NativeMap {
     return pixelRatio;
   }
 
+  @Override
+  public void triggerRepaint() {
+    nativeTriggerRepaint();
+  }
+
   @NonNull
   @Override
   public RectF getDensityDependantRectangle(final RectF rectangle) {
@@ -1192,6 +1244,18 @@ final class NativeMapView implements NativeMap {
   private native double nativeGetMaxZoom();
 
   @Keep
+  private native void nativeSetMinPitch(double pitch);
+
+  @Keep
+  private native double nativeGetMinPitch();
+
+  @Keep
+  private native void nativeSetMaxPitch(double pitch);
+
+  @Keep
+  private native double nativeGetMaxPitch();
+
+  @Keep
   private native void nativeRotateBy(double sx, double sy, double ex, double ey, long duration);
 
   @Keep
@@ -1249,9 +1313,6 @@ final class NativeMapView implements NativeMap {
   private native void nativeSetDebug(boolean debug);
 
   @Keep
-  private native void nativeCycleDebugOptions();
-
-  @Keep
   private native boolean nativeGetDebug();
 
   @Keep
@@ -1275,9 +1336,18 @@ final class NativeMapView implements NativeMap {
   @Keep
   private native PointF nativePixelForLatLng(double lat, double lon);
 
+  @Keep
+  private native void nativePixelsForLatLngs(double[] input, double[] output, float pixelRatio);
+
+  @Keep
+  private native void nativeGetVisibleCoordinateBounds(double[] output);
+
   @NonNull
   @Keep
   private native LatLng nativeLatLngForPixel(float x, float y);
+
+  @Keep
+  private native void nativeLatLngsForPixels(double[] input, double[] output, float pixelRatio);
 
   @Keep
   private native double nativeGetTopOffsetPixelsForAnnotationSymbol(String symbolName);
@@ -1410,6 +1480,9 @@ final class NativeMapView implements NativeMap {
   public long getNativePtr() {
     return nativePtr;
   }
+
+  @Keep
+  private native void nativeTriggerRepaint();
 
   //
   // Snapshot

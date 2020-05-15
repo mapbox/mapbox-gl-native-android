@@ -5,19 +5,19 @@ import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.UiThread;
-import android.support.v4.util.LongSparseArray;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+
+import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
+import androidx.collection.LongSparseArray;
 
 import com.mapbox.android.gestures.AndroidGesturesManager;
 import com.mapbox.mapboxsdk.MapStrictMode;
@@ -70,15 +70,23 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
   private NativeMap nativeMapView;
   @Nullable
   private MapboxMap mapboxMap;
+  private View renderView;
+
   private AttributionClickListener attributionClickListener;
-  private MapboxMapOptions mapboxMapOptions;
+  MapboxMapOptions mapboxMapOptions;
   private MapRenderer mapRenderer;
   private boolean destroyed;
 
+  @Nullable
   private CompassView compassView;
   private PointF focalPoint;
-  private ImageView attrView;
-  private ImageView logoView;
+
+  // callback for focal point invalidation
+  private final FocalPointInvalidator focalInvalidator = new FocalPointInvalidator();
+  // callback for registering touch listeners
+  private final GesturesManagerInteractionListener registerTouchListener = new GesturesManagerInteractionListener();
+  // callback for camera change events
+  private final CameraChangeDispatcher cameraDispatcher = new CameraChangeDispatcher();
 
   @Nullable
   private MapGestureDetector mapGestureDetector;
@@ -129,14 +137,6 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
 
     mapboxMapOptions = options;
 
-    // inflate view
-    View view = LayoutInflater.from(context).inflate(R.layout.mapbox_mapview_internal, this);
-    compassView = view.findViewById(R.id.compassView);
-    attrView = view.findViewById(R.id.attributionView);
-    attrView.setImageDrawable(BitmapUtils.getDrawableFromRes(getContext(), R.drawable.mapbox_info_bg_selector));
-    logoView = view.findViewById(R.id.logoView);
-    logoView.setImageDrawable(BitmapUtils.getDrawableFromRes(getContext(), R.drawable.mapbox_logo_icon));
-
     // add accessibility support
     setContentDescription(context.getString(R.string.mapbox_mapActionDescription));
     setWillNotDraw(false);
@@ -147,18 +147,11 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
     Context context = getContext();
 
     // callback for focal point invalidation
-    final FocalPointInvalidator focalInvalidator = new FocalPointInvalidator();
     focalInvalidator.addListener(createFocalPointChangeListener());
-
-    // callback for registering touch listeners
-    GesturesManagerInteractionListener registerTouchListener = new GesturesManagerInteractionListener();
-
-    // callback for camera change events
-    final CameraChangeDispatcher cameraDispatcher = new CameraChangeDispatcher();
 
     // setup components for MapboxMap creation
     Projection proj = new Projection(nativeMapView, this);
-    UiSettings uiSettings = new UiSettings(proj, focalInvalidator, compassView, attrView, logoView, getPixelRatio());
+    UiSettings uiSettings = new UiSettings(proj, focalInvalidator, getPixelRatio(), this);
     LongSparseArray<Annotation> annotationsArray = new LongSparseArray<>();
     IconManager iconManager = new IconManager(nativeMapView);
     Annotations annotations = new AnnotationContainer(nativeMapView, annotationsArray);
@@ -181,15 +174,8 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
       annotationManager, cameraDispatcher);
     mapKeyListener = new MapKeyListener(transform, uiSettings, mapGestureDetector);
 
-    // compass
-    compassView.injectCompassAnimationListener(createCompassAnimationListener(cameraDispatcher));
-    compassView.setOnClickListener(createCompassClickListener(cameraDispatcher));
-
     // LocationComponent
     mapboxMap.injectLocationComponent(new LocationComponent(mapboxMap, transform, developerAnimationListeners));
-
-    // inject widgets with MapboxMap
-    attrView.setOnClickListener(attributionClickListener = new AttributionClickListener(context, mapboxMap));
 
     // Ensure this view is interactable
     setClickable(true);
@@ -211,6 +197,44 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
     mapCallback.initialised();
   }
 
+  protected CompassView initialiseCompassView() {
+    compassView = new CompassView(this.getContext());
+    addView(compassView);
+    compassView.setTag("compassView");
+    compassView.getLayoutParams().width = LayoutParams.WRAP_CONTENT;
+    compassView.getLayoutParams().height = LayoutParams.WRAP_CONTENT;
+    compassView.setContentDescription(getResources().getString(R.string.mapbox_compassContentDescription));
+    compassView.injectCompassAnimationListener(createCompassAnimationListener(cameraDispatcher));
+    compassView.setOnClickListener(createCompassClickListener(cameraDispatcher));
+    return compassView;
+  }
+
+  protected ImageView initialiseAttributionView() {
+    ImageView attrView = new ImageView(this.getContext());
+    addView(attrView);
+    attrView.setTag("attrView");
+    attrView.getLayoutParams().width = LayoutParams.WRAP_CONTENT;
+    attrView.getLayoutParams().height = LayoutParams.WRAP_CONTENT;
+    attrView.setAdjustViewBounds(true);
+    attrView.setClickable(true);
+    attrView.setFocusable(true);
+    attrView.setContentDescription(getResources().getString(R.string.mapbox_attributionsIconContentDescription));
+    attrView.setImageDrawable(BitmapUtils.getDrawableFromRes(getContext(), R.drawable.mapbox_info_bg_selector));
+    // inject widgets with MapboxMap
+    attrView.setOnClickListener(attributionClickListener = new AttributionClickListener(getContext(), mapboxMap));
+    return attrView;
+  }
+
+  protected ImageView initialiseLogoView() {
+    ImageView logoView = new ImageView(this.getContext());
+    addView(logoView);
+    logoView.setTag("logoView");
+    logoView.getLayoutParams().width = LayoutParams.WRAP_CONTENT;
+    logoView.getLayoutParams().height = LayoutParams.WRAP_CONTENT;
+    logoView.setImageDrawable(BitmapUtils.getDrawableFromRes(getContext(), R.drawable.mapbox_logo_icon));
+    return logoView;
+  }
+
   private FocalPointChangeListener createFocalPointChangeListener() {
     return new FocalPointChangeListener() {
       @Override
@@ -230,7 +254,9 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
 
       @Override
       public void onCompassAnimationFinished() {
-        compassView.isAnimating(false);
+        if (compassView != null) {
+          compassView.isAnimating(false);
+        }
         cameraChangeDispatcher.onCameraIdle();
       }
     };
@@ -296,6 +322,7 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
       };
 
       addView(textureView, 0);
+      renderView = textureView;
     } else {
       MapboxGLSurfaceView glSurfaceView = new MapboxGLSurfaceView(getContext());
       glSurfaceView.setZOrderMediaOverlay(mapboxMapOptions.getRenderSurfaceOnTop());
@@ -308,6 +335,7 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
       };
 
       addView(glSurfaceView, 0);
+      renderView = glSurfaceView;
     }
 
     boolean crossSourceCollisions = mapboxMapOptions.getCrossSourceCollisions();
@@ -439,6 +467,18 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
   }
 
   /**
+   * Queue a runnable to be executed on the map renderer thread.
+   *
+   * @param runnable the runnable to queue
+   */
+  public void queueEvent(@NonNull Runnable runnable) {
+    if (mapRenderer == null) {
+      throw new IllegalStateException("Calling MapView#queueEvent before mapRenderer is created.");
+    }
+    mapRenderer.queueEvent(runnable);
+  }
+
+  /**
    * The maximum frame rate at which the map view is rendered,
    * but it can't excess the ability of device hardware.
    *
@@ -463,6 +503,20 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
   @UiThread
   public boolean isDestroyed() {
     return destroyed;
+  }
+
+  /**
+   * Returns the View used for rendering OpenGL.
+   * <p>
+   * The type of the returned view is either a GLSurfaceView or a TextureView.
+   * </p>
+   *
+   * @return the view used for rendering OpenGL
+   */
+  @NonNull
+  @UiThread
+  public View getRenderView() {
+    return renderView;
   }
 
   @Override
@@ -524,7 +578,13 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
     }
   }
 
-  private float getPixelRatio() {
+  /**
+   * Returns the map pixel ratio, by default it returns the device pixel ratio.
+   * Can be overwritten using {@link MapboxMapOptions#pixelRatio(float)}.
+   *
+   * @return the current map pixel ratio
+   */
+  public float getPixelRatio() {
     // check is user defined his own pixel ratio value
     float pixelRatio = mapboxMapOptions.getPixelRatio();
     if (pixelRatio == 0) {

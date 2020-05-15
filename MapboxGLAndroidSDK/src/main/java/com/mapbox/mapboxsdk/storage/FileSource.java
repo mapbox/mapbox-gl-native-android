@@ -6,10 +6,10 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.support.annotation.Keep;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.UiThread;
+import androidx.annotation.Keep;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
 import com.mapbox.mapboxsdk.MapStrictMode;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
@@ -261,10 +261,10 @@ public class FileSource {
 
   /**
    * Changes the path of the resources cache database.
-   * Note that the external storage setting needs to be activated in the manifest.
    * <p>
    * The callback reference is <b>strongly kept</b> throughout the process,
    * so it needs to be wrapped in a weak reference or released on the client side if necessary.
+   * </p>
    *
    * @param context  the context of the path
    * @param path     the new database path
@@ -280,10 +280,10 @@ public class FileSource {
 
   /**
    * Changes the path of the resources cache database.
-   * Note that the external storage setting needs to be activated in the manifest.
    * <p>
    * The callback reference is <b>strongly kept</b> throughout the process,
    * so it needs to be wrapped in a weak reference or released on the client side if necessary.
+   * </p>
    *
    * @param path     the new database path
    * @param callback the callback to obtain the result

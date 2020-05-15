@@ -19,6 +19,9 @@
     <string name="description_debug_mode">Debug Mode</string>
     <string name="description_offline">Offline Map example</string>
     <string name="description_region">Download an offline region.</string>
+    <string name="description_within">Usage of the within expression on a buffered geometry</string>
+    <string name="description_stretchable_image">Usage of the stretchable image as a background for text.</string>
+    <string name="description_image_in_label">Usage of the image in label.</string>
     <string name="description_update_metadata">Update metadata example</string>
     <string name="description_offline_region_delete">Delete region example</string>
     <string name="description_change_resources_cache_path">Change resources cache path example</string>
@@ -27,10 +30,12 @@
     <string name="description_polygon">Add a polygon to a map</string>
     <string name="description_scroll_by">Scroll with pixels in x,y direction</string>
     <string name="description_snapshot">Example to make a snapshot of the map</string>
+    <string name="description_snapshot_within">Example of snapshotter with within expression</string>
     <string name="description_doublemap">2 maps in a view hierarchy</string>
     <string name="description_dynamic_info_window_adapter">Learn how to create a dynamic custom InfoWindow</string>
     <string name="description_viewpager">Use SupportMapFragments in a ViewPager</string>
     <string name="description_runtime_style">Adopt the map style on the fly</string>
+    <string name="description_distance_style">Show POIs on a map with distance expression filter</string>
     <string name="description_gradient_line">Show a gradient line layer from a geojson source</string>
     <string name="description_data_driven_style">Use functions to change the map appearance</string>
     <string name="description_symbol_layer">Manipulate symbols at runtime</string>
@@ -60,7 +65,8 @@
     <string name="description_bottom_sheet">Show 2 MapView on screen with a bottom sheet</string>
     <string name="description_map_snapshotter">Show a static bitmap taken with the MapSnapshotter</string>
     <string name="description_map_snapshotter_reuse">Show how to reuse a MapSnapshotter instance</string>
-    <string name="description_map_snapshotter_marker">Show how to add a marker to a Snapshot</string>
+    <string name="description_map_snapshotter_bitmap_overlay">Show how to add a bitmap overlay to a Snapshot</string>
+    <string name="description_map_snapshotter_heatmap_layer">Show how to add a heatmap layer to a Snapshot</string>
     <string name="description_map_snapshotter_local_style">Show how to load a local style with a Snapshot</string>
     <string name="description_camera_animator">Use Android SDK Animators to animate camera position changes</string>
     <string name="description_symbol_generator">Use Android SDK Views as symbols</string>
@@ -80,6 +86,8 @@
     <string name="description_location_map_change">Change map\'s style while location is displayed</string>
     <string name="description_location_modes">Showcases location render and tracking modes</string>
     <string name="description_location_fragment">Uses LocationComponent in a Fragment</string>
+    <string name="description_location_basic_pulsing_circle">Display the LocationComponent\'s default pulsing circle</string>
+    <string name="description_location_customized_pulsing_circle">Display and customize the LocationComponent\'s pulsing circle</string>
     <string name="description_location_manual">Force location updates and don\'t rely on the engine</string>
     <string name="description_location_activation_builder">Use LocationComponentActivationOptions to set options</string>
     <string name="description_recyclerview_textureview">Show multiple TextureView MapViews as recyclerView items</string>

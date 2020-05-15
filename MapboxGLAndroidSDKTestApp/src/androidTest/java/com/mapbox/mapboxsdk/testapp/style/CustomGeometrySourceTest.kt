@@ -1,7 +1,7 @@
 package com.mapbox.mapboxsdk.testapp.style
 
-import android.support.test.espresso.Espresso.onView
-import android.support.test.espresso.matcher.ViewMatchers.isRoot
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import com.mapbox.mapboxsdk.style.sources.CustomGeometrySource.THREAD_POOL_LIMIT
 import com.mapbox.mapboxsdk.style.sources.CustomGeometrySource.THREAD_PREFIX
 import com.mapbox.mapboxsdk.testapp.action.MapboxMapAction.invoke
@@ -14,6 +14,7 @@ import com.mapbox.mapboxsdk.testapp.activity.style.GridSourceActivity.ID_GRID_LA
 import com.mapbox.mapboxsdk.testapp.activity.style.GridSourceActivity.ID_GRID_SOURCE
 import com.mapbox.mapboxsdk.testapp.utils.TestingAsyncUtils
 import org.junit.Assert
+import org.junit.Assert.*
 import org.junit.Test
 
 class CustomGeometrySourceTest : BaseTest() {
@@ -64,6 +65,46 @@ class CustomGeometrySourceTest : BaseTest() {
         Thread.getAllStackTraces().keys.filter {
           it.name.startsWith(THREAD_PREFIX)
         }.count() == THREAD_POOL_LIMIT)
+    }
+  }
+
+  @Test
+  fun sourceZoomDeltaTest() {
+    validateTestSetup()
+    invoke(mapboxMap) { uiController, mapboxMap ->
+      mapboxMap.prefetchZoomDelta = 3
+      mapboxMap.style!!.getSource(ID_GRID_SOURCE)!!.let {
+        assertNull(it.prefetchZoomDelta)
+        it.prefetchZoomDelta = 5
+        assertNotNull(it.prefetchZoomDelta)
+        assertEquals(5, it.prefetchZoomDelta!!)
+        it.prefetchZoomDelta = null
+        assertNull(it.prefetchZoomDelta)
+      }
+    }
+  }
+
+  @Test
+  fun isVolatileTest() {
+    validateTestSetup()
+    invoke(mapboxMap) { uiController, mapboxMap ->
+      mapboxMap.style!!.getSource(ID_GRID_SOURCE)!!.let {
+        assertFalse(it.isVolatile)
+        it.isVolatile = true
+        assertTrue(it.isVolatile)
+      }
+    }
+  }
+
+  @Test
+  fun minimumTileUpdateIntervalTest() {
+    validateTestSetup()
+    invoke(mapboxMap) { uiController, mapboxMap ->
+      mapboxMap.style!!.getSource(ID_GRID_SOURCE)!!.let {
+        assertEquals(0, it.minimumTileUpdateInterval)
+        it.minimumTileUpdateInterval = 1000
+        assertEquals(1000, it.minimumTileUpdateInterval)
+      }
     }
   }
 }

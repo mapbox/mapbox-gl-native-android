@@ -1,20 +1,21 @@
 package com.mapbox.mapboxsdk.testapp.maps.widgets;
 
-import android.support.test.espresso.UiController;
-import android.support.test.espresso.ViewAction;
 import android.view.View;
 
+import androidx.test.espresso.UiController;
+import androidx.test.espresso.ViewAction;
+
 import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.testapp.R;
 import com.mapbox.mapboxsdk.testapp.activity.EspressoTest;
 
 import org.hamcrest.Matcher;
 import org.junit.Test;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withTagValue;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
 public class LogoTest extends EspressoTest {
@@ -22,16 +23,16 @@ public class LogoTest extends EspressoTest {
   @Test
   public void testDefault() {
     validateTestSetup();
-    onView(withId(R.id.logoView)).check(matches(isDisplayed()));
+    onView(withTagValue(is("logoView"))).check(matches(isDisplayed()));
   }
 
   @Test
   public void testDisabled() {
     validateTestSetup();
 
-    onView(withId(R.id.logoView))
-      .perform(new DisableAction(mapboxMap))
-      .check(matches(not(isDisplayed())));
+    onView(withTagValue(is("logoView")))
+            .perform(new DisableAction(mapboxMap))
+            .check(matches(not(isDisplayed())));
   }
 
   private class DisableAction implements ViewAction {

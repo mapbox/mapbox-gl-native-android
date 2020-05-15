@@ -1,12 +1,13 @@
 package com.mapbox.mapboxsdk.testapp.activity.snapshot;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.snapshotter.MapSnapshot;
 import com.mapbox.mapboxsdk.snapshotter.MapSnapshotter;
 import com.mapbox.mapboxsdk.testapp.R;
@@ -48,7 +49,7 @@ public class MapSnapshotterLocalStyleActivity extends AppCompatActivity
             getApplicationContext(),
             new MapSnapshotter
               .Options(Math.min(container.getMeasuredWidth(), 1024), Math.min(container.getMeasuredHeight(), 1024))
-              .withStyleJson(styleJson)
+              .withStyleBuilder(new Style.Builder().fromJson(styleJson))
               .withCameraPosition(new CameraPosition.Builder().target(new LatLng(52.090737, 5.121420)).zoom(18).build())
           );
           mapSnapshotter.start(MapSnapshotterLocalStyleActivity.this, error -> Timber.e(error));

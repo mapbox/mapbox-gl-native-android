@@ -1,12 +1,12 @@
-// This file is generated. Edit android/platform/scripts/generate-style-code.js, then run `make android-style-code`.
+// This file is generated. Edit scripts/generate-style-code.js, then run `make style-code`.
 
 package com.mapbox.mapboxsdk.style.layers;
 
-import android.support.annotation.ColorInt;
-import android.support.annotation.Keep;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.UiThread;
+import androidx.annotation.ColorInt;
+import androidx.annotation.Keep;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
 
 import static com.mapbox.mapboxsdk.utils.ColorUtils.rgbaToColor;
 
@@ -189,6 +189,18 @@ public class LineLayer extends Layer {
   public PropertyValue<Float> getLineRoundLimit() {
     checkThread();
     return (PropertyValue<Float>) new PropertyValue("line-round-limit", nativeGetLineRoundLimit());
+  }
+
+  /**
+   * Get the LineSortKey property
+   *
+   * @return property wrapper value around Float
+   */
+  @NonNull
+  @SuppressWarnings("unchecked")
+  public PropertyValue<Float> getLineSortKey() {
+    checkThread();
+    return (PropertyValue<Float>) new PropertyValue("line-sort-key", nativeGetLineSortKey());
   }
 
   /**
@@ -561,6 +573,10 @@ public class LineLayer extends Layer {
   @NonNull
   @Keep
   private native Object nativeGetLineRoundLimit();
+
+  @NonNull
+  @Keep
+  private native Object nativeGetLineSortKey();
 
   @NonNull
   @Keep

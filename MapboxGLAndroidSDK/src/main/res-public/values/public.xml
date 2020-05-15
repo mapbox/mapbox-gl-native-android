@@ -28,9 +28,14 @@
     <public name="mapbox_cameraZoomMax" type="attr" />
     <public name="mapbox_cameraZoomMin" type="attr" />
 
+    <!--Pitch-->
+    <public name="mapbox_cameraPitchMax" type="attr" />
+    <public name="mapbox_cameraPitchMin" type="attr" />
+
     <!--Gestures-->
     <public name="mapbox_uiZoomGestures" type="attr" />
     <public name="mapbox_uiScrollGestures" type="attr" />
+    <public name="mapbox_uiHorizontalScrollGestures" type="attr" />
     <public name="mapbox_uiRotateGestures" type="attr" />
     <public name="mapbox_uiTiltGestures" type="attr" />
     <public name="mapbox_uiDoubleTapGestures" type="attr" />
@@ -159,5 +164,14 @@
     <!--LocationComponent position-->
     <public name="mapbox_layer_above" format="string" type="attr" />
     <public name="mapbox_layer_below" format="string" type="attr" />
+
+    <!-- Pulsing circle -->
+    <public name="mapbox_pulsingLocationCircleEnabled" format="boolean" type="attr" />
+    <public name="mapbox_pulsingLocationCircleFadeEnabled" format="boolean" type="attr" />
+    <public name="mapbox_pulsingLocationCircleColor" format="color" type="attr" />
+    <public name="mapbox_pulsingLocationCircleDuration" format="float" type="attr" />
+    <public name="mapbox_pulsingLocationCircleRadius" format="float" type="attr" />
+    <public name="mapbox_pulsingLocationCircleAlpha" format="float" type="attr" />
+    <public name="mapbox_pulsingLocationCircleInterpolator" format="string" type="attr" />
 
 </resources>

@@ -1,6 +1,6 @@
 package com.mapbox.mapboxsdk.location.utils
 
-import android.support.test.espresso.IdlingResource
+import androidx.test.espresso.IdlingResource
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.Style
 
@@ -33,7 +33,7 @@ class StyleChangeIdlingResource : IdlingResource {
 
   fun waitForStyle(mapboxMap: MapboxMap, styleUrl: String) {
     isIdle = false
-    mapboxMap.setStyle(Style.Builder().fromUrl(styleUrl)) {
+    mapboxMap.setStyle(Style.Builder().fromUri(styleUrl)) {
       setIdle()
     }
   }

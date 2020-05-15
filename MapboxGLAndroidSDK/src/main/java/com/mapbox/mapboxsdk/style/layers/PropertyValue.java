@@ -1,14 +1,16 @@
 package com.mapbox.mapboxsdk.style.layers;
 
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.google.gson.JsonArray;
 import com.mapbox.mapboxsdk.MapStrictMode;
 import com.mapbox.mapboxsdk.exceptions.ConversionException;
 import com.mapbox.mapboxsdk.log.Logger;
 import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.utils.ColorUtils;
+
+import java.util.Arrays;
 
 /**
  * Properties for Layer
@@ -123,5 +125,36 @@ public class PropertyValue<T> {
   @Override
   public String toString() {
     return String.format("%s: %s", name, value);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    PropertyValue<?> that = (PropertyValue<?>) o;
+
+    if (!name.equals(that.name)) {
+      return false;
+    }
+    if (value != null) {
+      if (value instanceof Object[]) {
+        return Arrays.deepEquals((Object[]) value, (Object[]) that.value);
+      }
+      return value.equals(that.value);
+    } else {
+      return that.value == null;
+    }
+  }
+
+  @Override
+  public int hashCode() {
+    int result = name.hashCode();
+    result = 31 * result + (value != null ? value.hashCode() : 0);
+    return result;
   }
 }

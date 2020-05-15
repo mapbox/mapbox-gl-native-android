@@ -1,8 +1,8 @@
 package com.mapbox.mapboxsdk.maps;
 
 import android.graphics.PointF;
-import android.support.annotation.FloatRange;
-import android.support.annotation.NonNull;
+import androidx.annotation.FloatRange;
+import androidx.annotation.NonNull;
 
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.constants.GeometryConstants;
@@ -93,6 +93,19 @@ public class Projection {
   @NonNull
   public LatLng fromScreenLocation(@NonNull PointF point) {
     return nativeMapView.latLngForPixel(point);
+  }
+
+
+  /**
+   * Returns the geographic locations that corresponds to screen locations.
+   * The screen locations are specified in screen pixels (not display pixels) relative to the
+   * top left of the map (not the top left of the whole screen).
+   *
+   * @param input  an array of input values representing screen coordinates
+   * @param output an array of output values representing geographic locations
+   */
+  public void fromScreenLocations(@NonNull double[] input, @NonNull double[] output) {
+    nativeMapView.latLngsForPixels(input, output);
   }
 
   /**
@@ -191,6 +204,19 @@ public class Projection {
   }
 
   /**
+   * Gets a projection of the viewing frustum for converting between screen coordinates and
+   * geo-latitude/longitude coordinate bounds.
+   * <p>
+   * This method ignores the content padding.
+   *
+   * @param bounds an array of 4 output values representing bounds(in the order of latNorth,
+   *               lonEast, latSouth, lonWest).
+   */
+  public void getVisibleCoordinateBounds(@NonNull double[] bounds) {
+    nativeMapView.getVisibleCoordinateBounds(bounds);
+  }
+
+  /**
    * Takes two {@link Point}s and finds the geographic bearing between them.
    *
    * @param latLng1 the first point used for calculating the bearing
@@ -261,6 +287,18 @@ public class Projection {
   @NonNull
   public PointF toScreenLocation(@NonNull LatLng location) {
     return nativeMapView.pixelForLatLng(location);
+  }
+
+  /**
+   * Returns a screen locations that corresponds to a geographical coordinates.
+   * The screen locations are in screen pixels (not display pixels) relative to the top left
+   * of the map (not of the whole screen).
+   *
+   * @param input  an array of input values representing geographic locations
+   * @param output an array of output values representing screen coordinates
+   */
+  public void toScreenLocations(@NonNull double[] input, @NonNull double[] output) {
+    nativeMapView.pixelsForLatLngs(input, output);
   }
 
   float getHeight() {

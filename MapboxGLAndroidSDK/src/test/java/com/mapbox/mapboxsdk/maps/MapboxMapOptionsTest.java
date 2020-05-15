@@ -122,6 +122,20 @@ public class MapboxMapOptionsTest {
   }
 
   @Test
+  public void testMinPitch() {
+    assertEquals(MapboxConstants.MINIMUM_PITCH, new MapboxMapOptions().getMinPitchPreference(), DELTA);
+    assertEquals(5.0f, new MapboxMapOptions().minPitchPreference(5.0f).getMinPitchPreference(), DELTA);
+    assertNotEquals(2.0f, new MapboxMapOptions().minPitchPreference(5.0f).getMinPitchPreference(), DELTA);
+  }
+
+  @Test
+  public void testMaxPitch() {
+    assertEquals(MapboxConstants.MAXIMUM_PITCH, new MapboxMapOptions().getMaxPitchPreference(), DELTA);
+    assertEquals(5.0f, new MapboxMapOptions().maxPitchPreference(5.0f).getMaxPitchPreference(), DELTA);
+    assertNotEquals(2.0f, new MapboxMapOptions().maxPitchPreference(5.0f).getMaxPitchPreference(), DELTA);
+  }
+
+  @Test
   public void testTiltGesturesEnabled() {
     assertTrue(new MapboxMapOptions().getTiltGesturesEnabled());
     assertTrue(new MapboxMapOptions().tiltGesturesEnabled(true).getTiltGesturesEnabled());
@@ -133,6 +147,13 @@ public class MapboxMapOptionsTest {
     assertTrue(new MapboxMapOptions().getScrollGesturesEnabled());
     assertTrue(new MapboxMapOptions().scrollGesturesEnabled(true).getScrollGesturesEnabled());
     assertFalse(new MapboxMapOptions().scrollGesturesEnabled(false).getScrollGesturesEnabled());
+  }
+
+  @Test
+  public void testHorizontalScrollGesturesEnabled() {
+    assertTrue(new MapboxMapOptions().getHorizontalScrollGesturesEnabled());
+    assertTrue(new MapboxMapOptions().horizontalScrollGesturesEnabled(true).getHorizontalScrollGesturesEnabled());
+    assertFalse(new MapboxMapOptions().horizontalScrollGesturesEnabled(false).getHorizontalScrollGesturesEnabled());
   }
 
   @Test

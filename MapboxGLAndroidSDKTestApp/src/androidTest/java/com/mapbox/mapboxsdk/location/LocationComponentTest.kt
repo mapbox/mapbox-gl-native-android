@@ -6,13 +6,13 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.RectF
 import android.location.Location
-import android.support.test.espresso.Espresso.onView
-import android.support.test.espresso.IdlingRegistry
-import android.support.test.espresso.UiController
-import android.support.test.espresso.assertion.ViewAssertions.matches
-import android.support.test.espresso.matcher.ViewMatchers.*
-import android.support.test.rule.GrantPermissionRule
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.UiController
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.rule.GrantPermissionRule
 import com.mapbox.geojson.Point
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.geometry.LatLng
@@ -382,6 +382,10 @@ class LocationComponentTest : EspressoTest() {
         uiController: UiController,
         context: Context
       ) {
+        val foregroundDrawable = BitmapUtils.getDrawableFromRes(context, R.drawable.ic_media_play)
+        foregroundDrawable?.let {
+          mapboxMap.addImageFromDrawable("custom-gps-bitmap", it)
+        }
         locationComponentActivationOptions = LocationComponentActivationOptions
                 .builder(context, style)
                 .useDefaultLocationEngine(false)
@@ -422,6 +426,10 @@ class LocationComponentTest : EspressoTest() {
         uiController: UiController,
         context: Context
       ) {
+        val foregroundDrawable = BitmapUtils.getDrawableFromRes(context, R.drawable.ic_media_play)
+        foregroundDrawable?.let {
+          mapboxMap.addImageFromDrawable("custom-gps-bitmap", it)
+        }
         locationComponentActivationOptions = LocationComponentActivationOptions
                 .builder(context, style)
                 .useDefaultLocationEngine(false)
@@ -1008,7 +1016,7 @@ class LocationComponentTest : EspressoTest() {
         component.forceLocationUpdate(location)
         TestingAsyncUtils.waitForLayer(uiController, mapView)
         uiController.loopMainThreadForAtLeast(MAX_ANIMATION_DURATION_MS) // Waiting for the animation to finish
-        assertEquals(92.0f, mapboxMap.querySourceFeatures(LOCATION_SOURCE)[0].getNumberProperty(PROPERTY_GPS_BEARING).toFloat(), 0.1f)
+        assertEquals(92.0f, mapboxMap.querySourceFeatures(LOCATION_SOURCE)[0].getNumberProperty(PROPERTY_GPS_BEARING).toFloat(), 0.5f)
       }
     }
 

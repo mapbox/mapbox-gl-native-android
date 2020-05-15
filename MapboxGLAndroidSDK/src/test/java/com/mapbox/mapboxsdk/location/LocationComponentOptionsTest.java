@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.mapbox.mapboxsdk.R;
 
 import org.junit.Before;
@@ -72,7 +72,7 @@ public class LocationComponentOptionsTest {
   public void passingBothLayerPositionOptions_throwsException() throws Exception {
     thrown.expect(IllegalArgumentException.class);
     thrown.expectMessage("You cannot set both layerAbove and layerBelow options."
-      + "Choose one or the other.");
+      + " Choose one or the other.");
     LocationComponentOptions.builder(context)
       .layerAbove("above")
       .layerBelow("below")

@@ -1,10 +1,10 @@
 package com.mapbox.mapboxsdk.style.layers;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
-class PaintPropertyValue<T> extends PropertyValue<T> {
+public class PaintPropertyValue<T> extends PropertyValue<T> {
 
-  PaintPropertyValue(@NonNull String name, T value) {
+  public PaintPropertyValue(@NonNull String name, T value) {
     super(name, value);
   }
 

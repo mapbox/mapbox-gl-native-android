@@ -2,7 +2,7 @@ package com.mapbox.mapboxsdk.geometry;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Contains the four points defining the four-sided polygon that is visible in a map's camera.
@@ -54,10 +54,10 @@ public class VisibleRegion implements Parcelable {
   /**
    * Creates a VisibleRegion given the four corners of the camera.
    *
-   * @param farLeft      A LatLng object containing the latitude and longitude of the near left corner of the region.
-   * @param farRight     A LatLng object containing the latitude and longitude of the near left corner of the region.
+   * @param farLeft      A LatLng object containing the latitude and longitude of the far left corner of the region.
+   * @param farRight     A LatLng object containing the latitude and longitude of the far right corner of the region.
    * @param nearLeft     A LatLng object containing the latitude and longitude of the near left corner of the region.
-   * @param nearRight    A LatLng object containing the latitude and longitude of the near left corner of the region.
+   * @param nearRight    A LatLng object containing the latitude and longitude of the near right corner of the region.
    * @param latLngBounds The smallest bounding box that includes the visible region defined in this class.
    */
   public VisibleRegion(LatLng farLeft, LatLng farRight, LatLng nearLeft, LatLng nearRight, LatLngBounds latLngBounds) {

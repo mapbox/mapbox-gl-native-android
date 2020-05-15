@@ -4,7 +4,6 @@ workflows:
   version: 2
   mapbox-gl-native-android:
     jobs:
-      - android-debug-arm-v7-buck
       - android-arm-template:
           name: android-debug-arm-v8
       - android-release:
@@ -172,6 +171,15 @@ commands:
               gcloud auth activate-service-account --key-file secret.json --project mapbox-gl-native-android
               rm secret.json
             fi
+  generate-api-javadoc:
+    steps:
+      - run:
+          name: Generate Maps SDK API javadoc and transfer to `/android-docs`
+          command: |
+            export VERSION_TAG=${CIRCLE_TAG}
+            export GITHUB_TOKEN=${DANGER_GITHUB_API_TOKEN}
+            export DOCS_REPO="android-docs"
+            bash scripts/trigger-maps-documentation-deploy-steps.sh
 
 jobs:
   # ------------------------------------------------------------------------------
@@ -278,19 +286,19 @@ jobs:
           name: Android nitpick
           command: make run-android-nitpick
       - run:
-          name: Trigger core benchmark run
-          command: |
-            if [ -n "${MOBILE_METRICS_TOKEN}" ]; then
-              if [[ $CIRCLE_BRANCH == master ]]; then
-                curl -u $MOBILE_METRICS_TOKEN -d build_parameters[CIRCLE_JOB]=android-core-benchmark https://circleci.com/api/v1.1/project/github/mapbox/mobile-metrics/tree/master
-              fi
-            fi
-      - run:
           name: Trigger android benchmark run
           command: |
             if [ -n "${MOBILE_METRICS_TOKEN}" ]; then
               if [[ $CIRCLE_BRANCH == master ]]; then
                 curl -u $MOBILE_METRICS_TOKEN -d build_parameters[CIRCLE_JOB]=android-benchmark https://circleci.com/api/v1.1/project/github/mapbox/mobile-metrics/tree/master
+              fi
+            fi
+      - run:
+          name: Trigger android binary size check
+          command: |
+            if [ -n "${MOBILE_METRICS_TOKEN}" ]; then
+              if [[ $CIRCLE_BRANCH == master ]]; then
+                curl -u ${MOBILE_METRICS_TOKEN}: -d build_parameters[CIRCLE_JOB]=android-binary-size-hydrogen https://circleci.com/api/v1.1/project/github/mapbox/mobile-metrics/tree/master
               fi
             fi
       - run:
@@ -318,23 +326,14 @@ jobs:
           command: make android-javadoc
       - save-dependencies: { gradle: true }
       - run:
-          name: gzip debugable .so files
+          name: archive debugable objects
           command: |
-            gzip MapboxGLAndroidSDK/build/intermediates/cmake/release/obj/arm64-v8a/libmapbox-gl.so && \
-            gzip MapboxGLAndroidSDK/build/intermediates/cmake/release/obj/armeabi-v7a/libmapbox-gl.so && \
-            gzip MapboxGLAndroidSDK/build/intermediates/cmake/release/obj/x86/libmapbox-gl.so && \
-            gzip MapboxGLAndroidSDK/build/intermediates/cmake/release/obj/x86_64/libmapbox-gl.so
+            cd MapboxGLAndroidSDK/build/intermediates/cmake/release && tar -zcvf debuggable-objects.tar.gz obj && cd -
       - store_artifacts:
           path: MapboxGLAndroidSDKTestApp/build/outputs/apk/release
           destination: .
       - store_artifacts:
-          path: MapboxGLAndroidSDK/build/intermediates/cmake/release/obj/arm64-v8a/libmapbox-gl.so.gz
-      - store_artifacts:
-          path: MapboxGLAndroidSDK/build/intermediates/cmake/release/obj/armeabi-v7a/libmapbox-gl.so.gz
-      - store_artifacts:
-          path: MapboxGLAndroidSDK/build/intermediates/cmake/release/obj/x86/libmapbox-gl.so.gz
-      - store_artifacts:
-          path: MapboxGLAndroidSDK/build/intermediates/cmake/release/obj/x86_64/libmapbox-gl.so.gz
+          path: MapboxGLAndroidSDK/build/intermediates/cmake/release/debuggable-objects.tar.gz
       - deploy:
           name: Publish to Bintray
           command: |
@@ -346,29 +345,4 @@ jobs:
                 make run-android-upload-to-artifactory
               fi
             fi
-
-  # ------------------------------------------------------------------------------
-  android-debug-arm-v7-buck:
-    docker:
-      - image: mbgl/android-ndk-r17c-buck:07c5ef2e71
-    working_directory: /src
-    environment:
-      LIBSYSCONFCPUS: 2
-      JOBS: 2
-      BUILDTYPE: Debug
-      ANDROID_NDK: /android/sdk/ndk-bundle
-    steps:
-      - checkout
-      - npm-install
-      - run:
-          name: Checkout submodules
-          command: |
-            git submodule update --init --recursive
-      - npm-install-vendor
-      - prepare-environment
-      - run:
-          name: Build Android library
-          command: |
-            cd vendor/mapbox-gl-native/misc/buck
-            buck build mapbox-gl-native:android-core
-  # ------------------------------------------------------------------------------
+      - generate-api-javadoc
