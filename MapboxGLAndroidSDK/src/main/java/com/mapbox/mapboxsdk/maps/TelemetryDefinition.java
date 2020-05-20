@@ -63,4 +63,11 @@ public interface TelemetryDefinition {
    * @param data performance event data
    */
   void onPerformanceEvent(Bundle data);
+
+  /**
+   * Specifies the URL used for API endpoint.
+   *
+   * @param apiBaseUri The base of our API endpoint
+   */
+  void setApiBaseUrl(String apiBaseUri);
 }

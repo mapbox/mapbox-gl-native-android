@@ -133,4 +133,9 @@ public class TelemetryImpl implements TelemetryDefinition {
     telemetry.push(MapEventFactory.buildPerformanceEvent(new PhoneState(appContext),
       UUID.randomUUID().toString(), data));
   }
+
+  @Override
+  public void setApiBaseUrl(String apiBaseUrl) {
+    telemetry.setBaseUrl(apiBaseUrl);
+  }
 }
