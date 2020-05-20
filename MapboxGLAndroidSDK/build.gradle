@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: "com.jaredsburrows.license"
 apply plugin: 'kotlin-android'
 apply from: "${rootDir}/gradle/native-build.gradle"
+apply plugin: 'com.mapbox.android.sdk.versions'
 
 dependencies {
     lintChecks project(":MapboxGLAndroidSDKLint")
@@ -13,7 +14,6 @@ dependencies {
     implementation dependenciesList.supportAnnotations
     implementation dependenciesList.supportFragmentV4
     implementation dependenciesList.okhttp3
-    implementation dependenciesList.soLoader
     testImplementation dependenciesList.junit
     testImplementation dependenciesList.mockito
     testImplementation dependenciesList.mockk

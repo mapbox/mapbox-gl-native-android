@@ -69,16 +69,10 @@ class LocationComponentCompassEngine implements CompassEngine, SensorEventListen
     this.sensorManager = sensorManager;
     compassSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
     if (compassSensor == null) {
-      if (isGyroscopeAvailable()) {
-        Logger.d(TAG, "Rotation vector sensor not supported on device, "
-                + "falling back to orientation.");
-        compassSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
-      } else {
-        Logger.d(TAG, "Rotation vector sensor not supported on device, "
-                        + "falling back to accelerometer and magnetic field.");
-        gravitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        magneticFieldSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-      }
+      Logger.d(TAG, "Rotation vector sensor not supported on device, "
+              + "falling back to accelerometer and magnetic field.");
+      gravitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+      magneticFieldSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
     }
   }
 
@@ -110,20 +104,15 @@ class LocationComponentCompassEngine implements CompassEngine, SensorEventListen
 
   @Override
   public void onSensorChanged(@NonNull SensorEvent event) {
-    // check when the last time the compass was updated, return if too soon.
-    long currentTime = SystemClock.elapsedRealtime();
-    if (currentTime < compassUpdateNextTimestamp) {
-      return;
-    }
     if (lastAccuracySensorStatus == SensorManager.SENSOR_STATUS_UNRELIABLE) {
       Logger.d(TAG, "Compass sensor is unreliable, device calibration is needed.");
-      return;
+      // Update the heading, even if the sensor is unreliable.
+      // This makes it possible to use a different indicator for the unreliable case,
+      // instead of just changing the RenderMode to NORMAL.
     }
     if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
       rotationVectorValue = getRotationVectorFromSensorEvent(event);
       updateOrientation();
-    } else if (event.sensor.getType() == Sensor.TYPE_ORIENTATION) {
-      notifyCompassChangeListeners((event.values[0] + 360) % 360);
     } else if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
       gravityValues = lowPassFilter(getRotationVectorFromSensorEvent(event), gravityValues);
       updateOrientation();
@@ -131,9 +120,6 @@ class LocationComponentCompassEngine implements CompassEngine, SensorEventListen
       magneticValues = lowPassFilter(getRotationVectorFromSensorEvent(event), magneticValues);
       updateOrientation();
     }
-
-    // Update the compassUpdateNextTimestamp
-    compassUpdateNextTimestamp = currentTime + LocationComponentConstants.COMPASS_UPDATE_RATE_MS;
   }
 
   @Override
@@ -146,12 +132,14 @@ class LocationComponentCompassEngine implements CompassEngine, SensorEventListen
     }
   }
 
-  private boolean isGyroscopeAvailable() {
-    return sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null;
-  }
-
   @SuppressWarnings("SuspiciousNameCombination")
   private void updateOrientation() {
+    // check when the last time the compass was updated, return if too soon.
+    long currentTime = SystemClock.elapsedRealtime();
+    if (currentTime < compassUpdateNextTimestamp) {
+      return;
+    }
+
     if (rotationVectorValue != null) {
       SensorManager.getRotationMatrixFromVector(rotationMatrix, rotationVectorValue);
     } else {
@@ -159,28 +147,28 @@ class LocationComponentCompassEngine implements CompassEngine, SensorEventListen
       SensorManager.getRotationMatrix(rotationMatrix, null, gravityValues, magneticValues);
     }
 
-    final int worldAxisForDeviceAxisX;
-    final int worldAxisForDeviceAxisY;
+    int worldAxisForDeviceAxisX;
+    int worldAxisForDeviceAxisY;
 
-    // Remap the axes as if the device screen was the instrument panel,
+    // Assume the device screen was parallel to the ground,
     // and adjust the rotation matrix for the device orientation.
     switch (windowManager.getDefaultDisplay().getRotation()) {
       case Surface.ROTATION_90:
-        worldAxisForDeviceAxisX = SensorManager.AXIS_Z;
+        worldAxisForDeviceAxisX = SensorManager.AXIS_Y;
         worldAxisForDeviceAxisY = SensorManager.AXIS_MINUS_X;
         break;
       case Surface.ROTATION_180:
         worldAxisForDeviceAxisX = SensorManager.AXIS_MINUS_X;
-        worldAxisForDeviceAxisY = SensorManager.AXIS_MINUS_Z;
+        worldAxisForDeviceAxisY = SensorManager.AXIS_MINUS_Y;
         break;
       case Surface.ROTATION_270:
-        worldAxisForDeviceAxisX = SensorManager.AXIS_MINUS_Z;
+        worldAxisForDeviceAxisX = SensorManager.AXIS_MINUS_Y;
         worldAxisForDeviceAxisY = SensorManager.AXIS_X;
         break;
       case Surface.ROTATION_0:
       default:
         worldAxisForDeviceAxisX = SensorManager.AXIS_X;
-        worldAxisForDeviceAxisY = SensorManager.AXIS_Z;
+        worldAxisForDeviceAxisY = SensorManager.AXIS_Y;
         break;
     }
 
@@ -192,8 +180,85 @@ class LocationComponentCompassEngine implements CompassEngine, SensorEventListen
     float[] orientation = new float[3];
     SensorManager.getOrientation(adjustedRotationMatrix, orientation);
 
+    if (orientation[1] < -Math.PI / 4) {
+      // The pitch is less than -45 degrees.
+      // Remap the axes as if the device screen was the instrument panel.
+      switch (windowManager.getDefaultDisplay().getRotation()) {
+        case Surface.ROTATION_90:
+          worldAxisForDeviceAxisX = SensorManager.AXIS_Z;
+          worldAxisForDeviceAxisY = SensorManager.AXIS_MINUS_X;
+          break;
+        case Surface.ROTATION_180:
+          worldAxisForDeviceAxisX = SensorManager.AXIS_MINUS_X;
+          worldAxisForDeviceAxisY = SensorManager.AXIS_MINUS_Z;
+          break;
+        case Surface.ROTATION_270:
+          worldAxisForDeviceAxisX = SensorManager.AXIS_MINUS_Z;
+          worldAxisForDeviceAxisY = SensorManager.AXIS_X;
+          break;
+        case Surface.ROTATION_0:
+        default:
+          worldAxisForDeviceAxisX = SensorManager.AXIS_X;
+          worldAxisForDeviceAxisY = SensorManager.AXIS_Z;
+          break;
+      }
+    } else if (orientation[1] > Math.PI / 4) {
+      // The pitch is larger than 45 degrees.
+      // Remap the axes as if the device screen was upside down and facing back.
+      switch (windowManager.getDefaultDisplay().getRotation()) {
+        case Surface.ROTATION_90:
+          worldAxisForDeviceAxisX = SensorManager.AXIS_MINUS_Z;
+          worldAxisForDeviceAxisY = SensorManager.AXIS_MINUS_X;
+          break;
+        case Surface.ROTATION_180:
+          worldAxisForDeviceAxisX = SensorManager.AXIS_MINUS_X;
+          worldAxisForDeviceAxisY = SensorManager.AXIS_Z;
+          break;
+        case Surface.ROTATION_270:
+          worldAxisForDeviceAxisX = SensorManager.AXIS_Z;
+          worldAxisForDeviceAxisY = SensorManager.AXIS_X;
+          break;
+        case Surface.ROTATION_0:
+        default:
+          worldAxisForDeviceAxisX = SensorManager.AXIS_X;
+          worldAxisForDeviceAxisY = SensorManager.AXIS_MINUS_Z;
+          break;
+      }
+    } else if (Math.abs(orientation[2]) > Math.PI / 2) {
+      // The roll is less than -90 degrees, or is larger than 90 degrees.
+      // Remap the axes as if the device screen was face down.
+      switch (windowManager.getDefaultDisplay().getRotation()) {
+        case Surface.ROTATION_90:
+          worldAxisForDeviceAxisX = SensorManager.AXIS_MINUS_Y;
+          worldAxisForDeviceAxisY = SensorManager.AXIS_MINUS_X;
+          break;
+        case Surface.ROTATION_180:
+          worldAxisForDeviceAxisX = SensorManager.AXIS_MINUS_X;
+          worldAxisForDeviceAxisY = SensorManager.AXIS_Y;
+          break;
+        case Surface.ROTATION_270:
+          worldAxisForDeviceAxisX = SensorManager.AXIS_Y;
+          worldAxisForDeviceAxisY = SensorManager.AXIS_X;
+          break;
+        case Surface.ROTATION_0:
+        default:
+          worldAxisForDeviceAxisX = SensorManager.AXIS_X;
+          worldAxisForDeviceAxisY = SensorManager.AXIS_MINUS_Y;
+          break;
+      }
+    }
+
+    SensorManager.remapCoordinateSystem(rotationMatrix, worldAxisForDeviceAxisX,
+      worldAxisForDeviceAxisY, adjustedRotationMatrix);
+
+    // Transform rotation matrix into azimuth/pitch/roll
+    SensorManager.getOrientation(adjustedRotationMatrix, orientation);
+
     // The x-axis is all we care about here.
     notifyCompassChangeListeners((float) Math.toDegrees(orientation[0]));
+
+    // Update the compassUpdateNextTimestamp
+    compassUpdateNextTimestamp = currentTime + LocationComponentConstants.COMPASS_UPDATE_RATE_MS;
   }
 
   private void notifyCompassChangeListeners(float heading) {

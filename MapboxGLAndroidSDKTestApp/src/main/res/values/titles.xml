@@ -32,6 +32,7 @@
     <string name="activity_minmax_zoom">Min/Max Zoom</string>
     <string name="activity_viewpager">ViewPager</string>
     <string name="activity_runtime_style">Runtime Style</string>
+    <string name="activity_distance_style">Distance Expression</string>
     <string name="activity_gradient_line">Gradient line layer</string>
     <string name="activity_data_driven_style">Data Driven Style</string>
     <string name="activity_circle_layer">Circle layer</string>
@@ -80,6 +81,8 @@
     <string name="activity_draggable_maker">Draggable marker</string>
     <string name="activity_location_map_change">Simple Location Activity</string>
     <string name="activity_location_modes">Location Modes Activity</string>
+    <string name="activity_basic_location_pulsing_circle">Basic Pulsing Circle Activity</string>
+    <string name="activity_customized_location_pulsing_circle">Customized Pulsing Circle Activity</string>
     <string name="activity_location_fragment">Location Fragment</string>
     <string name="activity_location_manual">Manual Location updates</string>
     <string name="activity_location_activation_builder">Build Location Activation</string>
@@ -91,4 +94,5 @@
     <string name="activity_region">Download region</string>
     <string name="activity_within">Within expression</string>
     <string name="activity_stretchable_image">Stretchable Image</string>
+    <string name="activity_image_in_label">Image In Label</string>
 </resources>

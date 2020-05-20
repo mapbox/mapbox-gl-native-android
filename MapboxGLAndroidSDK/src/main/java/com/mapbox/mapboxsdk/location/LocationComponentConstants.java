@@ -55,6 +55,8 @@ public final class LocationComponentConstants {
   static final String PROPERTY_FOREGROUND_STALE_ICON = "mapbox-property-foreground-stale-icon";
   static final String PROPERTY_BACKGROUND_STALE_ICON = "mapbox-property-background-stale-icon";
   static final String PROPERTY_BEARING_ICON = "mapbox-property-shadow-icon";
+  static final String PROPERTY_PULSING_RADIUS = "mapbox-property-pulsing-circle-radius";
+  static final String PROPERTY_PULSING_OPACITY = "mapbox-property-pulsing-circle-opacity";
 
   // Layers
 
@@ -83,6 +85,11 @@ public final class LocationComponentConstants {
    */
   public static final String BEARING_LAYER = "mapbox-location-bearing-layer";
 
+  /**
+   * Layer ID of the location pulsing circle.
+   */
+  public static final String PULSING_CIRCLE_LAYER = "mapbox-location-pulsing-circle-layer";
+
   // Icons
   static final String FOREGROUND_ICON = "mapbox-location-icon";
   static final String BACKGROUND_ICON = "mapbox-location-stroke-icon";
@@ -90,6 +97,7 @@ public final class LocationComponentConstants {
   static final String BACKGROUND_STALE_ICON = "mapbox-location-background-stale-icon";
   static final String SHADOW_ICON = "mapbox-location-shadow-icon";
   static final String BEARING_ICON = "mapbox-location-bearing-icon";
+  static final String BEARING_STALE_ICON = "mapbox-location-bearing-stale-icon";
 
   private LocationComponentConstants() {
     // Class should not be initialized
