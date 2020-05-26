@@ -35,7 +35,6 @@ final class LocationCameraController {
   private final Transform transform;
   private final OnCameraTrackingChangedListener internalCameraTrackingChangedListener;
   private LocationComponentOptions options;
-  private boolean adjustFocalPoint;
 
   private final MoveGestureDetector moveGestureDetector;
   private final OnCameraMoveInvalidateListener onCameraMoveInvalidateListener;
@@ -211,12 +210,6 @@ final class LocationCameraController {
     lastLocation = latLng;
     transform.moveCamera(mapboxMap, CameraUpdateFactory.newLatLng(latLng), null);
     onCameraMoveInvalidateListener.onInvalidateCameraMove();
-
-    if (adjustFocalPoint) {
-      PointF focalPoint = mapboxMap.getProjection().toScreenLocation(latLng);
-      mapboxMap.getUiSettings().setFocalPoint(focalPoint);
-      adjustFocalPoint = false;
-    }
   }
 
   private void setZoom(float zoom) {
@@ -313,7 +306,6 @@ final class LocationCameraController {
   private void adjustGesturesThresholds() {
     if (options.trackingGesturesManagement()) {
       if (isLocationTracking()) {
-        adjustFocalPoint = true;
         moveGestureDetector.setMoveThreshold(options.trackingInitialMoveThreshold());
       } else {
         moveGestureDetector.setMoveThreshold(0f);
