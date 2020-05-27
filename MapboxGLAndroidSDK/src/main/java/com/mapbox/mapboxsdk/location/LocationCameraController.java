@@ -76,6 +76,7 @@ final class LocationCameraController {
                            AndroidGesturesManager initialGesturesManager,
                            AndroidGesturesManager internalGesturesManager) {
     this.mapboxMap = mapboxMap;
+    mapboxMap.addOnCameraMoveListener(onCameraMoveListener);
     this.transform = transform;
     this.moveGestureDetector = moveGestureDetector;
     this.internalCameraTrackingChangedListener = internalCameraTrackingChangedListener;
@@ -352,7 +353,7 @@ final class LocationCameraController {
 
     @Override
     public void onCameraMove() {
-      if (isLocationTracking() && lastLocation != null) {
+      if (isLocationTracking() && lastLocation != null && options.trackingGesturesManagement()) {
         PointF focalPoint = mapboxMap.getProjection().toScreenLocation(lastLocation);
         mapboxMap.getUiSettings().setFocalPoint(focalPoint);
       }
