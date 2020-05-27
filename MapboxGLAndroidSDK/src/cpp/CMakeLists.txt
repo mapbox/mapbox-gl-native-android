@@ -200,13 +200,17 @@ target_compile_options(mapbox-gl
                                $<$<CONFIG:Release>:-fvisibility-inlines-hidden>)
 
 target_link_libraries(mapbox-gl
-                      PRIVATE $<$<CONFIG:Release>:-Oz>
+                      PRIVATE
+                              Mapbox::Base::jni.hpp
+                              mbgl-core
+                              mbgl-vendor-unique_resource
                               $<$<CONFIG:Release>:-Wl,--icf=all>
                               $<$<CONFIG:Release>:-Wl,--gc-sections>
                               $<$<CONFIG:Release>:-flto>
-                              $<$<CONFIG:Release>:-fuse-ld=gold>
-                              Mapbox::Base::jni.hpp
-                              mbgl-core
-                              mbgl-vendor-unique_resource)
+                              $<$<CONFIG:Release>:-fuse-ld=lld>
+                              $<$<CONFIG:Release>:-Wl,--lto-new-pass-manager>
+                              $<$<CONFIG:Release>:-Wl,--pack-dyn-relocs=android>
+                              $<$<CONFIG:Release>:-Wl,--lto-O3>)
+
 
 install(TARGETS mapbox-gl LIBRARY DESTINATION lib)
