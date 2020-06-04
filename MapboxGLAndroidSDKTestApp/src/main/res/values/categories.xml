@@ -18,4 +18,5 @@
     <string name="category_integration">_Integration</string>
     <string name="category_telemetry">Telemetry</string>
     <string name="category_turf">Turf</string>
+    <string name="category_render_view">Render View</string>
 </resources>

@@ -1181,6 +1181,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.FeatureOverviewActivity" />
         </activity>
+        <activity
+            android:name=".activity.glsurfaceview.CustomGLSurfaceViewActivity"
+            android:description="@string/description_custom_render_view"
+            android:exported="true"
+            android:label="@string/activity_custom_render_view">
+            <meta-data
+                android:name="@string/category"
+                android:value="@string/category_render_view" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.FeatureOverviewActivity" />
+        </activity>
         <!-- For Instrumentation tests -->
         <activity
             android:name=".activity.style.RuntimeStyleTimingTestActivity"

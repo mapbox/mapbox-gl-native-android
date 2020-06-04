@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -117,6 +118,15 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
   @UiThread
   public MapView(@NonNull Context context, @Nullable MapboxMapOptions options) {
     super(context);
+    initialize(context, options == null ? MapboxMapOptions.createFromAttributes(context) : options);
+  }
+
+  @UiThread
+  public MapView(@NonNull Context context, @Nullable MapboxMapOptions options, View renderView,
+                 MapRenderer mapRenderer) {
+    super(context);
+    this.renderView = renderView;
+    this.mapRenderer = mapRenderer;
     initialize(context, options == null ? MapboxMapOptions.createFromAttributes(context) : options);
   }
 
@@ -309,42 +319,51 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
 
   private void initialiseDrawingSurface(MapboxMapOptions options) {
     String localFontFamily = options.getLocalIdeographFontFamily();
-    if (options.getTextureMode()) {
-      TextureView textureView = new TextureView(getContext());
-      boolean translucentSurface = options.getTranslucentTextureSurface();
-      mapRenderer = new TextureViewMapRenderer(getContext(),
-        textureView, localFontFamily, translucentSurface) {
-        @Override
-        protected void onSurfaceCreated(GL10 gl, EGLConfig config) {
-          MapView.this.onSurfaceCreated();
-          super.onSurfaceCreated(gl, config);
-        }
-      };
 
-      addView(textureView, 0);
-      renderView = textureView;
+    if (renderView == null && mapRenderer == null) {
+      if (options.getTextureMode()) {
+        TextureView textureView = new TextureView(getContext());
+        boolean translucentSurface = options.getTranslucentTextureSurface();
+        mapRenderer = new TextureViewMapRenderer(getContext(),
+          textureView, localFontFamily, translucentSurface) {
+          @Override
+          protected void onSurfaceCreated(GL10 gl, EGLConfig config) {
+            MapView.this.onSurfaceCreated();
+            super.onSurfaceCreated(gl, config);
+          }
+        };
+        renderView = textureView;
+      } else {
+        MapboxGLSurfaceView glSurfaceView = new MapboxGLSurfaceView(getContext());
+        glSurfaceView.setZOrderMediaOverlay(mapboxMapOptions.getRenderSurfaceOnTop());
+        mapRenderer = new GLSurfaceViewMapRenderer(getContext(), glSurfaceView, localFontFamily) {
+          @Override
+          public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+            MapView.this.onSurfaceCreated();
+            super.onSurfaceCreated(gl, config);
+          }
+        };
+        renderView = glSurfaceView;
+      }
     } else {
-      MapboxGLSurfaceView glSurfaceView = new MapboxGLSurfaceView(getContext());
-      glSurfaceView.setZOrderMediaOverlay(mapboxMapOptions.getRenderSurfaceOnTop());
-      mapRenderer = new GLSurfaceViewMapRenderer(getContext(), glSurfaceView, localFontFamily) {
-        @Override
-        public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-          MapView.this.onSurfaceCreated();
-          super.onSurfaceCreated(gl, config);
-        }
-      };
-
-      addView(glSurfaceView, 0);
-      renderView = glSurfaceView;
+      // external provided surface
+      onSurfaceCreated();
+      onStart();
+      onResume();
     }
 
+    if (renderView == null || mapRenderer == null) {
+      throw new IllegalStateException("RenderView or MapRenderer is null");
+    }
+
+    addView(renderView, 0);
     boolean crossSourceCollisions = mapboxMapOptions.getCrossSourceCollisions();
     nativeMapView = new NativeMapView(
       getContext(), getPixelRatio(), crossSourceCollisions, this, mapChangeReceiver, mapRenderer
     );
   }
 
-  private void onSurfaceCreated() {
+  public void onSurfaceCreated() {
     post(new Runnable() {
       @Override
       public void run() {
