@@ -8,6 +8,7 @@
 #include "../conversion/transition_options.hpp"
 
 #include <mbgl/style/layer_impl.hpp>
+#include <mbgl/util/logging.hpp>
 
 namespace mbgl {
 namespace android {
@@ -43,433 +44,816 @@ namespace android {
 
     jni::Local<jni::Object<>> SymbolLayer::getSymbolPlacement(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getSymbolPlacement()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultSymbolPlacement()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getSymbolPlacement()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getSymbolSpacing(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getSymbolSpacing()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultSymbolSpacing()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getSymbolSpacing()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getSymbolAvoidEdges(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getSymbolAvoidEdges()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultSymbolAvoidEdges()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getSymbolAvoidEdges()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getSymbolSortKey(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getSymbolSortKey()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultSymbolSortKey()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getSymbolSortKey()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getSymbolZOrder(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getSymbolZOrder()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultSymbolZOrder()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getSymbolZOrder()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getIconAllowOverlap(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getIconAllowOverlap()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultIconAllowOverlap()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getIconAllowOverlap()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getIconIgnorePlacement(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getIconIgnorePlacement()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultIconIgnorePlacement()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getIconIgnorePlacement()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getIconOptional(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getIconOptional()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultIconOptional()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getIconOptional()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getIconRotationAlignment(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getIconRotationAlignment()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultIconRotationAlignment()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getIconRotationAlignment()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getIconSize(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getIconSize()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultIconSize()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getIconSize()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getIconTextFit(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getIconTextFit()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultIconTextFit()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getIconTextFit()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getIconTextFitPadding(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getIconTextFitPadding()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultIconTextFitPadding()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getIconTextFitPadding()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getIconImage(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getIconImage()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultIconImage()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getIconImage()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getIconRotate(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getIconRotate()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultIconRotate()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getIconRotate()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getIconPadding(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getIconPadding()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultIconPadding()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getIconPadding()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getIconKeepUpright(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getIconKeepUpright()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultIconKeepUpright()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getIconKeepUpright()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getIconOffset(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getIconOffset()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultIconOffset()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getIconOffset()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getIconAnchor(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getIconAnchor()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultIconAnchor()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getIconAnchor()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getIconPitchAlignment(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getIconPitchAlignment()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultIconPitchAlignment()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getIconPitchAlignment()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextPitchAlignment(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextPitchAlignment()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextPitchAlignment()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextPitchAlignment()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextRotationAlignment(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextRotationAlignment()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextRotationAlignment()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextRotationAlignment()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextField(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextField()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextField()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextField()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextFont(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextFont()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextFont()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextFont()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextSize(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextSize()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextSize()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextSize()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextMaxWidth(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextMaxWidth()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextMaxWidth()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextMaxWidth()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextLineHeight(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextLineHeight()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextLineHeight()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextLineHeight()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextLetterSpacing(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextLetterSpacing()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextLetterSpacing()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextLetterSpacing()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextJustify(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextJustify()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextJustify()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextJustify()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextRadialOffset(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextRadialOffset()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextRadialOffset()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextRadialOffset()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextVariableAnchor(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextVariableAnchor()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextVariableAnchor()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextVariableAnchor()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextAnchor(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextAnchor()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextAnchor()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextAnchor()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextMaxAngle(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextMaxAngle()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextMaxAngle()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextMaxAngle()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextWritingMode(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextWritingMode()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextWritingMode()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextWritingMode()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextRotate(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextRotate()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextRotate()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextRotate()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextPadding(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextPadding()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextPadding()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextPadding()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextKeepUpright(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextKeepUpright()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextKeepUpright()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextKeepUpright()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextTransform(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextTransform()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextTransform()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextTransform()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextOffset(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextOffset()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextOffset()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextOffset()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextAllowOverlap(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextAllowOverlap()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextAllowOverlap()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextAllowOverlap()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextIgnorePlacement(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextIgnorePlacement()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextIgnorePlacement()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextIgnorePlacement()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextOptional(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextOptional()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextOptional()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextOptional()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getIconOpacity(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getIconOpacity()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultIconOpacity()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getIconOpacity()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> SymbolLayer::getIconOpacityTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toSymbolLayer(layer).getIconOpacityTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toSymbolLayer(*layer.get()).getIconOpacityTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void SymbolLayer::setIconOpacityTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toSymbolLayer(layer).setIconOpacityTransition(options);
+        toSymbolLayer(*layer.get()).setIconOpacityTransition(options);
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getIconColor(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getIconColor()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultIconColor()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getIconColor()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> SymbolLayer::getIconColorTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toSymbolLayer(layer).getIconColorTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toSymbolLayer(*layer.get()).getIconColorTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void SymbolLayer::setIconColorTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toSymbolLayer(layer).setIconColorTransition(options);
+        toSymbolLayer(*layer.get()).setIconColorTransition(options);
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getIconHaloColor(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getIconHaloColor()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultIconHaloColor()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getIconHaloColor()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> SymbolLayer::getIconHaloColorTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toSymbolLayer(layer).getIconHaloColorTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toSymbolLayer(*layer.get()).getIconHaloColorTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void SymbolLayer::setIconHaloColorTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toSymbolLayer(layer).setIconHaloColorTransition(options);
+        toSymbolLayer(*layer.get()).setIconHaloColorTransition(options);
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getIconHaloWidth(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getIconHaloWidth()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultIconHaloWidth()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getIconHaloWidth()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> SymbolLayer::getIconHaloWidthTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toSymbolLayer(layer).getIconHaloWidthTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toSymbolLayer(*layer.get()).getIconHaloWidthTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void SymbolLayer::setIconHaloWidthTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toSymbolLayer(layer).setIconHaloWidthTransition(options);
+        toSymbolLayer(*layer.get()).setIconHaloWidthTransition(options);
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getIconHaloBlur(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getIconHaloBlur()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultIconHaloBlur()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getIconHaloBlur()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> SymbolLayer::getIconHaloBlurTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toSymbolLayer(layer).getIconHaloBlurTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toSymbolLayer(*layer.get()).getIconHaloBlurTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void SymbolLayer::setIconHaloBlurTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toSymbolLayer(layer).setIconHaloBlurTransition(options);
+        toSymbolLayer(*layer.get()).setIconHaloBlurTransition(options);
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getIconTranslate(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getIconTranslate()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultIconTranslate()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getIconTranslate()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> SymbolLayer::getIconTranslateTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toSymbolLayer(layer).getIconTranslateTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toSymbolLayer(*layer.get()).getIconTranslateTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void SymbolLayer::setIconTranslateTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toSymbolLayer(layer).setIconTranslateTransition(options);
+        toSymbolLayer(*layer.get()).setIconTranslateTransition(options);
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getIconTranslateAnchor(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getIconTranslateAnchor()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultIconTranslateAnchor()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getIconTranslateAnchor()));
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextOpacity(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextOpacity()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextOpacity()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextOpacity()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> SymbolLayer::getTextOpacityTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toSymbolLayer(layer).getTextOpacityTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toSymbolLayer(*layer.get()).getTextOpacityTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void SymbolLayer::setTextOpacityTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toSymbolLayer(layer).setTextOpacityTransition(options);
+        toSymbolLayer(*layer.get()).setTextOpacityTransition(options);
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextColor(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextColor()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextColor()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextColor()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> SymbolLayer::getTextColorTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toSymbolLayer(layer).getTextColorTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toSymbolLayer(*layer.get()).getTextColorTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void SymbolLayer::setTextColorTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toSymbolLayer(layer).setTextColorTransition(options);
+        toSymbolLayer(*layer.get()).setTextColorTransition(options);
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextHaloColor(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextHaloColor()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextHaloColor()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextHaloColor()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> SymbolLayer::getTextHaloColorTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toSymbolLayer(layer).getTextHaloColorTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toSymbolLayer(*layer.get()).getTextHaloColorTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void SymbolLayer::setTextHaloColorTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toSymbolLayer(layer).setTextHaloColorTransition(options);
+        toSymbolLayer(*layer.get()).setTextHaloColorTransition(options);
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextHaloWidth(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextHaloWidth()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextHaloWidth()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextHaloWidth()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> SymbolLayer::getTextHaloWidthTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toSymbolLayer(layer).getTextHaloWidthTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toSymbolLayer(*layer.get()).getTextHaloWidthTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void SymbolLayer::setTextHaloWidthTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toSymbolLayer(layer).setTextHaloWidthTransition(options);
+        toSymbolLayer(*layer.get()).setTextHaloWidthTransition(options);
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextHaloBlur(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextHaloBlur()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextHaloBlur()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextHaloBlur()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> SymbolLayer::getTextHaloBlurTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toSymbolLayer(layer).getTextHaloBlurTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toSymbolLayer(*layer.get()).getTextHaloBlurTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void SymbolLayer::setTextHaloBlurTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toSymbolLayer(layer).setTextHaloBlurTransition(options);
+        toSymbolLayer(*layer.get()).setTextHaloBlurTransition(options);
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextTranslate(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextTranslate()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextTranslate()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextTranslate()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> SymbolLayer::getTextTranslateTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toSymbolLayer(layer).getTextTranslateTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toSymbolLayer(*layer.get()).getTextTranslateTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void SymbolLayer::setTextTranslateTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toSymbolLayer(layer).setTextTranslateTransition(options);
+        toSymbolLayer(*layer.get()).setTextTranslateTransition(options);
     }
 
     jni::Local<jni::Object<>> SymbolLayer::getTextTranslateAnchor(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(layer).getTextTranslateAnchor()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::SymbolLayer::getDefaultTextTranslateAnchor()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toSymbolLayer(*layer.get()).getTextTranslateAnchor()));
     }
 
 

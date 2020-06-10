@@ -17,63 +17,68 @@ public:
 
     static constexpr auto Name() { return "com/mapbox/mapboxsdk/style/sources/Source"; };
 
-    static void registerNative(jni::JNIEnv&);
+    static void registerNative(jni::JNIEnv &);
 
-    static const jni::Object<Source>& peerForCoreSource(jni::JNIEnv&, mbgl::style::Source&);
-    static const jni::Object<Source>& peerForCoreSource(jni::JNIEnv&, mbgl::style::Source&, AndroidRendererFrontend&);
+    static const jni::Object<Source> &peerForCoreSource(jni::JNIEnv &, mbgl::style::Source &);
+
+    static const jni::Object<Source> &
+    peerForCoreSource(jni::JNIEnv &, mbgl::style::Source &, AndroidRendererFrontend &);
 
     /*
      * Called when a Java object is created for a core source that belongs to a map.
      */
-    Source(jni::JNIEnv&, mbgl::style::Source&, const jni::Object<Source>&, AndroidRendererFrontend*);
+    Source(jni::JNIEnv &, mbgl::style::Source &, const jni::Object<Source> &,
+           AndroidRendererFrontend *);
 
     /*
      * Called when a Java object is created for a new core source that does not belong to a map.
      */
-    Source(jni::JNIEnv&, std::unique_ptr<mbgl::style::Source>);
+    Source(jni::JNIEnv &, std::unique_ptr<mbgl::style::Source>);
 
     virtual ~Source();
 
-    virtual void addToMap(JNIEnv&, const jni::Object<Source>&, mbgl::Map&, AndroidRendererFrontend&);
+    virtual void
+    addToMap(JNIEnv &, const jni::Object<Source> &, mbgl::Map &, AndroidRendererFrontend &);
 
-    virtual bool removeFromMap(JNIEnv&, const jni::Object<Source>&, mbgl::Map&);
+    virtual bool removeFromMap(JNIEnv &, const jni::Object<Source> &, mbgl::Map &);
 
     void releaseJavaPeer();
 
-    jni::Local<jni::String> getId(jni::JNIEnv&);
+    jni::Local<jni::String> getId(jni::JNIEnv &);
 
-    jni::Local<jni::String> getAttribution(jni::JNIEnv&);
+    jni::Local<jni::String> getAttribution(jni::JNIEnv &);
 
-    void setPrefetchZoomDelta(jni::JNIEnv& env, jni::Integer& delta);
+    void setPrefetchZoomDelta(jni::JNIEnv &env, jni::Integer &delta);
 
-    jni::Local<jni::Integer> getPrefetchZoomDelta(jni::JNIEnv&);
+    jni::Local<jni::Integer> getPrefetchZoomDelta(jni::JNIEnv &);
 
-    void setMaxOverscaleFactorForParentTiles(jni::JNIEnv& env, jni::Integer& delta);
+    void setMaxOverscaleFactorForParentTiles(jni::JNIEnv &env, jni::Integer &delta);
 
-    jni::Local<jni::Integer> getMaxOverscaleFactorForParentTiles(jni::JNIEnv&);
+    jni::Local<jni::Integer> getMaxOverscaleFactorForParentTiles(jni::JNIEnv &);
 
-    void addToStyle(JNIEnv& env, const jni::Object<Source>& obj, mbgl::style::Style& style);
+    void addToStyle(JNIEnv &env, const jni::Object<Source> &obj, mbgl::style::Style &style);
 
-    jni::Local<jni::Boolean > isVolatile(JNIEnv&);
+    jni::Local<jni::Boolean> isVolatile(JNIEnv &);
 
-    void setVolatile(JNIEnv&, jni::Boolean&);
+    void setVolatile(JNIEnv &, jni::Boolean &);
 
-    void setMinimumTileUpdateInterval(JNIEnv&, jni::Long &);
+    void setMinimumTileUpdateInterval(JNIEnv &, jni::Long &);
 
-    jni::Local<jni::Long> getMinimumTileUpdateInterval(JNIEnv&);
+    jni::Local<jni::Long> getMinimumTileUpdateInterval(JNIEnv &);
 
 protected:
     // Set on newly created sources until added to the map.
     std::unique_ptr<mbgl::style::Source> ownedSource;
 
     // Raw pointer that is valid at all times.
-    mbgl::style::Source& source;
+    //mbgl::style::Source &source;
+    mapbox::base::WeakPtr<mbgl::style::Source> source;
 
     // Set when the source is added to a map.
     jni::Global<jni::Object<Source>> javaPeer;
 
     // RendererFrontend pointer is valid only when added to the map.
-    AndroidRendererFrontend* rendererFrontend { nullptr };
+    AndroidRendererFrontend *rendererFrontend{nullptr};
 };
 
 } // namespace android

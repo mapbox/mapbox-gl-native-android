@@ -8,6 +8,7 @@
 #include "../conversion/transition_options.hpp"
 
 #include <mbgl/style/layer_impl.hpp>
+#include <mbgl/util/logging.hpp>
 
 namespace mbgl {
 namespace android {
@@ -43,120 +44,214 @@ namespace android {
 
     jni::Local<jni::Object<>> FillExtrusionLayer::getFillExtrusionOpacity(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toFillExtrusionLayer(layer).getFillExtrusionOpacity()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::FillExtrusionLayer::getDefaultFillExtrusionOpacity()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toFillExtrusionLayer(*layer.get()).getFillExtrusionOpacity()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> FillExtrusionLayer::getFillExtrusionOpacityTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toFillExtrusionLayer(layer).getFillExtrusionOpacityTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toFillExtrusionLayer(*layer.get()).getFillExtrusionOpacityTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void FillExtrusionLayer::setFillExtrusionOpacityTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toFillExtrusionLayer(layer).setFillExtrusionOpacityTransition(options);
+        toFillExtrusionLayer(*layer.get()).setFillExtrusionOpacityTransition(options);
     }
 
     jni::Local<jni::Object<>> FillExtrusionLayer::getFillExtrusionColor(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toFillExtrusionLayer(layer).getFillExtrusionColor()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::FillExtrusionLayer::getDefaultFillExtrusionColor()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toFillExtrusionLayer(*layer.get()).getFillExtrusionColor()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> FillExtrusionLayer::getFillExtrusionColorTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toFillExtrusionLayer(layer).getFillExtrusionColorTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toFillExtrusionLayer(*layer.get()).getFillExtrusionColorTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void FillExtrusionLayer::setFillExtrusionColorTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toFillExtrusionLayer(layer).setFillExtrusionColorTransition(options);
+        toFillExtrusionLayer(*layer.get()).setFillExtrusionColorTransition(options);
     }
 
     jni::Local<jni::Object<>> FillExtrusionLayer::getFillExtrusionTranslate(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toFillExtrusionLayer(layer).getFillExtrusionTranslate()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::FillExtrusionLayer::getDefaultFillExtrusionTranslate()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toFillExtrusionLayer(*layer.get()).getFillExtrusionTranslate()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> FillExtrusionLayer::getFillExtrusionTranslateTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toFillExtrusionLayer(layer).getFillExtrusionTranslateTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toFillExtrusionLayer(*layer.get()).getFillExtrusionTranslateTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void FillExtrusionLayer::setFillExtrusionTranslateTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toFillExtrusionLayer(layer).setFillExtrusionTranslateTransition(options);
+        toFillExtrusionLayer(*layer.get()).setFillExtrusionTranslateTransition(options);
     }
 
     jni::Local<jni::Object<>> FillExtrusionLayer::getFillExtrusionTranslateAnchor(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toFillExtrusionLayer(layer).getFillExtrusionTranslateAnchor()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::FillExtrusionLayer::getDefaultFillExtrusionTranslateAnchor()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toFillExtrusionLayer(*layer.get()).getFillExtrusionTranslateAnchor()));
     }
 
     jni::Local<jni::Object<>> FillExtrusionLayer::getFillExtrusionPattern(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toFillExtrusionLayer(layer).getFillExtrusionPattern()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::FillExtrusionLayer::getDefaultFillExtrusionPattern()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toFillExtrusionLayer(*layer.get()).getFillExtrusionPattern()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> FillExtrusionLayer::getFillExtrusionPatternTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toFillExtrusionLayer(layer).getFillExtrusionPatternTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toFillExtrusionLayer(*layer.get()).getFillExtrusionPatternTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void FillExtrusionLayer::setFillExtrusionPatternTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toFillExtrusionLayer(layer).setFillExtrusionPatternTransition(options);
+        toFillExtrusionLayer(*layer.get()).setFillExtrusionPatternTransition(options);
     }
 
     jni::Local<jni::Object<>> FillExtrusionLayer::getFillExtrusionHeight(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toFillExtrusionLayer(layer).getFillExtrusionHeight()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::FillExtrusionLayer::getDefaultFillExtrusionHeight()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toFillExtrusionLayer(*layer.get()).getFillExtrusionHeight()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> FillExtrusionLayer::getFillExtrusionHeightTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toFillExtrusionLayer(layer).getFillExtrusionHeightTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toFillExtrusionLayer(*layer.get()).getFillExtrusionHeightTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void FillExtrusionLayer::setFillExtrusionHeightTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toFillExtrusionLayer(layer).setFillExtrusionHeightTransition(options);
+        toFillExtrusionLayer(*layer.get()).setFillExtrusionHeightTransition(options);
     }
 
     jni::Local<jni::Object<>> FillExtrusionLayer::getFillExtrusionBase(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toFillExtrusionLayer(layer).getFillExtrusionBase()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::FillExtrusionLayer::getDefaultFillExtrusionBase()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toFillExtrusionLayer(*layer.get()).getFillExtrusionBase()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> FillExtrusionLayer::getFillExtrusionBaseTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toFillExtrusionLayer(layer).getFillExtrusionBaseTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toFillExtrusionLayer(*layer.get()).getFillExtrusionBaseTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void FillExtrusionLayer::setFillExtrusionBaseTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toFillExtrusionLayer(layer).setFillExtrusionBaseTransition(options);
+        toFillExtrusionLayer(*layer.get()).setFillExtrusionBaseTransition(options);
     }
 
     jni::Local<jni::Object<>> FillExtrusionLayer::getFillExtrusionVerticalGradient(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toFillExtrusionLayer(layer).getFillExtrusionVerticalGradient()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::FillExtrusionLayer::getDefaultFillExtrusionVerticalGradient()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toFillExtrusionLayer(*layer.get()).getFillExtrusionVerticalGradient()));
     }
 
 

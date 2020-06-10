@@ -12,6 +12,7 @@
 #include "../conversion/transition_options.hpp"
 
 #include <mbgl/style/layer_impl.hpp>
+#include <mbgl/util/logging.hpp>
 
 namespace mbgl {
 namespace android {
@@ -57,15 +58,24 @@ namespace android {
 <% if (property.name != 'heatmap-color') { -%>
     jni::Local<jni::Object<>> <%- camelize(type) %>Layer::get<%- camelize(property.name) %>(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, to<%- camelize(type) %>Layer(layer).get<%- camelize(property.name) %>()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::<%- camelize(type) %>Layer::getDefault<%- camelize(property.name) %>()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, to<%- camelize(type) %>Layer(*layer.get()).get<%- camelize(property.name) %>()));
     }
 
 <% } else { -%>
     jni::Local<jni::Object<>> HeatmapLayer::getHeatmapColor(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        auto propertyValue =  to<%- camelize(type) %>Layer(layer).getHeatmapColor();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get heatmap color: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::<%- camelize(type) %>Layer::getDefault<%- camelize(property.name) %>()));
+        }
+        auto propertyValue =  to<%- camelize(type) %>Layer(*layer.get()).getHeatmapColor();
         if (propertyValue.isUndefined()) {
-            propertyValue =  to<%- camelize(type) %>Layer(layer).getDefaultHeatmapColor();
+            propertyValue =  to<%- camelize(type) %>Layer(*layer.get()).getDefaultHeatmapColor();
         }
         return std::move(*convert<jni::Local<jni::Object<>>>(env, propertyValue));
     }
@@ -74,15 +84,24 @@ namespace android {
 <% if (property.transition) { -%>
     jni::Local<jni::Object<TransitionOptions>> <%- camelize(type) %>Layer::get<%- camelize(property.name) %>Transition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = to<%- camelize(type) %>Layer(layer).get<%- camelize(property.name) %>Transition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = to<%- camelize(type) %>Layer(*layer.get()).get<%- camelize(property.name) %>Transition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void <%- camelize(type) %>Layer::set<%- camelize(property.name) %>Transition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        to<%- camelize(type) %>Layer(layer).set<%- camelize(property.name) %>Transition(options);
+        to<%- camelize(type) %>Layer(*layer.get()).set<%- camelize(property.name) %>Transition(options);
     }
 
 <% } -%>

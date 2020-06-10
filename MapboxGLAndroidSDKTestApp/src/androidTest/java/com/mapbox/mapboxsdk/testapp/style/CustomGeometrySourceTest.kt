@@ -15,12 +15,15 @@ import com.mapbox.mapboxsdk.testapp.activity.style.GridSourceActivity.ID_GRID_SO
 import com.mapbox.mapboxsdk.testapp.utils.TestingAsyncUtils
 import org.junit.Assert
 import org.junit.Assert.*
+import org.junit.Ignore
 import org.junit.Test
 
 class CustomGeometrySourceTest : BaseTest() {
 
   override fun getActivityClass(): Class<*> = GridSourceActivity::class.java
 
+  // TODO: Activate when PhantomReferences-based native memory management is implemented
+  @Ignore
   @Test
   fun sourceNotLeakingThreadsTest() {
     validateTestSetup()
@@ -35,6 +38,8 @@ class CustomGeometrySourceTest : BaseTest() {
       }.count() > THREAD_POOL_LIMIT)
   }
 
+  // TODO: Activate when PhantomReferences-based native memory management is implemented
+  @Ignore
   @Test
   fun threadsShutdownWhenSourceRemovedTest() {
     validateTestSetup()
@@ -50,6 +55,8 @@ class CustomGeometrySourceTest : BaseTest() {
     }
   }
 
+  // TODO: Activate when PhantomReferences-based native memory management is implemented
+  @Ignore
   @Test
   fun threadsRestartedWhenSourceReAddedTest() {
     validateTestSetup()

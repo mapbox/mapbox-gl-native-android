@@ -8,6 +8,7 @@
 #include "../conversion/transition_options.hpp"
 
 #include <mbgl/style/layer_impl.hpp>
+#include <mbgl/util/logging.hpp>
 
 namespace mbgl {
 namespace android {
@@ -43,120 +44,214 @@ namespace android {
 
     jni::Local<jni::Object<>> RasterLayer::getRasterOpacity(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toRasterLayer(layer).getRasterOpacity()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::RasterLayer::getDefaultRasterOpacity()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toRasterLayer(*layer.get()).getRasterOpacity()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> RasterLayer::getRasterOpacityTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toRasterLayer(layer).getRasterOpacityTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toRasterLayer(*layer.get()).getRasterOpacityTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void RasterLayer::setRasterOpacityTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toRasterLayer(layer).setRasterOpacityTransition(options);
+        toRasterLayer(*layer.get()).setRasterOpacityTransition(options);
     }
 
     jni::Local<jni::Object<>> RasterLayer::getRasterHueRotate(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toRasterLayer(layer).getRasterHueRotate()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::RasterLayer::getDefaultRasterHueRotate()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toRasterLayer(*layer.get()).getRasterHueRotate()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> RasterLayer::getRasterHueRotateTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toRasterLayer(layer).getRasterHueRotateTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toRasterLayer(*layer.get()).getRasterHueRotateTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void RasterLayer::setRasterHueRotateTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toRasterLayer(layer).setRasterHueRotateTransition(options);
+        toRasterLayer(*layer.get()).setRasterHueRotateTransition(options);
     }
 
     jni::Local<jni::Object<>> RasterLayer::getRasterBrightnessMin(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toRasterLayer(layer).getRasterBrightnessMin()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::RasterLayer::getDefaultRasterBrightnessMin()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toRasterLayer(*layer.get()).getRasterBrightnessMin()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> RasterLayer::getRasterBrightnessMinTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toRasterLayer(layer).getRasterBrightnessMinTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toRasterLayer(*layer.get()).getRasterBrightnessMinTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void RasterLayer::setRasterBrightnessMinTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toRasterLayer(layer).setRasterBrightnessMinTransition(options);
+        toRasterLayer(*layer.get()).setRasterBrightnessMinTransition(options);
     }
 
     jni::Local<jni::Object<>> RasterLayer::getRasterBrightnessMax(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toRasterLayer(layer).getRasterBrightnessMax()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::RasterLayer::getDefaultRasterBrightnessMax()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toRasterLayer(*layer.get()).getRasterBrightnessMax()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> RasterLayer::getRasterBrightnessMaxTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toRasterLayer(layer).getRasterBrightnessMaxTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toRasterLayer(*layer.get()).getRasterBrightnessMaxTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void RasterLayer::setRasterBrightnessMaxTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toRasterLayer(layer).setRasterBrightnessMaxTransition(options);
+        toRasterLayer(*layer.get()).setRasterBrightnessMaxTransition(options);
     }
 
     jni::Local<jni::Object<>> RasterLayer::getRasterSaturation(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toRasterLayer(layer).getRasterSaturation()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::RasterLayer::getDefaultRasterSaturation()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toRasterLayer(*layer.get()).getRasterSaturation()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> RasterLayer::getRasterSaturationTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toRasterLayer(layer).getRasterSaturationTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toRasterLayer(*layer.get()).getRasterSaturationTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void RasterLayer::setRasterSaturationTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toRasterLayer(layer).setRasterSaturationTransition(options);
+        toRasterLayer(*layer.get()).setRasterSaturationTransition(options);
     }
 
     jni::Local<jni::Object<>> RasterLayer::getRasterContrast(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toRasterLayer(layer).getRasterContrast()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::RasterLayer::getDefaultRasterContrast()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toRasterLayer(*layer.get()).getRasterContrast()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> RasterLayer::getRasterContrastTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toRasterLayer(layer).getRasterContrastTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toRasterLayer(*layer.get()).getRasterContrastTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void RasterLayer::setRasterContrastTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toRasterLayer(layer).setRasterContrastTransition(options);
+        toRasterLayer(*layer.get()).setRasterContrastTransition(options);
     }
 
     jni::Local<jni::Object<>> RasterLayer::getRasterResampling(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toRasterLayer(layer).getRasterResampling()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::RasterLayer::getDefaultRasterResampling()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toRasterLayer(*layer.get()).getRasterResampling()));
     }
 
     jni::Local<jni::Object<>> RasterLayer::getRasterFadeDuration(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toRasterLayer(layer).getRasterFadeDuration()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::RasterLayer::getDefaultRasterFadeDuration()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toRasterLayer(*layer.get()).getRasterFadeDuration()));
     }
 
 

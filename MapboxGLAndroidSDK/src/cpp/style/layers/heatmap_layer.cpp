@@ -8,6 +8,7 @@
 #include "../conversion/transition_options.hpp"
 
 #include <mbgl/style/layer_impl.hpp>
+#include <mbgl/util/logging.hpp>
 
 namespace mbgl {
 namespace android {
@@ -43,70 +44,121 @@ namespace android {
 
     jni::Local<jni::Object<>> HeatmapLayer::getHeatmapRadius(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toHeatmapLayer(layer).getHeatmapRadius()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::HeatmapLayer::getDefaultHeatmapRadius()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toHeatmapLayer(*layer.get()).getHeatmapRadius()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> HeatmapLayer::getHeatmapRadiusTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toHeatmapLayer(layer).getHeatmapRadiusTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toHeatmapLayer(*layer.get()).getHeatmapRadiusTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void HeatmapLayer::setHeatmapRadiusTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toHeatmapLayer(layer).setHeatmapRadiusTransition(options);
+        toHeatmapLayer(*layer.get()).setHeatmapRadiusTransition(options);
     }
 
     jni::Local<jni::Object<>> HeatmapLayer::getHeatmapWeight(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toHeatmapLayer(layer).getHeatmapWeight()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::HeatmapLayer::getDefaultHeatmapWeight()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toHeatmapLayer(*layer.get()).getHeatmapWeight()));
     }
 
     jni::Local<jni::Object<>> HeatmapLayer::getHeatmapIntensity(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toHeatmapLayer(layer).getHeatmapIntensity()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::HeatmapLayer::getDefaultHeatmapIntensity()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toHeatmapLayer(*layer.get()).getHeatmapIntensity()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> HeatmapLayer::getHeatmapIntensityTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toHeatmapLayer(layer).getHeatmapIntensityTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toHeatmapLayer(*layer.get()).getHeatmapIntensityTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void HeatmapLayer::setHeatmapIntensityTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toHeatmapLayer(layer).setHeatmapIntensityTransition(options);
+        toHeatmapLayer(*layer.get()).setHeatmapIntensityTransition(options);
     }
 
     jni::Local<jni::Object<>> HeatmapLayer::getHeatmapColor(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        auto propertyValue =  toHeatmapLayer(layer).getHeatmapColor();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting heatmap color: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::HeatmapLayer::getDefaultHeatmapColor()));
+        }
+        auto propertyValue =  toHeatmapLayer(*layer.get()).getHeatmapColor();
         if (propertyValue.isUndefined()) {
-            propertyValue =  toHeatmapLayer(layer).getDefaultHeatmapColor();
+            propertyValue =  toHeatmapLayer(*layer.get()).getDefaultHeatmapColor();
         }
         return std::move(*convert<jni::Local<jni::Object<>>>(env, propertyValue));
     }
 
     jni::Local<jni::Object<>> HeatmapLayer::getHeatmapOpacity(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toHeatmapLayer(layer).getHeatmapOpacity()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::HeatmapLayer::getDefaultHeatmapOpacity()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toHeatmapLayer(*layer.get()).getHeatmapOpacity()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> HeatmapLayer::getHeatmapOpacityTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toHeatmapLayer(layer).getHeatmapOpacityTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toHeatmapLayer(*layer.get()).getHeatmapOpacityTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void HeatmapLayer::setHeatmapOpacityTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toHeatmapLayer(layer).setHeatmapOpacityTransition(options);
+        toHeatmapLayer(*layer.get()).setHeatmapOpacityTransition(options);
     }
 
 

@@ -8,6 +8,7 @@
 #include "../conversion/transition_options.hpp"
 
 #include <mbgl/style/layer_impl.hpp>
+#include <mbgl/util/logging.hpp>
 
 namespace mbgl {
 namespace android {
@@ -43,84 +44,150 @@ namespace android {
 
     jni::Local<jni::Object<>> HillshadeLayer::getHillshadeIlluminationDirection(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toHillshadeLayer(layer).getHillshadeIlluminationDirection()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::HillshadeLayer::getDefaultHillshadeIlluminationDirection()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toHillshadeLayer(*layer.get()).getHillshadeIlluminationDirection()));
     }
 
     jni::Local<jni::Object<>> HillshadeLayer::getHillshadeIlluminationAnchor(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toHillshadeLayer(layer).getHillshadeIlluminationAnchor()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::HillshadeLayer::getDefaultHillshadeIlluminationAnchor()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toHillshadeLayer(*layer.get()).getHillshadeIlluminationAnchor()));
     }
 
     jni::Local<jni::Object<>> HillshadeLayer::getHillshadeExaggeration(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toHillshadeLayer(layer).getHillshadeExaggeration()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::HillshadeLayer::getDefaultHillshadeExaggeration()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toHillshadeLayer(*layer.get()).getHillshadeExaggeration()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> HillshadeLayer::getHillshadeExaggerationTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toHillshadeLayer(layer).getHillshadeExaggerationTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toHillshadeLayer(*layer.get()).getHillshadeExaggerationTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void HillshadeLayer::setHillshadeExaggerationTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toHillshadeLayer(layer).setHillshadeExaggerationTransition(options);
+        toHillshadeLayer(*layer.get()).setHillshadeExaggerationTransition(options);
     }
 
     jni::Local<jni::Object<>> HillshadeLayer::getHillshadeShadowColor(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toHillshadeLayer(layer).getHillshadeShadowColor()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::HillshadeLayer::getDefaultHillshadeShadowColor()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toHillshadeLayer(*layer.get()).getHillshadeShadowColor()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> HillshadeLayer::getHillshadeShadowColorTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toHillshadeLayer(layer).getHillshadeShadowColorTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toHillshadeLayer(*layer.get()).getHillshadeShadowColorTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void HillshadeLayer::setHillshadeShadowColorTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toHillshadeLayer(layer).setHillshadeShadowColorTransition(options);
+        toHillshadeLayer(*layer.get()).setHillshadeShadowColorTransition(options);
     }
 
     jni::Local<jni::Object<>> HillshadeLayer::getHillshadeHighlightColor(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toHillshadeLayer(layer).getHillshadeHighlightColor()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::HillshadeLayer::getDefaultHillshadeHighlightColor()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toHillshadeLayer(*layer.get()).getHillshadeHighlightColor()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> HillshadeLayer::getHillshadeHighlightColorTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toHillshadeLayer(layer).getHillshadeHighlightColorTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toHillshadeLayer(*layer.get()).getHillshadeHighlightColorTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void HillshadeLayer::setHillshadeHighlightColorTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toHillshadeLayer(layer).setHillshadeHighlightColorTransition(options);
+        toHillshadeLayer(*layer.get()).setHillshadeHighlightColorTransition(options);
     }
 
     jni::Local<jni::Object<>> HillshadeLayer::getHillshadeAccentColor(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        return std::move(*convert<jni::Local<jni::Object<>>>(env, toHillshadeLayer(layer).getHillshadeAccentColor()));
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::HillshadeLayer::getDefaultHillshadeAccentColor()));
+        }
+        return std::move(*convert<jni::Local<jni::Object<>>>(env, toHillshadeLayer(*layer.get()).getHillshadeAccentColor()));
     }
 
     jni::Local<jni::Object<TransitionOptions>> HillshadeLayer::getHillshadeAccentColorTransition(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
-        mbgl::style::TransitionOptions options = toHillshadeLayer(layer).getHillshadeAccentColorTransition();
+        auto guard = layer.lock();
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
+        }
+        mbgl::style::TransitionOptions options = toHillshadeLayer(*layer.get()).getHillshadeAccentColorTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
     void HillshadeLayer::setHillshadeAccentColorTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+        if (!layer) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            return;
+        }
         mbgl::style::TransitionOptions options;
         options.duration.emplace(mbgl::Milliseconds(duration));
         options.delay.emplace(mbgl::Milliseconds(delay));
-        toHillshadeLayer(layer).setHillshadeAccentColorTransition(options);
+        toHillshadeLayer(*layer.get()).setHillshadeAccentColorTransition(options);
     }
 
 
