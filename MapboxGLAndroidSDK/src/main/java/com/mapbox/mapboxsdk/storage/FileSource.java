@@ -329,7 +329,6 @@ public class FileSource {
     fileSource.setResourceCachePath(path, new ResourcesCachePathChangeCallback() {
       @Override
       public void onSuccess(@NonNull String path) {
-        fileSource.deactivate();
         resourcesCachePathLoaderLock.lock();
         resourcesCachePath = path;
         resourcesCachePathLoaderLock.unlock();
@@ -342,7 +341,6 @@ public class FileSource {
         callback.onError(message);
       }
     });
-    fileSource.activate();
   }
 
   private static boolean isPathWritable(String path) {

@@ -55,9 +55,11 @@ class FileSourceStandaloneTest : AppCenter() {
 
     fileSourceTestUtils.changePath(fileSourceTestUtils.testPath)
     Assert.assertEquals(fileSourceTestUtils.testPath, FileSource.getResourcesCachePath(rule.activity))
+    Assert.assertFalse("FileSource should not be active", fileSource.isActivated)
 
     fileSourceTestUtils.changePath(fileSourceTestUtils.originalPath)
     Assert.assertEquals(fileSourceTestUtils.originalPath, FileSource.getResourcesCachePath(rule.activity))
+    Assert.assertFalse("FileSource should not be active", fileSource.isActivated)
   }
 
   @Test
