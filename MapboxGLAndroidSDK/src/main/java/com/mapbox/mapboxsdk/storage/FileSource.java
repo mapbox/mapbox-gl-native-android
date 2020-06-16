@@ -337,7 +337,6 @@ public class FileSource {
 
       @Override
       public void onError(@NonNull String message) {
-        fileSource.deactivate();
         callback.onError(message);
       }
     });

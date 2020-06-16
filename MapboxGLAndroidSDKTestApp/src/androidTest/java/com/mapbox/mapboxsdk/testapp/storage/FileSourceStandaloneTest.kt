@@ -95,18 +95,10 @@ class FileSourceStandaloneTest : AppCenter() {
     }
 
     if (!secondLatch.await(5, TimeUnit.SECONDS)) {
-      rule.runOnUiThread {
-        // if we fail to call a callback, the file source is not going to be deactivated
-        fileSource.deactivate()
-      }
       Assert.fail("Second attempt should fail.")
     }
 
     if (!firstLatch.await(5, TimeUnit.SECONDS)) {
-      rule.runOnUiThread {
-        // if we fail to call a callback, the file source is not going to be deactivated
-        fileSource.deactivate()
-      }
       Assert.fail("First attempt should succeed.")
     }
   }
