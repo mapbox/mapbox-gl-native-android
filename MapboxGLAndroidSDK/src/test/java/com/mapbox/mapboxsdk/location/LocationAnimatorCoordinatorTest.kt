@@ -14,8 +14,7 @@ import com.mapbox.mapboxsdk.location.modes.RenderMode
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.Projection
 import io.mockk.*
-import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertTrue
+import junit.framework.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -462,7 +461,7 @@ class LocationAnimatorCoordinatorTest {
     locationAnimatorCoordinator.feedNewLocation(Location(""), cameraPosition, true)
     locationAnimatorCoordinator.cancelAllAnimations()
 
-    assertTrue(locationAnimatorCoordinator.animatorArray[ANIMATOR_CAMERA_LATLNG] == null)
+    assertFalse(locationAnimatorCoordinator.animatorArray[ANIMATOR_CAMERA_LATLNG].isRunning)
   }
 
   @Test
@@ -475,7 +474,7 @@ class LocationAnimatorCoordinatorTest {
     )
     locationAnimatorCoordinator.cancelZoomAnimation()
 
-    assertTrue(locationAnimatorCoordinator.animatorArray[ANIMATOR_ZOOM] == null)
+    assertFalse(locationAnimatorCoordinator.animatorArray[ANIMATOR_ZOOM].isRunning)
   }
 
   @Test
@@ -489,7 +488,7 @@ class LocationAnimatorCoordinatorTest {
 
     locationAnimatorCoordinator.cancelTiltAnimation()
 
-    assertTrue(locationAnimatorCoordinator.animatorArray[ANIMATOR_TILT] == null)
+    assertFalse(locationAnimatorCoordinator.animatorArray[ANIMATOR_TILT].isRunning)
   }
 
   @Test
