@@ -610,6 +610,9 @@ public final class LocationComponent {
                             @Nullable Double zoom, @Nullable Double bearing, @Nullable Double tilt,
                             @Nullable OnLocationCameraTransitionListener transitionListener) {
     checkActivationState();
+    if (!isEnabled) {
+      return;
+    }
     locationCameraController.setCameraMode(
       cameraMode, lastLocation, transitionDuration, zoom, bearing, tilt,
       new CameraTransitionListener(transitionListener));
