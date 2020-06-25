@@ -53,7 +53,7 @@ class LocationAnimatorCoordinatorTest {
     ))
   }
 
-  private fun configureAnimatorProvider() {
+  private fun configureAnimatorProvider(withMocks: Boolean = false) {
     // workaround https://github.com/mockk/mockk/issues/229#issuecomment-457816131
     registerInstanceFactory { AnimationsValueChangeListener<Float> {} }
     registerInstanceFactory { AnimationsValueChangeListener<LatLng> {} }
@@ -63,26 +63,26 @@ class LocationAnimatorCoordinatorTest {
     every {
       animatorProvider.floatAnimator(capture(floatsSlot), capture(listenerSlot), capture(maxFpsSlot))
     } answers {
-      MapboxFloatAnimator(floatsSlot.captured, listenerSlot.captured, maxFpsSlot.captured)
+      if (withMocks) mockk(relaxUnitFun = true) else MapboxFloatAnimator(floatsSlot.captured, listenerSlot.captured, maxFpsSlot.captured)
     }
 
     val latLngsSlot = slot<Array<LatLng>>()
     every {
       animatorProvider.latLngAnimator(capture(latLngsSlot), capture(listenerSlot), capture(maxFpsSlot))
     } answers {
-      MapboxLatLngAnimator(latLngsSlot.captured, listenerSlot.captured, maxFpsSlot.captured)
+      if (withMocks) mockk(relaxUnitFun = true) else MapboxLatLngAnimator(latLngsSlot.captured, listenerSlot.captured, maxFpsSlot.captured)
     }
 
     val callback = slot<MapboxMap.CancelableCallback>()
     every {
       animatorProvider.cameraAnimator(capture(floatsSlot), capture(listenerSlot), capture(callback))
     } answers {
-      MapboxCameraAnimatorAdapter(floatsSlot.captured, listenerSlot.captured, callback.captured)
+      if (withMocks) mockk(relaxUnitFun = true) else MapboxCameraAnimatorAdapter(floatsSlot.captured, listenerSlot.captured, callback.captured)
     }
     every {
       animatorProvider.cameraAnimator(capture(floatsSlot), capture(listenerSlot), null)
     } answers {
-      MapboxCameraAnimatorAdapter(floatsSlot.captured, listenerSlot.captured, null)
+      if (withMocks) mockk(relaxUnitFun = true) else MapboxCameraAnimatorAdapter(floatsSlot.captured, listenerSlot.captured, null)
     }
   }
 
@@ -458,14 +458,16 @@ class LocationAnimatorCoordinatorTest {
 
   @Test
   fun cancelAllAnimators() {
+    configureAnimatorProvider(withMocks = true)
     locationAnimatorCoordinator.feedNewLocation(Location(""), cameraPosition, true)
     locationAnimatorCoordinator.cancelAllAnimations()
 
-    assertFalse(locationAnimatorCoordinator.animatorArray[ANIMATOR_CAMERA_LATLNG].isRunning)
+    verify { locationAnimatorCoordinator.animatorArray[ANIMATOR_CAMERA_LATLNG].cancel() }
   }
 
   @Test
   fun cancelZoomAnimators() {
+    configureAnimatorProvider(withMocks = true)
     locationAnimatorCoordinator.feedNewZoomLevel(
       15.0,
       cameraPosition,
@@ -474,11 +476,12 @@ class LocationAnimatorCoordinatorTest {
     )
     locationAnimatorCoordinator.cancelZoomAnimation()
 
-    assertFalse(locationAnimatorCoordinator.animatorArray[ANIMATOR_ZOOM].isRunning)
+    verify { locationAnimatorCoordinator.animatorArray[ANIMATOR_ZOOM].cancel() }
   }
 
   @Test
   fun cancelTiltAnimation() {
+    configureAnimatorProvider(withMocks = true)
     locationAnimatorCoordinator.feedNewTilt(
       30.0,
       cameraPosition,
@@ -488,7 +491,7 @@ class LocationAnimatorCoordinatorTest {
 
     locationAnimatorCoordinator.cancelTiltAnimation()
 
-    assertFalse(locationAnimatorCoordinator.animatorArray[ANIMATOR_TILT].isRunning)
+    verify { locationAnimatorCoordinator.animatorArray[ANIMATOR_TILT].cancel() }
   }
 
   @Test
