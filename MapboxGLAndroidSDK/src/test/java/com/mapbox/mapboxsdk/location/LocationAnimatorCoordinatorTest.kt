@@ -464,6 +464,8 @@ class LocationAnimatorCoordinatorTest {
   @Test
   fun cancelAllAnimators() {
     locationAnimatorCoordinator.feedNewLocation(Location(""), cameraPosition, true)
+    assertTrue(locationAnimatorCoordinator.animatorArray[ANIMATOR_CAMERA_LATLNG].isStarted)
+
     locationAnimatorCoordinator.cancelAllAnimations()
 
     assertFalse(locationAnimatorCoordinator.animatorArray[ANIMATOR_CAMERA_LATLNG].isStarted)
@@ -477,6 +479,8 @@ class LocationAnimatorCoordinatorTest {
       DEFAULT_TRACKING_ZOOM_ANIM_DURATION,
       null
     )
+    assertTrue(locationAnimatorCoordinator.animatorArray[ANIMATOR_ZOOM].isStarted)
+
     locationAnimatorCoordinator.cancelZoomAnimation()
 
     assertFalse(locationAnimatorCoordinator.animatorArray[ANIMATOR_ZOOM].isStarted)
@@ -490,6 +494,7 @@ class LocationAnimatorCoordinatorTest {
       DEFAULT_TRACKING_TILT_ANIM_DURATION,
       null
     )
+    assertTrue(locationAnimatorCoordinator.animatorArray[ANIMATOR_TILT].isStarted)
 
     locationAnimatorCoordinator.cancelTiltAnimation()
 
