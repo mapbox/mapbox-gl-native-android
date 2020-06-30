@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:id="@id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        mapbox:mapbox_cameraTargetLat="60.1699"
+        mapbox:mapbox_cameraTargetLng="24.9384"
+        mapbox:mapbox_cameraZoom="9"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/log_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="8sp"
+            tools:text="Log text container" />
+
+    </FrameLayout>
+
+    <FrameLayout android:layout_width="match_parent" android:layout_height="64dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/primary"
+        android:id="@+id/bottom"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <TextView
+            android:id="@+id/download_status"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Not downloading"
+            android:textColor="@color/white"
+            android:textSize="16sp"/>
+
+    </FrameLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/bottom"
+        android:background="@color/primary"
+        app:layout_constraintBottom_toBottomOf="@id/bottom"
+        app:layout_constraintBottom_toTopOf="@id/bottom"
+        android:src="@drawable/ic_play_arrow_black_24dp"
+        android:tint="@android:color/white"
+        android:layout_marginBottom="64dp"
+        app:backgroundTint="@color/primary"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

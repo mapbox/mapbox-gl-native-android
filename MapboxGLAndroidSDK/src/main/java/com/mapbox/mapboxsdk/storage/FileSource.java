@@ -293,7 +293,12 @@ public class FileSource {
     final Context applicationContext = Mapbox.getApplicationContext();
     final FileSource fileSource = FileSource.getInstance(applicationContext);
 
-    if (path.equals(getResourcesCachePath(applicationContext))) {
+    if (fileSource.isActivated()) {
+      String fileSourceActivatedMessage = "Cannot set path, file source is activated."
+        + " Make sure that the map or a resources download is not running.";
+      Logger.w(TAG, fileSourceActivatedMessage);
+      callback.onError(fileSourceActivatedMessage);
+    } else if (path.equals(getResourcesCachePath(applicationContext))) {
       // no need to change the path
       callback.onSuccess(path);
     } else {
@@ -321,17 +326,10 @@ public class FileSource {
   private static void internalSetResourcesCachePath(@NonNull Context context, @NonNull String path,
                                                     @NonNull final ResourcesCachePathChangeCallback callback) {
     final FileSource fileSource = getInstance(context);
-    final boolean active = fileSource.isActivated();
-    if (!active) {
-      fileSource.activate();
-    }
-
     fileSource.setResourceCachePath(path, new ResourcesCachePathChangeCallback() {
       @Override
       public void onSuccess(@NonNull String path) {
-        if (!active) {
-          fileSource.deactivate();
-        }
+        fileSource.deactivate();
         resourcesCachePathLoaderLock.lock();
         resourcesCachePath = path;
         resourcesCachePathLoaderLock.unlock();
@@ -340,12 +338,11 @@ public class FileSource {
 
       @Override
       public void onError(@NonNull String message) {
-        if (!active) {
-          fileSource.deactivate();
-        }
+        fileSource.deactivate();
         callback.onError(message);
       }
     });
+    fileSource.activate();
   }
 
   private static boolean isPathWritable(String path) {

@@ -2,6 +2,7 @@ package com.mapbox.mapboxsdk.module.telemetry;
 
 import android.content.Context;
 import android.os.Bundle;
+
 import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;
 
@@ -15,7 +16,6 @@ import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
 import com.mapbox.mapboxsdk.maps.TelemetryDefinition;
 import com.mapbox.mapboxsdk.offline.OfflineRegionDefinition;
-import com.mapbox.mapboxsdk.offline.OfflineTilePyramidRegionDefinition;
 
 import java.util.UUID;
 
@@ -113,7 +113,7 @@ public class TelemetryImpl implements TelemetryDefinition {
   @Override
   public void onCreateOfflineRegion(@NonNull OfflineRegionDefinition offlineDefinition) {
     telemetry.push(MapEventFactory.buildOfflineDownloadStartEvent(new PhoneState(appContext),
-      offlineDefinition instanceof OfflineTilePyramidRegionDefinition ? "tileregion" : "shaperegion",
+      offlineDefinition.getType(),
       offlineDefinition.getMinZoom(),
       offlineDefinition.getMaxZoom(),
       offlineDefinition.getStyleURL())

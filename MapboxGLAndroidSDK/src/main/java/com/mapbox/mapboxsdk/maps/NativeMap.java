@@ -12,6 +12,7 @@ import com.mapbox.mapboxsdk.annotations.Polyline;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
+import com.mapbox.mapboxsdk.geometry.LatLngBoundsZoom;
 import com.mapbox.mapboxsdk.geometry.ProjectedMeters;
 import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.Layer;
@@ -64,6 +65,8 @@ interface NativeMap {
   void setLatLng(@NonNull LatLng latLng, long duration);
 
   LatLng getLatLng();
+
+  LatLngBoundsZoom getLatLngBoundsZoomFromCamera(@NonNull CameraPosition cameraPosition);
 
   void setLatLngBounds(@Nullable LatLngBounds latLngBounds);
 
