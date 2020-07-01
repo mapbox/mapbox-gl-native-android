@@ -284,9 +284,6 @@ final class LocationAnimatorCoordinator {
     bearings[0] = normalize(previousBearing);
     for (int i = 1; i < bearings.length; i++) {
       bearings[i] = shortestRotation(targetLocations[i - 1].getBearing(), bearings[i - 1]);
-      if ((bearings[i] - bearings[i - 1]) % 360 == 0) {
-        bearings[i] = bearings[i - 1];
-      }
     }
     return bearings;
   }
