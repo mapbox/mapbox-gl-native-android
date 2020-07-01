@@ -114,9 +114,9 @@ final class LocationAnimatorCoordinator {
     // replace the animation start with the camera's previous value
     latLngValues[0] = previousCameraLatLng;
     if (isGpsNorth) {
-      bearingValues = new Float[] {previousCameraBearing, 0f};
+      bearingValues = new Float[] {previousCameraBearing, shortestRotation(0f, previousCameraBearing)};
     } else {
-      bearingValues[0] = previousCameraBearing;
+      bearingValues = getBearingValues(previousCameraBearing, newLocations);
     }
     updateCameraAnimators(latLngValues, bearingValues);
 
@@ -284,6 +284,9 @@ final class LocationAnimatorCoordinator {
     bearings[0] = normalize(previousBearing);
     for (int i = 1; i < bearings.length; i++) {
       bearings[i] = shortestRotation(targetLocations[i - 1].getBearing(), bearings[i - 1]);
+      if ((bearings[i] - bearings[i - 1]) % 360 == 0) {
+        bearings[i] = bearings[i - 1];
+      }
     }
     return bearings;
   }
