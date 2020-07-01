@@ -376,30 +376,6 @@ class LocationAnimatorCoordinatorTest {
   }
 
   @Test
-  fun feedNewCompassBearing_bigValue_animatorValue() {
-    val bearing = 719f
-    locationAnimatorCoordinator.feedNewCompassBearing(bearing, cameraPosition)
-
-    val cameraBearingTarget = locationAnimatorCoordinator.animatorArray[ANIMATOR_CAMERA_COMPASS_BEARING]?.target as Float
-    assertEquals(-1f, cameraBearingTarget)
-
-    val layerBearingTarget = locationAnimatorCoordinator.animatorArray[ANIMATOR_LAYER_COMPASS_BEARING]?.target as Float
-    assertEquals(359f, layerBearingTarget)
-  }
-
-  @Test
-  fun feedNewCompassBearing_smallValue_animatorValue() {
-    val bearing = -719f
-    locationAnimatorCoordinator.feedNewCompassBearing(bearing, cameraPosition)
-
-    val cameraBearingTarget = locationAnimatorCoordinator.animatorArray[ANIMATOR_CAMERA_COMPASS_BEARING]?.target as Float
-    assertEquals(1f, cameraBearingTarget)
-
-    val layerBearingTarget = locationAnimatorCoordinator.animatorArray[ANIMATOR_LAYER_COMPASS_BEARING]?.target as Float
-    assertEquals(-359f, layerBearingTarget)
-  }
-
-  @Test
   fun feedNewAccuracyRadius_animatorsCreated() {
     locationAnimatorCoordinator.feedNewAccuracyRadius(150f, false)
 

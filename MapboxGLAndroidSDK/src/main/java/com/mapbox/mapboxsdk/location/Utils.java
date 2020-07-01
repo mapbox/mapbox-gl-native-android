@@ -33,16 +33,12 @@ public final class Utils {
    * @return the shortest degree of rotation possible
    */
   public static float shortestRotation(float heading, float previousHeading) {
-    heading %= 360;
-    previousHeading %= 360;
-
     double diff = previousHeading - heading;
     if (diff > 180.0f) {
       heading += 360.0f;
     } else if (diff < -180.0f) {
       heading -= 360.f;
     }
-
     return heading;
   }
 
