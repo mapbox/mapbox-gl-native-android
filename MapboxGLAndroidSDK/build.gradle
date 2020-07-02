@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: "com.jaredsburrows.license"
 apply plugin: 'kotlin-android'
-apply from: "../gradle/native-build.gradle"
+apply from: "${projectDir}/../gradle/native-build.gradle"
 apply plugin: 'com.mapbox.android.sdk.versions'
 
 dependencies {
@@ -96,10 +96,10 @@ configurations {
     all*.exclude group: 'commons-logging', module: 'commons-logging'
     all*.exclude group: 'commons-collections', module: 'commons-collections'
 }
-apply from: "../gradle/gradle-javadoc.gradle"
-apply from: "../gradle/gradle-checkstyle.gradle"
-apply from: "../gradle/gradle-dependencies-graph.gradle"
-apply from: "../gradle/gradle-update-vendor-modules.gradle"
-apply from: "../gradle/android-nitpick.gradle"
-apply from: "../gradle/gradle-bintray.gradle"
-apply from: "../gradle/jacoco-report.gradle"
+apply from: "${projectDir}/../gradle/gradle-javadoc.gradle"
+apply from: "${projectDir}/../gradle/gradle-checkstyle.gradle"
+apply from: "${projectDir}/../gradle/gradle-dependencies-graph.gradle"
+apply from: "${projectDir}/../gradle/gradle-update-vendor-modules.gradle"
+apply from: "${projectDir}/../gradle/android-nitpick.gradle"
+apply from: "${projectDir}/../gradle/gradle-bintray.gradle"
+apply from: "${projectDir}/../gradle/jacoco-report.gradle"
