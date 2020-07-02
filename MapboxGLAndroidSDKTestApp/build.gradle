@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply from: "${rootDir}/gradle/native-build.gradle"
+apply from: "../gradle/native-build.gradle"
 
 android {
     compileSdkVersion androidVersions.compileSdkVersion
@@ -82,12 +82,10 @@ dependencies {
     androidTestImplementation dependenciesList.appCenter
 }
 
-apply from: "${rootDir}/gradle/gradle-make.gradle"
-apply from: "${rootDir}/gradle/gradle-config.gradle"
-apply from: "${rootDir}/gradle/gradle-checkstyle.gradle"
-apply from: "${rootDir}/gradle/gradle-lint.gradle"
-
-
+apply from: "../gradle/gradle-make.gradle"
+apply from: "../gradle/gradle-config.gradle"
+apply from: "../gradle/gradle-checkstyle.gradle"
+apply from: "../gradle/gradle-lint.gradle"
 
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
