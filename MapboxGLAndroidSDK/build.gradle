@@ -86,10 +86,10 @@ configurations {
     all*.exclude group: 'commons-logging', module: 'commons-logging'
     all*.exclude group: 'commons-collections', module: 'commons-collections'
 }
-apply from: "${rootDir}/gradle/gradle-javadoc.gradle"
-apply from: "${rootDir}/gradle/gradle-checkstyle.gradle"
-apply from: "${rootDir}/gradle/gradle-dependencies-graph.gradle"
-apply from: "${rootDir}/gradle/gradle-update-vendor-modules.gradle"
-apply from: "${rootDir}/gradle/android-nitpick.gradle"
-apply from: "${rootDir}/gradle/gradle-bintray.gradle"
-apply from: "${rootDir}/gradle/jacoco-report.gradle"
+apply from: "${projectDir}/../gradle/gradle-javadoc.gradle"
+apply from: "${projectDir}/../gradle/gradle-checkstyle.gradle"
+apply from: "${projectDir}/../gradle/gradle-dependencies-graph.gradle"
+apply from: "${projectDir}/../gradle/gradle-update-vendor-modules.gradle"
+apply from: "${projectDir}/../gradle/android-nitpick.gradle"
+apply from: "${projectDir}/../gradle/gradle-bintray.gradle"
+apply from: "${projectDir}/../gradle/jacoco-report.gradle"
