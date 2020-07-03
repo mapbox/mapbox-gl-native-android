@@ -19,6 +19,7 @@ import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.exceptions.CalledFromWorkerThreadException;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
+import com.mapbox.mapboxsdk.geometry.LatLngBoundsZoom;
 import com.mapbox.mapboxsdk.geometry.ProjectedMeters;
 import com.mapbox.mapboxsdk.log.Logger;
 import com.mapbox.mapboxsdk.maps.renderer.MapRenderer;
@@ -208,6 +209,14 @@ final class NativeMapView implements NativeMap {
       return "";
     }
     return nativeGetStyleJson();
+  }
+
+  @Override
+  public LatLngBoundsZoom getLatLngBoundsZoomFromCamera(@NonNull CameraPosition cameraPosition) {
+    if (checkState("getLatLngBoundsZoomFromCamera")) {
+      return LatLngBoundsZoom.from(0, 0, 0);
+    }
+    return nativeGetLatLngBoundsZoomFromCamera(cameraPosition);
   }
 
   @Override
@@ -1183,6 +1192,10 @@ final class NativeMapView implements NativeMap {
   @NonNull
   @Keep
   private native String nativeGetStyleJson();
+
+  @Keep
+  @NonNull
+  private native LatLngBoundsZoom nativeGetLatLngBoundsZoomFromCamera(CameraPosition cameraPosition);
 
   @Keep
   private native void nativeSetLatLngBounds(LatLngBounds latLngBounds);

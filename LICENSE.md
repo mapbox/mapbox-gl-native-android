@@ -11,220 +11,231 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 ===========================================================================
 
-Mapbox GL uses portions of Android Arch-Common.  
+Mapbox Maps SDK for Android uses portions of Mapbox GL Native v1.7.0 and above.
+License: [Mapbox Terms of Service](https://mapbox.com/legal/tos)
+
+===========================================================================
+
+Mapbox Maps SDK for Android uses portions of Android Arch-Common.  
 URL: [https://developer.android.com/topic/libraries/architecture/index.html](https://developer.android.com/topic/libraries/architecture/index.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Android Arch-Runtime.  
+Mapbox Maps SDK for Android uses portions of Android Arch-Runtime.  
 URL: [https://developer.android.com/topic/libraries/architecture/index.html](https://developer.android.com/topic/libraries/architecture/index.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Android Lifecycle LiveData.  
+Mapbox Maps SDK for Android uses portions of Android Lifecycle LiveData.  
 URL: [https://developer.android.com/topic/libraries/architecture/index.html](https://developer.android.com/topic/libraries/architecture/index.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Android Lifecycle LiveData Core.  
+Mapbox Maps SDK for Android uses portions of Android Lifecycle LiveData Core.  
 URL: [https://developer.android.com/topic/libraries/architecture/index.html](https://developer.android.com/topic/libraries/architecture/index.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Android Lifecycle Runtime.  
+Mapbox Maps SDK for Android uses portions of Android Lifecycle Runtime.  
 URL: [https://developer.android.com/topic/libraries/architecture/index.html](https://developer.android.com/topic/libraries/architecture/index.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Android Lifecycle ViewModel.  
+Mapbox Maps SDK for Android uses portions of Android Lifecycle ViewModel.  
 URL: [https://developer.android.com/topic/libraries/architecture/index.html](https://developer.android.com/topic/libraries/architecture/index.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Android Lifecycle-Common.  
+Mapbox Maps SDK for Android uses portions of Android Lifecycle-Common.  
 URL: [https://developer.android.com/topic/libraries/architecture/index.html](https://developer.android.com/topic/libraries/architecture/index.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Android Support Library Annotations.  
+Mapbox Maps SDK for Android uses portions of Android Support Library Annotations.  
 URL: [http://developer.android.com/tools/extras/support-library.html](http://developer.android.com/tools/extras/support-library.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Android Support Library Async Layout Inflater.  
+Mapbox Maps SDK for Android uses portions of Android Support Library Async Layout Inflater.  
 URL: [http://developer.android.com/tools/extras/support-library.html](http://developer.android.com/tools/extras/support-library.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Android Support Library collections.  
+Mapbox Maps SDK for Android uses portions of Android Support Library collections.  
 URL: [http://developer.android.com/tools/extras/support-library.html](http://developer.android.com/tools/extras/support-library.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Android Support Library compat.  
+Mapbox Maps SDK for Android uses portions of Android Support Library compat.  
 URL: [http://developer.android.com/tools/extras/support-library.html](http://developer.android.com/tools/extras/support-library.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Android Support Library Coordinator Layout.  
+Mapbox Maps SDK for Android uses portions of Android Support Library Coordinator Layout.  
 URL: [http://developer.android.com/tools/extras/support-library.html](http://developer.android.com/tools/extras/support-library.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Android Support Library core UI.  
+Mapbox Maps SDK for Android uses portions of Android Support Library core UI.  
 URL: [http://developer.android.com/tools/extras/support-library.html](http://developer.android.com/tools/extras/support-library.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Android Support Library core utils.  
+Mapbox Maps SDK for Android uses portions of Android Support Library core utils.  
 URL: [http://developer.android.com/tools/extras/support-library.html](http://developer.android.com/tools/extras/support-library.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Android Support Library Cursor Adapter.  
+Mapbox Maps SDK for Android uses portions of Android Support Library Cursor Adapter.  
 URL: [http://developer.android.com/tools/extras/support-library.html](http://developer.android.com/tools/extras/support-library.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Android Support Library Custom View.  
+Mapbox Maps SDK for Android uses portions of Android Support Library Custom View.  
 URL: [http://developer.android.com/tools/extras/support-library.html](http://developer.android.com/tools/extras/support-library.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Android Support Library Custom View.  
+Mapbox Maps SDK for Android uses portions of Android Support Library Custom View.  
 URL: [http://developer.android.com/tools/extras/support-library.html](http://developer.android.com/tools/extras/support-library.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Android Support Library Document File.  
+Mapbox Maps SDK for Android uses portions of Android Support Library Document File.  
 URL: [http://developer.android.com/tools/extras/support-library.html](http://developer.android.com/tools/extras/support-library.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Android Support Library Drawer Layout.  
+Mapbox Maps SDK for Android uses portions of Android Support Library Drawer Layout.  
 URL: [http://developer.android.com/tools/extras/support-library.html](http://developer.android.com/tools/extras/support-library.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Android Support Library fragment.  
+Mapbox Maps SDK for Android uses portions of Android Support Library fragment.  
 URL: [http://developer.android.com/tools/extras/support-library.html](http://developer.android.com/tools/extras/support-library.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Android Support Library Interpolators.  
+Mapbox Maps SDK for Android uses portions of Android Support Library Interpolators.  
 URL: [http://developer.android.com/tools/extras/support-library.html](http://developer.android.com/tools/extras/support-library.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Android Support Library loader.  
+Mapbox Maps SDK for Android uses portions of Android Support Library loader.  
 URL: [http://developer.android.com/tools/extras/support-library.html](http://developer.android.com/tools/extras/support-library.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Android Support Library Local Broadcast Manager.  
+Mapbox Maps SDK for Android uses portions of Android Support Library Local Broadcast Manager.  
 URL: [http://developer.android.com/tools/extras/support-library.html](http://developer.android.com/tools/extras/support-library.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Android Support Library Print.  
+Mapbox Maps SDK for Android uses portions of Android Support Library Print.  
 URL: [http://developer.android.com/tools/extras/support-library.html](http://developer.android.com/tools/extras/support-library.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Android Support Library Sliding Pane Layout.  
+Mapbox Maps SDK for Android uses portions of Android Support Library Sliding Pane Layout.  
 URL: [http://developer.android.com/tools/extras/support-library.html](http://developer.android.com/tools/extras/support-library.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Android Support Library View Pager.  
+Mapbox Maps SDK for Android uses portions of Android Support Library View Pager.  
 URL: [http://developer.android.com/tools/extras/support-library.html](http://developer.android.com/tools/extras/support-library.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Gson.  
+Mapbox Maps SDK for Android uses portions of Gson.  
 License: [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Mapbox Accounts SDK for Android.  
+Mapbox Maps SDK for Android uses portions of Mapbox Accounts SDK for Android.  
 URL: [https://github.com/mapbox/mapbox-accounts-android](https://github.com/mapbox/mapbox-accounts-android)  
 License: [Mapbox Terms of Service](https://www.mapbox.com/tos/)
 
 ===========================================================================
 
-Mapbox GL uses portions of Mapbox Android Core Library.  
+Mapbox Maps SDK for Android uses portions of Mapbox Android Core Library.  
 URL: [https://github.com/mapbox/mapbox-events-android](https://github.com/mapbox/mapbox-events-android)  
 License: [The MIT License](https://opensource.org/licenses/MIT)
 
 ===========================================================================
 
-Mapbox GL uses portions of Mapbox Android Gestures Library.  
+Mapbox Maps SDK for Android uses portions of Mapbox Android Gestures Library.  
 URL: [https://github.com/mapbox/mapbox-gestures-android](https://github.com/mapbox/mapbox-gestures-android)  
 License: [BSD](https://opensource.org/licenses/BSD-2-Clause)
 
 ===========================================================================
 
-Mapbox GL uses portions of Mapbox Android Telemetry Library.  
+Mapbox Maps SDK for Android uses portions of Mapbox Android Telemetry Library.  
 URL: [https://github.com/mapbox/mapbox-events-android](https://github.com/mapbox/mapbox-events-android)  
 License: [The MIT License](https://opensource.org/licenses/MIT)
 
 ===========================================================================
 
-Mapbox GL uses portions of Mapbox Java SDK.  
+Mapbox Maps SDK for Android uses portions of Mapbox Java SDK.  
 URL: [https://github.com/mapbox/mapbox-java](https://github.com/mapbox/mapbox-java)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Mapbox Java SDK.  
+Mapbox Maps SDK for Android uses portions of Mapbox Java SDK.  
 URL: [https://github.com/mapbox/mapbox-java](https://github.com/mapbox/mapbox-java)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of OkHttp.  
+Mapbox Maps SDK for Android uses portions of Mapbox Maps GL Core SDK for Android.  
+URL: [https://github.com/mapbox/mapbox-gl-native-android](https://github.com/mapbox/mapbox-gl-native-android)  
+License: [BSD](https://opensource.org/licenses/BSD-2-Clause)
+
+===========================================================================
+
+Mapbox Maps SDK for Android uses portions of OkHttp.  
 License: [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Okio.  
+Mapbox Maps SDK for Android uses portions of Okio.  
 License: [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of VersionedParcelable and friends.  
+Mapbox Maps SDK for Android uses portions of VersionedParcelable and friends.  
 URL: [http://developer.android.com/tools/extras/support-library.html](http://developer.android.com/tools/extras/support-library.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox GL uses portions of Gradle License Plugin.  
+Mapbox Maps SDK for Android uses portions of Gradle License Plugin.  
 URL: [https://github.com/jaredsburrows/gradle-license-plugin](https://github.com/jaredsburrows/gradle-license-plugin)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 

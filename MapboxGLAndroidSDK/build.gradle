@@ -1,7 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: "com.jaredsburrows.license"
 apply plugin: 'kotlin-android'
-apply from: "${projectDir}/../gradle/native-build.gradle"
 apply plugin: 'com.mapbox.android.sdk.versions'
 
 dependencies {
@@ -10,6 +9,7 @@ dependencies {
     api dependenciesList.mapboxJavaGeoJSON
     api dependenciesList.mapboxAndroidGestures
     api dependenciesList.mapboxAndroidAccounts
+    api dependenciesList.mapboxSdkCore
     implementation dependenciesList.mapboxJavaTurf
     implementation dependenciesList.supportAnnotations
     implementation dependenciesList.supportFragmentV4
@@ -35,16 +35,6 @@ android {
         buildConfigField "String", "MAPBOX_EVENTS_USER_AGENT", String.format("\"mapbox-maps-android/%s\"", project.VERSION_NAME)
         consumerProguardFiles 'proguard-rules.pro'
     }
-
-    // build native libraries
-    List nativeTargets = ["mapbox-gl"]
-    if (project.hasProperty("mapbox.with_test")) {
-        nativeTargets.add("mbgl-test")
-    }
-    if (project.hasProperty("mapbox.with_benchmark")) {
-        nativeTargets.add("mbgl-benchmark")
-    }
-    nativeBuild(nativeTargets)
 
     // avoid naming conflicts, force usage of prefix
     resourcePrefix 'mapbox_'
