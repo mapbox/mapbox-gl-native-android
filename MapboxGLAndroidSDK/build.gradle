@@ -9,7 +9,12 @@ dependencies {
     api dependenciesList.mapboxJavaGeoJSON
     api dependenciesList.mapboxAndroidGestures
     api dependenciesList.mapboxAndroidAccounts
-    api dependenciesList.mapboxSdkCore
+
+    if (!project.findProperty('buildFromSource')) {
+        api dependenciesList.mapboxSdkCore
+    } else {
+        api project(":MapboxGLAndroidSDKCore")
+    }
     implementation dependenciesList.mapboxJavaTurf
     implementation dependenciesList.supportAnnotations
     implementation dependenciesList.supportFragmentV4
