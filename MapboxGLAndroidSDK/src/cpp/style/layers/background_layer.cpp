@@ -46,7 +46,7 @@ namespace android {
         using namespace mbgl::android::conversion;
         auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer property: core layer is not available");
             return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::BackgroundLayer::getDefaultBackgroundColor()));
         }
         return std::move(*convert<jni::Local<jni::Object<>>>(env, toBackgroundLayer(*layer.get()).getBackgroundColor()));
@@ -56,16 +56,17 @@ namespace android {
         using namespace mbgl::android::conversion;
         auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
             return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
         }
         mbgl::style::TransitionOptions options = toBackgroundLayer(*layer.get()).getBackgroundColorTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void BackgroundLayer::setBackgroundColorTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+    void BackgroundLayer::setBackgroundColorTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+        auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
             return;
         }
         mbgl::style::TransitionOptions options;
@@ -78,7 +79,7 @@ namespace android {
         using namespace mbgl::android::conversion;
         auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer property: core layer is not available");
             return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::BackgroundLayer::getDefaultBackgroundPattern()));
         }
         return std::move(*convert<jni::Local<jni::Object<>>>(env, toBackgroundLayer(*layer.get()).getBackgroundPattern()));
@@ -88,16 +89,17 @@ namespace android {
         using namespace mbgl::android::conversion;
         auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
             return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
         }
         mbgl::style::TransitionOptions options = toBackgroundLayer(*layer.get()).getBackgroundPatternTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void BackgroundLayer::setBackgroundPatternTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+    void BackgroundLayer::setBackgroundPatternTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+        auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
             return;
         }
         mbgl::style::TransitionOptions options;
@@ -110,7 +112,7 @@ namespace android {
         using namespace mbgl::android::conversion;
         auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer property: core layer is not available");
             return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::BackgroundLayer::getDefaultBackgroundOpacity()));
         }
         return std::move(*convert<jni::Local<jni::Object<>>>(env, toBackgroundLayer(*layer.get()).getBackgroundOpacity()));
@@ -120,16 +122,17 @@ namespace android {
         using namespace mbgl::android::conversion;
         auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
             return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
         }
         mbgl::style::TransitionOptions options = toBackgroundLayer(*layer.get()).getBackgroundOpacityTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void BackgroundLayer::setBackgroundOpacityTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+    void BackgroundLayer::setBackgroundOpacityTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+        auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
             return;
         }
         mbgl::style::TransitionOptions options;

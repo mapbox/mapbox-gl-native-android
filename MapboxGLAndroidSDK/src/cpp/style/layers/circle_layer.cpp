@@ -46,7 +46,7 @@ namespace android {
         using namespace mbgl::android::conversion;
         auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer property: core layer is not available");
             return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::CircleLayer::getDefaultCircleSortKey()));
         }
         return std::move(*convert<jni::Local<jni::Object<>>>(env, toCircleLayer(*layer.get()).getCircleSortKey()));
@@ -56,7 +56,7 @@ namespace android {
         using namespace mbgl::android::conversion;
         auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer property: core layer is not available");
             return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::CircleLayer::getDefaultCircleRadius()));
         }
         return std::move(*convert<jni::Local<jni::Object<>>>(env, toCircleLayer(*layer.get()).getCircleRadius()));
@@ -66,16 +66,17 @@ namespace android {
         using namespace mbgl::android::conversion;
         auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
             return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
         }
         mbgl::style::TransitionOptions options = toCircleLayer(*layer.get()).getCircleRadiusTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void CircleLayer::setCircleRadiusTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+    void CircleLayer::setCircleRadiusTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+        auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
             return;
         }
         mbgl::style::TransitionOptions options;
@@ -88,7 +89,7 @@ namespace android {
         using namespace mbgl::android::conversion;
         auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer property: core layer is not available");
             return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::CircleLayer::getDefaultCircleColor()));
         }
         return std::move(*convert<jni::Local<jni::Object<>>>(env, toCircleLayer(*layer.get()).getCircleColor()));
@@ -98,16 +99,17 @@ namespace android {
         using namespace mbgl::android::conversion;
         auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
             return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
         }
         mbgl::style::TransitionOptions options = toCircleLayer(*layer.get()).getCircleColorTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void CircleLayer::setCircleColorTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+    void CircleLayer::setCircleColorTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+        auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
             return;
         }
         mbgl::style::TransitionOptions options;
@@ -120,7 +122,7 @@ namespace android {
         using namespace mbgl::android::conversion;
         auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer property: core layer is not available");
             return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::CircleLayer::getDefaultCircleBlur()));
         }
         return std::move(*convert<jni::Local<jni::Object<>>>(env, toCircleLayer(*layer.get()).getCircleBlur()));
@@ -130,16 +132,17 @@ namespace android {
         using namespace mbgl::android::conversion;
         auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
             return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
         }
         mbgl::style::TransitionOptions options = toCircleLayer(*layer.get()).getCircleBlurTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void CircleLayer::setCircleBlurTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+    void CircleLayer::setCircleBlurTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+        auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
             return;
         }
         mbgl::style::TransitionOptions options;
@@ -152,7 +155,7 @@ namespace android {
         using namespace mbgl::android::conversion;
         auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer property: core layer is not available");
             return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::CircleLayer::getDefaultCircleOpacity()));
         }
         return std::move(*convert<jni::Local<jni::Object<>>>(env, toCircleLayer(*layer.get()).getCircleOpacity()));
@@ -162,16 +165,17 @@ namespace android {
         using namespace mbgl::android::conversion;
         auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
             return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
         }
         mbgl::style::TransitionOptions options = toCircleLayer(*layer.get()).getCircleOpacityTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void CircleLayer::setCircleOpacityTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+    void CircleLayer::setCircleOpacityTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+        auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
             return;
         }
         mbgl::style::TransitionOptions options;
@@ -184,7 +188,7 @@ namespace android {
         using namespace mbgl::android::conversion;
         auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer property: core layer is not available");
             return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::CircleLayer::getDefaultCircleTranslate()));
         }
         return std::move(*convert<jni::Local<jni::Object<>>>(env, toCircleLayer(*layer.get()).getCircleTranslate()));
@@ -194,16 +198,17 @@ namespace android {
         using namespace mbgl::android::conversion;
         auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
             return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
         }
         mbgl::style::TransitionOptions options = toCircleLayer(*layer.get()).getCircleTranslateTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void CircleLayer::setCircleTranslateTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+    void CircleLayer::setCircleTranslateTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+        auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
             return;
         }
         mbgl::style::TransitionOptions options;
@@ -216,7 +221,7 @@ namespace android {
         using namespace mbgl::android::conversion;
         auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer property: core layer is not available");
             return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::CircleLayer::getDefaultCircleTranslateAnchor()));
         }
         return std::move(*convert<jni::Local<jni::Object<>>>(env, toCircleLayer(*layer.get()).getCircleTranslateAnchor()));
@@ -226,7 +231,7 @@ namespace android {
         using namespace mbgl::android::conversion;
         auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer property: core layer is not available");
             return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::CircleLayer::getDefaultCirclePitchScale()));
         }
         return std::move(*convert<jni::Local<jni::Object<>>>(env, toCircleLayer(*layer.get()).getCirclePitchScale()));
@@ -236,7 +241,7 @@ namespace android {
         using namespace mbgl::android::conversion;
         auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer property: core layer is not available");
             return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::CircleLayer::getDefaultCirclePitchAlignment()));
         }
         return std::move(*convert<jni::Local<jni::Object<>>>(env, toCircleLayer(*layer.get()).getCirclePitchAlignment()));
@@ -246,7 +251,7 @@ namespace android {
         using namespace mbgl::android::conversion;
         auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer property: core layer is not available");
             return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::CircleLayer::getDefaultCircleStrokeWidth()));
         }
         return std::move(*convert<jni::Local<jni::Object<>>>(env, toCircleLayer(*layer.get()).getCircleStrokeWidth()));
@@ -256,16 +261,17 @@ namespace android {
         using namespace mbgl::android::conversion;
         auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
             return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
         }
         mbgl::style::TransitionOptions options = toCircleLayer(*layer.get()).getCircleStrokeWidthTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void CircleLayer::setCircleStrokeWidthTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+    void CircleLayer::setCircleStrokeWidthTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+        auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
             return;
         }
         mbgl::style::TransitionOptions options;
@@ -278,7 +284,7 @@ namespace android {
         using namespace mbgl::android::conversion;
         auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer property: core layer is not available");
             return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::CircleLayer::getDefaultCircleStrokeColor()));
         }
         return std::move(*convert<jni::Local<jni::Object<>>>(env, toCircleLayer(*layer.get()).getCircleStrokeColor()));
@@ -288,16 +294,17 @@ namespace android {
         using namespace mbgl::android::conversion;
         auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
             return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
         }
         mbgl::style::TransitionOptions options = toCircleLayer(*layer.get()).getCircleStrokeColorTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void CircleLayer::setCircleStrokeColorTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+    void CircleLayer::setCircleStrokeColorTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+        auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
             return;
         }
         mbgl::style::TransitionOptions options;
@@ -310,7 +317,7 @@ namespace android {
         using namespace mbgl::android::conversion;
         auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer property: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer property: core layer is not available");
             return std::move(*convert<jni::Local<jni::Object<>>>(env, mbgl::style::CircleLayer::getDefaultCircleStrokeOpacity()));
         }
         return std::move(*convert<jni::Local<jni::Object<>>>(env, toCircleLayer(*layer.get()).getCircleStrokeOpacity()));
@@ -320,16 +327,17 @@ namespace android {
         using namespace mbgl::android::conversion;
         auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
             return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, mbgl::style::TransitionOptions{}));
         }
         mbgl::style::TransitionOptions options = toCircleLayer(*layer.get()).getCircleStrokeOpacityTransition();
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void CircleLayer::setCircleStrokeOpacityTransition(jni::JNIEnv&, jlong duration, jlong delay) {
+    void CircleLayer::setCircleStrokeOpacityTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+        auto guard = layer.lock();
         if (!layer) {
-            mbgl::Log::Error(mbgl::Event::JNI, "Error getting layer transition options: core layer is not available");
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
             return;
         }
         mbgl::style::TransitionOptions options;
