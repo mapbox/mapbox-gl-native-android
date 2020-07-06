@@ -87,7 +87,7 @@ Source::~Source() {
         ownedSource.reset();
     }
 
-    if (ownedSource.get() == nullptr && javaPeer.get() != nullptr) {
+    if (javaPeer.get() != nullptr) {
         // Manually clear the java peer
         android::UniqueEnv env = android::AttachEnv();
         static auto &javaClass = jni::Class<Source>::Singleton(*env);
