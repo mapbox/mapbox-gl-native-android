@@ -185,6 +185,11 @@ void Source::addToStyle(JNIEnv &env, const jni::Object<Source> &obj, mbgl::style
     // Add source to style and release ownership
     style.addSource(std::move(ownedSource));
 
+    auto guard = source.lock();
+    if (!source) {
+        throw std::runtime_error("Failed to add source style: " + ERR_MSG_DEAD_CORE_PEER);
+    }
+
     // Add peer to core source
     source->peer = this;
 
@@ -201,6 +206,11 @@ void Source::addToMap(JNIEnv &env, const jni::Object<Source> &obj, mbgl::Map &ma
 
     // Add source to map and release ownership
     map.getStyle().addSource(std::move(ownedSource));
+
+    auto guard = source.lock();
+    if (!source) {
+        throw std::runtime_error("Failed to add source to map: " + ERR_MSG_DEAD_CORE_PEER);
+    }
 
     // Add peer to core source
     source->peer = this;
