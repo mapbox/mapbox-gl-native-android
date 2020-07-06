@@ -137,6 +137,12 @@ namespace android {
                                            const jni::Object<geojson::FeatureCollection>& jFeatures) {
         using namespace mbgl::android::geojson;
 
+        auto guard = source.lock();
+        if (!source) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to set custom geometry source tile data: core source is not available");
+            return;
+        }
+
         // Convert the jni object
         auto geometry = geojson::FeatureCollection::convert(env, jFeatures);
 
@@ -147,12 +153,22 @@ namespace android {
     }
 
     void CustomGeometrySource::invalidateTile(jni::JNIEnv&, jni::jint z, jni::jint x, jni::jint y) {
-       source->as<mbgl::style::CustomGeometrySource>()->CustomGeometrySource::invalidateTile(CanonicalTileID(z, x, y));
+        auto guard = source.lock();
+        if (!source) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to invalidate custom geometry source tile: core source is not available");
+            return;
+        }
+        source->as<mbgl::style::CustomGeometrySource>()->CustomGeometrySource::invalidateTile(CanonicalTileID(z, x, y));
     }
 
     void CustomGeometrySource::invalidateBounds(jni::JNIEnv& env, const jni::Object<LatLngBounds>& jBounds) {
+        auto guard = source.lock();
+        if (!source) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to invalidate custom geometry source bounds: core source is not available");
+            return;
+        }
         auto bounds = LatLngBounds::getLatLngBounds(env, jBounds);
-       source->as<mbgl::style::CustomGeometrySource>()->CustomGeometrySource::invalidateRegion(bounds);
+        source->as<mbgl::style::CustomGeometrySource>()->CustomGeometrySource::invalidateRegion(bounds);
     }
 
     jni::Local<jni::Array<jni::Object<geojson::Feature>>> CustomGeometrySource::querySourceFeatures(jni::JNIEnv& env,
@@ -162,6 +178,11 @@ namespace android {
 
         std::vector<mbgl::Feature> features;
         if (rendererFrontend) {
+            auto guard = source.lock();
+            if (!source) {
+                mbgl::Log::Error(mbgl::Event::JNI, "Failed to query custom geometry source features: core source is not available");
+                return Feature::convert(env, features);
+            }
             features = rendererFrontend->querySourceFeatures(source->getID(), { {},  toFilter(env, jfilter) });
         }
         return Feature::convert(env, features);
