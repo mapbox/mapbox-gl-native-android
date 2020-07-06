@@ -80,11 +80,20 @@ void GeoJSONSource::setGeoJSONString(jni::JNIEnv& env, const jni::String& jStrin
     }
 
     void GeoJSONSource::setURL(jni::JNIEnv& env, const jni::String& url) {
-        // Update the core source
-       source->as<style::GeoJSONSource>()->setURL(jni::Make<std::string>(env, url));
+        auto guard = source.lock();
+        if (!source) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to set GeoJSON source URL: core source is not available.");
+            return;
+        }
+        source->as<style::GeoJSONSource>()->setURL(jni::Make<std::string>(env, url));
     }
 
     jni::Local<jni::String> GeoJSONSource::getURL(jni::JNIEnv& env) {
+        auto guard = source.lock();
+        if (!source) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get GeoJSON source URL: core source is not available.");
+            return jni::Local<jni::String>();
+        }
         optional<std::string> url =source->as<style::GeoJSONSource>()->getURL();
         return url ? jni::Make<jni::String>(env, *url) : jni::Local<jni::String>();
     }
@@ -96,6 +105,11 @@ void GeoJSONSource::setGeoJSONString(jni::JNIEnv& env, const jni::String& jStrin
 
         std::vector<mbgl::Feature> features;
         if (rendererFrontend) {
+            auto guard = source.lock();
+            if (!source) {
+                mbgl::Log::Error(mbgl::Event::JNI, "Failed to query GeoJSON features: core source is not available.");
+                return Feature::convert(env, features);
+            }
             features = rendererFrontend->querySourceFeatures(source->getID(),
                 { {}, toFilter(env, jfilter) });
         }
@@ -109,6 +123,14 @@ void GeoJSONSource::setGeoJSONString(jni::JNIEnv& env, const jni::String& jStrin
         if (rendererFrontend) {
             mbgl::Feature _feature = Feature::convert(env, feature);
             _feature.properties["cluster_id"] = static_cast<uint64_t>(_feature.properties["cluster_id"].get<double>());
+
+            auto guard = source.lock();
+            if (!source) {
+                mbgl::Log::Error(mbgl::Event::JNI, "Failed to get GeoJSON cluster children: core source is not available.");
+                const auto emptyFeatureExtension = FeatureExtensionValue{mbgl::FeatureCollection{}};
+                return Feature::convert(env, emptyFeatureExtension.get<mbgl::FeatureCollection>());
+            }
+
             const auto featureExtension = rendererFrontend->queryFeatureExtensions(source->getID(), _feature, "supercluster", "children", {});
             if (featureExtension.is<mbgl::FeatureCollection>()) {
                 return Feature::convert(env, featureExtension.get<mbgl::FeatureCollection>());
@@ -126,6 +148,14 @@ void GeoJSONSource::setGeoJSONString(jni::JNIEnv& env, const jni::String& jStrin
             _feature.properties["cluster_id"] = static_cast<uint64_t>(_feature.properties["cluster_id"].get<double>());
             const std::map<std::string, mbgl::Value> options = { {"limit", static_cast<uint64_t>(limit)},
                                                                     {"offset", static_cast<uint64_t>(offset)} };
+
+            auto guard = source.lock();
+            if (!source) {
+                mbgl::Log::Error(mbgl::Event::JNI, "Failed to get GeoJSON cluster leaves: core source is not available.");
+                const auto emptyFeatureExtension = FeatureExtensionValue{mbgl::FeatureCollection{}};
+                return Feature::convert(env, emptyFeatureExtension.get<mbgl::FeatureCollection>());
+            }
+
             auto featureExtension = rendererFrontend->queryFeatureExtensions(source->getID(), _feature, "supercluster", "leaves", options);
             if (featureExtension.is<mbgl::FeatureCollection>()) {
                 return Feature::convert(env, featureExtension.get<mbgl::FeatureCollection>());
@@ -141,6 +171,13 @@ void GeoJSONSource::setGeoJSONString(jni::JNIEnv& env, const jni::String& jStrin
         if (rendererFrontend) {
             mbgl::Feature _feature = Feature::convert(env, feature);
             _feature.properties["cluster_id"] = static_cast<uint64_t>(_feature.properties["cluster_id"].get<double>());
+
+            auto guard = source.lock();
+            if (!source) {
+                mbgl::Log::Error(mbgl::Event::JNI, "Failed to get GeoJSON cluster expansion zoom: core source is not available.");
+                return 0;
+            }
+
             auto featureExtension = rendererFrontend->queryFeatureExtensions(source->getID(), _feature, "supercluster", "expansion-zoom", {});
             if (featureExtension.is<mbgl::Value>()) {
                 auto value = featureExtension.get<mbgl::Value>();
@@ -177,6 +214,8 @@ void GeoJSONSource::setGeoJSONString(jni::JNIEnv& env, const jni::String& jStrin
                 *Scheduler::GetCurrent(), [this](std::shared_ptr<style::GeoJSONData> geoJSONData) {
                     // conversion from Java features to core ones finished
                     android::UniqueEnv _env = android::AttachEnv();
+
+                    auto guard = source.lock();
 
                     // Update the core source
                     if (!source) {
