@@ -85,7 +85,6 @@ Source::Source(jni::JNIEnv &, std::unique_ptr<mbgl::style::Source> coreSource)
 Source::~Source() {
     if (ownedSource) {
         ownedSource.reset();
-        ownedSource.release();
     }
 
     if (ownedSource.get() == nullptr && javaPeer.get() != nullptr) {
