@@ -28,6 +28,11 @@ namespace android {
     RasterSource::~RasterSource() = default;
 
     jni::Local<jni::String> RasterSource::getURL(jni::JNIEnv& env) {
+        auto guard = source.lock();
+        if (!source) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get raster source URL : core source is not available.");
+            return jni::Local<jni::String>();
+        }
         optional<std::string> url =source->as<mbgl::style::RasterSource>()->RasterSource::getURL();
         return url ? jni::Make<jni::String>(env, *url) : jni::Local<jni::String>();
     }

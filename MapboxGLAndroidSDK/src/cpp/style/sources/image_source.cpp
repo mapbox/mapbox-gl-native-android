@@ -29,20 +29,39 @@ namespace android {
     ImageSource::~ImageSource() = default;
 
     void ImageSource::setURL(jni::JNIEnv& env, const jni::String& url) {
-        // Update the core source
-       source->as<mbgl::style::ImageSource>()->ImageSource::setURL(jni::Make<std::string>(env, url));
+        auto guard = source.lock();
+        if (!source) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to set image source URL: core source is not available.");
+            return;
+        }
+        source->as<mbgl::style::ImageSource>()->ImageSource::setURL(jni::Make<std::string>(env, url));
     }
 
     jni::Local<jni::String> ImageSource::getURL(jni::JNIEnv& env) {
+        auto guard = source.lock();
+        if (!source) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get image source URL: core source is not available.");
+            return jni::Local<jni::String>();
+        }
         optional<std::string> url =source->as<mbgl::style::ImageSource>()->ImageSource::getURL();
         return url ? jni::Make<jni::String>(env, *url) : jni::Local<jni::String>();
     }
 
     void ImageSource::setImage(jni::JNIEnv& env, const jni::Object<Bitmap>& bitmap) {
+        auto guard = source.lock();
+        if (!source) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to set image source's image : core source is not available.");
+            return;
+        }
        source->as<mbgl::style::ImageSource>()->setImage(Bitmap::GetImage(env, bitmap));
     }
 
     void ImageSource::setCoordinates(jni::JNIEnv& env, const jni::Object<LatLngQuad>& coordinatesObject) {
+        auto guard = source.lock();
+        if (!source) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to set image source coordinates : core source is not available.");
+            return;
+        }
        source->as<mbgl::style::ImageSource>()->setCoordinates(
                 LatLngQuad::getLatLngArray(env, coordinatesObject));
     }
