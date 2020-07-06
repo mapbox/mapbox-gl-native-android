@@ -12,7 +12,7 @@
 namespace mbgl {
 namespace android {
 
-    RasterDEMSource::RasterDEMSource(jni::JNIEnv& env, const jni::String& sourceId, const jni::Object<>& urlOrTileSet, jni::jint tileSize)
+RasterDEMSource::RasterDEMSource(jni::JNIEnv& env, const jni::String& sourceId, const jni::Object<>& urlOrTileSet, jni::jint tileSize)
         : Source(
             env,
             std::make_unique<mbgl::style::RasterDEMSource>(
@@ -31,6 +31,11 @@ namespace android {
     RasterDEMSource::~RasterDEMSource() = default;
 
     jni::Local<jni::String> RasterDEMSource::getURL(jni::JNIEnv& env) {
+        auto guard = source.lock();
+        if (!source) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get RasterDEMSource url: core source is not available.");
+            return jni::Local<jni::String>();
+        }
         optional<std::string> url = source->as<mbgl::style::RasterDEMSource>()->RasterDEMSource::getURL();
         return url ? jni::Make<jni::String>(env, *url) : jni::Local<jni::String>();
     }
