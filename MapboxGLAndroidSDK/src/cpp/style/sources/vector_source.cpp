@@ -55,7 +55,7 @@ namespace android {
         auto guard = source.lock();
         if (!source) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get vector source features: core source is not available.");
-            auto features = std::vector<Feature>{};
+            auto features = std::vector<mbgl::Feature>{};
             return Feature::convert(env, features);
         }
 
