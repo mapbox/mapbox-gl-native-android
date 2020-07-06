@@ -473,7 +473,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void SymbolLayer::setIconOpacityTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void SymbolLayer::setIconOpacityTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -506,7 +506,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void SymbolLayer::setIconColorTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void SymbolLayer::setIconColorTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -539,7 +539,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void SymbolLayer::setIconHaloColorTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void SymbolLayer::setIconHaloColorTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -572,7 +572,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void SymbolLayer::setIconHaloWidthTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void SymbolLayer::setIconHaloWidthTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -605,7 +605,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void SymbolLayer::setIconHaloBlurTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void SymbolLayer::setIconHaloBlurTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -638,7 +638,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void SymbolLayer::setIconTranslateTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void SymbolLayer::setIconTranslateTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -681,7 +681,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void SymbolLayer::setTextOpacityTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void SymbolLayer::setTextOpacityTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -714,7 +714,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void SymbolLayer::setTextColorTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void SymbolLayer::setTextColorTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -747,7 +747,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void SymbolLayer::setTextHaloColorTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void SymbolLayer::setTextHaloColorTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -780,7 +780,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void SymbolLayer::setTextHaloWidthTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void SymbolLayer::setTextHaloWidthTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -813,7 +813,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void SymbolLayer::setTextHaloBlurTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void SymbolLayer::setTextHaloBlurTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -846,7 +846,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void SymbolLayer::setTextTranslateTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void SymbolLayer::setTextTranslateTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");

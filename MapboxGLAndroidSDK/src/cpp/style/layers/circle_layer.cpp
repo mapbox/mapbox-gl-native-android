@@ -73,7 +73,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void CircleLayer::setCircleRadiusTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void CircleLayer::setCircleRadiusTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -106,7 +106,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void CircleLayer::setCircleColorTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void CircleLayer::setCircleColorTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -139,7 +139,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void CircleLayer::setCircleBlurTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void CircleLayer::setCircleBlurTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -172,7 +172,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void CircleLayer::setCircleOpacityTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void CircleLayer::setCircleOpacityTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -205,7 +205,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void CircleLayer::setCircleTranslateTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void CircleLayer::setCircleTranslateTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -268,7 +268,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void CircleLayer::setCircleStrokeWidthTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void CircleLayer::setCircleStrokeWidthTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -301,7 +301,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void CircleLayer::setCircleStrokeColorTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void CircleLayer::setCircleStrokeColorTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -334,7 +334,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void CircleLayer::setCircleStrokeOpacityTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void CircleLayer::setCircleStrokeOpacityTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");

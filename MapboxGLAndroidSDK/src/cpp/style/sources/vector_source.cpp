@@ -36,6 +36,12 @@ namespace android {
     VectorSource::~VectorSource() = default;
 
     jni::Local<jni::String> VectorSource::getURL(jni::JNIEnv& env) {
+        auto guard = source.lock();
+        if (!source) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get vector source url: core source is not available.");
+            return jni::Make<jni::String>(env, "");
+        }
+
         optional<std::string> url =source->as<mbgl::style::VectorSource>()->VectorSource::getURL();
         return url ? jni::Make<jni::String>(env, *url) : jni::Local<jni::String>();
     }
@@ -45,6 +51,13 @@ namespace android {
                                                                              const jni::Array<jni::Object<>>& jfilter) {
         using namespace mbgl::android::conversion;
         using namespace mbgl::android::geojson;
+
+        auto guard = source.lock();
+        if (!source) {
+            mbgl::Log::Error(mbgl::Event::JNI, "Failed to get vector source features: core source is not available.");
+            auto features = std::vector<Feature>{};
+            return Feature::convert(env, features);
+        }
 
         std::vector<mbgl::Feature> features;
         if (rendererFrontend) {

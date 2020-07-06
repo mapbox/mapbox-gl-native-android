@@ -113,7 +113,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void LineLayer::setLineOpacityTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void LineLayer::setLineOpacityTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -146,7 +146,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void LineLayer::setLineColorTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void LineLayer::setLineColorTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -179,7 +179,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void LineLayer::setLineTranslateTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void LineLayer::setLineTranslateTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -222,7 +222,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void LineLayer::setLineWidthTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void LineLayer::setLineWidthTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -255,7 +255,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void LineLayer::setLineGapWidthTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void LineLayer::setLineGapWidthTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -288,7 +288,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void LineLayer::setLineOffsetTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void LineLayer::setLineOffsetTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -321,7 +321,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void LineLayer::setLineBlurTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void LineLayer::setLineBlurTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -354,7 +354,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void LineLayer::setLineDasharrayTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void LineLayer::setLineDasharrayTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -387,7 +387,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void LineLayer::setLinePatternTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void LineLayer::setLinePatternTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");

@@ -123,7 +123,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void LocationIndicatorLayer::setLocationTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void LocationIndicatorLayer::setLocationTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -156,7 +156,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void LocationIndicatorLayer::setAccuracyRadiusTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void LocationIndicatorLayer::setAccuracyRadiusTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -189,7 +189,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void LocationIndicatorLayer::setTopImageSizeTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void LocationIndicatorLayer::setTopImageSizeTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -222,7 +222,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void LocationIndicatorLayer::setBearingImageSizeTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void LocationIndicatorLayer::setBearingImageSizeTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -255,7 +255,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void LocationIndicatorLayer::setShadowImageSizeTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void LocationIndicatorLayer::setShadowImageSizeTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -288,7 +288,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void LocationIndicatorLayer::setAccuracyRadiusColorTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void LocationIndicatorLayer::setAccuracyRadiusColorTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
@@ -321,7 +321,7 @@ namespace android {
         return std::move(*convert<jni::Local<jni::Object<TransitionOptions>>>(env, options));
     }
 
-    void LocationIndicatorLayer::setAccuracyRadiusBorderColorTransition(jni::JNIEnv&, jlong duration, jlong delay) 
+    void LocationIndicatorLayer::setAccuracyRadiusBorderColorTransition(jni::JNIEnv&, jlong duration, jlong delay) {
         auto guard = layer.lock();
         if (!layer) {
             mbgl::Log::Error(mbgl::Event::JNI, "Failed to get layer transition options: core layer is not available");
