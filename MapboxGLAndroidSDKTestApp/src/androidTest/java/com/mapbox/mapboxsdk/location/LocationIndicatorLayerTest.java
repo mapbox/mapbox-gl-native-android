@@ -6,27 +6,24 @@ import android.graphics.Color;
 import androidx.test.annotation.UiThreadTest;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.mapbox.mapboxsdk.maps.BaseLayerTest;
 import org.junit.Before;
 import timber.log.Timber;
-
-import com.mapbox.mapboxsdk.style.expressions.Expression;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static com.mapbox.mapboxsdk.style.expressions.Expression.*;
 import static org.junit.Assert.*;
 import static com.mapbox.mapboxsdk.style.layers.Property.*;
 import static com.mapbox.mapboxsdk.location.LocationPropertyFactory.*;
 
+import com.mapbox.mapboxsdk.maps.BaseAppCenterLayerTest;
 import com.mapbox.mapboxsdk.style.layers.TransitionOptions;
 
 /**
  * Basic smoke tests for LocationIndicatorLayer
  */
 @RunWith(AndroidJUnit4.class)
-public class LocationIndicatorLayerTest extends BaseLayerTest {
+public class LocationIndicatorLayerTest extends BaseAppCenterLayerTest {
 
   private LocationIndicatorLayer layer;
 
