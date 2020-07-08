@@ -1,31 +1,35 @@
 package com.mapbox.mapboxsdk.testapp.activity;
 
 import android.content.Context;
-import androidx.annotation.CallSuper;
-import androidx.annotation.UiThread;
-import androidx.test.rule.ActivityTestRule;
-import androidx.test.rule.GrantPermissionRule;
 
+import com.mapbox.mapboxsdk.AppCenter;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.testapp.R;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestName;
-import timber.log.Timber;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
+import androidx.annotation.CallSuper;
+import androidx.annotation.UiThread;
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.rule.GrantPermissionRule;
+import timber.log.Timber;
 
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
 
 /**
  * Base class for all Activity test hooking into an existing Activity that will load style.
+ * Tests in sub classes will be executed on App center.
  */
-public abstract class BaseTest {
+public abstract class BaseAppCenterTest extends AppCenter {
 
   private static final int WAIT_TIMEOUT = 30; //seconds
 
@@ -51,7 +55,10 @@ public abstract class BaseTest {
   }
 
   @After
-  public void afterTest(){}
+  @CallSuper
+  public void afterTest() {
+    super.afterTest();
+  }
 
   @UiThread
   @CallSuper

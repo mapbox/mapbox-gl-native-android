@@ -1,7 +1,8 @@
 package com.mapbox.mapboxsdk.testapp.string;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import com.mapbox.mapboxsdk.testapp.activity.EspressoTest;
+
+import com.mapbox.mapboxsdk.testapp.activity.EspressoAppCenterTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -14,7 +15,7 @@ import static junit.framework.Assert.assertEquals;
  * </p>
  */
 @RunWith(AndroidJUnit4.class)
-public class UppperLowerCaseTest extends EspressoTest {
+public class UppperLowerCaseTest extends EspressoAppCenterTest {
 
   @Test
   public void testToUpperCase() {

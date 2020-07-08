@@ -3,7 +3,7 @@ package com.mapbox.mapboxsdk.testapp.style;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.testapp.R;
-import com.mapbox.mapboxsdk.testapp.activity.EspressoTest;
+import com.mapbox.mapboxsdk.testapp.activity.EspressoAppCenterTest;
 import com.mapbox.mapboxsdk.testapp.utils.ResourceUtils;
 import org.junit.Test;
 
@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Tests around style loading
  */
-public class StyleLoaderTest extends EspressoTest {
+public class StyleLoaderTest extends EspressoAppCenterTest {
 
   @Test
   public void testSetGetStyleJsonString() {

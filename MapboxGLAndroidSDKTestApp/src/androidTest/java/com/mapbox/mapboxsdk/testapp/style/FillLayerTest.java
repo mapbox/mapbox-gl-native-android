@@ -12,7 +12,7 @@ import com.mapbox.geojson.MultiPoint;
 import com.mapbox.geojson.MultiPolygon;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.Polygon;
-import com.mapbox.mapboxsdk.maps.BaseLayerTest;
+import com.mapbox.mapboxsdk.maps.BaseAppCenterLayerTest;
 import org.junit.Before;
 import timber.log.Timber;
 
@@ -36,7 +36,7 @@ import java.util.List;
  * Basic smoke tests for FillLayer
  */
 @RunWith(AndroidJUnit4.class)
-public class FillLayerTest extends BaseLayerTest {
+public class FillLayerTest extends BaseAppCenterLayerTest {
 
   private FillLayer layer;
   private final List<Point> pointsList = new ArrayList<Point>() {
