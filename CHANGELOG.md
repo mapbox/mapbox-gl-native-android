@@ -2,6 +2,9 @@
 
 Mapbox welcomes participation and contributions from everyone. Please read [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) to get started.
 
+## 9.3.0-beta.1 - July 9, 2020
+ - Updated Mapbox GL Native library to v1.8.1. ([#464](https://github.com/mapbox/mapbox-gl-native-android/pull/464))
+
 ## 9.3.0-alpha.1 - July 2, 2020
 Starting this release, the Mapbox Maps SDK for Android will use a pre-built GL Native binary licensed under the [Mapbox Terms of Service](https://www.mapbox.com/legal/tos). The license of the Maps SDK for Android remains BSD-2. For more information on using this and future releases, see [README.md](https://github.com/mapbox/mapbox-gl-native-android/blob/master/README.md). For more details on licensing, see [LICENSE.md](https://github.com/mapbox/mapbox-gl-native-android/blob/master/LICENSE.md).
 
