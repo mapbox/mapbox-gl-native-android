@@ -227,6 +227,11 @@ bool Source::removeFromMap(JNIEnv &, const jni::Object<Source> &, mbgl::Map &map
         throw std::runtime_error("Cannot remove detached source");
     }
 
+    auto guard = source.lock();
+    if (!source) {
+        throw std::runtime_error("Failed to remove source from map: " + ERR_MSG_DEAD_CORE_PEER);
+    }
+
     // Remove the source from the map and take ownership
     ownedSource = map.getStyle().removeSource(source->getID());
 
