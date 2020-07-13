@@ -21,6 +21,10 @@ with open(path + "/LICENSE.md", 'w') as licenseFile:
     "NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY "
     "OF SUCH DAMAGE.")
     licenseFile.write("\n\n===========================================================================\n\n")
+    licenseFile.write("Mapbox Maps SDK for Android uses portions of Mapbox GL Native v1.7.0 and above.\n" +
+                      "License: [Mapbox Terms of Service](https://mapbox.com/legal/tos)"
+                              "\n\n===========================================================================\n\n")
+
     with open(path + "/MapboxGLAndroidSDK/build/reports/licenses/licenseReleaseReport.json", 'r') as dataFile:
         data = json.load(dataFile)
 
@@ -47,7 +51,7 @@ with open(path + "/LICENSE.md", 'w') as licenseFile:
                 licenseName = license["license"]
                 licenseUrl = license["license_url"]
 
-            licenseFile.write("Mapbox GL uses portions of %s.  \n" % projectName +
+            licenseFile.write("Mapbox Maps SDK for Android uses portions of %s.  \n" % projectName +
                               ("URL: [%s](%s)  \n" % (projectUrl, projectUrl) if projectUrl is not None else "") +
                               "License: [%s](%s)" % (licenseName, licenseUrl) +
                               "\n\n===========================================================================\n\n")

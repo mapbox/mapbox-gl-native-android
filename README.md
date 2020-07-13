@@ -5,11 +5,11 @@
 
 [![](https://www.mapbox.com/android-docs/assets/overview-map-sdk-322-9abe118316efb5910b6101e222a2e57c.png)](https://docs.mapbox.com/android/maps/overview/)
 
-The Mapbox Maps SDK for Android is a library based on [Mapbox GL Native](https://github.com/mapbox/mapbox-gl-native/) for embedding interactive map views with scalable, customizable vector maps onto Android devices.
+The Mapbox Maps SDK for Android is a library based on Mapbox GL Native for embedding interactive map views with scalable, customizable vector maps onto Android devices.
 
 ## Getting Started
 
-This particular README is for people who are interested in working on and improving the Maps SDK for Android. If you're looking for more general information and instructions on the Maps SDK:
+This particular README is for people who are interested in working on and improving the Maps SDK for Android. If you're looking for more general information and instructions on the Maps SDK:
 
 Visit [https://docs.mapbox.com/android/maps/overview](https://docs.mapbox.com/android/maps/overview/) to see current documentation on the Maps SDK for Android.
 
@@ -32,87 +32,47 @@ git submodule update --init --recursive
 
 #### Installing dependencies
 
-These dependencies are required for all operating systems and all platform targets.
-
-- Latest stable [Android Studio](https://developer.android.com/studio/index.html)
-- Update the Mapbox Maps SDK for Android with the latest
-  - Android SDK Build-Tools
-  - Android Platform-Tools
-  - Android SDK Tools
-  - CMake
-  - NDK
-  - LLDB
-- Modern C++ compiler that supports `-std=c++14`\*
-  - clang++ 3.5 or later or
-  - g++-4.9 or later
-- [Node.js](https://nodejs.org/)
-  - make sure [npm](https://www.npmjs.com) is installed as well
-- [ccache](https://ccache.samba.org/) (optional)
-
-**Note**: We partially support C++14 because GCC 4.9 does not fully implement the
-final draft of the C++14 standard. More information in [DEVELOPING.md](../../DEVELOPING.md).
-
-**Note**: On macOS you can install clang with installing the [Apple command line developer tools](https://developer.apple.com/download/).
+- Latest stable [Android Studio](https://developer.android.com/studio/index.html) and Android SDK.
 
 ### Opening the project
 
-#### macOS
-
-Execute the following command in this repository's root folder to generate the required build files and open the project with Android Studio:
-
-```
-make aproj
-```
-
-#### linux
-
-run `make android-configuration` in the root folder of the project and open in Android Studio.
-
-If you are using Arch Linux, install [ncurses5-compat-libs](https://aur.archlinux.org/packages/ncurses5-compat-libs).
+Open the root folder of this repository in Android Studio.
 
 ### Project configuration
+
+#### Setup Mapbox Access token for dependency download
+
+Add a Mapbox access token with scope set to `DOWNLOADS:READ` in the root `build.gradle`.
+
+```groovy
+allprojects {
+    repositories {
+        maven {
+            url 'https://api.mapbox.com/downloads/v2/releases/maven'
+            authentication {
+                basic(BasicAuthentication)
+            }
+            credentials {
+                username = "mapbox"
+                password = "INSERT_MAPBOX_ACCESS_TOKEN_HERE"
+            }
+        }
+    }
+}
+```
 
 #### Setup Checkstyle
 
 Mapbox uses specific IDE settings related to code and check style.
 See [checkstyle guide](https://github.com/mapbox/mapbox-gl-native-android/wiki/Setting-up-Mapbox-checkstyle) for configuration details.
 
-#### Resolving duplicate file entries
-With buck build support, Android Studio can complain about duplicate source files. To remove this warning, open `MapboxGLAndroidSDK.iml` find the list of `excludeFolder` entries and add `<excludeFolder url="file://$MODULE_DIR$/../../../misc/" />` line.
-
-##### Setting Mapbox Access Token
+##### Setup Mapbox Access Token for Mapbox vector tiles
 
 _The test application (used for development purposes) uses Mapbox vector tiles, which require a Mapbox account and API access token. Obtain a free access token on the [Mapbox account page](https://www.mapbox.com/studio/account/tokens/)._
 
-With the first gradle invocation, gradle will take the value of the `MAPBOX_ACCESS_TOKEN` environment variable and save it to `MapboxGLAndroidSDKTestApp/src/main/res/values/developer-config.xml`. If the environment variable wasn't set, you can edit `developer-config.xml` manually and add your access token to the `mapbox_access_token` resource.  
-
-### Running project
-
-Run the configuration for the `MapboxGLAndroidSDKTestApp` module and select a device or emulator to deploy on. Based on the selected device, the c++ code will be compiled for the related processor architecture. You can see the project compiling in the `View > Tool Windows > Gradle Console`.
-
-More information about building and distributing this project in [DISTRIBUTE.md](DISTRIBUTE.md).
+With the first gradle invocation, gradle will take the value of the `MAPBOX_ACCESS_TOKEN` environment variable and save it to `MapboxGLAndroidSDKTestApp/src/main/res/values/developer-config.xml`. If the environment variable wasn't set, you can edit `developer-config.xml` manually and add your access token to the `mapbox_access_token` resource.
 
 ### Additional resources
-
-#### Using the SDK snapshot
-
-Instead of using the latest stable release of the Maps SDK for Android, you can use a "snapshot" or the beta version if there is one available. Our snapshots are built every time a Github pull request adds code to this repository's `master` branch. If you'd like to use a snapshot build, your Android project's gradle file should have -SNAPSHOT appended to the SDK version number:
-
-```java
-// Mapbox SDK dependency
-implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.1.0-SNAPSHOT'
-```
-
-You also need to have the section below in your build.gradle root folder to be able to resolve the SNAPSHOT dependencies:
-```
-allprojects {
-    repositories {
-        jcenter()
-        maven { url 'https://oss.jfrog.org/artifactory/oss-snapshot-local/' }
-    }
-}
-```
-
 
 #### Symbolicating native crashes
 

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -124,6 +125,28 @@ public class OfflineManager {
      * @param error the error message
      */
     void onError(String error);
+  }
+
+  /**
+   * This callback receives an asynchronous response containing a the request ID
+   * of the prefetch ambient cache request.
+   */
+  @Keep
+  public interface PrefetchAmbientCacheCallback {
+    /**
+     * Receives request Id of the prefetch ambient cache request.
+     *
+     * @param requestId the prefetch ambient cache request Id
+     */
+    void onSuccess(long requestId);
+
+    /**
+     * Receives the error message.
+     *
+     * @param requestId the prefetch ambient cache request Id
+     * @param error     the error message
+     */
+    void onError(long requestId, String error);
   }
 
   /*
@@ -608,8 +631,8 @@ public class OfflineManager {
                                   @NonNull final CreateOfflineRegionCallback callback) {
     if (!isValidOfflineRegionDefinition(definition)) {
       callback.onError(
-              String.format(context.getString(R.string.mapbox_offline_error_region_definition_invalid),
-                      definition.getBounds())
+        String.format(context.getString(R.string.mapbox_offline_error_region_definition_invalid),
+          definition.getBounds())
       );
       return;
     }
@@ -651,6 +674,27 @@ public class OfflineManager {
   }
 
   /**
+   * Pre-fetch resources from network and populates the ambient cache.
+   *
+   * @param definition the cache area definition
+   * @param callback   the callback to be invoked
+   * @return request id of the prefetch ambient cache request
+   */
+  public long prefetchAmbientCache(@NonNull CacheAreaDefinition definition,
+                                   @NonNull final PrefetchAmbientCacheCallback callback) {
+    return nativePrefetchAmbientCache(definition, callback);
+  }
+
+  /**
+   * Cancel the prefetch ambient cache request.
+   *
+   * @param requestId the id of the prefetch ambient cache request
+   */
+  public void cancelPrefetchAmbientCacheRequest(long requestId) {
+    nativeCancelPrefetchAmbientCacheRequest(requestId);
+  }
+
+  /**
    * Validates if the offline region definition bounds is valid for an offline region download.
    *
    * @param definition the offline region definition
@@ -683,7 +727,7 @@ public class OfflineManager {
    * after an offline region is deleted by calling
    * {@link OfflineRegion#delete(OfflineRegion.OfflineRegionDeleteCallback)}
    * or the ambient cache is cleared by calling {@link OfflineManager#clearAmbientCache()}.
-   *
+   * <p>
    * If packing is disabled, disk space will not be freed after
    * resources are removed unless {@link OfflineManager#packDatabase()} is explicitly called.
    * </p>
@@ -718,6 +762,13 @@ public class OfflineManager {
 
   @Keep
   private native void nativeInvalidateAmbientCache(@Nullable FileSourceCallback callback);
+
+  @Keep
+  private native long nativePrefetchAmbientCache(CacheAreaDefinition definition,
+                                                 PrefetchAmbientCacheCallback callback);
+
+  @Keep
+  private native void nativeCancelPrefetchAmbientCacheRequest(long requestId);
 
   @Keep
   private native void nativeClearAmbientCache(@Nullable FileSourceCallback callback);

@@ -30,6 +30,7 @@ import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
+import com.mapbox.mapboxsdk.geometry.LatLngBoundsZoom;
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.log.Logger;
 import com.mapbox.mapboxsdk.offline.OfflineRegionDefinition;
@@ -1490,6 +1491,16 @@ public final class MapboxMap {
   //
   // LatLngBounds
   //
+
+  /**
+   * Get the LatLngBoundsZoom from a given CameraPosition.
+   *
+   * @param camera the input camera position
+   * @return LatLngBoundsZoom
+   */
+  public LatLngBoundsZoom getLatLngBoundsZoomFromCamera(@NonNull CameraPosition camera) {
+    return nativeMapView.getLatLngBoundsZoomFromCamera(camera);
+  }
 
   /**
    * Sets a LatLngBounds that constraints map transformations to this bounds.

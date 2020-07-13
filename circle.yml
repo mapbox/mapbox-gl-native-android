@@ -263,8 +263,6 @@ jobs:
           path: MapboxGLAndroidSDKTestApp/build/reports/lint-results.xml
       - store_artifacts:
           path: MapboxGLAndroidSDKTestApp/lint-baseline.xml
-      - store_artifacts:
-          path: MapboxGLAndroidSDK/build/intermediates/cmake/debug/obj
 
   # ------------------------------------------------------------------------------
   android-release:
@@ -285,14 +283,6 @@ jobs:
       - run:
           name: Android nitpick
           command: make run-android-nitpick
-      - run:
-          name: Generate Maven credentials
-          command: |
-            if [ -n "${BINTRAY_USER}" ]; then
-              echo "BINTRAY_USER=$BINTRAY_USER
-              BINTRAY_API_KEY=$BINTRAY_API_KEY
-              GPG_PASSPHRASE=$GPG_PASSPHRASE"
-            fi
       - run:
           name: Update version name
           command: |
@@ -325,26 +315,9 @@ jobs:
                   --device-ids sailfish --os-version-ids "26" --locales en --orientations portrait --timeout 90s
               fi
             fi
-      - run:
-          name: archive debugable objects
-          command: |
-            cd MapboxGLAndroidSDK/build/intermediates/cmake/release && tar -zcvf debuggable-objects.tar.gz obj && cd -
       - store_artifacts:
           path: MapboxGLAndroidSDKTestApp/build/outputs/apk/release
           destination: .
-      - store_artifacts:
-          path: MapboxGLAndroidSDK/build/intermediates/cmake/release/debuggable-objects.tar.gz
-      - deploy:
-          name: Publish to Bintray
-          command: |
-            if [[ $CIRCLE_BRANCH == master ]] || [[ $CIRCLE_BRANCH == release-* ]] || [[ $CIRCLE_TAG == android-v* ]]; then
-              version=$(cat MapboxGLAndroidSDK/gradle.properties | grep "VERSION_NAME")
-              if [[ $version != *"SNAPSHOT"* ]]; then
-                make run-android-upload-to-bintray
-              else
-                make run-android-upload-to-artifactory
-              fi
-            fi
       - run:
           name: upload debuggable objects to release tag
           command: |

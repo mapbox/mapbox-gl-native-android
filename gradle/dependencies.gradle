@@ -39,10 +39,12 @@ ext {
             appcenter        : '1.4',
             ktlint           : '0.34.0',
             commonsIO        : '2.6',
-            mapboxSdkVersions: '1.0.1'
+            mapboxSdkVersions: '1.0.1',
+            mapboxSdkCore    : '1.8.1'
     ]
 
     dependenciesList = [
+            mapboxSdkCore          : "com.mapbox.mapboxsdk:mapbox-android-sdk-gl-core:${versions.mapboxSdkCore}",
             mapboxJavaGeoJSON      : "com.mapbox.mapboxsdk:mapbox-sdk-geojson:${versions.mapboxServices}",
             mapboxAndroidTelemetry : "com.mapbox.mapboxsdk:mapbox-android-telemetry:${versions.mapboxTelemetry}",
             mapboxAndroidGestures  : "com.mapbox.mapboxsdk:mapbox-android-gestures:${versions.mapboxGestures}",

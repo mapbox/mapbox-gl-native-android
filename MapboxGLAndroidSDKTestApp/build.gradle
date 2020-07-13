@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply from: "${rootDir}/gradle/native-build.gradle"
 
 android {
     compileSdkVersion androidVersions.compileSdkVersion
@@ -17,8 +16,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
-    nativeBuild(["example-custom-layer"])
 
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
@@ -82,12 +79,10 @@ dependencies {
     androidTestImplementation dependenciesList.appCenter
 }
 
-apply from: "${rootDir}/gradle/gradle-make.gradle"
-apply from: "${rootDir}/gradle/gradle-config.gradle"
-apply from: "${rootDir}/gradle/gradle-checkstyle.gradle"
-apply from: "${rootDir}/gradle/gradle-lint.gradle"
-
-
+apply from: "${projectDir}/../gradle/gradle-make.gradle"
+apply from: "${projectDir}/../gradle/gradle-config.gradle"
+apply from: "${projectDir}/../gradle/gradle-checkstyle.gradle"
+apply from: "${projectDir}/../gradle/gradle-lint.gradle"
 
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
