@@ -284,22 +284,6 @@ jobs:
           name: Android nitpick
           command: make run-android-nitpick
       - run:
-          name: Trigger android benchmark run
-          command: |
-            if [ -n "${MOBILE_METRICS_TOKEN}" ]; then
-              if [[ $CIRCLE_BRANCH == master ]]; then
-                curl -u $MOBILE_METRICS_TOKEN -d build_parameters[CIRCLE_JOB]=android-benchmark https://circleci.com/api/v1.1/project/github/mapbox/mobile-metrics/tree/master
-              fi
-            fi
-      - run:
-          name: Trigger android binary size check
-          command: |
-            if [ -n "${MOBILE_METRICS_TOKEN}" ]; then
-              if [[ $CIRCLE_BRANCH == master ]]; then
-                curl -u ${MOBILE_METRICS_TOKEN}: -d build_parameters[CIRCLE_JOB]=android-binary-size-hydrogen https://circleci.com/api/v1.1/project/github/mapbox/mobile-metrics/tree/master
-              fi
-            fi
-      - run:
           name: Update version name
           command: |
             if [[ $CIRCLE_TAG == android-v* ]]; then
@@ -334,4 +318,11 @@ jobs:
       - store_artifacts:
           path: MapboxGLAndroidSDKTestApp/build/outputs/apk/release
           destination: .
+      - run:
+          name: upload debuggable objects to release tag
+          command: |
+            if [[ $CIRCLE_TAG == android-v* ]]; then
+              export GITHUB_TOKEN=${DANGER_GITHUB_API_TOKEN}
+              python3 scripts/upload-to-github-release.py --file MapboxGLAndroidSDK/build/intermediates/cmake/release/debuggable-objects.tar.gz --release $CIRCLE_TAG --project mapbox-gl-native-android
+            fi
       - generate-api-javadoc
