@@ -4,13 +4,23 @@ workflows:
   version: 2
   mapbox-gl-native-android:
     jobs:
-      - android-arm-template:
+      - android-appcenter-weekly:
           name: android-debug-arm-v8
       - android-release:
           filters:
             tags:
               only: /android-v.*/
-
+  weekly:
+    triggers:
+      - schedule:
+          cron: "0 0 * * 0"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - android-appcenter-weekly:
+          name: android-debug-arm-v8
 commands:
   npm-install:
     steps:
@@ -326,3 +336,62 @@ jobs:
               python3 scripts/upload-to-github-release.py --file MapboxGLAndroidSDK/build/intermediates/cmake/release/debuggable-objects.tar.gz --release $CIRCLE_TAG --project mapbox-gl-native-android
             fi
       - generate-api-javadoc
+
+  #-------------------------------------------------------------------------------
+  android-appcenter-weekly:
+    parameters:
+      stl:
+        type: string
+        default: "c++_static"
+      image:
+        type: string
+        default: android-ndk-r21b:a111a5b966
+      abi:
+        type: string
+        default: "arm-v8"
+    docker:
+      - image: mbgl/<< parameters.image >>
+    resource_class: xlarge
+    working_directory: /src
+    environment:
+      LIBSYSCONFCPUS: 8
+      JOBS: 8
+      BUILDTYPE: Debug
+      IS_LOCAL_DEVELOPMENT: false
+      MBGL_ANDROID_STL: << parameters.stl >>
+    steps:
+      - install-dependencies: { gradle: true }
+      - run:
+          name: Initialize vendor submodules
+          command: git submodule update --init --recursive vendor
+      - run:
+          name: Build libmapbox-gl.so for << parameters.abi >>
+          command: make android-lib-<< parameters.abi >>
+      - run:
+          name: Build Test APK
+          command: |
+            if [ -n "${MAPBOX_DEVELOPER_CONFIG_XML}" ]; then
+              echo "${MAPBOX_DEVELOPER_CONFIG_XML}" > MapboxGLAndroidSDKTestApp/src/main/res/values/developer-config.xml
+              make android-ui-test-<< parameters.abi >>
+            fi
+      - save-dependencies: { gradle: true }
+      - run:
+          name: Run instrumentation tests on App Center
+          no_output_timeout: 20m
+          command: make run-android-test-app-center devices=OnePlus
+
+      - store_artifacts:
+          path: MapboxGLAndroidSDKTestApp/build/outputs/apk/debug
+          destination: .
+      - store_artifacts:
+          path: MapboxGLAndroidSDK/build/reports/lint-results.html
+      - store_artifacts:
+          path: MapboxGLAndroidSDK/build/reports/lint-results.xml
+      - store_artifacts:
+          path: MapboxGLAndroidSDK/lint-baseline.xml
+      - store_artifacts:
+          path: MapboxGLAndroidSDKTestApp/build/reports/lint-results.html
+      - store_artifacts:
+          path: MapboxGLAndroidSDKTestApp/build/reports/lint-results.xml
+      - store_artifacts:
+          path: MapboxGLAndroidSDKTestApp/lint-baseline.xml
