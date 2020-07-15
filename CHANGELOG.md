@@ -2,12 +2,7 @@
 
 Mapbox welcomes participation and contributions from everyone. Please read [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) to get started.
 
-## 9.3.0-beta.1 - July 9, 2020
-
- - Updated Mapbox GL Native library to v1.8.1. ([#464](https://github.com/mapbox/mapbox-gl-native-android/pull/464))
- - Not change file source status while changing cache path ([#457](https://github.com/mapbox/mapbox-gl-native-android/pull/457))
-
-## 9.3.0-alpha.1 - July 2, 2020
+## 9.3.0 - July 15, 2020
 Starting this release, the Mapbox Maps SDK for Android will use a pre-built GL Native binary licensed under the [Mapbox Terms of Service](https://www.mapbox.com/legal/tos). The license of the Maps SDK for Android remains BSD-2. For more information on using this and future releases, see [README.md](https://github.com/mapbox/mapbox-gl-native-android/blob/master/README.md). For more details on licensing, see [LICENSE.md](https://github.com/mapbox/mapbox-gl-native-android/blob/master/LICENSE.md).
 
 ### Improvements and bug fixes
@@ -16,6 +11,8 @@ Starting this release, the Mapbox Maps SDK for Android will use a pre-built GL N
  - Clarified the error message when an HTTP request has been cancelled. ([#433](https://github.com/mapbox/mapbox-gl-native-android/pull/433))
  - Fixed a memory leak that would occur when a source was removed. ([#412](https://github.com/mapbox/mapbox-gl-native-android/pull/412))
  - Fixed a bug that would halt the application during a scheduled snapshot when the map renderer was stopped. ([#390](https://github.com/mapbox/mapbox-gl-native-android/pull/390)
+ - Not change file source status while changing cache path ([#457](https://github.com/mapbox/mapbox-gl-native-android/pull/457))
+ - Avoid null pointer exception when the underlying hardware is too slow to create the surface ([#471](https://github.com/mapbox/mapbox-gl-native-android/pull/471))
 
 ### User location indicator
  - Double-tapping the map when the camera is tracking the user location indicator now zooms to the `LocationComponent`'s location. ([#378](https://github.com/mapbox/mapbox-gl-native-android/pull/378))
@@ -23,6 +20,7 @@ Starting this release, the Mapbox Maps SDK for Android will use a pre-built GL N
  - Added support for using a background image on GPS mode when `LocationComponentActivationOptions#useSpecializedLocationLayer` is activated . ([#439](https://github.com/mapbox/mapbox-gl-native-android/pull/439))
  - Fixed a bug where an in-progress animation of an updating `LocationComponent` would be interrupted when a style was changed. ([#437](https://github.com/mapbox/mapbox-gl-native-android/pull/437))
  - Updated documentation to reflect that the `FOREGROUND_LAYER` constant is usable for relative positioning in both normal and specialized rendering modes. [#413](https://github.com/mapbox/mapbox-gl-native-android/pull/413)
+ - Set gps bearing immediately while changing to gps mode. ([#470](https://github.com/mapbox/mapbox-gl-native-android/pull/470))
 
 ### Other changes
  - Updated javadoc documentation for `removeSource`/`removeLayer`/`removeLayerAt`. ([#422](https://github.com/mapbox/mapbox-gl-native-android/pull/422))
