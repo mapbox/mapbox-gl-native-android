@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.mapbox.mapboxsdk.BuildConfig;
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
+import com.mapbox.mapboxsdk.http.HttpHook;
 import com.mapbox.mapboxsdk.http.HttpIdentifier;
 import com.mapbox.mapboxsdk.http.HttpLogger;
 import com.mapbox.mapboxsdk.http.HttpRequest;
@@ -127,6 +128,7 @@ public class HttpRequestImpl implements HttpRequest {
 
     @Override
     public void onResponse(@NonNull Call call, @NonNull Response response) {
+      HttpHook.onResultCode(response.code());
       if (response.isSuccessful()) {
         HttpLogger.log(Log.VERBOSE, String.format("[HTTP] Request was successful (code = %s).", response.code()));
       } else {

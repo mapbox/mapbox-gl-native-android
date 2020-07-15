@@ -6,6 +6,7 @@ import android.text.TextUtils;
 
 import com.mapbox.mapboxsdk.MapStrictMode;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.http.HttpHook;
 import com.mapbox.mapboxsdk.log.Logger;
 import com.mapbox.mapboxsdk.maps.TelemetryDefinition;
 import com.mapbox.mapboxsdk.testapp.utils.TileLoadingMeasurementUtils;
@@ -40,6 +41,7 @@ public class MapboxApplication extends Application {
     initializeLogger();
     initializeStrictMode();
     initializeMapbox();
+    HttpHook.setHookListener(code -> Timber.d("[Http] Response code:%s", code));
   }
 
   protected boolean initializeLeakCanary() {
