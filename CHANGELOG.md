@@ -20,7 +20,7 @@ Starting this release, the Mapbox Maps SDK for Android will use a pre-built GL N
  - Added support for using a background image on GPS mode when `LocationComponentActivationOptions#useSpecializedLocationLayer` is activated . ([#439](https://github.com/mapbox/mapbox-gl-native-android/pull/439))
  - Fixed a bug where an in-progress animation of an updating `LocationComponent` would be interrupted when a style was changed. ([#437](https://github.com/mapbox/mapbox-gl-native-android/pull/437))
  - Updated documentation to reflect that the `FOREGROUND_LAYER` constant is usable for relative positioning in both normal and specialized rendering modes. [#413](https://github.com/mapbox/mapbox-gl-native-android/pull/413)
- - Set gps bearing immediately while changing to gps mode. ([#470](https://github.com/mapbox/mapbox-gl-native-android/pull/470))
+ - Set GPS bearing immediately when changing the indicator to GPS mode. ([#470](https://github.com/mapbox/mapbox-gl-native-android/pull/470))
 
 ### Other changes
  - Updated javadoc documentation for `removeSource`/`removeLayer`/`removeLayerAt`. ([#422](https://github.com/mapbox/mapbox-gl-native-android/pull/422))
