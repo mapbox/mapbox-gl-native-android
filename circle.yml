@@ -319,10 +319,12 @@ jobs:
           path: MapboxGLAndroidSDKTestApp/build/outputs/apk/release
           destination: .
       - run:
-          name: upload debuggable objects to release tag
+          name: Test SDK registry
+          command: make run-android-upload-to-sdk-registry
+      - deploy:
+          name: Publish to SDK Registry
           command: |
             if [[ $CIRCLE_TAG == android-v* ]]; then
-              export GITHUB_TOKEN=${DANGER_GITHUB_API_TOKEN}
-              python3 scripts/upload-to-github-release.py --file MapboxGLAndroidSDK/build/intermediates/cmake/release/debuggable-objects.tar.gz --release $CIRCLE_TAG --project mapbox-gl-native-android
+              make run-android-upload-to-sdk-registry
             fi
       - generate-api-javadoc
