@@ -1,31 +1,107 @@
 # Changelog for the Mapbox Maps SDK for Android
 
-Mapbox welcomes participation and contributions from everyone.  If you'd like to do so please see the [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) first to get started.
+Mapbox welcomes participation and contributions from everyone. Please read [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) to get started.
+
+## 8.6.4 - July 17, 2020
+[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v8.6.3...android-v8.6.4) since [Mapbox Maps SDK for Android v8.6.3](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v8.6.3):
+### Bug fixes
+ - Fixed a memory leak that would occur when a source was removed. ([#412](https://github.com/mapbox/mapbox-gl-native-android/pull/412))
+### Other changes
+ - Bumped Java SDK dependency to 4.9.1 ([#478](https://github.com/mapbox/mapbox-gl-native-android/pull/478))
+
+## 9.3.0 - July 15, 2020
+Starting this release, the Mapbox Maps SDK for Android will use a pre-built GL Native binary licensed under the [Mapbox Terms of Service](https://www.mapbox.com/legal/tos). The license of the Maps SDK for Android remains BSD-2. For more information on using this and future releases, see [README.md](https://github.com/mapbox/mapbox-gl-native-android/blob/master/README.md). For more details on licensing, see [LICENSE.md](https://github.com/mapbox/mapbox-gl-native-android/blob/master/LICENSE.md).
+
+### Improvements and bug fixes
+ - Added exception-free GLSurfaceView implementation. ([#402](https://github.com/mapbox/mapbox-gl-native-android/pull/402))
+ - Added exception-free Android map renderer. ([#411](https://github.com/mapbox/mapbox-gl-native-android/pull/411))
+ - Clarified the error message when an HTTP request has been cancelled. ([#433](https://github.com/mapbox/mapbox-gl-native-android/pull/433))
+ - Fixed a memory leak that would occur when a source was removed. ([#412](https://github.com/mapbox/mapbox-gl-native-android/pull/412))
+ - Fixed a bug that would halt the application during a scheduled snapshot when the map renderer was stopped. ([#390](https://github.com/mapbox/mapbox-gl-native-android/pull/390)
+ - Avoid changing file source status when the cache path is changed. ([#457](https://github.com/mapbox/mapbox-gl-native-android/pull/457))
+ - Avoid null pointer exception when the underlying hardware is too slow to create the surface. ([#471](https://github.com/mapbox/mapbox-gl-native-android/pull/471))
+
+### User location indicator
+ - Double-tapping the map when the camera is tracking the user location indicator now zooms to the `LocationComponent`'s location. ([#378](https://github.com/mapbox/mapbox-gl-native-android/pull/378))
+ - Improved camera rotation to use the shortest path. ([#426](https://github.com/mapbox/mapbox-gl-native-android/pull/426))
+ - Added support for using a background image on GPS mode when `LocationComponentActivationOptions#useSpecializedLocationLayer` is activated . ([#439](https://github.com/mapbox/mapbox-gl-native-android/pull/439))
+ - Fixed a bug where an in-progress animation of an updating `LocationComponent` would be interrupted when a style was changed. ([#437](https://github.com/mapbox/mapbox-gl-native-android/pull/437))
+ - Updated documentation to reflect that the `FOREGROUND_LAYER` constant is usable for relative positioning in both normal and specialized rendering modes. [#413](https://github.com/mapbox/mapbox-gl-native-android/pull/413)
+ - Set GPS bearing immediately when changing the indicator to GPS mode. ([#470](https://github.com/mapbox/mapbox-gl-native-android/pull/470))
+
+### Other changes
+ - Updated javadoc documentation for `removeSource`/`removeLayer`/`removeLayerAt`. ([#422](https://github.com/mapbox/mapbox-gl-native-android/pull/422))
+ - Updated GeoJSON library to v5.3.0. ([#441](https://github.com/mapbox/mapbox-gl-native-android/pull/441))
+ - Updated Telemetry library to v5.1.0. ([#409](https://github.com/mapbox/mapbox-gl-native-android/pull/409))
+
+## 9.2.1 - May 15, 2020
+### Improvements and bug fixes
+ - Added compiler and linker options to reduce binary size for release build. ([#382](https://github.com/mapbox/mapbox-gl-native-android/pull/382))
+ - Fixed a crash when `Layer.getFilter()` is used with the `distance` expression. ([#380](https://github.com/mapbox/mapbox-gl-native-android/pull/380))
+ - Reset AndroidRendererBackend properly to prevent a crash during rotation on an Android 4.2.2 x86 tablet. ([#381](https://github.com/mapbox/mapbox-gl-native-android/pull/381)（h/t [ystsoi](https://github.com/ystsoi))
+
+## 9.2.0 - May 7, 2020
+### Features
+ - Added the `distance` expression for calculating the shortest distance between an evaluated feature and a given GeoJSON object. ([#339](https://github.com/mapbox/mapbox-gl-native-android/pull/339))
+ - The [`SymbolLayer.iconTextFit`](https://docs.mapbox.com/android/api/map-sdk/9.2.0-beta.1/com/mapbox/mapboxsdk/style/layers/PropertyFactory.html#iconTextFit-com.mapbox.mapboxsdk.style.expressions.Expression-) property now respects the stretch metadata of any nine-part stretchable image passed into the `style.addImage` method. You can define the stretchable area of an image by configuring the `stretchX`, `stretchY`, `content` options on `Style.addImage` to append the requisite [metadata](https://github.com/mapbox/mapbox-gl-js/issues/8917). ([#314](https://github.com/mapbox/mapbox-gl-native-android/pull/314))
+ - Added methods to set and get the sort key of features in a `CircleLayer` at runtime. Features with a higher sort key will appear above features with a lower sort key. ([#322](https://github.com/mapbox/mapbox-gl-native-android/pull/322))
+ - Introduced `Source.setVolatile` to disable ambient caching of tiles from a source. Use this option on transient sources, such as traffic tilesets, if not showing tiles from a source is preferable to showing outdated tiles should an update request fail. ([#355](https://github.com/mapbox/mapbox-gl-native-android/pull/355))
+ - Introduced `Source.minimumTileUpdateInterval` to override the expiration time set via HTTP headers with a longer expiration time on the client. ([#355](https://github.com/mapbox/mapbox-gl-native-android/pull/355))
+ - Added `Source.maxOverscaleFactor` for defining how much a parent tile can be overscaled during rendering. This setting is only needed if a custom source on your map appears blurry or distorted when viewed at new zoom levels. ([#299](https://github.com/mapbox/mapbox-gl-native-android/pull/299))
+
+### User location indicator
+- Introduced an activation option to render the `LocationComponent` with a dedicated OpenGL layer through `LocationComponentActivationOptions#useSpecializedLocationLayer`, instead of the combined symbol and circle layer implementation used by default. ([#319](https://github.com/mapbox/mapbox-gl-native-android/pull/319))
+- Introduced an option to add an animated pulsing circle around the `LocationComponent` through `LocationComponentOptions#pulseEnabled` and methods to customize it. ([#172](https://github.com/mapbox/mapbox-gl-native-android/pull/172))
+- Introduced an option to set a screen area through `LocationComponentOptions#trackingMultiFingerProtectedMoveArea` where executed gestures will avoid breaking camera tracking when `LocationComponentOptions#trackingGesturesManagement` is enabled. ([#356](https://github.com/mapbox/mapbox-gl-native-android/pull/356))
+
+### Improvements and bug fixes
+ - Improved the default compass engine's heading calculation by accounting for device orientation, ensuring accelerometer and magnetic field sensor events are retained, and pushing updates to the heading even if the sensor is unreliable. ([#338](https://github.com/mapbox/mapbox-gl-native-android/pull/338))（h/t [ystsoi](https://github.com/ystsoi))
+ - Correctly call the `onFling` listener only when the velocity of a gesture meets the threshold to animate the camera. ([#356](https://github.com/mapbox/mapbox-gl-native-android/pull/356))
+ - Enabled adding style images on-demand on `MapSnapshotter`. ([#317](https://github.com/mapbox/mapbox-gl-native-android/pull/317))
+ - Fixed a crash when changing the user interface in `MapSnapshotter.ErrorHandler`. ([#347](https://github.com/mapbox/mapbox-gl-native-android/pull/347))
+ - Fixed a crash when calling the `Style.removeImage` method with the name of a nonexistent image. ([#16391](https://github.com/mapbox/mapbox-gl-native/pull/16391))
+ - Fixed a crash when encountering an invalid polyline. ([#16409](https://github.com/mapbox/mapbox-gl-native/pull/16409))
+ - Certain logging statements no longer run on the main thread. ([#16325](https://github.com/mapbox/mapbox-gl-native/pull/16325))
+
+### Other changes
+ - Rollback to `System.loadLibrary` to fix SoLoader fails to load the native library on x86 devices. ([#368](https://github.com/mapbox/mapbox-gl-native-android/pull/368))
+ - Worked around crashes caused by `JobIntentService` on devices >= API 26 by using a network request to report errors instead. ([#472](https://github.com/mapbox/mapbox-events-android/pull/472)
+
+## 9.1.0 - April 7, 2020
+### Features
+ - Added `within` expression for testing whether an evaluated feature lies within a given GeoJSON object. `within` accepts `Feature`, `FeatureCollection`, `Polygon`, and `MultiPolygon` as valid GeoJSON objects. ([#198](https://github.com/mapbox/mapbox-gl-native-android/pull/198))
+ - Added `in` expression for testing whether an item exists in an array or a substring exists in a string. ([#171](https://github.com/mapbox/mapbox-gl-native-android/pull/171))
+ - Introduced APIs and callbacks for customizing the style used in a `MapSnapshotter` snapshotter with runtime styling methods. ([#268](https://www.github.com/mapbox/mapbox-gl-native-android/pull/268), [#292](https://www.github.com/mapbox/mapbox-gl-native-android/pull/292))
+ - Added methods to set and get the sort key of features in a `FillLayer` and `LineLayer` at runtime. Features with a higher sort key will appear above features with a lower sort key. ([#209](https://github.com/mapbox/mapbox-gl-native-android/pull/209))
+ - Introduced `MapboxMap.setMaxPitchPreference` and `MapboxMap.setMinPitchPreference` to constrain a map's pitch. ([#199](https://github.com/mapbox/mapbox-gl-native-android/pull/199))
+ - Introduced ability to configure the zoom level(s) that tiles are prefetched from by `Source`. This overrides the  tile prefetch setting defined by the `Map` instance. ([#184](https://github.com/mapbox/mapbox-gl-native-android/pull/184))
+
+### Performance improvements
+ - Increased stability of label placement when the map is tilted. ([#16287](https://github.com/mapbox/mapbox-gl-native/pull/16287))
+ - Improved the performance of loading a style that has many style images. ([#16187](https://github.com/mapbox/mapbox-gl-native/pull/16187))
+ - Fixed a memory leak during zooming when `MapboxMapOptions.debugActive` is enabled. ([#15179](https://github.com/mapbox/mapbox-gl-native/issues/15179), fixed by [#15395](https://github.com/mapbox/mapbox-gl-native/pull/15395))
+
+### Bug fixes
+ - Downloaded offline packs no longer reduce the storage space available for ambient caching of tiles and other resources. ([#15622](https://github.com/mapbox/mapbox-gl-native/pull/15622))
+ - Fixed conversion of a `Map` object into a GeoJSON object. ([#16243](https://github.com/mapbox/mapbox-gl-native/pull/16243))
+ - Fixed issues that would cause an offline region to stop downloading before completion. ([#16230](https://github.com/mapbox/mapbox-gl-native/pull/16230), [#16240](https://github.com/mapbox/mapbox-gl-native/pull/16240))
+ - Fixed an issue where a `LineDasharray` value of `[1, 0]` resulted in hairline gaps. ([#16202](https://github.com/mapbox/mapbox-gl-native/pull/16202))
+ - Fixed Proguard configuration to prevent obfuscation of telemetry event classes. ([#306](https://github.com/mapbox/mapbox-gl-native-android/pull/306))
+ - Fixed a crash that might occur during EGL window surface creation. ([#278](https://github.com/mapbox/mapbox-gl-native-android/pull/278))
+ - Fixed a bug that would cause local CJK glyphs to be rendered incorrectly when generated on a device with the high-contrast accessibility setting enabled. ([#289](https://github.com/mapbox/mapbox-gl-native-android/pull/289))
+
+### Other changes
+ - Updated mapbox-events-android to v5.0.0. ([#294](https://github.com/mapbox/mapbox-gl-native-android/pull/294))
+
+## 9.0.1 - March 11, 2020
+[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.0.0...android-v9.0.1) since [Mapbox Maps SDK for Android v9.0.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.0.0):
+### Bug fixes
+ - Fix Proguard configuration to prevent obfuscation of telemetry event classes. [#195](https://github.com/mapbox/mapbox-gl-native-android/pull/195)
 
 ## 8.6.3 - March 5, 2020
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v8.6.2...android-v8.6.3) since [Mapbox Maps SDK for Android v8.6.2](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v8.6.2):
 ### Bug fixes
  - Fix Proguard configuration to prevent obfuscation of telemetry event classes. [#195](https://github.com/mapbox/mapbox-gl-native-android/pull/195)
-
-## 9.1.0-alpha.1 - February 28, 2020
-[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.0.0...android-v9.1.0-alpha.1) since [Mapbox Maps SDK for Android v9.0.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.0.0):
-### Features
- - Introduce `in` expression for testing whether an item exists in an array or a substring exists in a string. [#171](https://github.com/mapbox/mapbox-gl-native-android/pull/171)
- - Introduce option to set the minimum and maximum pitch of a map. [#199](https://github.com/mapbox/mapbox-gl-native-android/pull/199)
- - Introduce ability to configure the zoom level(s) that tiles are prefetched from by `Source`. This overrides the  tile prefetch setting defined by the `Map` instance. [#184](https://github.com/mapbox/mapbox-gl-native-android/pull/184)
- - Introduce option to pass in intermediate points for a smooth `LocationComponent` animation. [#166](https://github.com/mapbox/mapbox-gl-native-android/pull/166)
-
-### Performance improvements
- - Improve the performance of loading a style that has many style images. [#16187](https://github.com/mapbox/mapbox-gl-native/pull/16187)
- - Fix a memory leak during zooming when `MapboxMapOptions.debugActive` is enabled. [#15179](https://github.com/mapbox/mapbox-gl-native/issues/15179), fixed by [#15395](https://github.com/mapbox/mapbox-gl-native/pull/15395)
-
-### Bug fixes
- - Fix issues that would cause an offline pack to stop downloading before completion. [#16230](https://github.com/mapbox/mapbox-gl-native/pull/16230), [#16240](https://github.com/mapbox/mapbox-gl-native/pull/16240)
- - Fix an issue where a `LineDasharray` value of `[1, 0]` resulted in hairline gaps. [#16202](https://github.com/mapbox/mapbox-gl-native/pull/16202)
- - Fix Proguard configuration to prevent obfuscation of telemetry event classes. [#195](https://github.com/mapbox/mapbox-gl-native-android/pull/195)
-
-### Other changes
- - Update mapbox-events-android to v4.7.3. [#201](https://github.com/mapbox/mapbox-gl-native-android/pull/201)
 
 ## 9.0.0 - February 13, 2020
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.0.0-beta.1...android-v9.0.0) since [Mapbox Maps SDK for Android v9.0.0-beta.1](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.0.0-beta.1):
