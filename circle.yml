@@ -4,7 +4,7 @@ workflows:
   version: 2
   mapbox-gl-native-android:
     jobs:
-      - android-appcenter-weekly:
+      - android-arm-template:
           name: android-debug-arm-v8
       - android-release:
           filters:
@@ -378,7 +378,7 @@ jobs:
       - run:
           name: Run instrumentation tests on App Center
           no_output_timeout: 20m
-          command: make run-android-test-app-center devices=OnePlus
+          command: make run-android-test-app-center devices=AndroidMap
 
       - store_artifacts:
           path: MapboxGLAndroidSDKTestApp/build/outputs/apk/debug
