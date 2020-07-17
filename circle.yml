@@ -20,7 +20,7 @@ workflows:
                 - master
     jobs:
       - android-appcenter-weekly:
-          name: android-debug-arm-v8
+          name: android-debug-arm-v7-weekly
 commands:
   npm-install:
     steps:
@@ -348,7 +348,7 @@ jobs:
         default: android-ndk-r21b:a111a5b966
       abi:
         type: string
-        default: "arm-v8"
+        default: "arm-v7"
     docker:
       - image: mbgl/<< parameters.image >>
     resource_class: xlarge
