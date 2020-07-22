@@ -245,7 +245,7 @@ final class NativeMapView implements NativeMap {
 
   @Override
   public void setUserAnimationInProgress(boolean inProgress) {
-    if (checkState("setAnimationInProgress")) {
+    if (checkState("setUserAnimationInProgress")) {
       return;
     }
     nativeSetUserAnimationInProgress(inProgress);
