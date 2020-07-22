@@ -2127,6 +2127,15 @@ public final class MapboxMap {
      nativeMapView.setUserAnimationInProgress(inProgress);
    }
 
+  /**
+   * Check if the animation is currently performed by the user (e.g. with a `jumpTo()` calls series)
+   *
+   * @return true if user animation is in progress, otherwise false
+   */
+  public boolean isUserAnimationInProgress() {
+    return nativeMapView.isUserAnimationInProgress();
+  }
+
   //
   // Interfaces
   //
