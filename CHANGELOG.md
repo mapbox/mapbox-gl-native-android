@@ -2,6 +2,11 @@
 
 Mapbox welcomes participation and contributions from everyone. Please read [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) to get started.
 
+## 8.6.5 - July 22, 2020
+[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v8.6.4...android-v8.6.5) since [Mapbox Maps SDK for Android v8.6.4](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v8.6.4):
+### Bug fixes
+ - Calculate size of an ambient cache without offline region's resources ([#15622](https://github.com/mapbox/mapbox-gl-native/pull/15622))
+
 ## 8.6.4 - July 17, 2020
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v8.6.3...android-v8.6.4) since [Mapbox Maps SDK for Android v8.6.3](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v8.6.3):
 ### Bug fixes
