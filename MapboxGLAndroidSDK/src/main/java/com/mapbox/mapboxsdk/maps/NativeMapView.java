@@ -244,6 +244,22 @@ final class NativeMapView implements NativeMap {
   }
 
   @Override
+  public void setUserAnimationInProgress(boolean inProgress) {
+    if (checkState("setAnimationInProgress")) {
+      return;
+    }
+    nativeSetUserAnimationInProgress(inProgress);
+  }
+
+  @Override
+  public boolean isUserAnimationInProgress() {
+    if (checkState("isUserAnimationInProgress")) {
+      return false;
+    }
+    return nativeIsUserAnimationInProgress();
+  }
+
+  @Override
   public void moveBy(double dx, double dy, long duration) {
     if (checkState("moveBy")) {
       return;
@@ -1205,6 +1221,12 @@ final class NativeMapView implements NativeMap {
 
   @Keep
   private native void nativeSetGestureInProgress(boolean inProgress);
+
+  @Keep
+  private native void nativeSetUserAnimationInProgress(boolean inProgress);
+
+  @Keep
+  private native boolean nativeIsUserAnimationInProgress();
 
   @Keep
   private native void nativeMoveBy(double dx, double dy, long duration);

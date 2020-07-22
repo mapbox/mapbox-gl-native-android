@@ -238,6 +238,10 @@ interface NativeMap {
 
   void setGestureInProgress(boolean inProgress);
 
+  void setUserAnimationInProgress(boolean inProgress);
+
+  boolean isUserAnimationInProgress();
+
   float getPixelRatio();
 
   void triggerRepaint();
