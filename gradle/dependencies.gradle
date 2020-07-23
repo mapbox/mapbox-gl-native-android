@@ -39,8 +39,9 @@ ext {
             appcenter        : '1.4',
             ktlint           : '0.34.0',
             commonsIO        : '2.6',
-            mapboxSdkVersions: '1.0.1',
-            mapboxSdkCore    : '1.8.4'
+            mapboxSdkVersions: '1.1.0',
+            mapboxSdkCore    : '1.8.4',
+            mapboxSdkRegistryPlugin: '0.2.1'
     ]
 
     dependenciesList = [
@@ -50,6 +51,8 @@ ext {
             mapboxAndroidGestures  : "com.mapbox.mapboxsdk:mapbox-android-gestures:${versions.mapboxGestures}",
             mapboxAndroidAccounts  : "com.mapbox.mapboxsdk:mapbox-android-accounts:${versions.mapboxAccounts}",
             mapboxJavaTurf         : "com.mapbox.mapboxsdk:mapbox-sdk-turf:${versions.mapboxServices}",
+            mapboxSdkVersions      : "com.mapbox.mapboxsdk:mapbox-android-sdk-versions:${versions.mapboxSdkVersions}",
+            mapboxSdkRegistryPlugin: "com.mapbox.gradle.plugins:sdk-registry:${versions.mapboxSdkRegistryPlugin}",
 
             junit                  : "junit:junit:${versions.junit}",
             mockito                : "org.mockito:mockito-core:${versions.mockito}",
@@ -89,7 +92,6 @@ ext {
             lintApi                : "com.android.tools.lint:lint-api:${versions.lint}",
             lintChecks             : "com.android.tools.lint:lint-checks:${versions.lint}",
             lintTests              : "com.android.tools.lint:lint-tests:${versions.lint}",
-            ktlint                 : "com.pinterest:ktlint:${versions.ktlint}",
-            mapboxSdkVersions      : "com.mapbox.mapboxsdk:mapbox-android-sdk-versions:${versions.mapboxSdkVersions}"
+            ktlint                 : "com.pinterest:ktlint:${versions.ktlint}"
     ]
 }
