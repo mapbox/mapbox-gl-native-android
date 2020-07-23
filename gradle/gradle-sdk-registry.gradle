@@ -48,7 +48,7 @@ registry {
     production = false
     snapshot = false
     override = false
-    dryRun = true
+    dryRun = false
     publications = ["MapboxAndroidMapsSdk"]
 }
 
