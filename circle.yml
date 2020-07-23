@@ -190,7 +190,7 @@ jobs:
         default: "c++_static"
       image:
         type: string
-        default: android-ndk-r21b:a111a5b966
+        default: android-ndk-r21:769c31f1d8
       firebase_device_id:
         type: string
         default: sailfish
@@ -267,7 +267,7 @@ jobs:
   # ------------------------------------------------------------------------------
   android-release:
     docker:
-      - image: mbgl/android-ndk-r21b:a111a5b966
+      - image: mbgl/android-ndk-r21:769c31f1d8
     resource_class: xlarge
     working_directory: /src
     environment:
@@ -318,11 +318,10 @@ jobs:
       - store_artifacts:
           path: MapboxGLAndroidSDKTestApp/build/outputs/apk/release
           destination: .
-      - run:
-          name: upload debuggable objects to release tag
+      - deploy:
+          name: Publish to SDK Registry
           command: |
             if [[ $CIRCLE_TAG == android-v* ]]; then
-              export GITHUB_TOKEN=${DANGER_GITHUB_API_TOKEN}
-              python3 scripts/upload-to-github-release.py --file MapboxGLAndroidSDK/build/intermediates/cmake/release/debuggable-objects.tar.gz --release $CIRCLE_TAG --project mapbox-gl-native-android
+              make run-android-upload-to-sdk-registry
             fi
       - generate-api-javadoc
