@@ -190,7 +190,7 @@ jobs:
         default: "c++_static"
       image:
         type: string
-        default: android-ndk-r21b:a111a5b966
+        default: android-ndk-r21:769c31f1d8
       firebase_device_id:
         type: string
         default: sailfish
@@ -267,7 +267,7 @@ jobs:
   # ------------------------------------------------------------------------------
   android-release:
     docker:
-      - image: mbgl/android-ndk-r21b:a111a5b966
+      - image: mbgl/android-ndk-r21:769c31f1d8
     resource_class: xlarge
     working_directory: /src
     environment:
@@ -283,22 +283,6 @@ jobs:
       - run:
           name: Android nitpick
           command: make run-android-nitpick
-      - run:
-          name: Trigger android benchmark run
-          command: |
-            if [ -n "${MOBILE_METRICS_TOKEN}" ]; then
-              if [[ $CIRCLE_BRANCH == master ]]; then
-                curl -u $MOBILE_METRICS_TOKEN -d build_parameters[CIRCLE_JOB]=android-benchmark https://circleci.com/api/v1.1/project/github/mapbox/mobile-metrics/tree/master
-              fi
-            fi
-      - run:
-          name: Trigger android binary size check
-          command: |
-            if [ -n "${MOBILE_METRICS_TOKEN}" ]; then
-              if [[ $CIRCLE_BRANCH == master ]]; then
-                curl -u ${MOBILE_METRICS_TOKEN}: -d build_parameters[CIRCLE_JOB]=android-binary-size-hydrogen https://circleci.com/api/v1.1/project/github/mapbox/mobile-metrics/tree/master
-              fi
-            fi
       - run:
           name: Update version name
           command: |
@@ -334,4 +318,10 @@ jobs:
       - store_artifacts:
           path: MapboxGLAndroidSDKTestApp/build/outputs/apk/release
           destination: .
+      - deploy:
+          name: Publish to SDK Registry
+          command: |
+            if [[ $CIRCLE_TAG == android-v* ]]; then
+              make run-android-upload-to-sdk-registry
+            fi
       - generate-api-javadoc
