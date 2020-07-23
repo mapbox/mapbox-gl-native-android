@@ -318,9 +318,6 @@ jobs:
       - store_artifacts:
           path: MapboxGLAndroidSDKTestApp/build/outputs/apk/release
           destination: .
-      - run:
-          name: Test SDK registry
-          command: make run-android-upload-to-sdk-registry
       - deploy:
           name: Publish to SDK Registry
           command: |
