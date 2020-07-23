@@ -2116,6 +2116,26 @@ public final class MapboxMap {
     return locationComponent;
   }
 
+  /**
+   * Tells the map rendering engine that the animation is currently performed by the
+   * user (e.g. with a `jumpTo()` calls series). It adjusts the engine for the animation use case.
+   * In particular, it brings more stability to symbol placement and rendering.
+   *
+   * @param inProgress Bool representing if user animation is in progress
+   */
+  public void setUserAnimationInProgress(boolean inProgress) {
+    nativeMapView.setUserAnimationInProgress(inProgress);
+  }
+
+  /**
+   * Check if the animation is currently performed by the user (e.g. with a `jumpTo()` calls series)
+   *
+   * @return true if user animation is in progress, otherwise false
+   */
+  public boolean isUserAnimationInProgress() {
+    return nativeMapView.isUserAnimationInProgress();
+  }
+
   //
   // Interfaces
   //
