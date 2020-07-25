@@ -223,4 +223,27 @@ class MapboxMapTest {
     mapboxMap.onFinishLoadingStyle()
     verify(exactly = 1) { onStyleLoadedListener.onStyleLoaded(style) }
   }
+
+  @Test
+  fun addObserver() {
+    val observer = mockk<Observer>()
+    val debugList = arrayListOf<String>()
+    mapboxMap.subscribe(observer, debugList)
+    verify { nativeMapView.subscribe(observer, debugList) }
+  }
+
+  @Test
+  fun removeObserver() {
+    val observer = mockk<Observer>()
+    mapboxMap.unsubscribe(observer)
+    verify { nativeMapView.unsubscribe(observer) }
+  }
+
+  @Test
+  fun removeObserverList() {
+    val observer = mockk<Observer>()
+    val debugList = arrayListOf<String>()
+    mapboxMap.unsubscribe(observer, debugList)
+    verify { nativeMapView.unsubscribe(observer, debugList) }
+  }
 }

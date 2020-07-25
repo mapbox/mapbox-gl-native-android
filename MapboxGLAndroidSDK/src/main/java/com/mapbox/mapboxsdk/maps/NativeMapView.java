@@ -23,6 +23,7 @@ import com.mapbox.mapboxsdk.geometry.LatLngBoundsZoom;
 import com.mapbox.mapboxsdk.geometry.ProjectedMeters;
 import com.mapbox.mapboxsdk.log.Logger;
 import com.mapbox.mapboxsdk.maps.renderer.MapRenderer;
+import com.mapbox.mapboxsdk.offline.OfflineRegionStatus;
 import com.mapbox.mapboxsdk.storage.FileSource;
 import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.CannotAddLayerException;
@@ -35,6 +36,7 @@ import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.IntRange;
@@ -1045,6 +1047,34 @@ final class NativeMapView implements NativeMap {
   }
 
   //
+  // Events Observer
+  //
+
+  @Override
+  public void subscribe(@NonNull Observer observer, @NonNull List<String> events) {
+    if (checkState("subscribe")) {
+      return;
+    }
+    nativeSubscribe(observer, events.toArray(new String[events.size()]));
+  }
+
+  @Override
+  public void unsubscribe(@NonNull Observer observer, @NonNull List<String> events) {
+    if (checkState("unsubscribe")) {
+      return;
+    }
+    nativeUnsubscribe(observer, events.toArray(new String[events.size()]));
+  }
+
+  @Override
+  public void unsubscribe(@NonNull Observer observer) {
+    if (checkState("unsubscribe all")) {
+      return;
+    }
+    nativeUnsubscribeAll(observer);
+  }
+
+  //
   // Callbacks
   //
 
@@ -1518,6 +1548,15 @@ final class NativeMapView implements NativeMap {
 
   @Keep
   private native void nativeTriggerRepaint();
+
+  @Keep
+  private native void nativeSubscribe(Observer observer, String[] events);
+
+  @Keep
+  private native void nativeUnsubscribe(Observer observer, String[] events);
+
+  @Keep
+  private native void nativeUnsubscribeAll(Observer observer);
 
   //
   // Snapshot

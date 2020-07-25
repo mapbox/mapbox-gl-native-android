@@ -37,6 +37,7 @@ import com.mapbox.mapboxsdk.offline.OfflineRegionDefinition;
 import com.mapbox.mapboxsdk.style.expressions.Expression;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.FloatRange;
@@ -2134,6 +2135,42 @@ public final class MapboxMap {
    */
   public boolean isUserAnimationInProgress() {
     return nativeMapView.isUserAnimationInProgress();
+  }
+
+  //
+  // Events Observer
+  //
+
+  /**
+   * Subscribes an Observer to a provided list of event types.
+   * Observable will hold a strong reference to an \sa Observer instance, therefore,
+   * in order to stop receiving notifications, caller must call unsubscribe with an
+   * \sa Observer instance used for an initial subscription.
+   *
+   * @param observer an \sa Observer
+   * @param events an array of event types to be subscribed to.
+   */
+  public void subscribe(@NonNull Observer observer, @NonNull List<String> events) {
+    nativeMapView.subscribe(observer, events);
+  }
+
+  /**
+   * Unsubscribes an Observer from a provided list of event types.
+   *
+   * @param observer an Observer
+   * @param events an array of event types to be unsubscribed from.
+   */
+  public void unsubscribe(@NonNull Observer observer, @NonNull List<String> events) {
+    nativeMapView.unsubscribe(observer, events);
+  }
+
+  /**
+   * Unsubscribes an Observer from all events.
+   *
+   * @param observer an Observer
+   */
+  public void unsubscribe(@NonNull Observer observer) {
+    nativeMapView.unsubscribe(observer);
   }
 
   //
