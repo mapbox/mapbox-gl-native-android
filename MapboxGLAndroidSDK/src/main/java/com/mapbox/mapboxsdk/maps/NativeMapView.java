@@ -1055,7 +1055,7 @@ final class NativeMapView implements NativeMap {
     if (checkState("subscribe")) {
       return;
     }
-    nativeSubscribe(observer, events.toArray(new String[events.size()]));
+    nativeSubscribe(observer, observer.getId(), events.toArray(new String[events.size()]));
   }
 
   @Override
@@ -1063,7 +1063,7 @@ final class NativeMapView implements NativeMap {
     if (checkState("unsubscribe")) {
       return;
     }
-    nativeUnsubscribe(observer, events.toArray(new String[events.size()]));
+    nativeUnsubscribe(observer.getId(), events.toArray(new String[events.size()]));
   }
 
   @Override
@@ -1071,7 +1071,7 @@ final class NativeMapView implements NativeMap {
     if (checkState("unsubscribe all")) {
       return;
     }
-    nativeUnsubscribeAll(observer);
+    nativeUnsubscribeAll(observer.getId());
   }
 
   //
@@ -1550,13 +1550,13 @@ final class NativeMapView implements NativeMap {
   private native void nativeTriggerRepaint();
 
   @Keep
-  private native void nativeSubscribe(Observer observer, String[] events);
+  private native void nativeSubscribe(Observer observer, int id, String[] events);
 
   @Keep
-  private native void nativeUnsubscribe(Observer observer, String[] events);
+  private native void nativeUnsubscribe(int id, String[] events);
 
   @Keep
-  private native void nativeUnsubscribeAll(Observer observer);
+  private native void nativeUnsubscribeAll(int id);
 
   //
   // Snapshot

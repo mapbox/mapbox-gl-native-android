@@ -2,21 +2,31 @@ package com.mapbox.mapboxsdk.maps;
 
 import androidx.annotation.NonNull;
 
-import com.mapbox.mapboxsdk.log.Logger;
+import java.util.concurrent.atomic.AtomicInteger;
 
+/** @brief Observer interface used to subscribe for an \sa Observable events. */
 public abstract class Observer {
 
-    private long nativePtr = 0;
+  private static AtomicInteger idCounter = new AtomicInteger(0);
+  private final int id;
 
-    public Observer() {
-        nativeInitialize();
+  public Observer() {
+      id = idCounter.incrementAndGet();
+  }
+
+  /**
+   * @brief Gets observer id
+   *
+   * @return observer id
+   */
+  public int getId() {
+        return id;
     }
 
-    protected native void nativeInitialize();
-
-    @Override
-    protected native void finalize() throws Throwable;
-
-    public abstract void notifyEvent(@NonNull ObservableEvent event);
-
+  /**
+   * @brief Notifies an Observer about an \sa Event.
+   *
+   * @param event an \sa Event
+   */
+  public abstract void notify(@NonNull ObservableEvent event);
 }

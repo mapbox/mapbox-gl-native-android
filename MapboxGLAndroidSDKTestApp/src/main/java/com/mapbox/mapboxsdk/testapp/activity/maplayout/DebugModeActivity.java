@@ -53,7 +53,7 @@ public class DebugModeActivity extends AppCompatActivity implements OnMapReadyCa
   private boolean isReportFps = true;
   private Observer observer = new Observer() {
     @Override
-    public void notifyEvent(@NonNull ObservableEvent event) {
+    public void notify(@NonNull ObservableEvent event) {
       Logger.v(TAG, "Observer event notified: " + event);
     }
   };
