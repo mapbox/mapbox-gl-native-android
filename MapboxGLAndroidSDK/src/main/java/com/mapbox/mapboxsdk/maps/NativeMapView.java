@@ -23,7 +23,6 @@ import com.mapbox.mapboxsdk.geometry.LatLngBoundsZoom;
 import com.mapbox.mapboxsdk.geometry.ProjectedMeters;
 import com.mapbox.mapboxsdk.log.Logger;
 import com.mapbox.mapboxsdk.maps.renderer.MapRenderer;
-import com.mapbox.mapboxsdk.offline.OfflineRegionStatus;
 import com.mapbox.mapboxsdk.storage.FileSource;
 import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.CannotAddLayerException;
@@ -36,7 +35,6 @@ import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.IntRange;

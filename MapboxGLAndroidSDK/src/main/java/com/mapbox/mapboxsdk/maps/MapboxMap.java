@@ -37,7 +37,6 @@ import com.mapbox.mapboxsdk.offline.OfflineRegionDefinition;
 import com.mapbox.mapboxsdk.style.expressions.Expression;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.FloatRange;
