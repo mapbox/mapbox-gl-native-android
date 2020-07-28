@@ -1,5 +1,6 @@
 package com.mapbox.mapboxsdk.maps;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -7,6 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Observer interface used to subscribe for an Observable events.
  */
+@Keep
 public abstract class Observer {
 
   private static AtomicInteger idCounter = new AtomicInteger(0);

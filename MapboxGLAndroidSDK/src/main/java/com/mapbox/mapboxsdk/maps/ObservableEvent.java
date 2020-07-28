@@ -1,5 +1,6 @@
 package com.mapbox.mapboxsdk.maps;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 
 import java.util.Date;
@@ -7,6 +8,7 @@ import java.util.Date;
 /**
  * Generic Event type used to notify Observer.
  */
+@Keep
 public final class ObservableEvent {
 
   @NonNull

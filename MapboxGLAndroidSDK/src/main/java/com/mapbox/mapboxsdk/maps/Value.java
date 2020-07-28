@@ -1,5 +1,6 @@
 package com.mapbox.mapboxsdk.maps;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -9,6 +10,7 @@ import java.util.HashMap;
 /**
  * Wrapper class for value, complies to the mapbox type system.
  */
+@Keep
 public class Value {
 
   @Nullable
