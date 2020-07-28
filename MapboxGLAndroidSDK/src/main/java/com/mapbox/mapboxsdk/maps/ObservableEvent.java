@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import java.util.Date;
 
 /**
- * @brief Generic Event type used to notify \sa Observer.
+ * Generic Event type used to notify Observer.
  */
 public final class ObservableEvent {
 
@@ -54,7 +54,7 @@ public final class ObservableEvent {
   }
 
   /**
-   * Generic container for an event's data. \sa Observable instances have to specify
+   * Generic container for an event's data. Observable instances have to specify
    * data format of an event.
    */
   @NonNull

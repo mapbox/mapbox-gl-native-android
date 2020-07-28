@@ -2142,11 +2142,11 @@ public final class MapboxMap {
 
   /**
    * Subscribes an Observer to a provided list of event types.
-   * Observable will hold a strong reference to an \sa Observer instance, therefore,
+   * Observable will hold a strong reference to an Observer instance, therefore,
    * in order to stop receiving notifications, caller must call unsubscribe with an
-   * \sa Observer instance used for an initial subscription.
+   * Observer instance used for an initial subscription.
    *
-   * @param observer an \sa Observer
+   * @param observer an Observer
    * @param events an array of event types to be subscribed to.
    */
   public void subscribe(@NonNull Observer observer, @NonNull List<String> events) {

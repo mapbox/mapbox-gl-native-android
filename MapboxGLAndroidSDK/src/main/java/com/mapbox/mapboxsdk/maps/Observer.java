@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @brief Observer interface used to subscribe for an \sa Observable events.
+ * Observer interface used to subscribe for an Observable events.
  */
 public abstract class Observer {
 
@@ -17,16 +17,18 @@ public abstract class Observer {
   }
 
   /**
+   * Gets observer id
+   *
    * @return observer id
-   * @brief Gets observer id
    */
   public int getId() {
     return id;
   }
 
   /**
-   * @param event an \sa Event
-   * @brief Notifies an Observer about an \sa Event.
+   * Notifies an Observer about an Event.
+   *
+   * @param event an Event
    */
   public abstract void notify(@NonNull ObservableEvent event);
 }
