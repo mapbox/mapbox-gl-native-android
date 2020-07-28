@@ -124,6 +124,21 @@ public class LocationCameraControllerTest {
   }
 
   @Test
+  public void setCameraMode_setUserAnimationInProgress() {
+    MapboxMap mapboxMap = mock(MapboxMap.class);
+    when(mapboxMap.getUiSettings()).thenReturn(mock(UiSettings.class));
+
+    LocationCameraController camera = buildCamera(mapboxMap);
+    camera.initializeOptions(mock(LocationComponentOptions.class));
+
+    camera.setCameraMode(TRACKING_GPS);
+    verify(mapboxMap).setUserAnimationInProgress(true);
+
+    camera.setCameraMode(NONE);
+    verify(mapboxMap).setUserAnimationInProgress(false);
+  }
+
+  @Test
   public void setCameraMode_trackingChangeListenerCameraDismissedIsCalled() {
     OnCameraTrackingChangedListener internalTrackingChangedListener = mock(OnCameraTrackingChangedListener.class);
     LocationCameraController camera = buildCamera(internalTrackingChangedListener);
