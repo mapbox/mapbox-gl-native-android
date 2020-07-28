@@ -7,10 +7,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.PointF;
 import android.os.Handler;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import android.view.InputDevice;
 import android.view.MotionEvent;
 import android.view.animation.DecelerateInterpolator;
@@ -31,6 +27,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import static com.mapbox.mapboxsdk.constants.MapboxConstants.MAXIMUM_ANGULAR_VELOCITY;
 import static com.mapbox.mapboxsdk.constants.MapboxConstants.MAX_ABSOLUTE_SCALE_VELOCITY_CHANGE;
@@ -415,7 +414,7 @@ final class MapGestureDetector {
       }
 
       float screenDensity = uiSettings.getPixelRatio();
-
+      screenDensity = screenDensity < 3 ? 3 : screenDensity;
       // calculate velocity vector for xy dimensions, independent from screen size
       double velocityXY = Math.hypot(velocityX / screenDensity, velocityY / screenDensity);
       if (velocityXY < MapboxConstants.VELOCITY_THRESHOLD_IGNORE_FLING) {
@@ -426,8 +425,8 @@ final class MapGestureDetector {
       // tilt results in a bigger translation, limiting input for #5281
       double tilt = transform.getTilt();
       double tiltFactor = 1.5 + ((tilt != 0) ? (tilt / 10) : 0);
-      double offsetX = velocityX / tiltFactor / 3;
-      double offsetY = velocityY / tiltFactor / 3;
+      double offsetX = velocityX / tiltFactor / screenDensity;
+      double offsetY = velocityY / tiltFactor / screenDensity;
 
       // calculate animation time based on displacement
       long animationTime = (long) (velocityXY / 7 / tiltFactor + MapboxConstants.ANIMATION_DURATION_FLING_BASE);
