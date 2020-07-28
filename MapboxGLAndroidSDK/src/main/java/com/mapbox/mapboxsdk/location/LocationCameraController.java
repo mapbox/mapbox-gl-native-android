@@ -114,8 +114,8 @@ final class LocationCameraController {
     }
 
     final boolean wasTracking = isLocationTracking();
-    mapboxMap.setUserAnimationInProgress(wasTracking);
     this.cameraMode = cameraMode;
+    mapboxMap.setUserAnimationInProgress(isLocationTracking());
 
     if (cameraMode != CameraMode.NONE) {
       mapboxMap.cancelTransitions();
