@@ -293,4 +293,14 @@ interface NativeMap {
   long getNativePtr();
 
   void addSnapshotCallback(@NonNull MapboxMap.SnapshotReadyCallback callback);
+
+  //
+  // Events Observer
+  //
+
+  void subscribe(@NonNull Observer observer, @NonNull List<String> events);
+
+  void unsubscribe(@NonNull Observer observer, @NonNull List<String> events);
+
+  void unsubscribe(@NonNull Observer observer);
 }
