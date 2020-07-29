@@ -2137,6 +2137,42 @@ public final class MapboxMap {
   }
 
   //
+  // Events Observer
+  //
+
+  /**
+   * Subscribes an Observer to a provided list of event types.
+   * Observable will hold a strong reference to an Observer instance, therefore,
+   * in order to stop receiving notifications, caller must call unsubscribe with an
+   * Observer instance used for an initial subscription.
+   *
+   * @param observer an Observer
+   * @param events an array of event types to be subscribed to.
+   */
+  public void subscribe(@NonNull Observer observer, @NonNull List<String> events) {
+    nativeMapView.subscribe(observer, events);
+  }
+
+  /**
+   * Unsubscribes an Observer from a provided list of event types.
+   *
+   * @param observer an Observer
+   * @param events an array of event types to be unsubscribed from.
+   */
+  public void unsubscribe(@NonNull Observer observer, @NonNull List<String> events) {
+    nativeMapView.unsubscribe(observer, events);
+  }
+
+  /**
+   * Unsubscribes an Observer from all events.
+   *
+   * @param observer an Observer
+   */
+  public void unsubscribe(@NonNull Observer observer) {
+    nativeMapView.unsubscribe(observer);
+  }
+
+  //
   // Interfaces
   //
 
