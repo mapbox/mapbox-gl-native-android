@@ -38,10 +38,11 @@ ext {
             jacoco           : '0.8.5',
             appcenter        : '1.4',
             ktlint           : '0.34.0',
-            commonsIO        : '2.6',
+x            commonsIO        : '2.6',
             mapboxSdkVersions: '1.1.0',
-            mapboxSdkCore    : '1.8.3',
-            mapboxSdkRegistryPlugin: '0.2.1'
+            mapboxSdkCore    : '2.0.0-alpha.1',
+            mapboxSdkRegistryPlugin: '0.2.1',
+            mapboxSdkVersions: '1.0.1'
     ]
 
     dependenciesList = [
