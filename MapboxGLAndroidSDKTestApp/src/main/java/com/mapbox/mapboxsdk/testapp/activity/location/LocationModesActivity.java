@@ -207,10 +207,10 @@ public class LocationModesActivity extends AppCompatActivity implements OnMapRea
     } else if (id == R.id.action_component_padding_animation_while_tracking) {
       Random paddingRandom = new Random();
       locationComponent.paddingWhileTracking(new double[] {
-          paddingRandom.nextDouble() * 500,
-          paddingRandom.nextDouble() * 500,
-          paddingRandom.nextDouble() * 500,
-          paddingRandom.nextDouble() * 500
+          paddingRandom.nextDouble() * 500 * (paddingRandom.nextBoolean() ? -1 : 1),
+          paddingRandom.nextDouble() * 500 * (paddingRandom.nextBoolean() ? -1 : 1),
+          paddingRandom.nextDouble() * 500 * (paddingRandom.nextBoolean() ? -1 : 1),
+          paddingRandom.nextDouble() * 500 * (paddingRandom.nextBoolean() ? -1 : 1)
       }, 1000L, new MapboxMap.CancelableCallback() {
         @Override
         public void onCancel() {
