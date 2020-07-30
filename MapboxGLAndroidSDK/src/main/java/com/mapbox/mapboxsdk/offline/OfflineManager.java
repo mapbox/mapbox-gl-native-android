@@ -12,7 +12,6 @@ import androidx.annotation.UiThread;
 
 import com.mapbox.mapboxsdk.LibraryLoader;
 import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.R;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.maps.TelemetryDefinition;
 import com.mapbox.mapboxsdk.net.ConnectivityReceiver;
@@ -629,14 +628,6 @@ public class OfflineManager {
    */
   public void createOfflineRegion(@NonNull OfflineRegionDefinition definition, @NonNull byte[] metadata,
                                   @NonNull final CreateOfflineRegionCallback callback) {
-    if (!isValidOfflineRegionDefinition(definition)) {
-      callback.onError(
-        String.format(context.getString(R.string.mapbox_offline_error_region_definition_invalid),
-          definition.getBounds())
-      );
-      return;
-    }
-
     ConnectivityReceiver.instance(context).activate();
     FileSource.getInstance(context).activate();
     createOfflineRegion(fileSource, definition, metadata, new CreateOfflineRegionCallback() {
@@ -692,16 +683,6 @@ public class OfflineManager {
    */
   public void cancelPrefetchAmbientCacheRequest(long requestId) {
     nativeCancelPrefetchAmbientCacheRequest(requestId);
-  }
-
-  /**
-   * Validates if the offline region definition bounds is valid for an offline region download.
-   *
-   * @param definition the offline region definition
-   * @return true if the region fits the world bounds.
-   */
-  private boolean isValidOfflineRegionDefinition(OfflineRegionDefinition definition) {
-    return LatLngBounds.world().contains(definition.getBounds());
   }
 
   /**
