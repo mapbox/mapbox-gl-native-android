@@ -6,8 +6,13 @@ endif ()
 
 add_library(
     example-custom-layer MODULE
-    ${PROJECT_SOURCE_DIR}/custom_layer.hpp
     ${PROJECT_SOURCE_DIR}/example_custom_layer.cpp
+)
+
+target_include_directories(
+    example-custom-layer
+    PRIVATE
+        ../../../../MapboxGLAndroidSDK/src/main/cpp
 )
 
 target_link_libraries(

@@ -21,7 +21,7 @@ ext.nativeBuild = { nativeTargets ->
         if (abi != 'none') {
             externalNativeBuild {
                 cmake {
-                    path "../MapboxGLAndroidSDK/src/main/cpp/CMakeLists.txt"
+                    path "./src/main/cpp/CMakeLists.txt"
                     version "3.10.2"
                 }
             }
