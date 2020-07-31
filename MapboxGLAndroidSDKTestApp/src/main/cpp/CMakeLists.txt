@@ -15,10 +15,28 @@ target_include_directories(
         ../../../../MapboxGLAndroidSDK/src/main/cpp
 )
 
+# Use the same compile_options as in mapbox-gl
+target_compile_options(
+    example-custom-layer
+    PRIVATE
+        $<$<CONFIG:Release>:-Oz>
+        $<$<CONFIG:Release>:-Qunused-arguments>
+        $<$<CONFIG:Release>:-flto>
+        $<$<CONFIG:Release>:-fvisibility=hidden>
+        $<$<CONFIG:Release>:-fvisibility-inlines-hidden>)
+
+# Use the same linker options as in mapbox-gl
 target_link_libraries(
     example-custom-layer
     PRIVATE
         GLESv2
         log
+        $<$<CONFIG:Release>:-Wl,--gc-sections>
+        $<$<CONFIG:Release>:-Wl,--icf=all>
+        $<$<CONFIG:Release>:-flto>
+        $<$<CONFIG:Release>:-fuse-ld=lld>
+        $<$<CONFIG:Release>:-Wl,--lto-new-pass-manager>
+        $<$<CONFIG:Release>:-Wl,--pack-dyn-relocs=android>
+        $<$<CONFIG:Release>:-Wl,--lto-O3>
 )
 
