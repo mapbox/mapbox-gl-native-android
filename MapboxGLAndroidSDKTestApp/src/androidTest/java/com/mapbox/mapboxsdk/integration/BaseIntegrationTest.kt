@@ -5,12 +5,11 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.*
-import com.mapbox.mapboxsdk.AppCenter
 import org.junit.Before
 
 const val TIMEOUT_UI_SEARCH_WAIT = 5000L
 
-abstract class BaseIntegrationTest : AppCenter() {
+abstract class BaseIntegrationTest {
 
   protected lateinit var device: UiDevice
 

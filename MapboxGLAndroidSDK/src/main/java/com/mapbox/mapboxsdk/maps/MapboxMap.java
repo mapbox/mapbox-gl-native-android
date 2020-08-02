@@ -30,6 +30,7 @@ import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
+import com.mapbox.mapboxsdk.geometry.LatLngBoundsZoom;
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.log.Logger;
@@ -84,6 +85,7 @@ public final class MapboxMap {
   private Style style;
 
   private boolean debugActive;
+  private boolean started;
 
   MapboxMap(NativeMap map, Transform transform, UiSettings ui, Projection projection,
             OnGesturesManagerInteractionListener listener, CameraChangeDispatcher cameraChangeDispatcher,
@@ -146,6 +148,7 @@ public final class MapboxMap {
    * Called when the hosting Activity/Fragment onStart() method is called.
    */
   void onStart() {
+    started = true;
     locationComponent.onStart();
   }
 
@@ -153,6 +156,7 @@ public final class MapboxMap {
    * Called when the hosting Activity/Fragment onStop() method is called.
    */
   void onStop() {
+    started = false;
     locationComponent.onStop();
   }
 
@@ -1512,6 +1516,16 @@ public final class MapboxMap {
   //
 
   /**
+   * Get the LatLngBoundsZoom from a given CameraPosition.
+   *
+   * @param camera the input camera position
+   * @return LatLngBoundsZoom
+   */
+  public LatLngBoundsZoom getLatLngBoundsZoomFromCamera(@NonNull CameraPosition camera) {
+    return nativeMapView.getLatLngBoundsZoomFromCamera(camera);
+  }
+
+  /**
    * Sets a LatLngBounds that constraints map transformations to this bounds.
    * <p>
    * Set to null to clear current bounds, newly set bounds will override previously set bounds.
@@ -2026,6 +2040,9 @@ public final class MapboxMap {
    * @param callback Callback method invoked when the snapshot is taken.
    */
   public void snapshot(@NonNull SnapshotReadyCallback callback) {
+    if (!started) {
+      return;
+    }
     nativeMapView.addSnapshotCallback(callback);
   }
 
@@ -2120,6 +2137,62 @@ public final class MapboxMap {
   @NonNull
   public LocationComponent getLocationComponent() {
     return locationComponent;
+  }
+
+  /**
+   * Tells the map rendering engine that the animation is currently performed by the
+   * user (e.g. with a `jumpTo()` calls series). It adjusts the engine for the animation use case.
+   * In particular, it brings more stability to symbol placement and rendering.
+   *
+   * @param inProgress Bool representing if user animation is in progress
+   */
+  public void setUserAnimationInProgress(boolean inProgress) {
+    nativeMapView.setUserAnimationInProgress(inProgress);
+  }
+
+  /**
+   * Check if the animation is currently performed by the user (e.g. with a `jumpTo()` calls series)
+   *
+   * @return true if user animation is in progress, otherwise false
+   */
+  public boolean isUserAnimationInProgress() {
+    return nativeMapView.isUserAnimationInProgress();
+  }
+
+  //
+  // Events Observer
+  //
+
+  /**
+   * Subscribes an Observer to a provided list of event types.
+   * Observable will hold a strong reference to an Observer instance, therefore,
+   * in order to stop receiving notifications, caller must call unsubscribe with an
+   * Observer instance used for an initial subscription.
+   *
+   * @param observer an Observer
+   * @param events an array of event types to be subscribed to.
+   */
+  public void subscribe(@NonNull Observer observer, @NonNull List<String> events) {
+    nativeMapView.subscribe(observer, events);
+  }
+
+  /**
+   * Unsubscribes an Observer from a provided list of event types.
+   *
+   * @param observer an Observer
+   * @param events an array of event types to be unsubscribed from.
+   */
+  public void unsubscribe(@NonNull Observer observer, @NonNull List<String> events) {
+    nativeMapView.unsubscribe(observer, events);
+  }
+
+  /**
+   * Unsubscribes an Observer from all events.
+   *
+   * @param observer an Observer
+   */
+  public void unsubscribe(@NonNull Observer observer) {
+    nativeMapView.unsubscribe(observer);
   }
 
   //

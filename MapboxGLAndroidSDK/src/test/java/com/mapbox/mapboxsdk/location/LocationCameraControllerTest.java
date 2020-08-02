@@ -58,7 +58,7 @@ public class LocationCameraControllerTest {
     MapboxMap mapboxMap = mock(MapboxMap.class);
     LocationCameraController camera = buildCamera(mapboxMap);
     camera.initializeOptions(mock(LocationComponentOptions.class));
-
+    camera.setEnabled(true);
     camera.setCameraMode(TRACKING_GPS);
 
     verify(mapboxMap).cancelTransitions();
@@ -122,6 +122,21 @@ public class LocationCameraControllerTest {
     camera.setCameraMode(NONE);
 
     verify(mapboxMap.getUiSettings()).setFocalPoint(null);
+  }
+
+  @Test
+  public void setCameraMode_setUserAnimationInProgress() {
+    MapboxMap mapboxMap = mock(MapboxMap.class);
+    when(mapboxMap.getUiSettings()).thenReturn(mock(UiSettings.class));
+
+    LocationCameraController camera = buildCamera(mapboxMap);
+    camera.initializeOptions(mock(LocationComponentOptions.class));
+
+    camera.setCameraMode(TRACKING_GPS);
+    verify(mapboxMap).setUserAnimationInProgress(true);
+
+    camera.setCameraMode(NONE);
+    verify(mapboxMap).setUserAnimationInProgress(false);
   }
 
   @Test
@@ -284,13 +299,22 @@ public class LocationCameraControllerTest {
   @Test
   public void onNewLatLngValue_focalPointIsAdjusted() {
     MapboxMap mapboxMap = mock(MapboxMap.class);
-    UiSettings uiSettings = mock(UiSettings.class);
-    when(mapboxMap.getUiSettings()).thenReturn(uiSettings);
+    Transform transform = mock(Transform.class);
+
+    final MapboxMap.OnCameraMoveListener[] listener = {null};
+    doAnswer(new Answer<Void>() {
+      @Override
+      public Void answer(InvocationOnMock invocation) {
+        listener[0] = (MapboxMap.OnCameraMoveListener) invocation.getArguments()[0];
+        return null;
+      }
+    }).when(mapboxMap).addOnCameraMoveListener(any(MapboxMap.OnCameraMoveListener.class));
+
     Projection projection = mock(Projection.class);
     PointF pointF = mock(PointF.class);
     when(projection.toScreenLocation(any(LatLng.class))).thenReturn(pointF);
     when(mapboxMap.getProjection()).thenReturn(projection);
-    LocationCameraController camera = buildCamera(mapboxMap);
+    LocationCameraController camera = buildCamera(mapboxMap, transform);
     LocationComponentOptions options = mock(LocationComponentOptions.class);
     when(options.trackingGesturesManagement()).thenReturn(true);
     camera.initializeOptions(options);
@@ -298,7 +322,12 @@ public class LocationCameraControllerTest {
     LatLng latLng = mock(LatLng.class);
 
     getAnimationListener(ANIMATOR_CAMERA_LATLNG, camera.getAnimationListeners()).onNewAnimationValue(latLng);
+    verify(transform).moveCamera(any(MapboxMap.class), any(CameraUpdate.class),
+      nullable(MapboxMap.CancelableCallback.class));
 
+    UiSettings uiSettings = mock(UiSettings.class);
+    when(mapboxMap.getUiSettings()).thenReturn(uiSettings);
+    listener[0].onCameraMove();
     verify(uiSettings).setFocalPoint(pointF);
   }
 
@@ -1143,6 +1172,32 @@ public class LocationCameraControllerTest {
       .animateCamera(eq(mapboxMap), eq(cameraUpdate), eq(1200), any(MapboxMap.CancelableCallback.class));
   }
 
+  @Test
+  public void transition_customAnimationDisabled() {
+    MapboxMap mapboxMap = mock(MapboxMap.class);
+    Transform transform = mock(Transform.class);
+    when(mapboxMap.getCameraPosition()).thenReturn(CameraPosition.DEFAULT);
+    Projection projection = mock(Projection.class);
+    when(mapboxMap.getProjection()).thenReturn(projection);
+    when(projection.getMetersPerPixelAtLatitude(any(Double.class))).thenReturn(Double.valueOf(1000));
+    LocationCameraController camera = buildCamera(mapboxMap, transform);
+    camera.initializeOptions(mock(LocationComponentOptions.class));
+    Location location = mock(Location.class);
+    CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(
+      new CameraPosition.Builder()
+        .target(new LatLng(location))
+        .zoom(14.0)
+        .bearing(13.0)
+        .tilt(45.0)
+        .build()
+    );
+
+    camera.setEnabled(false);
+    camera.setCameraMode(TRACKING, location, 1200, 14.0, 13.0, 45.0, null);
+    verify(transform, times(0))
+      .animateCamera(eq(mapboxMap), eq(cameraUpdate), eq(1200), any(MapboxMap.CancelableCallback.class));
+  }
+
   private LocationCameraController buildCamera(OnCameraTrackingChangedListener onCameraTrackingChangedListener) {
     MapboxMap mapboxMap = mock(MapboxMap.class);
     when(mapboxMap.getUiSettings()).thenReturn(mock(UiSettings.class));
@@ -1207,8 +1262,11 @@ public class LocationCameraControllerTest {
     OnCameraMoveInvalidateListener onCameraMoveInvalidateListener = mock(OnCameraMoveInvalidateListener.class);
     AndroidGesturesManager initialGesturesManager = mock(AndroidGesturesManager.class);
     AndroidGesturesManager internalGesturesManager = mock(AndroidGesturesManager.class);
-    return new LocationCameraController(mapboxMap, transform, moveGestureDetector,
+    LocationCameraController locationCameraController =
+      new LocationCameraController(mapboxMap, transform, moveGestureDetector,
       onCameraTrackingChangedListener, onCameraMoveInvalidateListener, initialGesturesManager, internalGesturesManager);
+    locationCameraController.setEnabled(true);
+    return locationCameraController;
   }
 
   private LocationCameraController buildCamera(MapboxMap mapboxMap, AndroidGesturesManager initialGesturesManager,

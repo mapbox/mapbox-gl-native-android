@@ -34,6 +34,7 @@ import com.mapbox.mapboxsdk.testapp.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class LocationModesActivity extends AppCompatActivity implements OnMapReadyCallback,
   OnLocationClickListener, OnCameraTrackingChangedListener {
@@ -197,6 +198,28 @@ public class LocationModesActivity extends AppCompatActivity implements OnMapRea
         @Override
         public void onFinish() {
           locationComponent.tiltWhileTracking(60);
+        }
+      });
+      if (locationComponent.getCameraMode() == CameraMode.NONE) {
+
+        Toast.makeText(this, "Not possible to animate - not tracking", Toast.LENGTH_SHORT).show();
+      }
+    } else if (id == R.id.action_component_padding_animation_while_tracking) {
+      Random paddingRandom = new Random();
+      locationComponent.paddingWhileTracking(new double[] {
+          paddingRandom.nextDouble() * 500 * (paddingRandom.nextBoolean() ? -1 : 1),
+          paddingRandom.nextDouble() * 500 * (paddingRandom.nextBoolean() ? -1 : 1),
+          paddingRandom.nextDouble() * 500 * (paddingRandom.nextBoolean() ? -1 : 1),
+          paddingRandom.nextDouble() * 500 * (paddingRandom.nextBoolean() ? -1 : 1)
+      }, 1000L, new MapboxMap.CancelableCallback() {
+        @Override
+        public void onCancel() {
+          // No impl
+        }
+
+        @Override
+        public void onFinish() {
+          locationComponent.zoomWhileTracking(16);
         }
       });
       if (locationComponent.getCameraMode() == CameraMode.NONE) {

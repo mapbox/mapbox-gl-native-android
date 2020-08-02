@@ -4,16 +4,25 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven {
+            url 'https://api.mapbox.com/downloads/v2/releases/maven'
+            authentication {
+                basic(BasicAuthentication)
+            }
+            credentials {
+                username "mapbox"
+                password = project.hasProperty('SDK_REGISTRY_TOKEN') ? project.property('SDK_REGISTRY_TOKEN') : System.getenv('SDK_REGISTRY_TOKEN')
+            }
+        }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath 'com.android.tools.build:gradle:4.0.1'
         classpath dependenciesList.licensesPlugin
         classpath dependenciesList.kotlinPlugin
-        classpath dependenciesList.bintrayPlugin
-        classpath dependenciesList.artifactoryPlugin
         classpath dependenciesList.androidPublishPlugin
         classpath dependenciesList.jacocoPlugin
         classpath dependenciesList.mapboxSdkVersions
+        classpath dependenciesList.mapboxSdkRegistryPlugin
     }
 }
 
@@ -22,10 +31,16 @@ allprojects {
         mavenCentral()
         google()
         jcenter()
-        // For publishing Maps SDK files to Bintray
-        maven { url 'https://mapbox.bintray.com/mapbox' }
-        // Snapshot repository
-        // maven { url 'https://oss.jfrog.org/artifactory/oss-snapshot-local/' }
+        maven {
+            url 'https://api.mapbox.com/downloads/v2/releases/maven'
+            authentication {
+                basic(BasicAuthentication)
+            }
+            credentials {
+                username "mapbox"
+                password = project.hasProperty('SDK_REGISTRY_TOKEN') ? project.property('SDK_REGISTRY_TOKEN') : System.getenv('SDK_REGISTRY_TOKEN')
+            }
+        }
     }
     apply from: "${rootDir}/gradle/ktlint.gradle"
 }

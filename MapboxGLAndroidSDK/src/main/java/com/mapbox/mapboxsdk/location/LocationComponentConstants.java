@@ -20,6 +20,9 @@ public final class LocationComponentConstants {
   // Default animation duration for zooming while tracking.
   static final long DEFAULT_TRACKING_ZOOM_ANIM_DURATION = 750;
 
+  // Default animation duration for updating padding while tracking.
+  static final long DEFAULT_TRACKING_PADDING_ANIM_DURATION = 750;
+
   // Default animation duration for tilting while tracking.
   static final long DEFAULT_TRACKING_TILT_ANIM_DURATION = 1250;
 
@@ -66,7 +69,8 @@ public final class LocationComponentConstants {
   public static final String SHADOW_LAYER = "mapbox-location-shadow-layer";
 
   /**
-   * Layer ID of the location foreground icon.
+   * Layer ID of the location foreground icon or the only runtime layer added if
+   * {@link LocationComponentActivationOptions#useSpecializedLocationLayer()} is used.
    */
   public static final String FOREGROUND_LAYER = "mapbox-location-foreground-layer";
 

@@ -17,15 +17,20 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.mapbox.mapboxsdk.log.Logger;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
+import com.mapbox.mapboxsdk.maps.ObservableEvent;
+import com.mapbox.mapboxsdk.maps.Observer;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.mapboxsdk.testapp.R;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -38,12 +43,19 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
  */
 public class DebugModeActivity extends AppCompatActivity implements OnMapReadyCallback, MapboxMap.OnFpsChangedListener {
 
+  private static String TAG = "DebugModeActivity";
   private MapView mapView;
   private MapboxMap mapboxMap;
   private MapboxMap.OnCameraMoveListener cameraMoveListener;
   private ActionBarDrawerToggle actionBarDrawerToggle;
   private int currentStyleIndex;
   private boolean isReportFps = true;
+  private Observer observer = new Observer() {
+    @Override
+    public void notify(@NonNull ObservableEvent event) {
+      Logger.v(TAG, "Observer event notified: " + event);
+    }
+  };
 
   private static final String[] STYLES = new String[] {
     Style.MAPBOX_STREETS,
@@ -106,6 +118,7 @@ public class DebugModeActivity extends AppCompatActivity implements OnMapReadyCa
   @Override
   public void onMapReady(@NonNull MapboxMap map) {
     mapboxMap = map;
+    mapboxMap.subscribe(observer, new ArrayList<>(Collections.singletonList("resource-request")));
     mapboxMap.setStyle(
       new Style.Builder().fromUri(STYLES[currentStyleIndex]), style -> setupNavigationView(style.getLayers())
     );
@@ -239,6 +252,7 @@ public class DebugModeActivity extends AppCompatActivity implements OnMapReadyCa
   protected void onDestroy() {
     super.onDestroy();
     if (mapboxMap != null) {
+      mapboxMap.unsubscribe(observer);
       mapboxMap.removeOnCameraMoveListener(cameraMoveListener);
     }
     mapView.onDestroy();

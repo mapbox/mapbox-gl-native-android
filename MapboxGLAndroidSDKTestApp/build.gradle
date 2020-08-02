@@ -82,12 +82,10 @@ dependencies {
     androidTestImplementation dependenciesList.appCenter
 }
 
-apply from: "${rootDir}/gradle/gradle-make.gradle"
-apply from: "${rootDir}/gradle/gradle-config.gradle"
-apply from: "${rootDir}/gradle/gradle-checkstyle.gradle"
-apply from: "${rootDir}/gradle/gradle-lint.gradle"
-
-
+apply from: "${projectDir}/../gradle/gradle-make.gradle"
+apply from: "${projectDir}/../gradle/gradle-config.gradle"
+apply from: "${projectDir}/../gradle/gradle-checkstyle.gradle"
+apply from: "${projectDir}/../gradle/gradle-lint.gradle"
 
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'

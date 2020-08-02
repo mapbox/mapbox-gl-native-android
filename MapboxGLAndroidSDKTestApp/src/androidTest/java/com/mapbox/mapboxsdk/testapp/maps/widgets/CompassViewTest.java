@@ -4,7 +4,7 @@ import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.testapp.action.WaitAction;
-import com.mapbox.mapboxsdk.testapp.activity.EspressoTest;
+import com.mapbox.mapboxsdk.testapp.activity.EspressoAppCenterTest;
 import com.mapbox.mapboxsdk.testapp.utils.TestConstants;
 
 import org.junit.Ignore;
@@ -20,7 +20,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 
-public class CompassViewTest extends EspressoTest {
+public class CompassViewTest extends EspressoAppCenterTest {
 
   @Test
   public void testDefault() {

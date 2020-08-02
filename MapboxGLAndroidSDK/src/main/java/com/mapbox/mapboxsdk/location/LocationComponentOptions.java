@@ -1729,8 +1729,11 @@ public class LocationComponentOptions implements Parcelable {
      * </p>
      *
      * @param padding The margins for the map in pixels (left, top, right, bottom).
-     * @deprecated Use {@link CameraPosition.Builder#padding(double, double, double, double)}
-     * or {@link CameraUpdateFactory#paddingTo(double, double, double, double)} instead.
+     * @deprecated Use {@link com.mapbox.mapboxsdk.camera.CameraPosition.Builder#padding(double[])}
+     * or {@link com.mapbox.mapboxsdk.camera.CameraUpdateFactory#paddingTo(double[])}
+     * when not tracking and
+     * {@link LocationComponent#paddingWhileTracking(double[])}
+     * when {@link com.mapbox.mapboxsdk.location.modes.CameraMode} tracking is engaged to manipulate the padding.
      */
     @NonNull
     @Deprecated

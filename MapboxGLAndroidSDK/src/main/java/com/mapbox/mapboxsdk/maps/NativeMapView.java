@@ -19,6 +19,7 @@ import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.exceptions.CalledFromWorkerThreadException;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
+import com.mapbox.mapboxsdk.geometry.LatLngBoundsZoom;
 import com.mapbox.mapboxsdk.geometry.ProjectedMeters;
 import com.mapbox.mapboxsdk.log.Logger;
 import com.mapbox.mapboxsdk.maps.renderer.MapRenderer;
@@ -211,6 +212,14 @@ final class NativeMapView implements NativeMap {
   }
 
   @Override
+  public LatLngBoundsZoom getLatLngBoundsZoomFromCamera(@NonNull CameraPosition cameraPosition) {
+    if (checkState("getLatLngBoundsZoomFromCamera")) {
+      return LatLngBoundsZoom.from(0, 0, 0);
+    }
+    return nativeGetLatLngBoundsZoomFromCamera(cameraPosition);
+  }
+
+  @Override
   public void setLatLngBounds(LatLngBounds latLngBounds) {
     if (checkState("setLatLngBounds")) {
       return;
@@ -232,6 +241,22 @@ final class NativeMapView implements NativeMap {
       return;
     }
     nativeSetGestureInProgress(inProgress);
+  }
+
+  @Override
+  public void setUserAnimationInProgress(boolean inProgress) {
+    if (checkState("setUserAnimationInProgress")) {
+      return;
+    }
+    nativeSetUserAnimationInProgress(inProgress);
+  }
+
+  @Override
+  public boolean isUserAnimationInProgress() {
+    if (checkState("isUserAnimationInProgress")) {
+      return false;
+    }
+    return nativeIsUserAnimationInProgress();
   }
 
   @Override
@@ -1020,6 +1045,34 @@ final class NativeMapView implements NativeMap {
   }
 
   //
+  // Events Observer
+  //
+
+  @Override
+  public void subscribe(@NonNull Observer observer, @NonNull List<String> events) {
+    if (checkState("subscribe")) {
+      return;
+    }
+    nativeSubscribe(observer, observer.getId(), events.toArray(new String[events.size()]));
+  }
+
+  @Override
+  public void unsubscribe(@NonNull Observer observer, @NonNull List<String> events) {
+    if (checkState("unsubscribe")) {
+      return;
+    }
+    nativeUnsubscribe(observer.getId(), events.toArray(new String[events.size()]));
+  }
+
+  @Override
+  public void unsubscribe(@NonNull Observer observer) {
+    if (checkState("unsubscribe all")) {
+      return;
+    }
+    nativeUnsubscribeAll(observer.getId());
+  }
+
+  //
   // Callbacks
   //
 
@@ -1185,6 +1238,10 @@ final class NativeMapView implements NativeMap {
   private native String nativeGetStyleJson();
 
   @Keep
+  @NonNull
+  private native LatLngBoundsZoom nativeGetLatLngBoundsZoomFromCamera(CameraPosition cameraPosition);
+
+  @Keep
   private native void nativeSetLatLngBounds(LatLngBounds latLngBounds);
 
   @Keep
@@ -1192,6 +1249,12 @@ final class NativeMapView implements NativeMap {
 
   @Keep
   private native void nativeSetGestureInProgress(boolean inProgress);
+
+  @Keep
+  private native void nativeSetUserAnimationInProgress(boolean inProgress);
+
+  @Keep
+  private native boolean nativeIsUserAnimationInProgress();
 
   @Keep
   private native void nativeMoveBy(double dx, double dy, long duration);
@@ -1483,6 +1546,15 @@ final class NativeMapView implements NativeMap {
 
   @Keep
   private native void nativeTriggerRepaint();
+
+  @Keep
+  private native void nativeSubscribe(Observer observer, int id, String[] events);
+
+  @Keep
+  private native void nativeUnsubscribe(int id, String[] events);
+
+  @Keep
+  private native void nativeUnsubscribeAll(int id);
 
   //
   // Snapshot
