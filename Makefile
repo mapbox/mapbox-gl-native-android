@@ -50,12 +50,6 @@ MBGL_ANDROID_GRADLE = ./gradlew --parallel --max-workers=$(JOBS) -Pmapbox.buildt
 # Some devices return \r\n, so we'll have to remove the carriage return before concatenating.
 MBGL_ANDROID_ACTIVE_ARCHS = $(shell adb devices | sed '1d;/^\*/d;s/[[:space:]].*//' | xargs -n 1 -I DEV `type -P adb` -s DEV shell getprop ro.product.cpu.abi | tr -d '\r')
 
-# Generate code based on the style specification
-.PHONY: android-style-code
-android-style-code:
-	node scripts/generate-style-code.js
-style-code: android-style-code
-
 # Configuration file for running CMake from Gradle within Android Studio.
 gradle/configuration.gradle:
 	@printf "ext {\n    node = '`command -v node || command -v nodejs`'\n    npm = '`command -v npm`'\n    ccache = '`command -v ccache`'\n}" > $@
