@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.TextureView;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -65,6 +66,7 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
   private final MapChangeReceiver mapChangeReceiver = new MapChangeReceiver();
   private final MapCallback mapCallback = new MapCallback();
   private final InitialRenderCallback initialRenderCallback = new InitialRenderCallback();
+  private final List<OnTouchListener> onTouchListeners = new ArrayList<>();
 
   @Nullable
   private NativeMap nativeMapView;
@@ -464,6 +466,8 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
     if (mapRenderer != null) {
       mapRenderer.onDestroy();
     }
+
+    onTouchListeners.clear();
   }
 
   /**
@@ -519,13 +523,38 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
     return renderView;
   }
 
+  /**
+   * Add an OnTouchListener which will be call when an event occurs
+   *
+   * @param listener
+   * @return true if listener has been successfully registered
+   */
+  public boolean addOnTouchListener(OnTouchListener listener) {
+    return onTouchListeners.add(listener);
+  }
+
+  /**
+   * Remove an OnTouchListener previously registered
+   *
+   * @param listener
+   * @return true if listener has been successfully unregistered
+   */
+  public boolean removeOnTouchListener(OnTouchListener listener) {
+    return onTouchListeners.remove(listener);
+  }
+
   @Override
   public boolean onTouchEvent(MotionEvent event) {
-    if (!isGestureDetectorInitialized()) {
-      return super.onTouchEvent(event);
+    if (isGestureDetectorInitialized() && mapGestureDetector.onTouchEvent(event) || super.onTouchEvent(event)) {
+      return true;
     }
 
-    return mapGestureDetector.onTouchEvent(event) || super.onTouchEvent(event);
+    for (OnTouchListener listener : onTouchListeners) {
+      if (listener.onTouch(this, event) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @Override
