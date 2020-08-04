@@ -17,8 +17,6 @@ public abstract class Source {
   @Keep
   private long nativePtr;
 
-  protected boolean detached;
-
   static {
     LibraryLoader.load();
   }
@@ -201,8 +199,4 @@ public abstract class Source {
   @NonNull
   @Keep
   protected native Long nativeGetMinimumTileUpdateInterval();
-
-  public void setDetached() {
-    detached = true;
-  }
 }
