@@ -470,6 +470,19 @@ class LocationComponentTest {
   }
 
   @Test
+  fun internal_indicatorPositionChangedListener_onIndicatorPositionChanged() {
+    locationComponent.activateLocationComponent(context, mock(Style::class.java), locationEngine, locationEngineRequest, locationComponentOptions)
+    locationComponent.isLocationComponentEnabled = true
+
+    val onIndicatorPositionChangedListener: OnIndicatorPositionChangedListener = mock(OnIndicatorPositionChangedListener::class.java)
+    locationComponent.addOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
+
+    locationComponent.indicatorPositionChangedListener.onIndicatorPositionChanged(any())
+
+    verify(onIndicatorPositionChangedListener).onIndicatorPositionChanged(any())
+  }
+
+  @Test
   fun change_to_gps_mode_symbolLayerBearingValue() {
     val location = Location("test")
     location.bearing = 50f
