@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply from: "${rootDir}/gradle/native-build.gradle"
+apply from: "${projectDir}/../gradle/native-build.gradle"
 
 android {
     compileSdkVersion androidVersions.compileSdkVersion
