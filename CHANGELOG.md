@@ -1,6 +1,16 @@
 # Changelog for the Mapbox Maps SDK for Android
 
 Mapbox welcomes participation and contributions from everyone. Please read [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) to get started.
+## 9.4.0-beta.1 - August 6, 2020
+[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.4.0-alpha.1...android-v9.4.0-beta.1) since [Mapbox Maps SDK for Android v9.4.0-alpha.1](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.4.0-alpha.1):
+### Features
+ - Expose OnIndicatorPositionChangedListener which will be invoked when indicator position changes. ([#515](https://github.com/mapbox/mapbox-gl-native-android/pull/515))
+### Improvements and bug fixes
+ - Add CustomLayer interface and example. ([#508](https://github.com/mapbox/mapbox-gl-native-android/pull/508))
+ - Adapt local glyph rasterizar to use glyph's real metrics. ([#520](https://github.com/mapbox/mapbox-gl-native-android/pull/520))
+### Dependencies
+ - Update core library to 3.0.0-rc.1
+
 ## 9.4.0-alpha.1 - Jul 30, 2020
 ### Features
  - Implement method to set padding when camera is tracking. ([#496](https://github.com/mapbox/mapbox-gl-native-android/pull/496))
