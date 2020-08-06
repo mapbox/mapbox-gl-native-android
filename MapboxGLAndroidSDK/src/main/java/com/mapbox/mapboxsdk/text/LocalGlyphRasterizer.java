@@ -17,6 +17,7 @@ import androidx.annotation.WorkerThread;
 @Keep
 public class LocalGlyphRasterizer {
 
+  @Keep
   public class GlyphMetrics {
     public int width;
     public int height;
