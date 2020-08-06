@@ -15,18 +15,18 @@ import androidx.annotation.WorkerThread;
  * by the portable local_glyph_rasterizer.hpp
  */
 @Keep
-public class LocalGlyphRasterizer {
+class LocalGlyphRasterizer {
 
   @Keep
-  public class GlyphMetrics {
-    public int width;
-    public int height;
-    public int top;
-    public int left;
-    public int ascender;
-    public int descender;
-    public int advance;
-    public Bitmap glyphBitmap;
+  private class GlyphMetrics {
+    int width;
+    int height;
+    int top;
+    int left;
+    int ascender;
+    int descender;
+    int advance;
+    Bitmap glyphBitmap;
   }
 
   @NonNull
