@@ -2,28 +2,21 @@
 
 Mapbox welcomes participation and contributions from everyone. Please read [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) to get started.
 ## 9.4.0-beta.1 - August 6, 2020
-[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.4.0-alpha.1...android-v9.4.0-beta.1) since [Mapbox Maps SDK for Android v9.4.0-alpha.1](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.4.0-alpha.1):
-### Features
- - Expose OnIndicatorPositionChangedListener which will be invoked when indicator position changes. ([#515](https://github.com/mapbox/mapbox-gl-native-android/pull/515))
-### Improvements and bug fixes
- - Add CustomLayer interface and example. ([#508](https://github.com/mapbox/mapbox-gl-native-android/pull/508))
- - Adapt local glyph rasterizar to use glyph's real metrics. ([#520](https://github.com/mapbox/mapbox-gl-native-android/pull/520))
-### Dependencies
- - Update core library to 3.0.0-rc.1
-
-## 9.4.0-alpha.1 - Jul 30, 2020
+[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.3.0...android-v9.4.0-beta.1) since [Mapbox Maps SDK for Android v9.3.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.3.0):
 ### Features
  - Implement method to set padding when camera is tracking. ([#496](https://github.com/mapbox/mapbox-gl-native-android/pull/496))
  - Expose animation handling ([#491](https://github.com/mapbox/mapbox-gl-native-android/pull/491))
- - Expose event Observable ([#502](https://github.com/mapbox/mapbox-gl-native-android/pull/502)) 
+ - Expose event Observable ([#502](https://github.com/mapbox/mapbox-gl-native-android/pull/502))
+ - Expose `OnIndicatorPositionChangedListener` which is invoked when the position of the user location indicator changes. ([#515](https://github.com/mapbox/mapbox-gl-native-android/pull/515))
 ### Improvements and bug fixes
- - Optimise fling animation ([#503](https://github.com/mapbox/mapbox-gl-native-android/pull/503)) 
+ - Optimise fling animation ([#503](https://github.com/mapbox/mapbox-gl-native-android/pull/503))
  - Remove world bounds validation when creating an offline region ([#495](https://github.com/mapbox/mapbox-gl-native-android/pull/495))
- - Call setUserAnimationInProgress in LocationCameraController ([#501](https://github.com/mapbox/mapbox-gl-native-android/pull/501)) 
+ - Call setUserAnimationInProgress in LocationCameraController ([#501](https://github.com/mapbox/mapbox-gl-native-android/pull/501))
  - Check isLocationTracking in the right place ([#504](https://github.com/mapbox/mapbox-gl-native-android/pull/504))
+ - Adapt `LocalGlyphRasterizer` to render glyphs with a font's actual glyph metrics. ([#520](https://github.com/mapbox/mapbox-gl-native-android/pull/520))
 ### Dependencies
  - Update telemetry to 6.0.0
- - Update core library to 2.0.0-alpha.1
+ - Update core library to 3.0.0-rc.1
 
 ## 8.6.5 - July 22, 2020
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v8.6.4...android-v8.6.5) since [Mapbox Maps SDK for Android v8.6.4](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v8.6.4):
