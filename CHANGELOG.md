@@ -18,6 +18,12 @@ Mapbox welcomes participation and contributions from everyone. Please read [`Con
  - Update telemetry to 6.0.0
  - Update core library to 3.0.0-rc.1
 
+## 9.3.1 - July 25, 2020
+### Bug fixes
+ - Fix crash on old devices (Android 4.4) related to LLD linker.
+### Dependencies
+ - Update to gl-native release 1.8.4
+
 ## 8.6.5 - July 22, 2020
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v8.6.4...android-v8.6.5) since [Mapbox Maps SDK for Android v8.6.4](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v8.6.4):
 ### Bug fixes
