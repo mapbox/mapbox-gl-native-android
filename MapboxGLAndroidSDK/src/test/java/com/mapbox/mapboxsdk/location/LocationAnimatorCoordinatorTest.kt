@@ -624,10 +624,11 @@ class LocationAnimatorCoordinatorTest {
       DEFAULT_TRACKING_ROTATE_ANIM_DURATION,
       null
     )
+    assertTrue(locationAnimatorCoordinator.animatorArray[ANIMATOR_BEARING].isStarted)
 
     locationAnimatorCoordinator.cancelBearingAnimation()
 
-    assertTrue(locationAnimatorCoordinator.animatorArray[ANIMATOR_BEARING] == null)
+    assertFalse(locationAnimatorCoordinator.animatorArray[ANIMATOR_BEARING].isStarted)
   }
 
   @Test

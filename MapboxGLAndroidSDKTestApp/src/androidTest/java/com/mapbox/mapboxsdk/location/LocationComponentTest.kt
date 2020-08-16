@@ -1587,36 +1587,6 @@ class LocationComponentTest : EspressoTest() {
   }
 
   @Test
-  @Ignore
-  fun animators_rotateWhileTrackingCanceledOnModeChange() {
-    val componentAction = object : LocationComponentAction.OnPerformLocationComponentAction {
-      override fun onLocationComponentAction(
-        component: LocationComponent,
-        mapboxMap: MapboxMap,
-        style: Style,
-        uiController: UiController,
-        context: Context
-      ) {
-        component.activateLocationComponent(LocationComponentActivationOptions
-          .builder(context, style)
-          .useDefaultLocationEngine(false)
-          .build())
-        component.isLocationComponentEnabled = true
-        component.cameraMode = CameraMode.TRACKING
-        component.rotateWhileTracking(30.0)
-        uiController.loopMainThreadForAtLeast(DEFAULT_TRACKING_ROTATE_ANIM_DURATION / 2)
-        component.cameraMode = CameraMode.NONE
-        uiController.loopMainThreadForAtLeast(DEFAULT_TRACKING_ROTATE_ANIM_DURATION / 2)
-        TestingAsyncUtils.waitForLayer(uiController, mapView)
-
-        assertEquals(30.0 / 2.0, mapboxMap.cameraPosition.bearing, 3.0)
-      }
-    }
-
-    executeComponentTest(componentAction)
-  }
-
-  @Test
   fun animators_dontRotateWhileStopped() {
     val componentAction = object : LocationComponentAction.OnPerformLocationComponentAction {
       override fun onLocationComponentAction(
@@ -1670,35 +1640,6 @@ class LocationComponentTest : EspressoTest() {
         TestingAsyncUtils.waitForLayer(uiController, mapView)
 
         assertEquals(bearing, mapboxMap.cameraPosition.bearing, 0.0001)
-      }
-    }
-
-    executeComponentTest(componentAction)
-  }
-
-  @Test
-  @Ignore
-  fun animators_cancelRotateWhileTracking() {
-    val componentAction = object : LocationComponentAction.OnPerformLocationComponentAction {
-      override fun onLocationComponentAction(
-        component: LocationComponent,
-        mapboxMap: MapboxMap,
-        style: Style,
-        uiController: UiController,
-        context: Context
-      ) {
-        component.activateLocationComponent(LocationComponentActivationOptions
-          .builder(context, style)
-          .useDefaultLocationEngine(false)
-          .build())
-        component.isLocationComponentEnabled = true
-        component.cameraMode = CameraMode.TRACKING
-        component.rotateWhileTracking(30.0)
-        uiController.loopMainThreadForAtLeast(DEFAULT_TRACKING_ROTATE_ANIM_DURATION / 2)
-        component.cancelRotateWhileTrackingAnimation()
-        uiController.loopMainThreadForAtLeast(DEFAULT_TRACKING_ROTATE_ANIM_DURATION / 2)
-
-        assertEquals(30.0 / 2.0, mapboxMap.cameraPosition.bearing, 3.0)
       }
     }
 
