@@ -20,6 +20,7 @@ import com.mapbox.android.core.location.LocationEngineProvider;
 import com.mapbox.android.core.location.LocationEngineRequest;
 import com.mapbox.android.core.location.LocationEngineResult;
 import com.mapbox.android.core.permissions.PermissionsManager;
+import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.R;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdate;
@@ -184,6 +185,8 @@ public final class LocationComponent {
     = new CopyOnWriteArrayList<>();
   private final CopyOnWriteArrayList<OnRenderModeChangedListener> onRenderModeChangedListeners
     = new CopyOnWriteArrayList<>();
+  private final CopyOnWriteArrayList<OnIndicatorPositionChangedListener> onIndicatorPositionChangedListener
+      = new CopyOnWriteArrayList<>();
 
   // Workaround for too frequent updates, see https://github.com/mapbox/mapbox-gl-native/issues/13587
   private long fastestInterval;
@@ -1356,6 +1359,24 @@ public final class LocationComponent {
   }
 
   /**
+   * Adds a listener that gets invoked when indicator position changes.
+   *
+   * @param listener Listener that gets invoked when indicator position changes
+   */
+  public void addOnIndicatorPositionChangedListener(@NonNull OnIndicatorPositionChangedListener listener) {
+    onIndicatorPositionChangedListener.add(listener);
+  }
+
+  /**
+   * Removes a listener that gets invoked when indicator position changes.
+   *
+   * @param listener Listener that gets invoked when indicator position changes.
+   */
+  public void removeOnIndicatorPositionChangedListener(@NonNull OnIndicatorPositionChangedListener listener) {
+    onIndicatorPositionChangedListener.remove(listener);
+  }
+
+  /**
    * Internal use.
    */
   public void onStart() {
@@ -1482,7 +1503,8 @@ public final class LocationComponent {
     LayerFeatureProvider featureProvider = new LayerFeatureProvider();
     LayerBitmapProvider bitmapProvider = new LayerBitmapProvider(context);
     locationLayerController = new LocationLayerController(mapboxMap, style, sourceProvider, featureProvider,
-      bitmapProvider, options, renderModeChangedListener, useSpecializedLocationLayer);
+      bitmapProvider, options, renderModeChangedListener, indicatorPositionChangedListener,
+      useSpecializedLocationLayer);
     locationCameraController = new LocationCameraController(
       context, mapboxMap, transform, cameraTrackingChangedListener, options, onCameraMoveInvalidateListener);
 
@@ -1853,6 +1875,16 @@ public final class LocationComponent {
       updateAnimatorListenerHolders();
       for (OnRenderModeChangedListener listener : onRenderModeChangedListeners) {
         listener.onRenderModeChanged(currentMode);
+      }
+    }
+  };
+
+  @NonNull
+  @VisibleForTesting
+  OnIndicatorPositionChangedListener indicatorPositionChangedListener = new OnIndicatorPositionChangedListener() {
+    @Override public void onIndicatorPositionChanged(@NonNull Point point) {
+      for (OnIndicatorPositionChangedListener listener : onIndicatorPositionChangedListener) {
+        listener.onIndicatorPositionChanged(point);
       }
     }
   };

@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.log.Logger;
@@ -42,6 +43,7 @@ final class LocationLayerController {
   private final LayerBitmapProvider bitmapProvider;
   private LocationComponentOptions options;
   private final OnRenderModeChangedListener internalRenderModeChangedListener;
+  private final OnIndicatorPositionChangedListener internalIndicatorPositionChangedListener;
   private final boolean useSpecializedLocationLayer;
 
   private boolean isHidden = true;
@@ -57,10 +59,12 @@ final class LocationLayerController {
                           LayerBitmapProvider bitmapProvider,
                           @NonNull LocationComponentOptions options,
                           @NonNull OnRenderModeChangedListener internalRenderModeChangedListener,
+                          @NonNull OnIndicatorPositionChangedListener internalIndicatorPositionChangedListener,
                           boolean useSpecializedLocationLayer) {
     this.mapboxMap = mapboxMap;
     this.bitmapProvider = bitmapProvider;
     this.internalRenderModeChangedListener = internalRenderModeChangedListener;
+    this.internalIndicatorPositionChangedListener = internalIndicatorPositionChangedListener;
     this.useSpecializedLocationLayer = useSpecializedLocationLayer;
     this.isStale = options.enableStaleState();
     if (useSpecializedLocationLayer) {
@@ -262,6 +266,8 @@ final class LocationLayerController {
       @Override
       public void onNewAnimationValue(LatLng value) {
         locationLayerRenderer.setLatLng(value);
+        internalIndicatorPositionChangedListener.onIndicatorPositionChanged(
+          Point.fromLngLat(value.getLongitude(), value.getLatitude(), value.getAltitude()));
       }
   };
 

@@ -471,6 +471,47 @@ class LocationComponentTest {
   }
 
   @Test
+  fun internal_indicatorPositionChangedListener_onIndicatorPositionChanged() {
+    locationComponent.activateLocationComponent(context, mock(Style::class.java), locationEngine, locationEngineRequest, locationComponentOptions)
+    locationComponent.isLocationComponentEnabled = true
+
+    val onIndicatorPositionChangedListener: OnIndicatorPositionChangedListener = mock(OnIndicatorPositionChangedListener::class.java)
+    locationComponent.addOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
+
+    locationComponent.indicatorPositionChangedListener.onIndicatorPositionChanged(any())
+
+    verify(onIndicatorPositionChangedListener).onIndicatorPositionChanged(any())
+  }
+
+  @Test
+  fun change_to_gps_mode_symbolLayerBearingValue() {
+    val location = Location("test")
+    location.bearing = 50f
+    val projection: Projection = mock(Projection::class.java)
+    `when`(projection.getMetersPerPixelAtLatitude(location.latitude)).thenReturn(10.0)
+    `when`(mapboxMap.projection).thenReturn(projection)
+    `when`(style.isFullyLoaded).thenReturn(true)
+    `when`(mapboxMap.cameraPosition).thenReturn(CameraPosition.DEFAULT)
+
+    locationComponent.activateLocationComponent(
+      LocationComponentActivationOptions.builder(context, style)
+        .locationComponentOptions(locationComponentOptions)
+        .useDefaultLocationEngine(false)
+        .build()
+    )
+    locationComponent.isLocationComponentEnabled = true
+    locationComponent.onStart()
+    locationComponent.renderMode = RenderMode.NORMAL
+    locationComponent.forceLocationUpdate(location)
+
+    verify(locationLayerController, times(0)).setGpsBearing(50f)
+
+    locationComponent.renderMode = RenderMode.GPS
+    verify(locationLayerController, times(1)).setGpsBearing(50f)
+    verify(locationAnimatorCoordinator).cancelAndRemoveGpsBearingAnimation()
+  }
+
+  @Test
   fun rotateWhileTracking_notReady() {
     `when`(mapboxMap.cameraPosition).thenReturn(CameraPosition.DEFAULT)
     locationComponent.activateLocationComponent(context, mock(Style::class.java), locationEngine, locationEngineRequest, locationComponentOptions)
@@ -528,34 +569,6 @@ class LocationComponentTest {
     locationComponent.rotateWhileTracking(30.0, 500L, callback)
     verify(callback, times(0)).onCancel()
     verify(locationAnimatorCoordinator).feedNewBearing(30.0, CameraPosition.DEFAULT, 500L, callback)
-  }
-
-  @Test
-  fun change_to_gps_mode_symbolLayerBearingValue() {
-    val location = Location("test")
-    location.bearing = 50f
-    val projection: Projection = mock(Projection::class.java)
-    `when`(projection.getMetersPerPixelAtLatitude(location.latitude)).thenReturn(10.0)
-    `when`(mapboxMap.projection).thenReturn(projection)
-    `when`(style.isFullyLoaded).thenReturn(true)
-    `when`(mapboxMap.cameraPosition).thenReturn(CameraPosition.DEFAULT)
-
-    locationComponent.activateLocationComponent(
-      LocationComponentActivationOptions.builder(context, style)
-        .locationComponentOptions(locationComponentOptions)
-        .useDefaultLocationEngine(false)
-        .build()
-    )
-    locationComponent.isLocationComponentEnabled = true
-    locationComponent.onStart()
-    locationComponent.renderMode = RenderMode.NORMAL
-    locationComponent.forceLocationUpdate(location)
-
-    verify(locationLayerController, times(0)).setGpsBearing(50f)
-
-    locationComponent.renderMode = RenderMode.GPS
-    verify(locationLayerController, times(1)).setGpsBearing(50f)
-    verify(locationAnimatorCoordinator).cancelAndRemoveGpsBearingAnimation()
   }
 
   @Test
