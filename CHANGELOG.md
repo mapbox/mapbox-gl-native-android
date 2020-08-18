@@ -1,8 +1,9 @@
 # Changelog for the Mapbox Maps SDK for Android
 
 Mapbox welcomes participation and contributions from everyone. Please read [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) to get started.
-## 9.4.0-beta.1 - August 6, 2020
-[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.3.0...android-v9.4.0-beta.1) since [Mapbox Maps SDK for Android v9.3.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.3.0):
+
+## 9.4.0-beta.2 - August 18, 2020
+[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.3.0...android-v9.4.0-beta.2) since [Mapbox Maps SDK for Android v9.3.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.3.0)
 ### Features
  - Implement method to set padding when camera is tracking. ([#496](https://github.com/mapbox/mapbox-gl-native-android/pull/496))
  - Expose animation handling ([#491](https://github.com/mapbox/mapbox-gl-native-android/pull/491))
@@ -15,9 +16,9 @@ Mapbox welcomes participation and contributions from everyone. Please read [`Con
  - Check isLocationTracking in the right place ([#504](https://github.com/mapbox/mapbox-gl-native-android/pull/504))
  - Adapt `LocalGlyphRasterizer` to render glyphs with a font's actual glyph metrics. ([#520](https://github.com/mapbox/mapbox-gl-native-android/pull/520))
 ### Dependencies
- - Update telemetry to 6.0.0
- - Update core library to 3.0.0-rc.1
-
+ - Update telemetry to 6.1.0
+ - Update core library to 3.0.0
+ 
 ## 9.3.1 - July 25, 2020
 ### Bug fixes
  - Fix crash on old devices (Android 4.4) related to LLD linker.
