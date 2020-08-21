@@ -11,6 +11,7 @@ import com.mapbox.mapboxsdk.testapp.activity.FeatureOverviewActivity
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -53,6 +54,7 @@ class OfflineDownloadTest : OfflineRegion.OfflineRegionObserver {
   }
 
   @Test(timeout = 60000)
+  @Ignore("https://github.com/mapbox/mapbox-gl-native-android/issues/536")
   fun offlineDownloadAcrossWorldBounds() {
     rule.runOnUiThreadActivity {
       OfflineManager.getInstance(rule.activity).createOfflineRegion(
