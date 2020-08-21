@@ -11,6 +11,7 @@ import com.mapbox.mapboxsdk.testapp.activity.FeatureOverviewActivity
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -53,6 +54,7 @@ class OfflineDownloadTest : OfflineRegion.OfflineRegionObserver {
   }
 
   @Test(timeout = 60000)
+  @Ignore
   fun offlineDownloadAcrossWorldBounds() {
     rule.runOnUiThreadActivity {
       OfflineManager.getInstance(rule.activity).createOfflineRegion(
@@ -61,11 +63,11 @@ class OfflineDownloadTest : OfflineRegion.OfflineRegionObserver {
             listOf(
               listOf(
                 Point.fromLngLat(
-                  -179.9,
+                  179.9,
                   12.0
                 ),
                 Point.fromLngLat(
-                  -180.1,
+                  180.1,
                   12.0
                 )
               )
