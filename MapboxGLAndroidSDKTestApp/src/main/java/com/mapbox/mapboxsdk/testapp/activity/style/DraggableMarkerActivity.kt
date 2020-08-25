@@ -2,7 +2,6 @@ package com.mapbox.mapboxsdk.testapp.activity.style
 
 import android.graphics.PointF
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -319,11 +318,9 @@ class DraggableMarkerActivity : AppCompatActivity() {
     mapView.onDestroy()
   }
 
-  override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
-    super.onSaveInstanceState(outState, outPersistentState)
-    outState?.let {
-      mapView.onSaveInstanceState(it)
-    }
+  override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    mapView.onSaveInstanceState(outState)
   }
 }
 

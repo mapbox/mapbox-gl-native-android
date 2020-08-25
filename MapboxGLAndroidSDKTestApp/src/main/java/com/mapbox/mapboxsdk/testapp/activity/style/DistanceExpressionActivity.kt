@@ -2,7 +2,6 @@ package com.mapbox.mapboxsdk.testapp.activity.style
 
 import android.graphics.Color
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import com.mapbox.geojson.Point
 import com.mapbox.mapboxsdk.camera.CameraPosition
@@ -115,11 +114,9 @@ class DistanceExpressionActivity : AppCompatActivity() {
     mapView.onDestroy()
   }
 
-  override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
-    super.onSaveInstanceState(outState, outPersistentState)
-    outState?.let {
-      mapView.onSaveInstanceState(it)
-    }
+  override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    mapView.onSaveInstanceState(outState)
   }
 
   companion object {

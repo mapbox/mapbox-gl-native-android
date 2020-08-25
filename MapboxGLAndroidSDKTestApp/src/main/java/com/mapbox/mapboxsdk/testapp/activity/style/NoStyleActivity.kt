@@ -2,7 +2,6 @@ package com.mapbox.mapboxsdk.testapp.activity.style
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
@@ -68,11 +67,9 @@ class NoStyleActivity : AppCompatActivity() {
     mapView.onDestroy()
   }
 
-  override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
-    super.onSaveInstanceState(outState, outPersistentState)
-    outState?.let {
-      mapView.onSaveInstanceState(it)
-    }
+  override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    mapView.onSaveInstanceState(outState)
   }
 
   companion object {
