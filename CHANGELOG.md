@@ -2,8 +2,8 @@
 
 Mapbox welcomes participation and contributions from everyone. Please read [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) to get started.
 
-## 9.4.0-beta.2 - August 21, 2020
-[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.3.0...android-v9.4.0-beta.2) since [Mapbox Maps SDK for Android v9.3.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.3.0)
+## 9.4.0 - August 26, 2020
+[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.3.0...android-v9.4.0) since [Mapbox Maps SDK for Android v9.3.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.3.0)
 ### Features
  - Implement method to set padding when camera is tracking. ([#496](https://github.com/mapbox/mapbox-gl-native-android/pull/496))
  - Expose animation handling ([#491](https://github.com/mapbox/mapbox-gl-native-android/pull/491))
