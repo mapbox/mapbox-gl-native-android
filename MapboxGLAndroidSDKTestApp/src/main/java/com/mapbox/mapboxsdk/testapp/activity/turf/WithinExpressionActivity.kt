@@ -3,7 +3,6 @@ package com.mapbox.mapboxsdk.testapp.activity.turf
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
-import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import com.mapbox.geojson.*
 import com.mapbox.mapboxsdk.camera.CameraPosition
@@ -189,11 +188,9 @@ class WithinExpressionActivity : AppCompatActivity() {
     mapView.onDestroy()
   }
 
-  override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
-    super.onSaveInstanceState(outState, outPersistentState)
-    outState?.let {
-      mapView.onSaveInstanceState(it)
-    }
+  override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    mapView.onSaveInstanceState(outState)
   }
 
   private fun bufferLineStringGeometry(lineString: LineString? = null): Polygon {

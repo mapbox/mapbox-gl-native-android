@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.mapbox.mapboxsdk.maps.Style
@@ -56,11 +55,9 @@ class OverlayMapActivity : AppCompatActivity() {
         mapView.onDestroy()
     }
 
-    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
-      super.onSaveInstanceState(outState, outPersistentState)
-      outState?.let {
-        mapView.onSaveInstanceState(it)
-      }
+    override fun onSaveInstanceState(outState: Bundle) {
+      super.onSaveInstanceState(outState)
+      mapView.onSaveInstanceState(outState)
     }
 
     class OverlayView(context: Context) : View(context) {
