@@ -438,7 +438,6 @@ public class Style {
     addImageAsync(name, bitmap, false);
   }
 
-
   /**
    * Adds an drawable asynchronously, to be converted into a bitmap to be used in the map's style.
    *
@@ -604,6 +603,16 @@ public class Style {
     validateState("addImages");
     new BitmapImageConversionTask(nativeMap)
       .execute(Builder.ImageWrapper.convertToImageArray(images, sdf, stretchX, stretchY, content));
+  }
+
+  /**
+   * Add images synchronously, to be used in the map's style.
+   *
+   * @param images the array of images to add
+   */
+  public void addImages(Image[] images) {
+    validateState("addImages");
+    nativeMap.addImages(images);
   }
 
   /**
@@ -1425,7 +1434,7 @@ public class Style {
    * constants means your map style will always use the latest version and may change as we
    * improve the style
    */
-  @StringDef( {MAPBOX_STREETS, OUTDOORS, LIGHT, DARK, SATELLITE, SATELLITE_STREETS, TRAFFIC_DAY, TRAFFIC_NIGHT})
+  @StringDef({MAPBOX_STREETS, OUTDOORS, LIGHT, DARK, SATELLITE, SATELLITE_STREETS, TRAFFIC_DAY, TRAFFIC_NIGHT})
   @Retention(RetentionPolicy.SOURCE)
   public @interface StyleUrl {
   }
