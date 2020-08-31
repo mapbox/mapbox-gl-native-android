@@ -405,4 +405,21 @@ class StyleTest {
             Assert.assertEquals("Layer that failed to be added shouldn't be cached", layer1, mapboxMap.style!!.getLayer("layer1"))
         }
     }
+
+    @Test
+    fun addImages() {
+        val images = arrayOf(mockk<Image>())
+        mapboxMap.setStyle(Style.Builder())
+        mapboxMap.notifyStyleLoaded()
+        val style = mapboxMap.style!!
+        style.addImages(images)
+        verify { nativeMapView.addImages(images) }
+    }
+
+    @Test(expected = IllegalStateException::class)
+    fun addImagesNotLoadedStyleThrows() {
+        val images = arrayOf(mockk<Image>())
+        val style = Style.Builder().build(mockk())
+        style.addImages(images)
+    }
 }
