@@ -33,3 +33,6 @@ MapboxGLAndroidSDKTestApp/src/main/assets/integration/
 
 # Node modules
 node_modules
+
+# Docs files
+_site
