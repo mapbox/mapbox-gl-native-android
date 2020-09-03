@@ -2,6 +2,15 @@
 
 Mapbox welcomes participation and contributions from everyone. Please read [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) to get started.
 
+## 9.5.0-alpha.1 - September 3, 2020
+[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.4.0...android-v9.5.0-alpha.1) since [Mapbox Maps SDK for Android v9.4.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.4.0)
+### Changes made to match core library v4.0.0 updates
+ - Remove `LocalGlyphRasterizer`, now it's a part of core as pure C++ implementation. ([#548](https://github.com/mapbox/mapbox-gl-native-android/pull/548))
+ - `LocationIndicatorLayer`: deprecate getImageTiltDisplacement method, introduce it's replacement - getImagePitchDisplacement. ([#548](https://github.com/mapbox/mapbox-gl-native-android/pull/548))
+ - `LocationPropertyFactory`: `imageTiltDisplacement` methods are deprecated, `imagePitchDisplacement` are introduced for replacement. ([#548](https://github.com/mapbox/mapbox-gl-native-android/pull/548))
+### Dependencies
+ - Update core library to 4.0.0
+
 ## 9.4.0 - August 26, 2020
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.3.0...android-v9.4.0) since [Mapbox Maps SDK for Android v9.3.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.3.0)
 ### Features
