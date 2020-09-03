@@ -15,9 +15,11 @@
     "@mapbox/cloudfriend": "^4.2.1"
   },
   "devDependencies": {
+    "aws-sdk": "^2.745.0",
     "ejs": "^2.7.4",
     "esm": "~3.1.0",
     "lodash": "^4.16.4",
+    "mime": "^2.4.6",
     "pixelmatch": "^4.0.2"
   },
   "engines": {
