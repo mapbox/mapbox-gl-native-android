@@ -50,13 +50,37 @@ class LocationPropertyFactory {
   }
 
   /**
+   * @deprecated Use {@link LocationPropertyFactory#imagePitchDisplacement} instead.
+   *
    * The displacement off the center of the top image and the shadow image when the pitch of the map is greater than 0. This helps producing a three-dimensional appearence.
    *
    * @param value a Float value
    * @return property wrapper around Float
    */
   public static PropertyValue<Float> imageTiltDisplacement(Float value) {
-    return new PaintPropertyValue<>("image-tilt-displacement", value);
+    return new PaintPropertyValue<>("image-pitch-displacement", value);
+  }
+
+  /**
+   * @deprecated Use {@link LocationPropertyFactory#imagePitchDisplacement} instead.
+   *
+   * The displacement off the center of the top image and the shadow image when the pitch of the map is greater than 0. This helps producing a three-dimensional appearence.
+   *
+   * @param expression an expression statement
+   * @return property wrapper around an expression statement
+   */
+  public static PropertyValue<Expression> imageTiltDisplacement(Expression expression) {
+    return new PaintPropertyValue<>("image-pitch-displacement", expression);
+  }
+
+  /**
+   * The displacement off the center of the top image and the shadow image when the pitch of the map is greater than 0. This helps producing a three-dimensional appearence.
+   *
+   * @param value a Float value
+   * @return property wrapper around Float
+   */
+  public static PropertyValue<Float> imagePitchDisplacement(Float value) {
+    return new PaintPropertyValue<>("image-pitch-displacement", value);
   }
 
   /**
@@ -65,9 +89,10 @@ class LocationPropertyFactory {
    * @param expression an expression statement
    * @return property wrapper around an expression statement
    */
-  public static PropertyValue<Expression> imageTiltDisplacement(Expression expression) {
-    return new PaintPropertyValue<>("image-tilt-displacement", expression);
+  public static PropertyValue<Expression> imagePitchDisplacement(Expression expression) {
+    return new PaintPropertyValue<>("image-pitch-displacement", expression);
   }
+
 
   /**
    * The bearing of the location indicator.
