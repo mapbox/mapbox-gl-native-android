@@ -195,7 +195,7 @@ public class HeatmapLayerTest extends BaseLayerTest {
     assertNull(layer.getHeatmapRadius().getValue());
 
     // Set and Get
-    Float propertyValue = 0.3f;
+    Float propertyValue = 1.0f;
     layer.setProperties(heatmapRadius(propertyValue));
     assertEquals(layer.getHeatmapRadius().getValue(), propertyValue);
   }

@@ -111,15 +111,30 @@ class LocationIndicatorLayer extends Layer {
   }
 
   /**
+   * @deprecated Use {@link LocationIndicatorLayer#getImagePitchDisplacement} instead.
+   *
    * Get the ImageTiltDisplacement property
    *
    * @return property wrapper value around Float
    */
   @NonNull
   @SuppressWarnings("unchecked")
+  @Deprecated
   public PropertyValue<Float> getImageTiltDisplacement() {
     checkThread();
-    return (PropertyValue<Float>) new PropertyValue("image-tilt-displacement", nativeGetImageTiltDisplacement());
+    return (PropertyValue<Float>) new PropertyValue("image-pitch-displacement", nativeGetImageTiltDisplacement());
+  }
+
+  /**
+   * Get the ImagePitchDisplacement property
+   *
+   * @return property wrapper value around Float
+   */
+  @NonNull
+  @SuppressWarnings("unchecked")
+  public PropertyValue<Float> getImagePitchDisplacement() {
+    checkThread();
+    return (PropertyValue<Float>) new PropertyValue("image-pitch-displacement", nativeGetImagePitchDisplacement());
   }
 
   /**
@@ -418,6 +433,10 @@ class LocationIndicatorLayer extends Layer {
   @NonNull
   @Keep
   private native Object nativeGetImageTiltDisplacement();
+
+  @NonNull
+  @Keep
+  private native Object nativeGetImagePitchDisplacement();
 
   @NonNull
   @Keep

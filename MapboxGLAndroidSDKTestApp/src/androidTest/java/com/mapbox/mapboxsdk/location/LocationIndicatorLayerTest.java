@@ -116,6 +116,19 @@ public class LocationIndicatorLayerTest extends BaseAppCenterLayerTest {
 
   @Test
   @UiThreadTest
+  public void testImagePitchDisplacementAsConstant() {
+    Timber.i("image-tilt-displacement");
+    assertNotNull(layer);
+    assertNull(layer.getImagePitchDisplacement().getValue());
+
+    // Set and Get
+    Float propertyValue = 0.3f;
+    layer.setProperties(imageTiltDisplacement(propertyValue));
+    assertEquals(layer.getImagePitchDisplacement().getValue(), propertyValue);
+  }
+
+  @Test
+  @UiThreadTest
   public void testBearingAsConstant() {
     Timber.i("bearing");
     assertNotNull(layer);

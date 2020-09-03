@@ -198,7 +198,7 @@ public class SymbolLayerTest extends BaseAppCenterLayerTest {
     assertNull(layer.getSymbolSpacing().getValue());
 
     // Set and Get
-    Float propertyValue = 0.3f;
+    Float propertyValue = 1.0f;
     layer.setProperties(symbolSpacing(propertyValue));
     assertEquals(layer.getSymbolSpacing().getValue(), propertyValue);
   }
