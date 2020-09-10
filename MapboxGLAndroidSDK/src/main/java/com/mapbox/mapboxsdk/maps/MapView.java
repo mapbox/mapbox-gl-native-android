@@ -550,7 +550,7 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
     }
 
     for (OnTouchListener listener : onTouchListeners) {
-      if (listener.onTouch(this, event) {
+      if (listener.onTouch(this, event)) {
         return true;
       }
     }
