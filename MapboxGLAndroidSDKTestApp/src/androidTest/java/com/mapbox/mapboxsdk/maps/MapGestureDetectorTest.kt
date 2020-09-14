@@ -13,6 +13,7 @@ import com.mapbox.mapboxsdk.testapp.activity.BaseTest
 import com.mapbox.mapboxsdk.testapp.activity.maplayout.SimpleMapActivity
 import org.junit.Assert
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 
 class MapGestureDetectorTest : BaseTest() {
@@ -121,6 +122,7 @@ class MapGestureDetectorTest : BaseTest() {
     }
   }
 
+  @Ignore("https://github.com/mapbox/mapbox-gl-native-android-internal/issues/69")
   @Test
   fun doubleTap_minimalMovement() {
     validateTestSetup()

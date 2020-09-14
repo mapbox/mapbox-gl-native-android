@@ -67,7 +67,6 @@ android {
 
     buildTypes {
         debug {
-            testCoverageEnabled true
             jniDebuggable true
         }
     }

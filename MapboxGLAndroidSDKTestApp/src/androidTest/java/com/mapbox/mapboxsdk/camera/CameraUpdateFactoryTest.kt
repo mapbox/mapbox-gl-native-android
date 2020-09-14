@@ -10,6 +10,7 @@ import com.mapbox.mapboxsdk.testapp.activity.espresso.DeviceIndependentTestActiv
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -44,6 +45,7 @@ class CameraUpdateFactoryTest : BaseTest() {
     assertEquals("tilt should match:", 0.0, cameraPosition.tilt, 0.1)
   }
 
+  @Ignore("https://github.com/mapbox/mapbox-gl-native-android-internal/issues/69")
   @Test
   @UiThreadTest
   fun testLatLngBoundsTilted() {
@@ -92,6 +94,7 @@ class CameraUpdateFactoryTest : BaseTest() {
     assertEquals("tilt should match:", 0.0, cameraPosition.tilt, 0.1)
   }
 
+  @Ignore("https://github.com/mapbox/mapbox-gl-native-android-internal/issues/69")
   @Test
   @UiThreadTest
   fun testLatLngBoundsTiltedRotated() {
@@ -116,6 +119,7 @@ class CameraUpdateFactoryTest : BaseTest() {
     assertEquals("tilt should match:", 45.0, cameraPosition.tilt, 0.1)
   }
 
+  @Ignore("https://github.com/mapbox/mapbox-gl-native-android-internal/issues/69")
   @Test
   @UiThreadTest
   fun testLatLngBoundsWithProvidedTiltAndRotation() {
