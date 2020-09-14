@@ -40,7 +40,7 @@ ext {
             ktlint           : '0.34.0',
             commonsIO        : '2.6',
             mapboxSdkVersions: '1.1.0',
-            mapboxSdkCore    : '4.0.0',
+            mapboxSdkCore    : '5.0.0',
             mapboxSdkRegistryPlugin: '0.2.1'
     ]
 
