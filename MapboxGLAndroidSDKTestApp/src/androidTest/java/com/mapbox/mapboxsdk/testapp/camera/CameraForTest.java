@@ -9,6 +9,8 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.testapp.activity.BaseTest;
 import com.mapbox.mapboxsdk.testapp.activity.espresso.DeviceIndependentTestActivity;
+
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -75,6 +77,7 @@ public class CameraForTest extends BaseTest {
       expectedPosition.bearing, actualPosition.bearing, 0.01f);
   }
 
+  @Ignore("https://github.com/mapbox/mapbox-gl-native-android-internal/issues/69")
   @Test
   @UiThreadTest
   public void testGetCameraForLatLngBoundsTilt() {
@@ -95,6 +98,7 @@ public class CameraForTest extends BaseTest {
       expectedPosition.bearing, actualPosition.bearing, 0.01f);
   }
 
+  @Ignore("https://github.com/mapbox/mapbox-gl-native-android-internal/issues/69")
   @Test
   @UiThreadTest
   public void testGetCameraForLatLngBoundsAll() {
@@ -189,6 +193,7 @@ public class CameraForTest extends BaseTest {
       expectedPosition.bearing, actualPosition.bearing, 0.01f);
   }
 
+  @Ignore("https://github.com/mapbox/mapbox-gl-native-android-internal/issues/69")
   @Test
   @UiThreadTest
   public void testGetCameraForGeometryTilt() {
@@ -209,6 +214,7 @@ public class CameraForTest extends BaseTest {
       expectedPosition.bearing, actualPosition.bearing, 0.01f);
   }
 
+  @Ignore("https://github.com/mapbox/mapbox-gl-native-android-internal/issues/69")
   @Test
   @UiThreadTest
   public void testGetCameraForGeometryAll() {
