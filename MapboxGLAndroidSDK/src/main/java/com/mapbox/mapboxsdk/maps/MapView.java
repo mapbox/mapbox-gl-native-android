@@ -526,7 +526,7 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
   /**
    * Add an OnTouchListener which will be call when an event occurs
    *
-   * @param listener
+   * @param listener listener to be called when touch event occurs
    * @return true if listener has been successfully registered
    */
   public boolean addOnTouchListener(OnTouchListener listener) {
@@ -536,7 +536,7 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
   /**
    * Remove an OnTouchListener previously registered
    *
-   * @param listener
+   * @param listener listener to be called when touch event occurs
    * @return true if listener has been successfully unregistered
    */
   public boolean removeOnTouchListener(OnTouchListener listener) {
