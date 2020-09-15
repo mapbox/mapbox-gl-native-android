@@ -122,7 +122,7 @@ class MapGestureDetectorTest : BaseTest() {
     }
   }
 
-  @Ignore("https://github.com/mapbox/mapbox-gl-native-android-internal/issues/69")
+  @Ignore("https://github.com/mapbox/mapbox-gl-native-android/issues/561")
   @Test
   fun doubleTap_minimalMovement() {
     validateTestSetup()

@@ -45,7 +45,7 @@ class CameraUpdateFactoryTest : BaseTest() {
     assertEquals("tilt should match:", 0.0, cameraPosition.tilt, 0.1)
   }
 
-  @Ignore("https://github.com/mapbox/mapbox-gl-native-android-internal/issues/69")
+  @Ignore("https://github.com/mapbox/mapbox-gl-native-android/issues/561")
   @Test
   @UiThreadTest
   fun testLatLngBoundsTilted() {
@@ -94,7 +94,7 @@ class CameraUpdateFactoryTest : BaseTest() {
     assertEquals("tilt should match:", 0.0, cameraPosition.tilt, 0.1)
   }
 
-  @Ignore("https://github.com/mapbox/mapbox-gl-native-android-internal/issues/69")
+  @Ignore("https://github.com/mapbox/mapbox-gl-native-android/issues/561")
   @Test
   @UiThreadTest
   fun testLatLngBoundsTiltedRotated() {
@@ -119,7 +119,7 @@ class CameraUpdateFactoryTest : BaseTest() {
     assertEquals("tilt should match:", 45.0, cameraPosition.tilt, 0.1)
   }
 
-  @Ignore("https://github.com/mapbox/mapbox-gl-native-android-internal/issues/69")
+  @Ignore("https://github.com/mapbox/mapbox-gl-native-android/issues/561")
   @Test
   @UiThreadTest
   fun testLatLngBoundsWithProvidedTiltAndRotation() {
