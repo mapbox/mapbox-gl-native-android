@@ -13,6 +13,7 @@ import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
+import com.mapbox.mapboxsdk.log.Logger;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.layers.Layer;
@@ -59,6 +60,7 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
 import static com.mapbox.mapboxsdk.utils.ColorUtils.colorToRgbaString;
 
 final class LocationLayerController {
+  private static final String TAG = "LocationLayerController";
 
   @RenderMode.Mode
   private int renderMode;
@@ -222,6 +224,10 @@ final class LocationLayerController {
   }
 
   private void setLayerVisibility(@NonNull String layerId, boolean visible) {
+    if (!style.isFullyLoaded()) {
+      Logger.w(TAG, "Style is not fully loaded, not able to get layer!");
+      return;
+    }
     Layer layer = style.getLayer(layerId);
     if (layer != null) {
       String targetVisibility = visible ? VISIBLE : NONE;
@@ -286,6 +292,10 @@ final class LocationLayerController {
   }
 
   private void refreshSource() {
+    if (!style.isFullyLoaded()) {
+      Logger.w(TAG, "Style is not fully loaded, not able to get source!");
+      return;
+    }
     GeoJsonSource source = style.getSourceAs(LOCATION_SOURCE);
     if (source != null) {
       locationSource.setGeoJson(locationFeature);
