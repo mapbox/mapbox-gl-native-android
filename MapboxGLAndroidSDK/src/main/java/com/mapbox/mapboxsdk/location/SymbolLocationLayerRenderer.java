@@ -11,6 +11,7 @@ import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
+import com.mapbox.mapboxsdk.log.Logger;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.Layer;
@@ -59,6 +60,8 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
 import static com.mapbox.mapboxsdk.utils.ColorUtils.colorToRgbaString;
 
 final class SymbolLocationLayerRenderer implements LocationLayerRenderer {
+
+  private static final String TAG = "mbgl-locationSymbol";
   private Style style;
   private final LayerSourceProvider layerSourceProvider;
 
@@ -179,6 +182,11 @@ final class SymbolLocationLayerRenderer implements LocationLayerRenderer {
 
   @Override
   public void styleScaling(Expression scaleExpression) {
+    if (!style.isFullyLoaded()) {
+      Logger.w(TAG, "Style is not fully loaded, not able to get layer!");
+      return;
+    }
+
     for (String layerId : layerSet) {
       Layer layer = style.getLayer(layerId);
       if (layer instanceof SymbolLayer) {
@@ -244,6 +252,11 @@ final class SymbolLocationLayerRenderer implements LocationLayerRenderer {
   }
 
   private void setLayerVisibility(@NonNull String layerId, boolean visible) {
+    if (!style.isFullyLoaded()) {
+      Logger.w(TAG, "Style is not fully loaded, not able to get layer!");
+      return;
+    }
+
     Layer layer = style.getLayer(layerId);
     if (layer != null) {
       String targetVisibility = visible ? VISIBLE : NONE;
@@ -266,6 +279,11 @@ final class SymbolLocationLayerRenderer implements LocationLayerRenderer {
    */
   @Override
   public void stylePulsingCircle(LocationComponentOptions options) {
+    if (!style.isFullyLoaded()) {
+      Logger.w(TAG, "Style is not fully loaded, not able to get layer!");
+      return;
+    }
+
     if (style.getLayer(PULSING_CIRCLE_LAYER) != null) {
       setLayerVisibility(PULSING_CIRCLE_LAYER, true);
       style.getLayer(PULSING_CIRCLE_LAYER).setProperties(
@@ -318,6 +336,11 @@ final class SymbolLocationLayerRenderer implements LocationLayerRenderer {
   }
 
   private void refreshSource() {
+    if (!style.isFullyLoaded()) {
+      Logger.w(TAG, "Style is not fully loaded, not able to get source!");
+      return;
+    }
+
     GeoJsonSource source = style.getSourceAs(LOCATION_SOURCE);
     if (source != null) {
       locationSource.setGeoJson(locationFeature);

@@ -65,6 +65,7 @@ public class LocationLayerControllerTest {
   @Before
   public void before() {
     when(mapboxMap.getStyle()).thenReturn(style);
+    when(style.isFullyLoaded()).thenReturn(true);
   }
 
   @Test

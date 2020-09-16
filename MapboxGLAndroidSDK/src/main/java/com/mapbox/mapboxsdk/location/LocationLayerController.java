@@ -33,7 +33,7 @@ import static com.mapbox.mapboxsdk.style.expressions.Expression.stop;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.zoom;
 
 final class LocationLayerController {
-
+  
   private static final String TAG = "Mbgl-LocationLayerController";
 
   @RenderMode.Mode
@@ -269,7 +269,7 @@ final class LocationLayerController {
         internalIndicatorPositionChangedListener.onIndicatorPositionChanged(
           Point.fromLngLat(value.getLongitude(), value.getLatitude(), value.getAltitude()));
       }
-  };
+    };
 
   private final MapboxAnimator.AnimationsValueChangeListener<Float> gpsBearingValueListener =
     new MapboxAnimator.AnimationsValueChangeListener<Float>() {
@@ -277,7 +277,7 @@ final class LocationLayerController {
       public void onNewAnimationValue(Float value) {
         locationLayerRenderer.setGpsBearing(value);
       }
-  };
+    };
 
   private final MapboxAnimator.AnimationsValueChangeListener<Float> compassBearingValueListener =
     new MapboxAnimator.AnimationsValueChangeListener<Float>() {
@@ -285,7 +285,7 @@ final class LocationLayerController {
       public void onNewAnimationValue(Float value) {
         locationLayerRenderer.setCompassBearing(value);
       }
-  };
+    };
 
   private final MapboxAnimator.AnimationsValueChangeListener<Float> accuracyValueListener =
     new MapboxAnimator.AnimationsValueChangeListener<Float>() {
@@ -293,7 +293,7 @@ final class LocationLayerController {
       public void onNewAnimationValue(Float value) {
         locationLayerRenderer.setAccuracyRadius(value);
       }
-  };
+    };
 
   /**
    * The listener that handles the updating of the pulsing circle's radius and opacity.
@@ -308,7 +308,7 @@ final class LocationLayerController {
         }
         locationLayerRenderer.updatePulsingUi(newPulseRadiusValue, newPulseOpacityValue);
       }
-  };
+    };
 
   Set<AnimatorListenerHolder> getAnimationListeners() {
     Set<AnimatorListenerHolder> holders = new HashSet<>();
@@ -327,7 +327,7 @@ final class LocationLayerController {
 
     if (options.pulseEnabled()) {
       holders.add(new AnimatorListenerHolder(MapboxAnimator.ANIMATOR_PULSING_CIRCLE,
-          pulsingCircleRadiusListener));
+        pulsingCircleRadiusListener));
     }
     return holders;
   }
