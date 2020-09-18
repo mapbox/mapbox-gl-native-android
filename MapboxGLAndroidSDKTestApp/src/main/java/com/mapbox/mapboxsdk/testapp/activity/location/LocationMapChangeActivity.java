@@ -2,9 +2,13 @@ package com.mapbox.mapboxsdk.testapp.activity.location;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.widget.Toast;
 
 import com.mapbox.android.core.permissions.PermissionsListener;
@@ -32,6 +36,8 @@ public class LocationMapChangeActivity extends AppCompatActivity implements OnMa
     setContentView(R.layout.activity_location_layer_map_change);
 
     mapView = findViewById(R.id.mapView);
+    mapView.attachLifeCycle(this);
+
     FloatingActionButton stylesFab = findViewById(R.id.fabStyles);
 
     stylesFab.setOnClickListener(v -> {
@@ -98,40 +104,11 @@ public class LocationMapChangeActivity extends AppCompatActivity implements OnMa
       () -> Toast.makeText(this, "Location long clicked", Toast.LENGTH_SHORT).show());
   }
 
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
 
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     mapView.onSaveInstanceState(outState);
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
   }
 
   @Override

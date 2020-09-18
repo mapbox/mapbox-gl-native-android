@@ -19,6 +19,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 import androidx.collection.LongSparseArray;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.OnLifecycleEvent;
 
 import com.mapbox.android.gestures.AndroidGesturesManager;
 import com.mapbox.mapboxsdk.MapStrictMode;
@@ -61,7 +65,7 @@ import static com.mapbox.mapboxsdk.maps.widgets.CompassView.TIME_WAIT_IDLE;
  * <strong>Warning:</strong> Please note that you are responsible for getting permission to use the map data,
  * and for ensuring your use adheres to the relevant terms of use.
  */
-public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
+public class MapView extends FrameLayout implements NativeMapView.ViewCallback, LifecycleObserver {
 
   private final MapChangeReceiver mapChangeReceiver = new MapChangeReceiver();
   private final MapCallback mapCallback = new MapCallback();
@@ -376,6 +380,7 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
   /**
    * You must call this method from the parent's Activity#onStart() or Fragment#onStart()
    */
+  @OnLifecycleEvent(Lifecycle.Event.ON_START)
   @UiThread
   public void onStart() {
     if (!isStarted) {
@@ -395,6 +400,7 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
   /**
    * You must call this method from the parent's Activity#onResume() or Fragment#onResume().
    */
+  @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
   @UiThread
   public void onResume() {
     if (mapRenderer != null) {
@@ -405,6 +411,7 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
   /**
    * You must call this method from the parent's Activity#onPause() or Fragment#onPause().
    */
+  @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
   @UiThread
   public void onPause() {
     if (mapRenderer != null) {
@@ -415,6 +422,7 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
   /**
    * You must call this method from the parent's Activity#onStop() or Fragment#onStop().
    */
+  @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
   @UiThread
   public void onStop() {
     if (attributionClickListener != null) {
@@ -441,6 +449,7 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
   /**
    * You must call this method from the parent's Activity#onDestroy() or Fragment#onDestroyView().
    */
+  @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
   @UiThread
   public void onDestroy() {
     destroyed = true;
@@ -1452,4 +1461,13 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
   public static void setMapStrictModeEnabled(boolean strictModeEnabled) {
     MapStrictMode.setStrictModeEnabled(strictModeEnabled);
   }
+
+  /**
+   * Attachs the view to the LifeCycleOwner so that it can listen to all android lifecycle events and call the necessary mapview lifecycle events.
+   * @param owner Any class that extends LifeCycleOwner e.g. Activity or Fragment.
+   */
+  public void attachLifeCycle(LifecycleOwner owner) {
+    owner.getLifecycle().addObserver(this);
+  }
+
 }

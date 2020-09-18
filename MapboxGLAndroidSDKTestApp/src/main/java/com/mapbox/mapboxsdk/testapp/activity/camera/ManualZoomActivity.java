@@ -2,7 +2,9 @@ package com.mapbox.mapboxsdk.testapp.activity.camera;
 
 import android.graphics.Point;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +34,7 @@ public class ManualZoomActivity extends AppCompatActivity {
 
     mapView = (MapView) findViewById(R.id.mapView);
     mapView.onCreate(savedInstanceState);
+    mapView.attachLifeCycle(this);
     mapView.getMapAsync(mapboxMap -> {
       ManualZoomActivity.this.mapboxMap = mapboxMap;
       mapboxMap.setStyle(new Style.Builder().fromUri(Style.SATELLITE));
@@ -77,39 +80,9 @@ public class ManualZoomActivity extends AppCompatActivity {
   }
 
   @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
-
-  @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     mapView.onSaveInstanceState(outState);
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
   }
 
   @Override

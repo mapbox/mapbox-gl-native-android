@@ -47,6 +47,7 @@ public class StyleFileActivity extends AppCompatActivity {
         fabStyleJson.setOnClickListener(view -> new LoadStyleFileTask(view.getContext(), mapboxMap).execute());
       });
     });
+    mapView.attachLifeCycle(this);
   }
 
   /**
@@ -133,29 +134,7 @@ public class StyleFileActivity extends AppCompatActivity {
     }
   }
 
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
 
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
 
   @Override
   public void onSaveInstanceState(Bundle outState) {
@@ -169,9 +148,4 @@ public class StyleFileActivity extends AppCompatActivity {
     mapView.onLowMemory();
   }
 
-  @Override
-  public void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
-  }
 }

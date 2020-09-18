@@ -57,6 +57,7 @@ public class ScrollByActivity extends AppCompatActivity implements OnMapReadyCal
     mapView.setTag(true);
     mapView.onCreate(savedInstanceState);
     mapView.getMapAsync(this);
+    mapView.attachLifeCycle(this);
   }
 
   @Override
@@ -75,40 +76,11 @@ public class ScrollByActivity extends AppCompatActivity implements OnMapReadyCal
     );
   }
 
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
 
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     mapView.onSaveInstanceState(outState);
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
   }
 
   @Override

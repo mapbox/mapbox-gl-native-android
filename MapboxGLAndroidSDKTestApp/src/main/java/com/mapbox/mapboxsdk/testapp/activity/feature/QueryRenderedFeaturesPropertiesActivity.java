@@ -81,6 +81,7 @@ public class QueryRenderedFeaturesPropertiesActivity extends AppCompatActivity {
         mapboxMap.addOnMapClickListener(mapClickListener);
       });
     });
+    mapView.attachLifeCycle(this);
   }
 
   private void debugOutput(List<Feature> features) {
@@ -138,29 +139,8 @@ public class QueryRenderedFeaturesPropertiesActivity extends AppCompatActivity {
     return mapboxMap;
   }
 
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
 
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
 
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
 
   @Override
   protected void onSaveInstanceState(Bundle outState) {
@@ -168,14 +148,6 @@ public class QueryRenderedFeaturesPropertiesActivity extends AppCompatActivity {
     mapView.onSaveInstanceState(outState);
   }
 
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    if (mapboxMap != null) {
-      mapboxMap.removeOnMapClickListener(mapClickListener);
-    }
-    mapView.onDestroy();
-  }
 
   @Override
   public void onLowMemory() {

@@ -3,13 +3,17 @@ package com.mapbox.mapboxsdk.testapp.activity.camera;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import androidx.fragment.app.FragmentActivity;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.SeekBar;
@@ -24,6 +28,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.testapp.R;
+
 import timber.log.Timber;
 
 import static com.mapbox.mapboxsdk.constants.GeometryConstants.MAX_LATITUDE;
@@ -53,6 +58,7 @@ public class CameraPositionActivity extends FragmentActivity implements OnMapRea
     mapView = findViewById(R.id.mapView);
     mapView.onCreate(savedInstanceState);
     mapView.getMapAsync(this);
+    mapView.attachLifeCycle(this);
   }
 
   @Override
@@ -106,36 +112,11 @@ public class CameraPositionActivity extends FragmentActivity implements OnMapRea
   }
 
   @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
-
-  @Override
   protected void onDestroy() {
     super.onDestroy();
     if (mapboxMap != null) {
       mapboxMap.removeOnMapLongClickListener(this);
     }
-    mapView.onDestroy();
   }
 
   @Override
@@ -249,7 +230,7 @@ public class CameraPositionActivity extends FragmentActivity implements OnMapRea
 
       if (latitude < MIN_LATITUDE || latitude > MAX_LATITUDE) {
         Toast.makeText(dialogContent.getContext(), "latitude value must be set "
-                + " between " + MIN_LATITUDE + " and " + MAX_LATITUDE,
+            + " between " + MIN_LATITUDE + " and " + MAX_LATITUDE,
           Toast.LENGTH_SHORT).show();
         return;
       }

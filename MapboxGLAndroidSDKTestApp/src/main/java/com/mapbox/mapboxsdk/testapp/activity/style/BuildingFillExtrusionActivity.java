@@ -2,7 +2,9 @@ package com.mapbox.mapboxsdk.testapp.activity.style;
 
 import android.graphics.Color;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -45,6 +47,7 @@ public class BuildingFillExtrusionActivity extends AppCompatActivity {
     setContentView(R.layout.activity_building_layer);
     mapView = findViewById(R.id.mapView);
     mapView.onCreate(savedInstanceState);
+    mapView.attachLifeCycle(this);
     mapView.getMapAsync(map -> {
       mapboxMap = map;
       mapboxMap.setStyle(Style.MAPBOX_STREETS, style -> {
@@ -108,30 +111,6 @@ public class BuildingFillExtrusionActivity extends AppCompatActivity {
   }
 
   @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
-
-  @Override
   public void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     mapView.onSaveInstanceState(outState);
@@ -143,9 +122,4 @@ public class BuildingFillExtrusionActivity extends AppCompatActivity {
     mapView.onLowMemory();
   }
 
-  @Override
-  public void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
-  }
 }

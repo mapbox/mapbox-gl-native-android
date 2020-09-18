@@ -5,12 +5,14 @@ import android.animation.AnimatorSet;
 import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.collection.LongSparseArray;
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.core.view.animation.PathInterpolatorCompat;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -71,6 +73,7 @@ public class CameraAnimatorActivity extends AppCompatActivity implements OnMapRe
     mapView = (MapView) findViewById(R.id.mapView);
     if (mapView != null) {
       mapView.onCreate(savedInstanceState);
+      mapView.attachLifeCycle(this);
       mapView.getMapAsync(this);
     }
   }
@@ -214,28 +217,10 @@ public class CameraAnimatorActivity extends AppCompatActivity implements OnMapRe
   // MapView lifecycle
   //
 
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
 
   @Override
   protected void onStop() {
     super.onStop();
-    mapView.onStop();
     for (int i = 0; i < animators.size(); i++) {
       animators.get(animators.keyAt(i)).cancel();
     }
@@ -248,12 +233,6 @@ public class CameraAnimatorActivity extends AppCompatActivity implements OnMapRe
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     mapView.onSaveInstanceState(outState);
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
   }
 
   @Override

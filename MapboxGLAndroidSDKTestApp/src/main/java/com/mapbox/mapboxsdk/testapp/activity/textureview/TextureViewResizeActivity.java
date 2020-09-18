@@ -40,6 +40,7 @@ public class TextureViewResizeActivity extends AppCompatActivity {
     mapView = findViewById(R.id.mapView);
     mapView.onCreate(savedInstanceState);
     mapView.getMapAsync(this::setupMap);
+    mapView.attachLifeCycle(this);
   }
 
   private void setupMap(MapboxMap mapboxMap) {
@@ -58,29 +59,7 @@ public class TextureViewResizeActivity extends AppCompatActivity {
     });
   }
 
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
 
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
 
   @Override
   protected void onSaveInstanceState(Bundle outState) {
@@ -88,11 +67,6 @@ public class TextureViewResizeActivity extends AppCompatActivity {
     mapView.onSaveInstanceState(outState);
   }
 
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
-  }
 
   @Override
   public void onLowMemory() {

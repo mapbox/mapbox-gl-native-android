@@ -2,7 +2,9 @@ package com.mapbox.mapboxsdk.testapp.activity.annotation;
 
 import android.graphics.Color;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -64,6 +66,7 @@ public class PolylineActivity extends AppCompatActivity {
 
     mapView = findViewById(R.id.mapView);
     mapView.onCreate(savedInstanceState);
+    mapView.attachLifeCycle(this);
     mapView.getMapAsync(mapboxMap -> {
       PolylineActivity.this.mapboxMap = mapboxMap;
       mapboxMap.setStyle(Style.SATELLITE_STREETS);
@@ -128,41 +131,12 @@ public class PolylineActivity extends AppCompatActivity {
   }
 
   @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
-
-  @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     mapView.onSaveInstanceState(outState);
     outState.putParcelableArrayList(STATE_POLYLINE_OPTIONS, polylineOptions);
   }
 
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
-  }
 
   @Override
   public void onLowMemory() {

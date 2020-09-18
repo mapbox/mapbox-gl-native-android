@@ -1,7 +1,9 @@
 package com.mapbox.mapboxsdk.testapp.activity.style;
 
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
@@ -9,6 +11,7 @@ import com.mapbox.mapboxsdk.style.layers.CircleLayer;
 import com.mapbox.mapboxsdk.style.layers.HeatmapLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.mapboxsdk.testapp.R;
+
 import timber.log.Timber;
 
 import java.net.URI;
@@ -54,6 +57,7 @@ public class HeatmapLayerActivity extends AppCompatActivity {
     setContentView(R.layout.activity_heatmaplayer);
     mapView = findViewById(R.id.mapView);
     mapView.onCreate(savedInstanceState);
+    mapView.attachLifeCycle(this);
     mapView.getMapAsync(map -> {
       mapboxMap = map;
 
@@ -185,30 +189,6 @@ public class HeatmapLayerActivity extends AppCompatActivity {
   }
 
   @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
-
-  @Override
   public void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     mapView.onSaveInstanceState(outState);
@@ -218,11 +198,5 @@ public class HeatmapLayerActivity extends AppCompatActivity {
   public void onLowMemory() {
     super.onLowMemory();
     mapView.onLowMemory();
-  }
-
-  @Override
-  public void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
   }
 }

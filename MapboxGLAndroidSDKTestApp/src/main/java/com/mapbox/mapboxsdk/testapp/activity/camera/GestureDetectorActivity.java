@@ -3,6 +3,7 @@ package com.mapbox.mapboxsdk.testapp.activity.camera;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+
 import androidx.annotation.ColorInt;
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
@@ -11,6 +12,7 @@ import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -68,6 +70,7 @@ public class GestureDetectorActivity extends AppCompatActivity {
 
     mapView = findViewById(R.id.mapView);
     mapView.onCreate(savedInstanceState);
+    mapView.attachLifeCycle(this);
     mapView.getMapAsync(mapboxMap -> {
       GestureDetectorActivity.this.mapboxMap = mapboxMap;
       mapboxMap.setStyle(Style.MAPBOX_STREETS);
@@ -82,40 +85,9 @@ public class GestureDetectorActivity extends AppCompatActivity {
   }
 
   @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    gestureAlertsAdapter.cancelUpdates();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
-
-  @Override
   public void onLowMemory() {
     super.onLowMemory();
     mapView.onLowMemory();
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
   }
 
   @Override
@@ -379,7 +351,7 @@ public class GestureDetectorActivity extends AppCompatActivity {
 
   private static class GestureAlert {
     @Retention(SOURCE)
-    @IntDef( {TYPE_NONE, TYPE_START, TYPE_PROGRESS, TYPE_END, TYPE_OTHER})
+    @IntDef({TYPE_NONE, TYPE_START, TYPE_PROGRESS, TYPE_END, TYPE_OTHER})
     @interface Type {
     }
 

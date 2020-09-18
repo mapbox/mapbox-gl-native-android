@@ -146,6 +146,7 @@ public class SymbolLayerActivity extends AppCompatActivity implements MapboxMap.
         style.addImage(id, Objects.requireNonNull(androidIcon));
       }
     });
+    mapView.attachLifeCycle(this);
   }
 
   @Override
@@ -305,29 +306,9 @@ public class SymbolLayerActivity extends AppCompatActivity implements MapboxMap.
     return object;
   }
 
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
 
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
 
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
 
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
 
   @Override
   public void onSaveInstanceState(Bundle outState) {
@@ -347,7 +328,6 @@ public class SymbolLayerActivity extends AppCompatActivity implements MapboxMap.
     if (mapboxMap != null) {
       mapboxMap.removeOnMapClickListener(this);
     }
-    mapView.onDestroy();
   }
 
   @Override

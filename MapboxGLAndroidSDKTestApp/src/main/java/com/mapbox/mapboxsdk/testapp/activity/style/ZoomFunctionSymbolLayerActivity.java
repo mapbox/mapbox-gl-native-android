@@ -87,6 +87,7 @@ public class ZoomFunctionSymbolLayerActivity extends AppCompatActivity {
         map.addOnMapClickListener(mapClickListener);
       });
     });
+    mapView.attachLifeCycle(this);
   }
 
   private void updateSource(Style style) {
@@ -156,30 +157,6 @@ public class ZoomFunctionSymbolLayerActivity extends AppCompatActivity {
   }
 
   @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
-
-  @Override
   public void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     mapView.onSaveInstanceState(outState);
@@ -191,9 +168,4 @@ public class ZoomFunctionSymbolLayerActivity extends AppCompatActivity {
     mapView.onLowMemory();
   }
 
-  @Override
-  public void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
-  }
 }

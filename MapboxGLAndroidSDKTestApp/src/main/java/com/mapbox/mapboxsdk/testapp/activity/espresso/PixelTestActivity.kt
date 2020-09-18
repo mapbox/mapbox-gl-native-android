@@ -13,54 +13,31 @@ import com.mapbox.mapboxsdk.testapp.R
  */
 class PixelTestActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    lateinit var mapView: MapView
-    lateinit var mapboxMap: MapboxMap
+  lateinit var mapView: MapView
+  lateinit var mapboxMap: MapboxMap
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_pixel_test)
-        mapView = findViewById(R.id.mapView)
-        mapView.onCreate(savedInstanceState)
-        mapView.getMapAsync(this)
-    }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_pixel_test)
+    mapView = findViewById(R.id.mapView)
+    mapView.onCreate(savedInstanceState)
+    mapView.getMapAsync(this)
+    mapView.attachLifeCycle(this)
+  }
 
-    override fun onMapReady(map: MapboxMap) {
-        mapboxMap = map
-        mapboxMap.setStyle(Style.MAPBOX_STREETS)
-    }
+  override fun onMapReady(map: MapboxMap) {
+    mapboxMap = map
+    mapboxMap.setStyle(Style.MAPBOX_STREETS)
+  }
 
-    public override fun onResume() {
-        super.onResume()
-        mapView.onResume()
-    }
 
-    override fun onStart() {
-        super.onStart()
-        mapView.onStart()
-    }
+  override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    mapView.onSaveInstanceState(outState)
+  }
 
-    public override fun onPause() {
-        super.onPause()
-        mapView.onPause()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        mapView.onStop()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        mapView.onSaveInstanceState(outState)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mapView.onDestroy()
-    }
-
-    override fun onLowMemory() {
-        super.onLowMemory()
-        mapView.onLowMemory()
-    }
+  override fun onLowMemory() {
+    super.onLowMemory()
+    mapView.onLowMemory()
+  }
 }

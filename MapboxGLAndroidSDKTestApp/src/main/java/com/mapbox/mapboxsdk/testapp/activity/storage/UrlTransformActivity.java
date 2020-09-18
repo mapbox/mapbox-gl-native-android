@@ -49,31 +49,9 @@ public class UrlTransformActivity extends AppCompatActivity {
       Timber.i("Map loaded");
       map.setStyle(Style.MAPBOX_STREETS);
     });
+    mapView.attachLifeCycle(this);
   }
 
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
 
   @Override
   protected void onSaveInstanceState(Bundle outState) {
@@ -88,7 +66,6 @@ public class UrlTransformActivity extends AppCompatActivity {
     // Example of how to reset the transform callback
     FileSource.getInstance(UrlTransformActivity.this).setResourceTransform(null);
 
-    mapView.onDestroy();
   }
 
   @Override

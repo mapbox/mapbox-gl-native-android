@@ -2,14 +2,17 @@ package com.mapbox.mapboxsdk.testapp.activity.maplayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -75,12 +78,14 @@ public class DoubleMapActivity extends AppCompatActivity {
       // MapView large
       mapView = new MapView(view.getContext(), MapFragmentUtils.resolveArgs(view.getContext(), getArguments()));
       mapView.onCreate(savedInstanceState);
+      mapView.attachLifeCycle(this);
       mapView.getMapAsync(mapboxMap -> mapboxMap.setStyle(Style.MAPBOX_STREETS));
       ((ViewGroup) view.findViewById(R.id.container)).addView(mapView, 0);
 
       // MapView mini
       mapViewMini = view.findViewById(R.id.mini_map);
       mapViewMini.onCreate(savedInstanceState);
+      mapViewMini.attachLifeCycle(this);
       mapViewMini.getMapAsync(mapboxMap -> {
         mapboxMap.moveCamera(CameraUpdateFactory.newCameraPosition(
           new CameraPosition.Builder().target(MACHU_PICCHU)
@@ -106,40 +111,6 @@ public class DoubleMapActivity extends AppCompatActivity {
       });
     }
 
-    @Override
-    public void onResume() {
-      super.onResume();
-      mapView.onResume();
-      mapViewMini.onResume();
-    }
-
-    @Override
-    public void onStart() {
-      super.onStart();
-      mapView.onStart();
-      mapViewMini.onStart();
-    }
-
-    @Override
-    public void onPause() {
-      super.onPause();
-      mapView.onPause();
-      mapViewMini.onPause();
-    }
-
-    @Override
-    public void onStop() {
-      super.onStop();
-      mapView.onStop();
-      mapViewMini.onStop();
-    }
-
-    @Override
-    public void onDestroyView() {
-      super.onDestroyView();
-      mapView.onDestroy();
-      mapViewMini.onDestroy();
-    }
 
     @Override
     public void onLowMemory() {

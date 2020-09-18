@@ -49,44 +49,14 @@ public class PerformanceMeasurementActivity extends AppCompatActivity {
 
     mapView.getMapAsync(mapboxMap -> mapboxMap.setStyle(
       new Style.Builder().fromUri(Style.MAPBOX_STREETS)));
-  }
 
-
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
+    mapView.attachLifeCycle(this);
   }
 
   @Override
   public void onLowMemory() {
     super.onLowMemory();
     mapView.onLowMemory();
-  }
-
-  @Override
-  protected void onDestroy() {
-    HttpRequestUtil.setOkHttpClient(null);
-    super.onDestroy();
-    mapView.onDestroy();
   }
 
   @Override

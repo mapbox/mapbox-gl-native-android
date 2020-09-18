@@ -2,11 +2,15 @@ package com.mapbox.mapboxsdk.testapp.activity.style;
 
 import android.graphics.Color;
 import android.os.Bundle;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.View;
+
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
@@ -16,6 +20,7 @@ import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.mapboxsdk.testapp.R;
+
 import timber.log.Timber;
 
 import java.net.URI;
@@ -49,7 +54,8 @@ public class CircleLayerActivity extends AppCompatActivity implements View.OnCli
 
   public static final String SOURCE_ID = "bus_stop";
   public static final String SOURCE_ID_CLUSTER = "bus_stop_cluster";
-  public static final String URL_BUS_ROUTES = "https://raw.githubusercontent.com/cheeaun/busrouter-sg/master/data/2/bus-stops.geojson";
+  public static final String URL_BUS_ROUTES =
+    "https://raw.githubusercontent.com/cheeaun/busrouter-sg/master/data/2/bus-stops.geojson";
   public static final String LAYER_ID = "stops_layer";
   private MapView mapView;
   private MapboxMap mapboxMap;
@@ -70,6 +76,7 @@ public class CircleLayerActivity extends AppCompatActivity implements View.OnCli
 
     mapView = findViewById(R.id.mapView);
     mapView.onCreate(savedInstanceState);
+    mapView.attachLifeCycle(this);
     mapView.getMapAsync(map -> {
       mapboxMap = map;
       mapboxMap.setStyle(Style.SATELLITE_STREETS);
@@ -230,30 +237,6 @@ public class CircleLayerActivity extends AppCompatActivity implements View.OnCli
   }
 
   @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
-
-  @Override
   public void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     mapView.onSaveInstanceState(outState);
@@ -263,12 +246,6 @@ public class CircleLayerActivity extends AppCompatActivity implements View.OnCli
   public void onLowMemory() {
     super.onLowMemory();
     mapView.onLowMemory();
-  }
-
-  @Override
-  public void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
   }
 
   private static class Data {

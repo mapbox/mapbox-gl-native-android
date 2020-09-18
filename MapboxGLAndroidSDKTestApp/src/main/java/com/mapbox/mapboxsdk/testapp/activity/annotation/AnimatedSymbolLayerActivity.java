@@ -6,7 +6,9 @@ import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
@@ -74,6 +76,8 @@ public class AnimatedSymbolLayerActivity extends AppCompatActivity {
 
     mapView = findViewById(R.id.mapView);
     mapView.onCreate(savedInstanceState);
+    mapView.attachLifeCycle(this);
+
     mapView.getMapAsync(map -> {
       this.mapboxMap = map;
       map.setStyle(Style.MAPBOX_STREETS, style -> {
@@ -340,30 +344,6 @@ public class AnimatedSymbolLayerActivity extends AppCompatActivity {
   }
 
   @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
-
-  @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     mapView.onSaveInstanceState(outState);
@@ -379,8 +359,6 @@ public class AnimatedSymbolLayerActivity extends AppCompatActivity {
         animator.cancel();
       }
     }
-
-    mapView.onDestroy();
   }
 
   @Override

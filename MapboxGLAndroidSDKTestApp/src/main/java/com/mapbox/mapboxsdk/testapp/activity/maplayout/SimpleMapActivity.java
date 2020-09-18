@@ -24,42 +24,14 @@ public class SimpleMapActivity extends AppCompatActivity {
     mapView.getMapAsync(mapboxMap -> mapboxMap.setStyle(
       new Style.Builder().fromUri(Style.MAPBOX_STREETS)
     ));
+    mapView.attachLifeCycle(this);
   }
 
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
 
   @Override
   public void onLowMemory() {
     super.onLowMemory();
     mapView.onLowMemory();
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
   }
 
   @Override

@@ -2,6 +2,7 @@ package com.mapbox.mapboxsdk.testapp.activity.style;
 
 import android.graphics.Color;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -98,6 +99,7 @@ public class GridSourceActivity extends AppCompatActivity implements OnMapReadyC
     mapView = findViewById(R.id.mapView);
     mapView.onCreate(savedInstanceState);
     mapView.getMapAsync(this);
+    mapView.attachLifeCycle(this);
   }
 
   @Override
@@ -113,36 +115,6 @@ public class GridSourceActivity extends AppCompatActivity implements OnMapReadyC
       .withLayer(layer)
       .withSource(source)
     );
-  }
-
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  public void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  public void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
   }
 
   @Override

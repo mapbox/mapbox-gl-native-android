@@ -1,7 +1,9 @@
 package com.mapbox.mapboxsdk.testapp.activity.offline;
 
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -77,6 +79,7 @@ public class OfflineActivity extends AppCompatActivity
     // Set up map
     mapView = (MapView) findViewById(R.id.mapView);
     mapView.onCreate(savedInstanceState);
+    mapView.attachLifeCycle(this);
     mapView.getMapAsync(mapboxMap -> {
       Timber.d("Map is ready");
       OfflineActivity.this.mapboxMap = mapboxMap;
@@ -105,40 +108,11 @@ public class OfflineActivity extends AppCompatActivity
     offlineManager = OfflineManager.getInstance(this);
   }
 
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
 
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     mapView.onSaveInstanceState(outState);
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
   }
 
   @Override
@@ -189,7 +163,7 @@ public class OfflineActivity extends AppCompatActivity
 
       @Override
       public void onError(String error) {
-        Timber.e("Error: %s" , error);
+        Timber.e("Error: %s", error);
       }
     });
   }
@@ -223,7 +197,7 @@ public class OfflineActivity extends AppCompatActivity
     offlineManager.createOfflineRegion(definition, metadata, new OfflineManager.CreateOfflineRegionCallback() {
       @Override
       public void onCreate(OfflineRegion offlineRegion) {
-        Timber.d("Offline region created: %s" , regionName);
+        Timber.d("Offline region created: %s", regionName);
         OfflineActivity.this.offlineRegion = offlineRegion;
         launchDownload();
       }

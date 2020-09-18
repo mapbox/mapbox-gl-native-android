@@ -1,8 +1,10 @@
 package com.mapbox.mapboxsdk.testapp.activity.camera;
 
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.View;
 import android.widget.Toast;
 
@@ -68,6 +70,7 @@ public class CameraAnimationTypeActivity extends AppCompatActivity implements On
     mapView = findViewById(R.id.mapView);
     mapView.onCreate(savedInstanceState);
     mapView.getMapAsync(this);
+    mapView.attachLifeCycle(this);
   }
 
   @Override
@@ -127,30 +130,6 @@ public class CameraAnimationTypeActivity extends AppCompatActivity implements On
   }
 
   @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
-
-  @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     mapView.onSaveInstanceState(outState);
@@ -162,7 +141,6 @@ public class CameraAnimationTypeActivity extends AppCompatActivity implements On
     if (mapboxMap != null) {
       mapboxMap.removeOnCameraIdleListener(cameraIdleListener);
     }
-    mapView.onDestroy();
   }
 
   @Override

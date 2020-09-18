@@ -1,8 +1,10 @@
 package com.mapbox.mapboxsdk.testapp.activity.espresso;
 
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
@@ -23,6 +25,7 @@ public class DeviceIndependentTestActivity extends AppCompatActivity implements 
     mapView = findViewById(R.id.mapView);
     mapView.onCreate(savedInstanceState);
     mapView.getMapAsync(this);
+    mapView.attachLifeCycle(this);
   }
 
   @Override
@@ -35,29 +38,6 @@ public class DeviceIndependentTestActivity extends AppCompatActivity implements 
     return mapboxMap;
   }
 
-  @Override
-  public void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  public void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
 
   @Override
   protected void onSaveInstanceState(Bundle outState) {
@@ -65,11 +45,6 @@ public class DeviceIndependentTestActivity extends AppCompatActivity implements 
     mapView.onSaveInstanceState(outState);
   }
 
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
-  }
 
   @Override
   public void onLowMemory() {

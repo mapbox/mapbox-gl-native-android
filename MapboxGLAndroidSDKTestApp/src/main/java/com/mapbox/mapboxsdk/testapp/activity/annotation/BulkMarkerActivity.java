@@ -3,14 +3,17 @@ package com.mapbox.mapboxsdk.testapp.activity.annotation;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
 import androidx.core.view.MenuItemCompat;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
@@ -18,6 +21,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.testapp.R;
 import com.mapbox.mapboxsdk.testapp.utils.GeoParseUtil;
+
 import timber.log.Timber;
 
 import java.io.IOException;
@@ -45,10 +49,12 @@ public class BulkMarkerActivity extends AppCompatActivity implements AdapterView
     mapView = findViewById(R.id.mapView);
     mapView.onCreate(savedInstanceState);
     mapView.getMapAsync(this::initMap);
+    mapView.attachLifeCycle(this);
+
   }
 
   private void initMap(MapboxMap mapboxMap) {
-    this.mapboxMap =  mapboxMap;
+    this.mapboxMap = mapboxMap;
     mapboxMap.setStyle(Style.MAPBOX_STREETS);
   }
 
@@ -119,30 +125,6 @@ public class BulkMarkerActivity extends AppCompatActivity implements AdapterView
   }
 
   @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
-
-  @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     mapView.onSaveInstanceState(outState);
@@ -154,7 +136,6 @@ public class BulkMarkerActivity extends AppCompatActivity implements AdapterView
     if (progressDialog != null) {
       progressDialog.dismiss();
     }
-    mapView.onDestroy();
   }
 
   @Override

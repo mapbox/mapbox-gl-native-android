@@ -78,7 +78,7 @@ public class GeoJsonClusteringActivity extends AppCompatActivity {
     mapView = findViewById(R.id.mapView);
     // noinspection ConstantConditions
     mapView.onCreate(savedInstanceState);
-
+    mapView.attachLifeCycle(this);
     mapView.getMapAsync(map -> {
       mapboxMap = map;
       mapboxMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.7749, 122.4194), 0));
@@ -199,40 +199,11 @@ public class GeoJsonClusteringActivity extends AppCompatActivity {
       );
   }
 
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
 
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     mapView.onSaveInstanceState(outState);
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
   }
 
   @Override

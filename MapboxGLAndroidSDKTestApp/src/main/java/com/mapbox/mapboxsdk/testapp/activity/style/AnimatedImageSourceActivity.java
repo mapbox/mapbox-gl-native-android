@@ -6,6 +6,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -44,6 +45,8 @@ public class AnimatedImageSourceActivity extends AppCompatActivity implements On
     mapView = findViewById(R.id.mapView);
     mapView.onCreate(savedInstanceState);
     mapView.getMapAsync(this);
+    mapView.attachLifeCycle(this);
+
   }
 
   @Override
@@ -66,35 +69,11 @@ public class AnimatedImageSourceActivity extends AppCompatActivity implements On
     );
   }
 
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  public void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  public void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
 
   @Override
   protected void onStop() {
     super.onStop();
-    mapView.onStop();
     handler.removeCallbacks(runnable);
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
   }
 
   @Override

@@ -5,9 +5,11 @@ import android.content.res.Configuration;
 import android.graphics.RectF;
 import android.location.Location;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.ListPopupWindow;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -115,6 +117,7 @@ public class LocationModesActivity extends AppCompatActivity implements OnMapRea
         }
       });
       permissionsManager.requestLocationPermissions(this);
+      mapView.attachLifeCycle(this);
     }
   }
 
@@ -207,10 +210,10 @@ public class LocationModesActivity extends AppCompatActivity implements OnMapRea
     } else if (id == R.id.action_component_padding_animation_while_tracking) {
       Random paddingRandom = new Random();
       locationComponent.paddingWhileTracking(new double[] {
-          paddingRandom.nextDouble() * 500 * (paddingRandom.nextBoolean() ? -1 : 1),
-          paddingRandom.nextDouble() * 500 * (paddingRandom.nextBoolean() ? -1 : 1),
-          paddingRandom.nextDouble() * 500 * (paddingRandom.nextBoolean() ? -1 : 1),
-          paddingRandom.nextDouble() * 500 * (paddingRandom.nextBoolean() ? -1 : 1)
+        paddingRandom.nextDouble() * 500 * (paddingRandom.nextBoolean() ? -1 : 1),
+        paddingRandom.nextDouble() * 500 * (paddingRandom.nextBoolean() ? -1 : 1),
+        paddingRandom.nextDouble() * 500 * (paddingRandom.nextBoolean() ? -1 : 1),
+        paddingRandom.nextDouble() * 500 * (paddingRandom.nextBoolean() ? -1 : 1)
       }, 1000L, new MapboxMap.CancelableCallback() {
         @Override
         public void onCancel() {
@@ -302,30 +305,6 @@ public class LocationModesActivity extends AppCompatActivity implements OnMapRea
     locationComponent.applyStyle(options);
   }
 
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
-
   @SuppressLint("MissingPermission")
   @Override
   protected void onSaveInstanceState(Bundle outState) {
@@ -336,12 +315,6 @@ public class LocationModesActivity extends AppCompatActivity implements OnMapRea
     if (locationComponent != null) {
       outState.putParcelable(SAVED_STATE_LOCATION, locationComponent.getLastKnownLocation());
     }
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
   }
 
   @Override

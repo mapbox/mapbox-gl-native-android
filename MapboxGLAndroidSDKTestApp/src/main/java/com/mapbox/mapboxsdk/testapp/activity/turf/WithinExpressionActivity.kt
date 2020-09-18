@@ -59,6 +59,8 @@ class WithinExpressionActivity : AppCompatActivity() {
       // Load mapbox streets and add lines and circles
       setupStyle()
     }
+
+    mapView.attachLifeCycle(this)
   }
 
   private fun setupStyle() {
@@ -157,25 +159,10 @@ class WithinExpressionActivity : AppCompatActivity() {
     (style.getLayer("road-number-shield") as SymbolLayer).setProperties(visibility(NONE))
   }
 
-  override fun onStart() {
-    super.onStart()
-    mapView.onStart()
-  }
 
-  override fun onResume() {
-    super.onResume()
-    mapView.onResume()
-  }
 
-  override fun onPause() {
-    super.onPause()
-    mapView.onPause()
-  }
 
-  override fun onStop() {
-    super.onStop()
-    mapView.onStop()
-  }
+
 
   override fun onLowMemory() {
     super.onLowMemory()
@@ -185,7 +172,6 @@ class WithinExpressionActivity : AppCompatActivity() {
   override fun onDestroy() {
     super.onDestroy()
     handler.removeCallbacks(runnable)
-    mapView.onDestroy()
   }
 
   override fun onSaveInstanceState(outState: Bundle) {

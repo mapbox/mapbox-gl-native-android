@@ -72,6 +72,8 @@ public class TextureViewAnimationActivity extends AppCompatActivity {
       // Start an animation on the map as well
       flyTo(mapboxMap, 0, 14);
     });
+
+    mapView.attachLifeCycle(this);
   }
 
   private void flyTo(final MapboxMap mapboxMap, final int place, final double zoom) {
@@ -100,28 +102,11 @@ public class TextureViewAnimationActivity extends AppCompatActivity {
     mapboxMap.setOnFpsChangedListener(fps -> fpsView.setText(String.format(Locale.US, "FPS: %4.2f", fps)));
   }
 
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
 
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
 
   @Override
   protected void onStop() {
     super.onStop();
-    mapView.onStop();
     if (handler != null && delayed != null) {
       handler.removeCallbacks(delayed);
     }
@@ -133,11 +118,6 @@ public class TextureViewAnimationActivity extends AppCompatActivity {
     mapView.onSaveInstanceState(outState);
   }
 
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
-  }
 
   @Override
   public void onLowMemory() {

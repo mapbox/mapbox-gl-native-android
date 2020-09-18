@@ -56,6 +56,7 @@ public class StretchableImageActivity extends AppCompatActivity implements OnMap
     mapView = findViewById(R.id.mapView);
     mapView.onCreate(savedInstanceState);
     mapView.getMapAsync(this);
+    mapView.attachLifeCycle(this);
   }
 
   @Override
@@ -153,29 +154,6 @@ public class StretchableImageActivity extends AppCompatActivity implements OnMap
   }
 
 
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
 
   @Override
   public void onSaveInstanceState(Bundle outState) {
@@ -187,12 +165,6 @@ public class StretchableImageActivity extends AppCompatActivity implements OnMap
   public void onLowMemory() {
     super.onLowMemory();
     mapView.onLowMemory();
-  }
-
-  @Override
-  public void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
   }
 
 }

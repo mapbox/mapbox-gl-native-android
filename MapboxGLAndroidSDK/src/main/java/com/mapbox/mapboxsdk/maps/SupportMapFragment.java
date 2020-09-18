@@ -97,6 +97,7 @@ public class SupportMapFragment extends Fragment implements OnMapReadyCallback {
     super.onCreateView(inflater, container, savedInstanceState);
     Context context = inflater.getContext();
     map = new MapView(context, MapFragmentUtils.resolveArgs(context, getArguments()));
+    map.attachLifeCycle(this);
     return map;
   }
 
@@ -126,32 +127,7 @@ public class SupportMapFragment extends Fragment implements OnMapReadyCallback {
     }
   }
 
-  /**
-   * Called when the fragment is visible for the users.
-   */
-  @Override
-  public void onStart() {
-    super.onStart();
-    map.onStart();
-  }
 
-  /**
-   * Called when the fragment is ready to be interacted with.
-   */
-  @Override
-  public void onResume() {
-    super.onResume();
-    map.onResume();
-  }
-
-  /**
-   * Called when the fragment is pausing.
-   */
-  @Override
-  public void onPause() {
-    super.onPause();
-    map.onPause();
-  }
 
   /**
    * Called when the fragment state needs to be saved.
@@ -164,15 +140,6 @@ public class SupportMapFragment extends Fragment implements OnMapReadyCallback {
     if (map != null) {
       map.onSaveInstanceState(outState);
     }
-  }
-
-  /**
-   * Called when the fragment is no longer visible for the user.
-   */
-  @Override
-  public void onStop() {
-    super.onStop();
-    map.onStop();
   }
 
   /**

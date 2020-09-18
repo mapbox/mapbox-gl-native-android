@@ -88,6 +88,7 @@ public class SymbolGeneratorActivity extends AppCompatActivity implements OnMapR
     mapView = (MapView) findViewById(R.id.mapView);
     mapView.onCreate(savedInstanceState);
     mapView.getMapAsync(this);
+    mapView.attachLifeCycle(this);
   }
 
   @Override
@@ -143,29 +144,7 @@ public class SymbolGeneratorActivity extends AppCompatActivity implements OnMapR
     return super.onOptionsItemSelected(item);
   }
 
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
 
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
 
   @Override
   public void onSaveInstanceState(Bundle outState) {
@@ -179,11 +158,6 @@ public class SymbolGeneratorActivity extends AppCompatActivity implements OnMapR
     mapView.onLowMemory();
   }
 
-  @Override
-  public void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
-  }
 
   /**
    * Utility class to generate Bitmaps for Symbol.

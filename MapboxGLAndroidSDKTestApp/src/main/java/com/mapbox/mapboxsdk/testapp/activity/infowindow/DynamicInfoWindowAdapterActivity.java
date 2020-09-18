@@ -2,9 +2,11 @@ package com.mapbox.mapboxsdk.testapp.activity.infowindow;
 
 import android.graphics.Color;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.widget.TextView;
 
 import com.mapbox.mapboxsdk.annotations.InfoWindow;
@@ -65,6 +67,7 @@ public class DynamicInfoWindowAdapterActivity extends AppCompatActivity implemen
     mapView = findViewById(R.id.mapView);
     mapView.onCreate(savedInstanceState);
     mapView.getMapAsync(this);
+    mapView.attachLifeCycle(this);
   }
 
   @Override
@@ -111,29 +114,6 @@ public class DynamicInfoWindowAdapterActivity extends AppCompatActivity implemen
     });
   }
 
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
 
   @Override
   protected void onSaveInstanceState(Bundle outState) {
@@ -147,7 +127,6 @@ public class DynamicInfoWindowAdapterActivity extends AppCompatActivity implemen
     if (mapboxMap != null) {
       mapboxMap.removeOnMapClickListener(mapClickListener);
     }
-    mapView.onDestroy();
   }
 
   @Override

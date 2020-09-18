@@ -2,12 +2,16 @@ package com.mapbox.mapboxsdk.testapp.activity.maplayout;
 
 import android.content.Context;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -109,6 +113,7 @@ public class DebugModeActivity extends AppCompatActivity implements OnMapReadyCa
     mapView.onCreate(savedInstanceState);
     mapView.getMapAsync(this);
     mapView.addOnDidFinishLoadingStyleListener(() -> Timber.d("Style loaded"));
+    mapView.attachLifeCycle(this);
   }
 
   protected MapboxMapOptions setupMapboxMapOptions() {
@@ -219,30 +224,6 @@ public class DebugModeActivity extends AppCompatActivity implements OnMapReadyCa
   }
 
   @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
-
-  @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     mapView.onSaveInstanceState(outState);
@@ -255,7 +236,6 @@ public class DebugModeActivity extends AppCompatActivity implements OnMapReadyCa
       mapboxMap.unsubscribe(observer);
       mapboxMap.removeOnCameraMoveListener(cameraMoveListener);
     }
-    mapView.onDestroy();
   }
 
   @Override

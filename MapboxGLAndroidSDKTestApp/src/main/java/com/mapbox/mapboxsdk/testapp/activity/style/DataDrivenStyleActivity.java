@@ -2,7 +2,9 @@ package com.mapbox.mapboxsdk.testapp.activity.style;
 
 import android.graphics.Color;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -59,7 +61,7 @@ public class DataDrivenStyleActivity extends AppCompatActivity {
     // Initialize map as normal
     mapView = findViewById(R.id.mapView);
     mapView.onCreate(savedInstanceState);
-
+    mapView.attachLifeCycle(this);
     mapView.getMapAsync(map -> {
       // Store for later
       mapboxMap = map;
@@ -89,30 +91,6 @@ public class DataDrivenStyleActivity extends AppCompatActivity {
   }
 
   @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
-
-  @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     mapView.onSaveInstanceState(outState);
@@ -124,7 +102,6 @@ public class DataDrivenStyleActivity extends AppCompatActivity {
     if (mapboxMap != null && idleListener != null) {
       mapboxMap.removeOnCameraIdleListener(idleListener);
     }
-    mapView.onDestroy();
   }
 
   @Override

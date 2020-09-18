@@ -58,30 +58,7 @@ public class MapInDialogActivity extends AppCompatActivity {
       mapView = view.findViewById(R.id.mapView);
       mapView.onCreate(savedInstanceState);
       mapView.getMapAsync(mapboxMap -> mapboxMap.setStyle(Style.OUTDOORS));
-    }
-
-    @Override
-    public void onStart() {
-      super.onStart();
-      mapView.onStart();
-    }
-
-    @Override
-    public void onResume() {
-      super.onResume();
-      mapView.onResume();
-    }
-
-    @Override
-    public void onPause() {
-      super.onPause();
-      mapView.onPause();
-    }
-
-    @Override
-    public void onStop() {
-      super.onStop();
-      mapView.onStop();
+      mapView.attachLifeCycle(this);
     }
 
     @Override

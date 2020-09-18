@@ -48,7 +48,7 @@ public class CustomizedLocationPulsingCircleActivity extends AppCompatActivity i
   private static final float DEFAULT_LOCATION_CIRCLE_PULSE_RADIUS = 35;
   private static final float DEFAULT_LOCATION_CIRCLE_PULSE_ALPHA = .55f;
   private static final Interpolator DEFAULT_LOCATION_CIRCLE_INTERPOLATOR_PULSE_MODE
-      = new DecelerateInterpolator();
+    = new DecelerateInterpolator();
   private static final boolean DEFAULT_LOCATION_CIRCLE_PULSE_FADE_MODE = true;
   //endregion
 
@@ -87,7 +87,7 @@ public class CustomizedLocationPulsingCircleActivity extends AppCompatActivity i
 
     pulsingCircleDurationButton = findViewById(R.id.button_location_circle_duration);
     pulsingCircleDurationButton.setText(String.format("%sms",
-        String.valueOf(LOCATION_CIRCLE_PULSE_DURATION)));
+      String.valueOf(LOCATION_CIRCLE_PULSE_DURATION)));
     pulsingCircleDurationButton.setOnClickListener(v -> {
       if (locationComponent == null) {
         return;
@@ -104,7 +104,7 @@ public class CustomizedLocationPulsingCircleActivity extends AppCompatActivity i
     });
 
     mapView.onCreate(savedInstanceState);
-
+    mapView.attachLifeCycle(this);
     checkPermissions();
   }
 
@@ -117,14 +117,14 @@ public class CustomizedLocationPulsingCircleActivity extends AppCompatActivity i
       locationComponent = mapboxMap.getLocationComponent();
 
       LocationComponentOptions locationComponentOptions =
-          buildLocationComponentOptions(
-              LOCATION_CIRCLE_PULSE_COLOR,
-              LOCATION_CIRCLE_PULSE_DURATION)
-              .pulseEnabled(true)
-              .build();
+        buildLocationComponentOptions(
+          LOCATION_CIRCLE_PULSE_COLOR,
+          LOCATION_CIRCLE_PULSE_DURATION)
+          .pulseEnabled(true)
+          .build();
 
       LocationComponentActivationOptions locationComponentActivationOptions =
-          buildLocationComponentActivationOptions(style,locationComponentOptions);
+        buildLocationComponentActivationOptions(style, locationComponentOptions);
 
       locationComponent.activateLocationComponent(locationComponentActivationOptions);
       locationComponent.setLocationComponentEnabled(true);
@@ -138,38 +138,38 @@ public class CustomizedLocationPulsingCircleActivity extends AppCompatActivity i
   ) {
     currentPulseDuration = pulsingCircleDuration;
     return LocationComponentOptions.builder(this)
-        .layerBelow(LAYER_BELOW_ID)
-        .pulseFadeEnabled(DEFAULT_LOCATION_CIRCLE_PULSE_FADE_MODE)
-        .pulseInterpolator(DEFAULT_LOCATION_CIRCLE_INTERPOLATOR_PULSE_MODE)
-        .pulseColor(pulsingCircleColor)
-        .pulseAlpha(DEFAULT_LOCATION_CIRCLE_PULSE_ALPHA)
-        .pulseSingleDuration(pulsingCircleDuration)
-        .pulseMaxRadius(DEFAULT_LOCATION_CIRCLE_PULSE_RADIUS);
+      .layerBelow(LAYER_BELOW_ID)
+      .pulseFadeEnabled(DEFAULT_LOCATION_CIRCLE_PULSE_FADE_MODE)
+      .pulseInterpolator(DEFAULT_LOCATION_CIRCLE_INTERPOLATOR_PULSE_MODE)
+      .pulseColor(pulsingCircleColor)
+      .pulseAlpha(DEFAULT_LOCATION_CIRCLE_PULSE_ALPHA)
+      .pulseSingleDuration(pulsingCircleDuration)
+      .pulseMaxRadius(DEFAULT_LOCATION_CIRCLE_PULSE_RADIUS);
   }
 
   @SuppressLint("MissingPermission")
   private void setNewLocationComponentOptions(float newPulsingDuration,
                                               int newPulsingColor) {
     mapboxMap.getStyle(style -> locationComponent.applyStyle(
-        buildLocationComponentOptions(
-            newPulsingColor,
-            newPulsingDuration)
-            .pulseEnabled(true)
-            .build()));
+      buildLocationComponentOptions(
+        newPulsingColor,
+        newPulsingDuration)
+        .pulseEnabled(true)
+        .build()));
   }
 
   private LocationComponentActivationOptions buildLocationComponentActivationOptions(
-      @NonNull Style style,
-      @NonNull LocationComponentOptions locationComponentOptions) {
+    @NonNull Style style,
+    @NonNull LocationComponentOptions locationComponentOptions) {
     return LocationComponentActivationOptions
-        .builder(this, style)
-        .locationComponentOptions(locationComponentOptions)
-        .useDefaultLocationEngine(true)
-        .locationEngineRequest(new LocationEngineRequest.Builder(750)
-            .setFastestInterval(750)
-            .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
-            .build())
-        .build();
+      .builder(this, style)
+      .locationComponentOptions(locationComponentOptions)
+      .useDefaultLocationEngine(true)
+      .locationEngineRequest(new LocationEngineRequest.Builder(750)
+        .setFastestInterval(750)
+        .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
+        .build())
+      .build();
   }
 
   @Override
@@ -197,16 +197,16 @@ public class CustomizedLocationPulsingCircleActivity extends AppCompatActivity i
       return true;
     } else if (id == R.id.action_stop_pulsing) {
       locationComponent.applyStyle(LocationComponentOptions.builder(
-          CustomizedLocationPulsingCircleActivity.this)
-          .pulseEnabled(false)
-          .build());
+        CustomizedLocationPulsingCircleActivity.this)
+        .pulseEnabled(false)
+        .build());
       return true;
     } else if (id == R.id.action_start_pulsing) {
       locationComponent.applyStyle(buildLocationComponentOptions(
-          LOCATION_CIRCLE_PULSE_COLOR,
-          LOCATION_CIRCLE_PULSE_DURATION)
-          .pulseEnabled(true)
-          .build());
+        LOCATION_CIRCLE_PULSE_COLOR,
+        LOCATION_CIRCLE_PULSE_DURATION)
+        .pulseEnabled(true)
+        .build());
       return true;
     }
     return super.onOptionsItemSelected(item);
@@ -224,7 +224,7 @@ public class CustomizedLocationPulsingCircleActivity extends AppCompatActivity i
         @Override
         public void onExplanationNeeded(List<String> permissionsToExplain) {
           Toast.makeText(CustomizedLocationPulsingCircleActivity.this, "You need to accept location permissions.",
-              Toast.LENGTH_SHORT).show();
+            Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -246,7 +246,7 @@ public class CustomizedLocationPulsingCircleActivity extends AppCompatActivity i
     modes.add(String.format("%sms", String.valueOf(SECOND_LOCATION_CIRCLE_PULSE_DURATION_MS)));
     modes.add(String.format("%sms", String.valueOf(THIRD_LOCATION_CIRCLE_PULSE_DURATION_MS)));
     ArrayAdapter<String> profileAdapter = new ArrayAdapter<>(this,
-        android.R.layout.simple_list_item_1, modes);
+      android.R.layout.simple_list_item_1, modes);
     ListPopupWindow listPopup = new ListPopupWindow(this);
     listPopup.setAdapter(profileAdapter);
     listPopup.setAnchorView(pulsingCircleDurationButton);
@@ -254,15 +254,15 @@ public class CustomizedLocationPulsingCircleActivity extends AppCompatActivity i
       String selectedMode = modes.get(position);
       pulsingCircleDurationButton.setText(selectedMode);
       if (selectedMode.contentEquals(String.format("%sms",
-          String.valueOf(DEFAULT_LOCATION_CIRCLE_PULSE_DURATION_MS)))) {
+        String.valueOf(DEFAULT_LOCATION_CIRCLE_PULSE_DURATION_MS)))) {
         LOCATION_CIRCLE_PULSE_DURATION = DEFAULT_LOCATION_CIRCLE_PULSE_DURATION_MS;
         setNewLocationComponentOptions(DEFAULT_LOCATION_CIRCLE_PULSE_DURATION_MS, LOCATION_CIRCLE_PULSE_COLOR);
       } else if (selectedMode.contentEquals(String.format("%sms",
-          String.valueOf(SECOND_LOCATION_CIRCLE_PULSE_DURATION_MS)))) {
+        String.valueOf(SECOND_LOCATION_CIRCLE_PULSE_DURATION_MS)))) {
         LOCATION_CIRCLE_PULSE_DURATION = SECOND_LOCATION_CIRCLE_PULSE_DURATION_MS;
         setNewLocationComponentOptions(SECOND_LOCATION_CIRCLE_PULSE_DURATION_MS, LOCATION_CIRCLE_PULSE_COLOR);
       } else if (selectedMode.contentEquals(String.format("%sms",
-          String.valueOf(THIRD_LOCATION_CIRCLE_PULSE_DURATION_MS)))) {
+        String.valueOf(THIRD_LOCATION_CIRCLE_PULSE_DURATION_MS)))) {
         LOCATION_CIRCLE_PULSE_DURATION = THIRD_LOCATION_CIRCLE_PULSE_DURATION_MS;
         setNewLocationComponentOptions(THIRD_LOCATION_CIRCLE_PULSE_DURATION_MS, LOCATION_CIRCLE_PULSE_COLOR);
       }
@@ -278,7 +278,7 @@ public class CustomizedLocationPulsingCircleActivity extends AppCompatActivity i
     trackingTypes.add("Green");
     trackingTypes.add("Gray");
     ArrayAdapter<String> profileAdapter = new ArrayAdapter<>(this,
-        android.R.layout.simple_list_item_1, trackingTypes);
+      android.R.layout.simple_list_item_1, trackingTypes);
     ListPopupWindow listPopup = new ListPopupWindow(this);
     listPopup.setAdapter(profileAdapter);
     listPopup.setAnchorView(pulsingCircleColorButton);
@@ -310,29 +310,6 @@ public class CustomizedLocationPulsingCircleActivity extends AppCompatActivity i
     permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
   }
 
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
 
   @SuppressLint("MissingPermission")
   @Override
@@ -346,11 +323,6 @@ public class CustomizedLocationPulsingCircleActivity extends AppCompatActivity i
     }
   }
 
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
-  }
 
   @Override
   public void onLowMemory() {

@@ -53,6 +53,7 @@ public class BasicLocationPulsingCircleActivity extends AppCompatActivity implem
       lastLocation = savedInstanceState.getParcelable(SAVED_STATE_LOCATION);
     }
     mapView.onCreate(savedInstanceState);
+    mapView.attachLifeCycle(this);
 
     checkPermissions();
   }
@@ -66,12 +67,12 @@ public class BasicLocationPulsingCircleActivity extends AppCompatActivity implem
       locationComponent = mapboxMap.getLocationComponent();
 
       LocationComponentOptions locationComponentOptions =
-          LocationComponentOptions.builder(BasicLocationPulsingCircleActivity.this)
-              .pulseEnabled(true)
-              .build();
+        LocationComponentOptions.builder(BasicLocationPulsingCircleActivity.this)
+          .pulseEnabled(true)
+          .build();
 
       LocationComponentActivationOptions locationComponentActivationOptions =
-          buildLocationComponentActivationOptions(style,locationComponentOptions);
+        buildLocationComponentActivationOptions(style, locationComponentOptions);
 
       locationComponent.activateLocationComponent(locationComponentActivationOptions);
       locationComponent.setLocationComponentEnabled(true);
@@ -82,16 +83,16 @@ public class BasicLocationPulsingCircleActivity extends AppCompatActivity implem
 
   private LocationComponentActivationOptions buildLocationComponentActivationOptions(@NonNull Style style,
                                                                                      @NonNull LocationComponentOptions
-                                                                                         locationComponentOptions) {
+                                                                                       locationComponentOptions) {
     return LocationComponentActivationOptions
-        .builder(this, style)
-        .locationComponentOptions(locationComponentOptions)
-        .useDefaultLocationEngine(true)
-        .locationEngineRequest(new LocationEngineRequest.Builder(750)
-            .setFastestInterval(750)
-            .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
-            .build())
-        .build();
+      .builder(this, style)
+      .locationComponentOptions(locationComponentOptions)
+      .useDefaultLocationEngine(true)
+      .locationEngineRequest(new LocationEngineRequest.Builder(750)
+        .setFastestInterval(750)
+        .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
+        .build())
+      .build();
   }
 
   @Override
@@ -119,15 +120,15 @@ public class BasicLocationPulsingCircleActivity extends AppCompatActivity implem
       return true;
     } else if (id == R.id.action_stop_pulsing) {
       locationComponent.applyStyle(LocationComponentOptions.builder(
-          BasicLocationPulsingCircleActivity.this)
-          .pulseEnabled(false)
-          .build());
+        BasicLocationPulsingCircleActivity.this)
+        .pulseEnabled(false)
+        .build());
       return true;
     } else if (id == R.id.action_start_pulsing) {
       locationComponent.applyStyle(LocationComponentOptions.builder(
-          BasicLocationPulsingCircleActivity.this)
-          .pulseEnabled(true)
-          .build());
+        BasicLocationPulsingCircleActivity.this)
+        .pulseEnabled(true)
+        .build());
       return true;
     }
     return super.onOptionsItemSelected(item);
@@ -145,7 +146,7 @@ public class BasicLocationPulsingCircleActivity extends AppCompatActivity implem
         @Override
         public void onExplanationNeeded(List<String> permissionsToExplain) {
           Toast.makeText(BasicLocationPulsingCircleActivity.this, "You need to accept location permissions.",
-              Toast.LENGTH_SHORT).show();
+            Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -167,30 +168,6 @@ public class BasicLocationPulsingCircleActivity extends AppCompatActivity implem
     permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
   }
 
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
-
   @SuppressLint("MissingPermission")
   @Override
   protected void onSaveInstanceState(Bundle outState) {
@@ -199,12 +176,6 @@ public class BasicLocationPulsingCircleActivity extends AppCompatActivity implem
     if (locationComponent != null) {
       outState.putParcelable(SAVED_STATE_LOCATION, locationComponent.getLastKnownLocation());
     }
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
   }
 
   @Override

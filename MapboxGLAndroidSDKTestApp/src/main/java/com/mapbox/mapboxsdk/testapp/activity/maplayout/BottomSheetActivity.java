@@ -2,19 +2,24 @@ package com.mapbox.mapboxsdk.testapp.activity.maplayout;
 
 import android.content.Context;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
@@ -162,29 +167,6 @@ public class BottomSheetActivity extends AppCompatActivity {
       );
     }
 
-    @Override
-    public void onStart() {
-      super.onStart();
-      map.onStart();
-    }
-
-    @Override
-    public void onResume() {
-      super.onResume();
-      map.onResume();
-    }
-
-    @Override
-    public void onPause() {
-      super.onPause();
-      map.onPause();
-    }
-
-    @Override
-    public void onStop() {
-      super.onStop();
-      map.onStop();
-    }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -198,11 +180,6 @@ public class BottomSheetActivity extends AppCompatActivity {
       map.onLowMemory();
     }
 
-    @Override
-    public void onDestroyView() {
-      super.onDestroyView();
-      map.onDestroy();
-    }
   }
 
   public static class BottomSheetFragment extends Fragment implements OnMapReadyCallback {
@@ -221,7 +198,9 @@ public class BottomSheetActivity extends AppCompatActivity {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
       super.onCreateView(inflater, container, savedInstanceState);
       Context context = inflater.getContext();
-      return map = new MapView(context, MapFragmentUtils.resolveArgs(context, getArguments()));
+      map = new MapView(context, MapFragmentUtils.resolveArgs(context, getArguments()));
+      map.attachLifeCycle(this);
+      return map;
     }
 
     @Override
@@ -235,30 +214,6 @@ public class BottomSheetActivity extends AppCompatActivity {
     public void onMapReady(@NonNull MapboxMap mapboxMap) {
       mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.760545, -122.436055), 15));
       mapboxMap.setStyle(Style.LIGHT);
-    }
-
-    @Override
-    public void onStart() {
-      super.onStart();
-      map.onStart();
-    }
-
-    @Override
-    public void onResume() {
-      super.onResume();
-      map.onResume();
-    }
-
-    @Override
-    public void onPause() {
-      super.onPause();
-      map.onPause();
-    }
-
-    @Override
-    public void onStop() {
-      super.onStop();
-      map.onStop();
     }
 
     @Override

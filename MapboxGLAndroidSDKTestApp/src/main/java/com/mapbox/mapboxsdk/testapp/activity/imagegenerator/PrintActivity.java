@@ -2,9 +2,12 @@ package com.mapbox.mapboxsdk.testapp.activity.imagegenerator;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+
 import androidx.print.PrintHelper;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.View;
+
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
@@ -26,6 +29,7 @@ public class PrintActivity extends AppCompatActivity implements MapboxMap.Snapsh
     mapView = findViewById(R.id.mapView);
     mapView.onCreate(savedInstanceState);
     mapView.getMapAsync(this::initMap);
+    mapView.attachLifeCycle(this);
 
     final View fab = findViewById(R.id.fab);
     if (fab != null) {
@@ -49,40 +53,11 @@ public class PrintActivity extends AppCompatActivity implements MapboxMap.Snapsh
     photoPrinter.printBitmap("map.jpg - mapbox print job", snapshot);
   }
 
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
 
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     mapView.onSaveInstanceState(outState);
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
   }
 
   @Override

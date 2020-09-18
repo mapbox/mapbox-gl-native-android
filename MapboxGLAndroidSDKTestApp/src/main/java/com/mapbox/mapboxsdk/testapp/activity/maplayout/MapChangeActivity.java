@@ -1,6 +1,7 @@
 package com.mapbox.mapboxsdk.testapp.activity.maplayout;
 
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
@@ -43,42 +44,13 @@ public class MapChangeActivity extends AppCompatActivity {
       mapboxMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
         new LatLng(55.754020, 37.620948), 12), 9000);
     });
-  }
-
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
+    mapView.attachLifeCycle(this);
   }
 
   @Override
   public void onLowMemory() {
     super.onLowMemory();
     mapView.onLowMemory();
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
   }
 
   @Override

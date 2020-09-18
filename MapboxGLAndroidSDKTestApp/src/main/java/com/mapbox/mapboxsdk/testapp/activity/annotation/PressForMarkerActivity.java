@@ -2,8 +2,10 @@ package com.mapbox.mapboxsdk.testapp.activity.annotation;
 
 import android.graphics.PointF;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -40,6 +42,7 @@ public class PressForMarkerActivity extends AppCompatActivity {
 
     mapView = (MapView) findViewById(R.id.mapView);
     mapView.onCreate(savedInstanceState);
+    mapView.attachLifeCycle(this);
     mapView.getMapAsync(map -> {
       mapboxMap = map;
       resetMap();
@@ -101,36 +104,6 @@ public class PressForMarkerActivity extends AppCompatActivity {
 
     mapView.onSaveInstanceState(outState);
     outState.putParcelableArrayList(STATE_MARKER_LIST, markerList);
-  }
-
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
   }
 
   @Override

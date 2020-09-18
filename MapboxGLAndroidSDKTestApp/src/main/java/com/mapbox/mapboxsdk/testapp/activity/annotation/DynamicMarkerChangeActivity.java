@@ -1,7 +1,9 @@
 package com.mapbox.mapboxsdk.testapp.activity.annotation;
 
 import android.os.Bundle;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +37,7 @@ public class DynamicMarkerChangeActivity extends AppCompatActivity {
     mapView = findViewById(R.id.mapView);
     mapView.setTag(false);
     mapView.onCreate(savedInstanceState);
+    mapView.attachLifeCycle(this);
     mapView.getMapAsync(mapboxMap -> {
       mapboxMap.setStyle(Style.MAPBOX_STREETS);
 
@@ -77,39 +80,9 @@ public class DynamicMarkerChangeActivity extends AppCompatActivity {
   }
 
   @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
-  }
-
-  @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     mapView.onSaveInstanceState(outState);
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
   }
 
   @Override

@@ -35,19 +35,14 @@ public class VisibilityChangeActivity extends AppCompatActivity {
       mapboxMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
         new LatLng(55.754020, 37.620948), 12), 9000);
     });
+
+    mapView.attachLifeCycle(this);
   }
 
   @Override
   protected void onStart() {
     super.onStart();
-    mapView.onStart();
     handler.post(runnable = new VisibilityRunner(mapView, findViewById(R.id.viewParent), handler));
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    mapView.onResume();
   }
 
   private static class VisibilityRunner implements Runnable {
@@ -109,19 +104,12 @@ public class VisibilityChangeActivity extends AppCompatActivity {
   }
 
   @Override
-  protected void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
   protected void onStop() {
     super.onStop();
     if (runnable != null) {
       handler.removeCallbacks(runnable);
       runnable = null;
     }
-    mapView.onStop();
   }
 
   @Override
@@ -130,11 +118,6 @@ public class VisibilityChangeActivity extends AppCompatActivity {
     mapView.onLowMemory();
   }
 
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
-  }
 
   @Override
   protected void onSaveInstanceState(Bundle outState) {

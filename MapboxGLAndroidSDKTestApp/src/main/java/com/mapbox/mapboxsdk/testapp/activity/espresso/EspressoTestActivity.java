@@ -1,7 +1,9 @@
 package com.mapbox.mapboxsdk.testapp.activity.espresso;
 
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.testapp.R;
@@ -20,42 +22,13 @@ public class EspressoTestActivity extends AppCompatActivity {
     setContentView(R.layout.activity_espresso_test);
     mapView = findViewById(R.id.mapView);
     mapView.onCreate(savedInstanceState);
-  }
-
-  @Override
-  public void onResume() {
-    super.onResume();
-    mapView.onResume();
-  }
-
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapView.onStart();
-  }
-
-  @Override
-  public void onPause() {
-    super.onPause();
-    mapView.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mapView.onStop();
+    mapView.attachLifeCycle(this);
   }
 
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     mapView.onSaveInstanceState(outState);
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    mapView.onDestroy();
   }
 
   @Override

@@ -36,6 +36,7 @@ class SnapshotActivity : AppCompatActivity(), OnMapReadyCallback {
     setContentView(R.layout.activity_snapshot)
     mapView.onCreate(savedInstanceState)
     mapView.getMapAsync(this)
+    mapView.attachLifeCycle(this)
   }
 
   override fun onMapReady(map: MapboxMap) {
@@ -43,28 +44,15 @@ class SnapshotActivity : AppCompatActivity(), OnMapReadyCallback {
     mapboxMap.setStyle(Style.Builder().fromUri(Style.OUTDOORS)) { mapView.addOnDidFinishRenderingFrameListener(idleListener) }
   }
 
-  override fun onStart() {
-    super.onStart()
-    mapView.onStart()
-  }
 
-  override fun onResume() {
-    super.onResume()
-    mapView.onResume()
-  }
 
   override fun onPause() {
     super.onPause()
     mapboxMap.snapshot {
       Timber.e("Regression test for https://github.com/mapbox/mapbox-gl-native/pull/11358")
     }
-    mapView.onPause()
   }
 
-  override fun onStop() {
-    super.onStop()
-    mapView.onStop()
-  }
 
   public override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
@@ -79,7 +67,6 @@ class SnapshotActivity : AppCompatActivity(), OnMapReadyCallback {
   public override fun onDestroy() {
     super.onDestroy()
     mapView.removeOnDidFinishRenderingFrameListener(idleListener)
-    mapView.onDestroy()
   }
 
   companion object {
