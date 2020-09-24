@@ -49,5 +49,10 @@
   "EspressoTestActivity",
   "FragmentBackStackActivity",
   "ChildFragmentMapInDialogActivity",
-  "PerformanceMeasurementActivity"
+  "PerformanceMeasurementActivity",
+  "MapSnapshotterActivity",
+  "MapSnapshotterBitMapOverlayActivity",
+  "MapSnapshotterHeatMapActivity",
+  "MapSnapshotterLocalStyleActivity",
+  "MapSnapshotterReuseActivity"
 ]
