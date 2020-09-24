@@ -2,13 +2,8 @@
 
 Mapbox welcomes participation and contributions from everyone. Please read [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) to get started.
 
-## 8.6.6 - September 25, 2020
-[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v8.6.5...android-v8.6.6) since [Mapbox Maps SDK for Android v8.6.5](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v8.6.5):
-### Bug fixes
- - Fix Style not ready exception in location component ([#563](https://github.com/mapbox/mapbox-gl-native-android/pull/563))
-
-## 9.5.0-beta.1 - September 14, 2020
-[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.4.0...android-v9.5.0-beta.1) since [Mapbox Maps SDK for Android 9.4.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.4.0)
+## 9.5.0 - September 25, 2020
+[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.4.0...android-v9.5.0) since [Mapbox Maps SDK for Android 9.4.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.4.0)
 ### Improvements and bug fixes 
  - Fix crash when converting screen coordinate as part of moveBy ([#555](https://github.com/mapbox/mapbox-gl-native-android/pull/555))
  - Upgrade MapView to manage multiple OnTouchListener-s ([#511](https://github.com/mapbox/mapbox-gl-native-android/pull/511))
@@ -18,6 +13,11 @@ Mapbox welcomes participation and contributions from everyone. Please read [`Con
 ### Dependencies
  - Update core library to 5.0.0
  
+## 8.6.6 - September 25, 2020
+[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v8.6.5...android-v8.6.6) since [Mapbox Maps SDK for Android v8.6.5](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v8.6.5):
+### Bug fixes
+ - Fix Style not ready exception in location component ([#563](https://github.com/mapbox/mapbox-gl-native-android/pull/563))
+
 ## 9.4.0 - August 26, 2020
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.3.0...android-v9.4.0) since [Mapbox Maps SDK for Android v9.3.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.3.0)
 ### Features
