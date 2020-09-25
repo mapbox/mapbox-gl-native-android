@@ -2,6 +2,45 @@
 
 Mapbox welcomes participation and contributions from everyone. Please read [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) to get started.
 
+## 8.6.6 - September 25, 2020
+[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v8.6.5...android-v8.6.6) since [Mapbox Maps SDK for Android v8.6.5](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v8.6.5):
+### Bug fixes
+ - Fix Style not ready exception in location component ([#563](https://github.com/mapbox/mapbox-gl-native-android/pull/563))
+
+## 9.5.0-beta.1 - September 14, 2020
+[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.4.0...android-v9.5.0-beta.1) since [Mapbox Maps SDK for Android 9.4.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.4.0)
+### Improvements and bug fixes 
+ - Fix crash when converting screen coordinate as part of moveBy ([#555](https://github.com/mapbox/mapbox-gl-native-android/pull/555))
+ - Upgrade MapView to manage multiple OnTouchListener-s ([#511](https://github.com/mapbox/mapbox-gl-native-android/pull/511))
+ - Remove `LocalGlyphRasterizer`, now it's a part of core as pure C++ implementation. ([#548](https://github.com/mapbox/mapbox-gl-native-android/pull/548))
+ - `LocationIndicatorLayer`: deprecate getImageTiltDisplacement method, introduce it's replacement - getImagePitchDisplacement. ([#548](https://github.com/mapbox/mapbox-gl-native-android/pull/548))
+ - `LocationPropertyFactory`: `imageTiltDisplacement` methods are deprecated, `imagePitchDisplacement` are introduced for replacement. ([#548](https://github.com/mapbox/mapbox-gl-native-android/pull/548))
+### Dependencies
+ - Update core library to 5.0.0
+ 
+## 9.4.0 - August 26, 2020
+[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.3.0...android-v9.4.0) since [Mapbox Maps SDK for Android v9.3.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.3.0)
+### Features
+ - Implement method to set padding when camera is tracking. ([#496](https://github.com/mapbox/mapbox-gl-native-android/pull/496))
+ - Expose animation handling ([#491](https://github.com/mapbox/mapbox-gl-native-android/pull/491))
+ - Expose event Observable ([#502](https://github.com/mapbox/mapbox-gl-native-android/pull/502))
+ - Expose `OnIndicatorPositionChangedListener` which is invoked when the position of the user location indicator changes. ([#515](https://github.com/mapbox/mapbox-gl-native-android/pull/515))
+### Improvements and bug fixes
+ - Optimise fling animation ([#503](https://github.com/mapbox/mapbox-gl-native-android/pull/503))
+ - Remove world bounds validation when creating an offline region ([#495](https://github.com/mapbox/mapbox-gl-native-android/pull/495))
+ - Call setUserAnimationInProgress in LocationCameraController ([#501](https://github.com/mapbox/mapbox-gl-native-android/pull/501))
+ - Check isLocationTracking in the right place ([#504](https://github.com/mapbox/mapbox-gl-native-android/pull/504))
+ - Adapt `LocalGlyphRasterizer` to render glyphs with a font's actual glyph metrics. ([#520](https://github.com/mapbox/mapbox-gl-native-android/pull/520))
+### Dependencies
+ - Update telemetry to 6.1.0
+ - Update core library to 3.1.0
+ 
+## 9.3.1 - July 25, 2020
+### Bug fixes
+ - Fix crash on old devices (Android 4.4) related to LLD linker.
+### Dependencies
+ - Update to gl-native release 1.8.4
+
 ## 8.6.5 - July 22, 2020
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v8.6.4...android-v8.6.5) since [Mapbox Maps SDK for Android v8.6.4](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v8.6.4):
 ### Bug fixes
