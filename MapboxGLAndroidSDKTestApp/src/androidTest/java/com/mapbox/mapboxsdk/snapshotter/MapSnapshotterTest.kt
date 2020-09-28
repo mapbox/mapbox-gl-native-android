@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 import junit.framework.Assert.assertNotNull
 import org.junit.Assert
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -21,6 +22,7 @@ import org.junit.runner.RunWith
  * Integration test that validates if a snapshotter creation
  */
 @RunWith(AndroidJUnit4::class)
+@Ignore("https://github.com/mapbox/mapbox-gl-native-android/issues/577")
 class MapSnapshotterTest {
 
   @Rule
