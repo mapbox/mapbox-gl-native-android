@@ -8,8 +8,8 @@ ext {
 
     versions = [
             mapboxServices   : '5.3.0',
-            mapboxTelemetry  : '6.1.0',
-            mapboxCore       : '3.0.0',
+            mapboxTelemetry  : '6.2.0',
+            mapboxCore       : '3.1.0',
             mapboxGestures   : '0.7.0',
             mapboxAccounts   : '0.7.0',
             appCompat        : '1.0.0',
