@@ -321,6 +321,14 @@ run-android-nitpick: android-update-vendor
 android-graph: gradle/configuration.gradle
 	$(MBGL_ANDROID_GRADLE) -Pmapbox.abis=none :MapboxGLAndroidSDK:generateDependencyGraphMapboxLibraries
 
+.PHONY: sdk-registry-upload
+sdk-registry-upload: gradle/configuration.gradle
+	$(MBGL_ANDROID_GRADLE) -Pmapbox.abis=none :MapboxGLAndroidSDK:mapboxSDKRegistryUpload
+
+.PHONY: sdk-registry-publish
+sdk-registry-publish: gradle/configuration.gradle
+	python3 -m pip install git-pull-request
+	$(MBGL_ANDROID_GRADLE) -Pmapbox.abis=none :MapboxGLAndroidSDK:mapboxSDKRegistryPublish
 #### Miscellaneous targets #####################################################
 
 .PHONY: clean
