@@ -245,6 +245,12 @@ run-android-test-app-center:
 run-android-upload-to-sdk-registry: gradle/configuration.gradle
 	$(MBGL_ANDROID_GRADLE) -Pmapbox.abis=all :MapboxGLAndroidSDK:mapboxSDKRegistryUpload
 
+# Publishes the Android SDK to Mapbox SDK Registry
+.PHONY: run-android-publish-to-sdk-registry
+run-android-publish-to-sdk-registry: gradle/configuration.gradle
+	python3 -m pip install git-pull-request
+	$(MBGL_ANDROID_GRADLE) -Pmapbox.abis=all :MapboxGLAndroidSDK:mapboxSDKRegistryPublish
+
 # Dump system graphics information for the test app
 .PHONY: android-gfxinfo
 android-gfxinfo:
@@ -321,14 +327,6 @@ run-android-nitpick: android-update-vendor
 android-graph: gradle/configuration.gradle
 	$(MBGL_ANDROID_GRADLE) -Pmapbox.abis=none :MapboxGLAndroidSDK:generateDependencyGraphMapboxLibraries
 
-.PHONY: sdk-registry-upload
-sdk-registry-upload: gradle/configuration.gradle
-	$(MBGL_ANDROID_GRADLE) -Pmapbox.abis=none :MapboxGLAndroidSDK:mapboxSDKRegistryUpload
-
-.PHONY: sdk-registry-publish
-sdk-registry-publish: gradle/configuration.gradle
-	python3 -m pip install git-pull-request
-	$(MBGL_ANDROID_GRADLE) -Pmapbox.abis=none :MapboxGLAndroidSDK:mapboxSDKRegistryPublish
 #### Miscellaneous targets #####################################################
 
 .PHONY: clean
