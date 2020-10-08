@@ -18,6 +18,7 @@ JAVADOC_OUTPUT_DIR="./MapboxGLAndroidSDK/build/docs/javadoc/release"
 readonly ANDROID_DOCS_DIRECTORY="android-docs-repo"
 readonly CONSTANTS_FILE="./src/constants.json"
 readonly MAP_VERSION_NUMBERS_FILE="./src/data/map-version-numbers.json"
+readonly BRANCH_WITH_DOCUMENTATION="publisher-production"
 
 MAPS_SDK_VERSION=
 REVIEWERS=
@@ -80,13 +81,19 @@ function generate_docs() {
     fi
 }
 
-function clone_android_docs_repo() {
-    git clone $ANDROID_DOCS_REPO_URL $ANDROID_DOCS_DIRECTORY
+function prepare_branch_with_documentation() {
+    INTERIM_BRANCH_WITH_DOCUMENTATION="${BRANCH_WITH_DOCUMENTATION}_${1}"
+    git checkout $BRANCH_WITH_DOCUMENTATION
+    mkdir -p $1
+    cp -r $JAVADOC_OUTPUT_DIR/* $1
+    git add $1
+    git commit -m "Add $1 API documentation."
+    git checkout -b $INTERIM_BRANCH_WITH_DOCUMENTATION
+    git push --set-upstream origin $INTERIM_BRANCH_WITH_DOCUMENTATION
 }
 
-function copy_generated_to_android_docs () {
-    mkdir -p "${ANDROID_DOCS_DIRECTORY}/api/map-sdk/$1"
-    cp -r $JAVADOC_OUTPUT_DIR/* "${ANDROID_DOCS_DIRECTORY}/api/map-sdk/$1"
+function clone_android_docs_repo() {
+    git clone $ANDROID_DOCS_REPO_URL $ANDROID_DOCS_DIRECTORY
 }
 
 function update_constants_and_map_version_numbers() {
@@ -106,24 +113,34 @@ function prepare_android_docs_branch() {
     BRANCH_NAME="android_maps_sdk_v$1"
     git checkout -b $BRANCH_NAME
     git add -A
-    git commit -m "Documentation for Hydrogen Maps SDK $1"
+    git commit -m "Hydrogen Maps SDK bump to $1"
     git push --set-upstream origin $BRANCH_NAME
     cd -
 }
 
 function create_pull_request() {
-    cd $ANDROID_DOCS_DIRECTORY
-    if [ -z "$REVIEWERS" ]; then
-        gh pr create --title "$1" --body ""
-    else
-        gh pr create --title "$1" --body "" --reviewer $REVIEWERS
+    CMD="gh pr create --title \"${1}\" --body \"\""
+    
+    if [ ! -z "$REVIEWERS" ]; then
+        CMD+=" --reviewer ${REVIEWERS}"
     fi
-    cd -
+    
+    if [ ! -z "${2:-}" ]; then
+        CMD+=" --base ${BRANCH_WITH_DOCUMENTATION}"
+    fi
+    
+    eval $CMD
 }
 
+# Generate docs, create branch and make PR with API documentation in the SDK repo.
 generate_docs
+prepare_branch_with_documentation $MAPS_SDK_VERSION
+create_pull_request "Add ${MAPS_SDK_VERSION} API documentation." $BRANCH_WITH_DOCUMENTATION
+
+# Update config files in Android Docs Repo.
 clone_android_docs_repo
-copy_generated_to_android_docs $MAPS_SDK_VERSION
 update_constants_and_map_version_numbers $MAPS_SDK_VERSION
 prepare_android_docs_branch $MAPS_SDK_VERSION
-create_pull_request "Documentation for Hydrogen Maps SDK ${MAPS_SDK_VERSION}"
+cd $ANDROID_DOCS_DIRECTORY
+create_pull_request "Hydrogen Maps SDK bump to ${MAPS_SDK_VERSION}"
+cd -
