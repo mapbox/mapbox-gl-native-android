@@ -245,6 +245,12 @@ run-android-test-app-center:
 run-android-upload-to-sdk-registry: gradle/configuration.gradle
 	$(MBGL_ANDROID_GRADLE) -Pmapbox.abis=all :MapboxGLAndroidSDK:mapboxSDKRegistryUpload
 
+# Publishes the Android SDK to Mapbox SDK Registry
+.PHONY: run-android-publish-to-sdk-registry
+run-android-publish-to-sdk-registry: gradle/configuration.gradle
+	python3 -m pip install git-pull-request
+	$(MBGL_ANDROID_GRADLE) -Pmapbox.abis=all :MapboxGLAndroidSDK:mapboxSDKRegistryPublish
+
 # Dump system graphics information for the test app
 .PHONY: android-gfxinfo
 android-gfxinfo:
