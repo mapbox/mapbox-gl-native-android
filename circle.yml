@@ -35,9 +35,9 @@ commands:
             echo "$CIRCLE_SHA1"
             echo "$CIRCLE_SHA1" > .circle-sha1
             echo "$CIRCLE_TARGET_BRANCH"
-            echo "${CIRCLE_TARGET_BRANCH:master}" > .circle-target-branch
+            echo "${CIRCLE_TARGET_BRANCH:main}" > .circle-target-branch
             echo "$CIRCLE_MERGE_BASE"
-            echo "${CIRCLE_MERGE_BASE:master}" > .circle-merge-base
+            echo "${CIRCLE_MERGE_BASE:main}" > .circle-merge-base
             ccache --clear
   reset-ccache-stats:
     steps:
@@ -312,7 +312,7 @@ jobs:
           no_output_timeout: 10m
           command: |
             if [[ -n "${GLCLOUD_SERVICE_JSON}" ]]; then
-              if [[ $CIRCLE_BRANCH != master && $CIRCLE_TAG != android-v* ]]; then
+              if [[ $CIRCLE_BRANCH != main && $CIRCLE_TAG != android-v* ]]; then
                 gcloud firebase test android run --type robo \
                   --app MapboxGLAndroidSDKTestApp/build/outputs/apk/release/MapboxGLAndroidSDKTestApp-release.apk \
                   --device-ids sailfish --os-version-ids "26" --locales en --orientations portrait --timeout 90s
