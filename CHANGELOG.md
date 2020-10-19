@@ -2,6 +2,11 @@
 
 Mapbox welcomes participation and contributions from everyone. Please read [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) to get started.
 
+## 9.5.1 - October 19, 2020
+[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.5.0...android-v9.5.1) since [Mapbox Maps SDK for Android 9.5.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.5.0)
+### Dependencies
+ - Update core library to 5.1.2
+
 ## 9.5.0 - September 25, 2020
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.4.0...android-v9.5.0) since [Mapbox Maps SDK for Android 9.4.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.4.0)
 ### Improvements and bug fixes 
