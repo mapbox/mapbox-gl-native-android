@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.DrawableRes;
 import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,7 +20,6 @@ import androidx.annotation.Px;
 import androidx.annotation.UiThread;
 import androidx.annotation.VisibleForTesting;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 
 import com.mapbox.mapboxsdk.R;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
@@ -193,10 +193,10 @@ public final class UiSettings {
       setCompassMargins(tenDp, tenDp, tenDp, tenDp);
     }
     setCompassFadeFacingNorth(options.getCompassFadeFacingNorth());
-    if (options.getCompassImage() == null) {
-      options.compassImage(ResourcesCompat.getDrawable(resources, R.drawable.mapbox_compass_icon, null));
+    if (options.getCompassImage() != null) {
+      setCompassImage(options.getCompassImage());
     }
-    setCompassImage(options.getCompassImage());
+    setCompassImageResource(options.getCompassImageResource());
   }
 
   private void saveCompass(Bundle outState) {
@@ -207,8 +207,14 @@ public final class UiSettings {
     outState.putInt(MapboxConstants.STATE_COMPASS_MARGIN_BOTTOM, getCompassMarginBottom());
     outState.putInt(MapboxConstants.STATE_COMPASS_MARGIN_RIGHT, getCompassMarginRight());
     outState.putBoolean(MapboxConstants.STATE_COMPASS_FADE_WHEN_FACING_NORTH, isCompassFadeWhenFacingNorth());
-    outState.putByteArray(MapboxConstants.STATE_COMPASS_IMAGE_BITMAP,
-      BitmapUtils.getByteArrayFromDrawable(getCompassImage()));
+
+    // Remove below when we remove deprecated code for bitmap API, only leave else clause
+    if (compassView != null && compassView.isLegacyImageDrawableSetter()) {
+      outState.putByteArray(MapboxConstants.STATE_COMPASS_IMAGE_BITMAP,
+        BitmapUtils.getByteArrayFromDrawable(getCompassImage()));
+    } else {
+      outState.putInt(MapboxConstants.STATE_COMPASS_IMAGE_RES, getCompassImageResource());
+    }
   }
 
   private void restoreCompass(Bundle savedInstanceState) {
@@ -224,8 +230,13 @@ public final class UiSettings {
       savedInstanceState.getInt(MapboxConstants.STATE_COMPASS_MARGIN_RIGHT),
       savedInstanceState.getInt(MapboxConstants.STATE_COMPASS_MARGIN_BOTTOM));
     setCompassFadeFacingNorth(savedInstanceState.getBoolean(MapboxConstants.STATE_COMPASS_FADE_WHEN_FACING_NORTH));
-    setCompassImage(BitmapUtils.getDrawableFromByteArray(
-      mapView.getContext(), savedInstanceState.getByteArray(MapboxConstants.STATE_COMPASS_IMAGE_BITMAP)));
+
+    if (savedInstanceState.containsKey(MapboxConstants.STATE_COMPASS_IMAGE_BITMAP)) {
+      setCompassImage(BitmapUtils.getDrawableFromByteArray(
+        mapView.getContext(), savedInstanceState.getByteArray(MapboxConstants.STATE_COMPASS_IMAGE_BITMAP)));
+    } else {
+      setCompassImageResource(savedInstanceState.getInt(MapboxConstants.STATE_COMPASS_IMAGE_RES));
+    }
   }
 
   private void initialiseLogo(MapboxMapOptions options, @NonNull Resources resources) {
@@ -387,10 +398,26 @@ public final class UiSettings {
    * </p>
    *
    * @param compass the drawable to show as image compass
+   * @deprecated use {@link #setCompassImageResource(int)} instead
    */
+  @Deprecated
   public void setCompassImage(@NonNull Drawable compass) {
     if (compassView != null) {
       compassView.setCompassImage(compass);
+    }
+  }
+
+  /**
+   * Specifies the CompassView image.
+   * <p>
+   * By default this value is R.drawable.mapbox_compass_icon.
+   * </p>
+   *
+   * @param drawableRes the resource id of the drawable to show as image compass
+   */
+  public void setCompassImageResource(@DrawableRes int drawableRes) {
+    if (compassView != null) {
+      compassView.setCompassImageResource(drawableRes);
     }
   }
 
@@ -480,13 +507,30 @@ public final class UiSettings {
    * Get the current configured CompassView image.
    *
    * @return the drawable used as compass image
+   * @deprecated use {@link #getCompassImageResource()} instead
    */
   @Nullable
+  @Deprecated
   public Drawable getCompassImage() {
     if (compassView != null) {
       return compassView.getCompassImage();
     } else {
       return null;
+    }
+  }
+
+  /**
+   * Get the current configured id of the CompassView drawable resource.
+   *
+   * @return the drawable resource id used as compass image
+   */
+  @DrawableRes
+  @Nullable
+  public int getCompassImageResource() {
+    if (compassView != null) {
+      return compassView.getCompassImageResource();
+    } else {
+      return R.drawable.mapbox_compass_icon;
     }
   }
 
