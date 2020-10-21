@@ -84,6 +84,7 @@ public class MapboxMapOptions implements Parcelable {
   private boolean localIdeographFontFamilyEnabled = true;
   private String localIdeographFontFamily;
   private String[] localIdeographFontFamilies;
+  private GlyphsRasterizationMode glyphsRasterizationMode = GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY;
 
   private String apiBaseUri;
 
@@ -151,6 +152,7 @@ public class MapboxMapOptions implements Parcelable {
     zMediaOverlay = in.readByte() != 0;
     localIdeographFontFamilyEnabled = in.readByte() != 0;
     localIdeographFontFamily = in.readString();
+    glyphsRasterizationMode = GlyphsRasterizationMode.valueOf(in.readInt());
     localIdeographFontFamilies = in.createStringArray();
     pixelRatio = in.readFloat();
     foregroundLoadColor = in.readInt();
@@ -301,6 +303,9 @@ public class MapboxMapOptions implements Parcelable {
         mapboxMapOptions.localIdeographFontFamily(localIdeographFontFamily);
       }
 
+      int rasterizationMode = typedArray.getInt(R.styleable.mapbox_MapView_mapbox_glyphRasterizationMode, 0);
+      mapboxMapOptions.setRasterizationMode(GlyphsRasterizationMode.valueOf(rasterizationMode));
+
       mapboxMapOptions.pixelRatio(
         typedArray.getFloat(R.styleable.mapbox_MapView_mapbox_pixelRatio, 0));
       mapboxMapOptions.foregroundLoadColor(
@@ -313,6 +318,26 @@ public class MapboxMapOptions implements Parcelable {
       typedArray.recycle();
     }
     return mapboxMapOptions;
+  }
+
+  /**
+   * Experimental.
+   * Set glyphs rasterization mode for client-side text rendering.
+   *
+   * @param glyphsRasterizationMode the glyphs rasterization mode will be used.
+   */
+  public void setRasterizationMode(GlyphsRasterizationMode glyphsRasterizationMode) {
+    this.glyphsRasterizationMode = glyphsRasterizationMode;
+  }
+
+  /**
+   * Experimental.
+   * Glyphs rasterization mode for client-side text rendering.
+   *
+   * @return the glyphs rasterization mode.
+   */
+  public GlyphsRasterizationMode getGlyphsRasterizationMode() {
+    return glyphsRasterizationMode;
   }
 
   /**
@@ -1232,6 +1257,7 @@ public class MapboxMapOptions implements Parcelable {
     dest.writeByte((byte) (zMediaOverlay ? 1 : 0));
     dest.writeByte((byte) (localIdeographFontFamilyEnabled ? 1 : 0));
     dest.writeString(localIdeographFontFamily);
+    dest.writeInt(glyphsRasterizationMode.ordinal());
     dest.writeStringArray(localIdeographFontFamilies);
     dest.writeFloat(pixelRatio);
     dest.writeInt(foregroundLoadColor);
@@ -1347,6 +1373,9 @@ public class MapboxMapOptions implements Parcelable {
     if (!localIdeographFontFamily.equals(options.localIdeographFontFamily)) {
       return false;
     }
+    if (!glyphsRasterizationMode.equals(options.glyphsRasterizationMode)) {
+      return false;
+    }
     if (!Arrays.equals(localIdeographFontFamilies, options.localIdeographFontFamilies)) {
       return false;
     }
@@ -1404,6 +1433,7 @@ public class MapboxMapOptions implements Parcelable {
     result = 31 * result + (zMediaOverlay ? 1 : 0);
     result = 31 * result + (localIdeographFontFamilyEnabled ? 1 : 0);
     result = 31 * result + (localIdeographFontFamily != null ? localIdeographFontFamily.hashCode() : 0);
+    result = 31 * result + glyphsRasterizationMode.ordinal();
     result = 31 * result + Arrays.hashCode(localIdeographFontFamilies);
     result = 31 * result + (int) pixelRatio;
     result = 31 * result + (crossSourceCollisions ? 1 : 0);

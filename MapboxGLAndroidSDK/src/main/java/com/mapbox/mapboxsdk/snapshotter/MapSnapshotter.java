@@ -23,6 +23,7 @@ import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.log.Logger;
+import com.mapbox.mapboxsdk.maps.GlyphsRasterizationMode;
 import com.mapbox.mapboxsdk.maps.Image;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.maps.TelemetryDefinition;
@@ -133,6 +134,7 @@ public class MapSnapshotter {
     private CameraPosition cameraPosition;
     private boolean showLogo = true;
     private String localIdeographFontFamily = MapboxConstants.DEFAULT_FONT;
+    private GlyphsRasterizationMode glyphsRasterizationMode = GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY;
     private String apiBaseUrl;
     private Style.Builder builder;
 
@@ -245,6 +247,24 @@ public class MapSnapshotter {
     @NonNull
     public Options withLocalIdeographFontFamily(String fontFamily) {
       this.localIdeographFontFamily = FontUtils.extractValidFont(fontFamily);
+      return this;
+    }
+
+    /**
+     * Experimental.
+     * Set the glyphs rasterization mode for generating glyphs locally for ideographs in the &#x27;
+     * CJK Unified Ideographs&#x27; and &#x27;Hangul Syllables&#x27; ranges.
+     * <p>
+     * The glyphs rasterization mode argument is passed to {@link android.graphics.Typeface#create(String, int)}.
+     * Default glyphs rasterization mode is {@link GlyphsRasterizationMode#NO_GLYPHS_RASTERIZED_LOCALLY}.
+     * </p>
+     *
+     * @param glyphsRasterizationMode glyphs rasterization mode for local ideograph generation.
+     * @return the mutated {@link Options}
+     */
+    @NonNull
+    public Options withGlyphsRasterizationMode(GlyphsRasterizationMode glyphsRasterizationMode) {
+      this.glyphsRasterizationMode = glyphsRasterizationMode;
       return this;
     }
 
@@ -403,7 +423,7 @@ public class MapSnapshotter {
 
     nativeInitialize(this, fileSource, options.pixelRatio, options.width,
       options.height, options.getStyleUri(), options.getStyleJson(), options.region, options.cameraPosition,
-      options.showLogo, options.localIdeographFontFamily);
+      options.showLogo,options.glyphsRasterizationMode.ordinal(), options.localIdeographFontFamily);
   }
 
 
@@ -829,7 +849,9 @@ public class MapSnapshotter {
                                          FileSource fileSource, float pixelRatio,
                                          int width, int height, String styleUrl, String styleJson,
                                          LatLngBounds region, CameraPosition position,
-                                         boolean showLogo, String localIdeographFontFamily);
+                                         boolean showLogo,
+                                         int glyphsRasterizationMode,
+                                         String localIdeographFontFamily);
 
   @Keep
   protected native void nativeStart();

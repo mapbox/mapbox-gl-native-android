@@ -16,6 +16,7 @@ import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
+import com.mapbox.mapboxsdk.maps.GlyphsRasterizationMode;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.snapshotter.MapSnapshotter;
 import com.mapbox.mapboxsdk.style.layers.Property;
@@ -102,6 +103,7 @@ public class MapSnapshotterActivity extends AppCompatActivity {
     )
       // Optionally the pixel ratio
       .withPixelRatio(1)
+      .withGlyphsRasterizationMode(GlyphsRasterizationMode.ALL_GLYPHS_RASTERIZED_LOCALLY)
       .withLocalIdeographFontFamily(MapboxConstants.DEFAULT_FONT);
 
     // Optionally the visible region
