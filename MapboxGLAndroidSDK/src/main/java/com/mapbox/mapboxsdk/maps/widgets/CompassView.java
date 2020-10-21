@@ -2,6 +2,7 @@ package com.mapbox.mapboxsdk.maps.widgets;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
@@ -35,6 +36,9 @@ public final class CompassView extends ImageView implements Runnable {
   private ViewPropertyAnimatorCompat fadeAnimator;
   private MapboxMap.OnCompassAnimationListener compassAnimationListener;
   private boolean isAnimating = false;
+  @DrawableRes
+  private int compassImageResource;
+  private boolean legacyImageDrawableSetter = false;
 
   public CompassView(@NonNull Context context) {
     super(context);
@@ -139,8 +143,10 @@ public final class CompassView extends ImageView implements Runnable {
    * Set the CompassView image.
    *
    * @param compass the drawable to use as compass image
+   * @deprecated use {@link #setCompassImageResource(int)} instead
    */
   public void setCompassImage(Drawable compass) {
+    legacyImageDrawableSetter = true;
     setImageDrawable(compass);
   }
 
@@ -148,6 +154,7 @@ public final class CompassView extends ImageView implements Runnable {
    * Get the current configured CompassView image.
    *
    * @return the drawable used as compass image
+   * @deprecated use {@link #getCompassImageResource()} instead
    */
   public Drawable getCompassImage() {
     return getDrawable();
@@ -175,5 +182,18 @@ public final class CompassView extends ImageView implements Runnable {
     if (isAnimating) {
       compassAnimationListener.onCompassAnimation();
     }
+  }
+
+  public int getCompassImageResource() {
+    return compassImageResource;
+  }
+
+  public void setCompassImageResource(int drawableRes) {
+    this.compassImageResource = drawableRes;
+    setImageResource(compassImageResource);
+  }
+
+  public boolean isLegacyImageDrawableSetter() {
+    return legacyImageDrawableSetter;
   }
 }
