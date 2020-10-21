@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.mapbox.mapboxsdk.LibraryLoader;
 import com.mapbox.mapboxsdk.log.Logger;
+import com.mapbox.mapboxsdk.maps.GlyphsRasterizationMode;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -33,11 +34,12 @@ public abstract class MapRenderer implements MapRendererScheduler {
   private double expectedRenderTime = 0;
   private MapboxMap.OnFpsChangedListener onFpsChangedListener;
 
-  public MapRenderer(@NonNull Context context, String localIdeographFontFamily) {
+  public MapRenderer(@NonNull Context context, GlyphsRasterizationMode glyphsRasterizationMode,
+                     String localIdeographFontFamily) {
     float pixelRatio = context.getResources().getDisplayMetrics().density;
 
     // Initialise native peer
-    nativeInitialize(this, pixelRatio, localIdeographFontFamily);
+    nativeInitialize(this, pixelRatio, glyphsRasterizationMode.ordinal(), localIdeographFontFamily);
   }
 
   public void onStart() {
@@ -117,6 +119,7 @@ public abstract class MapRenderer implements MapRendererScheduler {
 
   private native void nativeInitialize(MapRenderer self,
                                        float pixelRatio,
+                                       int glyphsRasterizationMode,
                                        String localIdeographFontFamily);
 
   @CallSuper

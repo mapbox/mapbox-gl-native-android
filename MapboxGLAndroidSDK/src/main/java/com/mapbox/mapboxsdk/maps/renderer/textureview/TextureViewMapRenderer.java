@@ -4,6 +4,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import android.view.TextureView;
 
+import com.mapbox.mapboxsdk.maps.GlyphsRasterizationMode;
 import com.mapbox.mapboxsdk.maps.renderer.MapRenderer;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -24,14 +25,16 @@ public class TextureViewMapRenderer extends MapRenderer {
    *
    * @param context                  the current Context
    * @param textureView              the TextureView
+   * @param glyphsRasterizationMode  the GlyphsRasterizationMode
    * @param localIdeographFontFamily the local font family
    * @param translucentSurface    the translucency flag
    */
   public TextureViewMapRenderer(@NonNull Context context,
                                 @NonNull TextureView textureView,
+                                GlyphsRasterizationMode glyphsRasterizationMode,
                                 String localIdeographFontFamily,
                                 boolean translucentSurface) {
-    super(context, localIdeographFontFamily);
+    super(context, glyphsRasterizationMode, localIdeographFontFamily);
     this.translucentSurface = translucentSurface;
     renderThread = new TextureViewRenderThread(textureView, this);
     renderThread.start();

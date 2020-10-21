@@ -4,6 +4,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
+import com.mapbox.mapboxsdk.maps.GlyphsRasterizationMode
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.style.layers.BackgroundLayer
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory
@@ -39,6 +40,7 @@ class MapSnapshotterTest {
       bg.setProperties(PropertyFactory.backgroundColor("rgba(255,128,0,0.7)"))
       val options = MapSnapshotter.Options(512, 512)
         .withPixelRatio(1.0f)
+        .withGlyphsRasterizationMode(GlyphsRasterizationMode.NO_GLYPHS_RASTERIZED_LOCALLY)
         .withStyleBuilder(Style.Builder().fromUri(Style.SATELLITE_STREETS)
           .withLayerAbove(bg, "country-label"))
         .withCameraPosition(

@@ -311,11 +311,12 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
 
   private void initialiseDrawingSurface(MapboxMapOptions options) {
     String localFontFamily = options.getLocalIdeographFontFamily();
+    GlyphsRasterizationMode glyphsRasterizationMode = options.getGlyphsRasterizationMode();
     if (options.getTextureMode()) {
       TextureView textureView = new TextureView(getContext());
       boolean translucentSurface = options.getTranslucentTextureSurface();
       mapRenderer = new TextureViewMapRenderer(getContext(),
-        textureView, localFontFamily, translucentSurface) {
+        textureView, glyphsRasterizationMode, localFontFamily, translucentSurface) {
         @Override
         protected void onSurfaceCreated(GL10 gl, EGLConfig config) {
           MapView.this.onSurfaceCreated();
@@ -328,7 +329,8 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
     } else {
       MapboxGLSurfaceView glSurfaceView = new MapboxGLSurfaceView(getContext());
       glSurfaceView.setZOrderMediaOverlay(mapboxMapOptions.getRenderSurfaceOnTop());
-      mapRenderer = new GLSurfaceViewMapRenderer(getContext(), glSurfaceView, localFontFamily) {
+      mapRenderer = new GLSurfaceViewMapRenderer(getContext(), glSurfaceView,
+        glyphsRasterizationMode, localFontFamily) {
         @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
           MapView.this.onSurfaceCreated();

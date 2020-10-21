@@ -5,6 +5,7 @@ import android.opengl.GLSurfaceView;
 
 import androidx.annotation.NonNull;
 
+import com.mapbox.mapboxsdk.maps.GlyphsRasterizationMode;
 import com.mapbox.mapboxsdk.maps.renderer.MapRenderer;
 import com.mapbox.mapboxsdk.maps.renderer.egl.EGLConfigChooser;
 import com.mapbox.mapboxsdk.maps.renderer.egl.EGLContextFactory;
@@ -28,8 +29,9 @@ public class GLSurfaceViewMapRenderer extends MapRenderer implements GLSurfaceVi
 
   public GLSurfaceViewMapRenderer(Context context,
                                   MapboxGLSurfaceView glSurfaceView,
+                                  GlyphsRasterizationMode glyphsRasterizationMode,
                                   String localIdeographFontFamily) {
-    super(context, localIdeographFontFamily);
+    super(context, glyphsRasterizationMode, localIdeographFontFamily);
     this.glSurfaceView = glSurfaceView;
     glSurfaceView.setEGLContextFactory(new EGLContextFactory());
     glSurfaceView.setEGLWindowSurfaceFactory(new EGLWindowSurfaceFactory());

@@ -7,6 +7,12 @@
 
         <!--Configuration-->
         <attr name="mapbox_apiBaseUri" format="string"/>
+        <!--Glyph rasterization configuration-->
+        <attr name="mapbox_glyphRasterizationMode">
+            <flag name="no_glyphs_rasterized_locally" value="0"/>
+            <flag name="ideagraphs_rasterized_locally" value="1"/>
+            <flag name="all_glyphs_rasterized_locally" value="2"/>
+        </attr>
         <attr name="mapbox_localIdeographEnabled" format="boolean"/>
         <attr name="mapbox_localIdeographFontFamily" format="string"/>
         <attr name="mapbox_localIdeographFontFamilies" format="reference"/>
