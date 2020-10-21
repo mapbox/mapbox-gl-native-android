@@ -82,7 +82,7 @@ public class MapboxMapOptions implements Parcelable {
   private boolean localIdeographFontFamilyEnabled = true;
   private String localIdeographFontFamily;
   private String[] localIdeographFontFamilies;
-  private GlyphsRasterizationMode glyphsRasterizationMode = GlyphsRasterizationMode.NO_GLYPHS_RASTERIZED_LOCALLY;
+  private GlyphsRasterizationMode glyphsRasterizationMode = GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY;
 
   private String apiBaseUri;
 

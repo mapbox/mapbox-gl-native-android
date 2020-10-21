@@ -99,6 +99,18 @@ class MapboxMapOptionsAttrsTest {
     }
   }
 
+  @Test
+  fun getFontFamilyAllGlyphMode() {
+    mockEnableLocalIdeograph(enabled = true)
+    val font = "foo"
+    mockLocalIdeographString(font)
+    every { typedArray.getInt(R.styleable.mapbox_MapView_mapbox_glyphRasterizationMode, 0) } returns 2
+    val options = MapboxMapOptions.createFromAttributes(options, context, typedArray)
+    verify(exactly = 1) {
+      options.setRasterizationMode(GlyphsRasterizationMode.ALL_GLYPHS_RASTERIZED_LOCALLY)
+    }
+  }
+
   private fun mockEnableLocalIdeograph(enabled: Boolean) {
     every {
       typedArray.getBoolean(R.styleable.mapbox_MapView_mapbox_localIdeographEnabled, true)

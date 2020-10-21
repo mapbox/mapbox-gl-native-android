@@ -134,7 +134,7 @@ public class MapSnapshotter {
     private CameraPosition cameraPosition;
     private boolean showLogo = true;
     private String localIdeographFontFamily = MapboxConstants.DEFAULT_FONT;
-    private GlyphsRasterizationMode glyphsRasterizationMode = GlyphsRasterizationMode.NO_GLYPHS_RASTERIZED_LOCALLY;
+    private GlyphsRasterizationMode glyphsRasterizationMode = GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY;
     private String apiBaseUrl;
     private Style.Builder builder;
 
