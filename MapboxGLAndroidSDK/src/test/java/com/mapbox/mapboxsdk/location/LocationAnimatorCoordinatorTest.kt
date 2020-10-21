@@ -7,9 +7,7 @@ import android.util.SparseArray
 import android.view.animation.LinearInterpolator
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
-import com.mapbox.mapboxsdk.location.LocationComponentConstants.DEFAULT_TRACKING_PADDING_ANIM_DURATION
-import com.mapbox.mapboxsdk.location.LocationComponentConstants.DEFAULT_TRACKING_TILT_ANIM_DURATION
-import com.mapbox.mapboxsdk.location.LocationComponentConstants.DEFAULT_TRACKING_ZOOM_ANIM_DURATION
+import com.mapbox.mapboxsdk.location.LocationComponentConstants.*
 import com.mapbox.mapboxsdk.location.MapboxAnimator.*
 import com.mapbox.mapboxsdk.location.modes.RenderMode
 import com.mapbox.mapboxsdk.maps.MapboxMap
@@ -108,7 +106,7 @@ class LocationAnimatorCoordinatorTest {
 
   @Test
   fun feedNewLocation_animatorsAreCreated() {
-    locationAnimatorCoordinator.feedNewLocation(Location(""), cameraPosition, false)
+    feedNewLocation(Location(""), cameraPosition, false)
 
     assertTrue(locationAnimatorCoordinator.animatorArray[ANIMATOR_CAMERA_LATLNG] != null)
     assertTrue(locationAnimatorCoordinator.animatorArray[ANIMATOR_CAMERA_GPS_BEARING] != null)
@@ -122,7 +120,7 @@ class LocationAnimatorCoordinatorTest {
     location.latitude = 51.0
     location.longitude = 17.0
     location.bearing = 35f
-    locationAnimatorCoordinator.feedNewLocation(location, cameraPosition, false)
+    feedNewLocation(location, cameraPosition, false)
 
     val cameraLatLngTarget = locationAnimatorCoordinator.animatorArray[ANIMATOR_CAMERA_LATLNG]?.target as LatLng
     assertEquals(location.latitude, cameraLatLngTarget.latitude)
@@ -154,7 +152,7 @@ class LocationAnimatorCoordinatorTest {
     location.latitude = 51.2
     location.longitude = 17.2
     location.bearing = 36f
-    locationAnimatorCoordinator.feedNewLocation(arrayOf(locationInter, location), cameraPosition, false, false)
+    locationAnimatorCoordinator.feedNewLocation(arrayOf(locationInter, location), cameraPosition, false, null)
 
     val cameraLatLngTarget = locationAnimatorCoordinator.animatorArray[ANIMATOR_CAMERA_LATLNG]?.target as LatLng
     assertEquals(location.latitude, cameraLatLngTarget.latitude)
@@ -198,7 +196,7 @@ class LocationAnimatorCoordinatorTest {
     current.longitude = 17.2
     current.bearing = 0f
 
-    locationAnimatorCoordinator.feedNewLocation(arrayOf(previous, current), cameraPosition, false, false)
+    locationAnimatorCoordinator.feedNewLocation(arrayOf(previous, current), cameraPosition, false, null)
 
     verify {
       animatorProvider.floatAnimator(
@@ -206,7 +204,7 @@ class LocationAnimatorCoordinatorTest {
       )
     }
 
-    locationAnimatorCoordinator.feedNewLocation(arrayOf(previous, current), cameraPosition, true, false)
+    locationAnimatorCoordinator.feedNewLocation(arrayOf(previous, current), cameraPosition, true, null)
 
     verify {
       animatorProvider.floatAnimator(
@@ -216,7 +214,7 @@ class LocationAnimatorCoordinatorTest {
   }
 
   @Test
-  fun feedNewLocation_animatorValue_multiplePoints_animationDuration() {
+  fun feedNewLocation_animatorValue_multiplePoints_animationDurationDefaultsToZero() {
     every { projection.getMetersPerPixelAtLatitude(any()) } answers { 10000.0 } // disable snap
     val locationInter = Location("")
     locationInter.latitude = 51.1
@@ -226,7 +224,7 @@ class LocationAnimatorCoordinatorTest {
     location.latitude = 51.2
     location.longitude = 17.2
     location.bearing = 36f
-    locationAnimatorCoordinator.feedNewLocation(arrayOf(locationInter, location), cameraPosition, false, false)
+    locationAnimatorCoordinator.feedNewLocation(arrayOf(locationInter, location), cameraPosition, false, null)
 
     verify {
       animatorSetProvider.startAnimation(eq(listOf(
@@ -239,7 +237,7 @@ class LocationAnimatorCoordinatorTest {
   }
 
   @Test
-  fun feedNewLocation_animatorValue_multiplePoints_animationDuration_lookAhead() {
+  fun feedNewLocation_animatorValue_multiplePoints_externalAnimationDuration() {
     every { projection.getMetersPerPixelAtLatitude(any()) } answers { 10000.0 } // disable snap
     val locationInter = Location("")
     locationInter.latitude = 51.1
@@ -249,8 +247,7 @@ class LocationAnimatorCoordinatorTest {
     location.latitude = 51.2
     location.longitude = 17.2
     location.bearing = 36f
-    location.time = System.currentTimeMillis() + 2000
-    locationAnimatorCoordinator.feedNewLocation(arrayOf(locationInter, location), cameraPosition, false, true)
+    locationAnimatorCoordinator.feedNewLocation(arrayOf(locationInter, location), cameraPosition, false, 1300)
 
     verify {
       animatorSetProvider.startAnimation(eq(listOf(
@@ -258,7 +255,7 @@ class LocationAnimatorCoordinatorTest {
         locationAnimatorCoordinator.animatorArray[ANIMATOR_LAYER_GPS_BEARING],
         locationAnimatorCoordinator.animatorArray[ANIMATOR_CAMERA_LATLNG],
         locationAnimatorCoordinator.animatorArray[ANIMATOR_CAMERA_GPS_BEARING]
-      )), any<LinearInterpolator>(), more(1500L))
+      )), any<LinearInterpolator>(), 1300)
     }
   }
 
@@ -273,7 +270,7 @@ class LocationAnimatorCoordinatorTest {
     every { animator.animatedValue } returns 270f
     locationAnimatorCoordinator.animatorArray.put(ANIMATOR_LAYER_GPS_BEARING, animator)
 
-    locationAnimatorCoordinator.feedNewLocation(location, cameraPosition, false)
+    feedNewLocation(location, cameraPosition, false)
 
     val layerBearingTarget = locationAnimatorCoordinator.animatorArray[ANIMATOR_LAYER_GPS_BEARING]?.target as Float
     assertEquals(360f, layerBearingTarget)
@@ -290,7 +287,7 @@ class LocationAnimatorCoordinatorTest {
     every { animator.animatedValue } returns 280f
     locationAnimatorCoordinator.animatorArray.put(ANIMATOR_LAYER_GPS_BEARING, animator)
 
-    locationAnimatorCoordinator.feedNewLocation(location, cameraPosition, false)
+    feedNewLocation(location, cameraPosition, false)
 
     val layerBearingTarget = locationAnimatorCoordinator.animatorArray[ANIMATOR_LAYER_GPS_BEARING]?.target as Float
     assertEquals(450f, layerBearingTarget)
@@ -307,7 +304,7 @@ class LocationAnimatorCoordinatorTest {
     every { animator.animatedValue } returns 450f
     locationAnimatorCoordinator.animatorArray.put(ANIMATOR_LAYER_GPS_BEARING, animator)
 
-    locationAnimatorCoordinator.feedNewLocation(location, cameraPosition, false)
+    feedNewLocation(location, cameraPosition, false)
 
     val layerBearingTarget = locationAnimatorCoordinator.animatorArray[ANIMATOR_LAYER_GPS_BEARING]?.target as Float
     assertEquals(-60f, layerBearingTarget)
@@ -324,7 +321,7 @@ class LocationAnimatorCoordinatorTest {
     every { animator.animatedValue } returns 10f
     locationAnimatorCoordinator.animatorArray.put(ANIMATOR_LAYER_GPS_BEARING, animator)
 
-    locationAnimatorCoordinator.feedNewLocation(location, cameraPosition, false)
+    feedNewLocation(location, cameraPosition, false)
 
     val layerBearingTarget = locationAnimatorCoordinator.animatorArray[ANIMATOR_LAYER_GPS_BEARING]?.target as Float
     assertEquals(-10f, layerBearingTarget)
@@ -341,7 +338,7 @@ class LocationAnimatorCoordinatorTest {
     every { animator.animatedValue } returns -280f
     locationAnimatorCoordinator.animatorArray.put(ANIMATOR_LAYER_GPS_BEARING, animator)
 
-    locationAnimatorCoordinator.feedNewLocation(location, cameraPosition, false)
+    feedNewLocation(location, cameraPosition, false)
 
     val layerBearingTarget = locationAnimatorCoordinator.animatorArray[ANIMATOR_LAYER_GPS_BEARING]?.target as Float
     assertEquals(90f, layerBearingTarget)
@@ -358,7 +355,7 @@ class LocationAnimatorCoordinatorTest {
     every { animator.animatedValue } returns -350f
     locationAnimatorCoordinator.animatorArray.put(ANIMATOR_LAYER_GPS_BEARING, animator)
 
-    locationAnimatorCoordinator.feedNewLocation(location, cameraPosition, false)
+    feedNewLocation(location, cameraPosition, false)
 
     val layerBearingTarget = locationAnimatorCoordinator.animatorArray[ANIMATOR_LAYER_GPS_BEARING]?.target as Float
     assertEquals(-90f, layerBearingTarget)
@@ -370,7 +367,7 @@ class LocationAnimatorCoordinatorTest {
     location.latitude = 51.0
     location.longitude = 17.0
     location.bearing = 35f
-    locationAnimatorCoordinator.feedNewLocation(location, cameraPosition, false)
+    feedNewLocation(location, cameraPosition, false)
 
     assertTrue(locationAnimatorCoordinator.animatorArray[ANIMATOR_CAMERA_LATLNG] != null)
     assertTrue(locationAnimatorCoordinator.animatorArray[ANIMATOR_CAMERA_GPS_BEARING] != null)
@@ -384,7 +381,7 @@ class LocationAnimatorCoordinatorTest {
     location.latitude = 51.0
     location.longitude = 17.0
     location.bearing = 35f
-    locationAnimatorCoordinator.feedNewLocation(location, cameraPosition, true)
+    feedNewLocation(location, cameraPosition, true)
 
     val cameraLatLngTarget = locationAnimatorCoordinator.animatorArray[ANIMATOR_CAMERA_LATLNG]?.target as LatLng
     assertEquals(cameraLatLngTarget.latitude, cameraLatLngTarget.latitude)
@@ -534,7 +531,7 @@ class LocationAnimatorCoordinatorTest {
 
   @Test
   fun cancelAllAnimators() {
-    locationAnimatorCoordinator.feedNewLocation(Location(""), cameraPosition, true)
+    feedNewLocation(Location(""), cameraPosition, true)
     assertTrue(locationAnimatorCoordinator.animatorArray[ANIMATOR_CAMERA_LATLNG].isStarted)
 
     locationAnimatorCoordinator.cancelAllAnimations()
@@ -729,7 +726,7 @@ class LocationAnimatorCoordinatorTest {
   @Test
   fun maxFps_givenToAnimator() {
     locationAnimatorCoordinator.setMaxAnimationFps(5)
-    locationAnimatorCoordinator.feedNewLocation(Location(""), cameraPosition, false)
+    feedNewLocation(Location(""), cameraPosition, false)
     verify { animatorProvider.latLngAnimator(any(), any(), 5) }
     verify { animatorProvider.floatAnimator(any(), any(), 5) }
   }
@@ -749,6 +746,14 @@ class LocationAnimatorCoordinatorTest {
         it.add(AnimatorListenerHolder(type, mockk(relaxUnitFun = true)))
       }
     }
+  }
+
+  private fun feedNewLocation(
+    newLocation: Location,
+    currentCameraPosition: CameraPosition,
+    isGpsNorth: Boolean
+  ) {
+    locationAnimatorCoordinator.feedNewLocation(arrayOf(newLocation), currentCameraPosition, isGpsNorth, null)
   }
 }
 

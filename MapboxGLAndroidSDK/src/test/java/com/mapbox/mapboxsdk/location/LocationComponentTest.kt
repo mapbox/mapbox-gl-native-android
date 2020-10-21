@@ -6,7 +6,9 @@ import android.content.res.TypedArray
 import android.location.Location
 import android.os.Looper
 import com.mapbox.android.core.location.LocationEngine
+import com.mapbox.android.core.location.LocationEngineCallback
 import com.mapbox.android.core.location.LocationEngineRequest
+import com.mapbox.android.core.location.LocationEngineResult
 import com.mapbox.mapboxsdk.R
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.location.LocationComponentConstants.TRANSITION_ANIMATION_DURATION_MS
@@ -20,10 +22,8 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentCaptor
-import org.mockito.Mock
+import org.mockito.*
 import org.mockito.Mockito.*
-import org.mockito.MockitoAnnotations
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -670,5 +670,113 @@ class LocationComponentTest {
     locationComponent.forceLocationUpdate(location)
 
     verify(locationAnimatorCoordinator).feedNewAccuracyRadius(location.accuracy, false)
+  }
+
+  @Test
+  fun newLocation_lookAhead_animationDurationGenerated() {
+    val location = Location("test")
+    location.accuracy = 50f
+    location.time = System.currentTimeMillis() + 2000
+    `when`(style.isFullyLoaded).thenReturn(true)
+    locationComponent = LocationComponent(mapboxMap, transform, developerAnimationListeners, currentListener, lastListener, locationLayerController, locationCameraController, locationAnimatorCoordinator, staleStateManager, compassEngine, locationEngineProvider, true)
+    locationComponent.activateLocationComponent(
+      LocationComponentActivationOptions.builder(context, style)
+        .locationComponentOptions(locationComponentOptions)
+        .useSpecializedLocationLayer(true)
+        .useDefaultLocationEngine(false)
+        .build()
+    )
+    locationComponent.isLocationComponentEnabled = true
+    locationComponent.onStart()
+    val locations: List<Location> = listOf(
+      mock(Location::class.java),
+      location
+    )
+    locationComponent.forceLocationUpdate(locations, true)
+
+    verify(locationAnimatorCoordinator).feedNewLocation(eq(locations.toTypedArray()), any(), eq(false), AdditionalMatchers.gt(1500L))
+  }
+
+  @Test
+  fun newLocation_nullAnimationDurationPassed() {
+    val location = Location("test")
+    location.accuracy = 50f
+    `when`(style.isFullyLoaded).thenReturn(true)
+    locationComponent = LocationComponent(mapboxMap, transform, developerAnimationListeners, currentListener, lastListener, locationLayerController, locationCameraController, locationAnimatorCoordinator, staleStateManager, compassEngine, locationEngineProvider, true)
+    locationComponent.activateLocationComponent(
+      LocationComponentActivationOptions.builder(context, style)
+        .locationComponentOptions(locationComponentOptions)
+        .useSpecializedLocationLayer(true)
+        .useDefaultLocationEngine(false)
+        .build()
+    )
+    locationComponent.isLocationComponentEnabled = true
+    locationComponent.onStart()
+    locationComponent.forceLocationUpdate(
+      LocationUpdate.Builder()
+        .location(location)
+        .build()
+    )
+    verify(locationAnimatorCoordinator).feedNewLocation(eq(listOf(location).toTypedArray()), any(), eq(false), isNull())
+  }
+
+  @Test
+  fun whenComponentReEnabled_noEngine_animationDurationZero() {
+    val location = Location("test")
+    location.accuracy = 50f
+    `when`(style.isFullyLoaded).thenReturn(true)
+    locationComponent = LocationComponent(mapboxMap, transform, developerAnimationListeners, currentListener, lastListener, locationLayerController, locationCameraController, locationAnimatorCoordinator, staleStateManager, compassEngine, locationEngineProvider, true)
+    locationComponent.activateLocationComponent(
+      LocationComponentActivationOptions.builder(context, style)
+        .locationComponentOptions(locationComponentOptions)
+        .useSpecializedLocationLayer(true)
+        .useDefaultLocationEngine(false)
+        .build()
+    )
+    locationComponent.isLocationComponentEnabled = true
+    locationComponent.onStart()
+    locationComponent.forceLocationUpdate(
+      LocationUpdate.Builder()
+        .location(location)
+        .animationDuration(1500L)
+        .build()
+    )
+    verify(locationAnimatorCoordinator).feedNewLocation(eq(listOf(location).toTypedArray()), any(), eq(false), eq(1500L))
+
+    locationComponent.onStop()
+    locationComponent.onStart()
+    verify(locationAnimatorCoordinator).feedNewLocation(eq(listOf(location).toTypedArray()), any(), eq(false), eq(0L))
+  }
+
+  @Test
+  fun whenComponentReEnabled_hasEngine_animationDurationZero() {
+    val engineRequest = LocationEngineRequest.Builder(
+      1000L
+    )
+      .setFastestInterval(0L)
+      .build()
+    val location = Location("test")
+    location.accuracy = 50f
+    val locationEngine = mock(LocationEngine::class.java)
+    `when`(style.isFullyLoaded).thenReturn(true)
+    locationComponent = LocationComponent(mapboxMap, transform, developerAnimationListeners, currentListener, locationLayerController, locationCameraController, locationAnimatorCoordinator, staleStateManager, compassEngine, locationEngineProvider, true, engineRequest)
+    locationComponent.activateLocationComponent(
+      LocationComponentActivationOptions.builder(context, style)
+        .locationComponentOptions(locationComponentOptions)
+        .useSpecializedLocationLayer(true)
+        .useDefaultLocationEngine(false)
+        .locationEngine(locationEngine)
+        .build()
+    )
+    locationComponent.isLocationComponentEnabled = true
+    locationComponent.onStart()
+
+    val capture: ArgumentCaptor<LocationEngineCallback<LocationEngineResult>> = ArgumentCaptor.forClass(LocationEngineCallback::class.java as Class<LocationEngineCallback<LocationEngineResult>>)
+    verify(locationEngine).getLastLocation(capture.capture())
+    val result = mock(LocationEngineResult::class.java)
+    `when`(result.lastLocation).thenReturn(location)
+    capture.value.onSuccess(result)
+
+    verify(locationAnimatorCoordinator).feedNewLocation(eq(listOf(location).toTypedArray()), any(), eq(false), eq(0L))
   }
 }

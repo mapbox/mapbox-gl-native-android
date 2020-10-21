@@ -89,13 +89,9 @@ final class LocationAnimatorCoordinator {
     }
   }
 
-  void feedNewLocation(@NonNull Location newLocation, @NonNull CameraPosition currentCameraPosition,
-                       boolean isGpsNorth) {
-    feedNewLocation(new Location[] {newLocation}, currentCameraPosition, isGpsNorth, false);
-  }
-
   void feedNewLocation(@NonNull @Size(min = 1) Location[] newLocations,
-                       @NonNull CameraPosition currentCameraPosition, boolean isGpsNorth, boolean lookAheadUpdate) {
+                       @NonNull CameraPosition currentCameraPosition, boolean isGpsNorth,
+                       @Nullable Long animationDuration) {
     Location newLocation = newLocations[newLocations.length - 1];
     if (previousLocation == null) {
       previousLocation = newLocation;
@@ -125,28 +121,20 @@ final class LocationAnimatorCoordinator {
     boolean snap = immediateAnimation(projection, previousCameraLatLng, targetLatLng)
       || immediateAnimation(projection, previousLayerLatLng, targetLatLng);
 
-    long animationDuration = 0;
-    if (!snap) {
-      long previousUpdateTimeStamp = locationUpdateTimestamp;
-      locationUpdateTimestamp = SystemClock.elapsedRealtime();
-
-      if (previousUpdateTimeStamp == 0) {
-        animationDuration = 0;
-      } else if (lookAheadUpdate) {
-        long currentTimestamp = System.currentTimeMillis();
-        if (currentTimestamp > newLocation.getTime()) {
-          animationDuration = 0;
-          Logger.e("LocationAnimatorCoordinator",
-            "Lookahead enabled, but the target location's timestamp is smaller than current timestamp");
+    long previousUpdateTimeStamp = locationUpdateTimestamp;
+    locationUpdateTimestamp = SystemClock.elapsedRealtime();
+    if (animationDuration == null) {
+      animationDuration = 0L;
+      if (!snap) {
+        if (previousUpdateTimeStamp == 0) {
+          animationDuration = 0L;
         } else {
-          animationDuration = newLocation.getTime() - currentTimestamp;
+          animationDuration = (long) ((locationUpdateTimestamp - previousUpdateTimeStamp) * durationMultiplier)
+          /* make animation slightly longer with durationMultiplier, defaults to 1.1f */;
         }
-      } else {
-        animationDuration = (long) ((locationUpdateTimestamp - previousUpdateTimeStamp) * durationMultiplier)
-        /* make animation slightly longer with durationMultiplier, defaults to 1.1f */;
-      }
 
-      animationDuration = Math.min(animationDuration, MAX_ANIMATION_DURATION_MS);
+        animationDuration = Math.min(animationDuration, MAX_ANIMATION_DURATION_MS);
+      }
     }
 
     playAnimators(animationDuration,
