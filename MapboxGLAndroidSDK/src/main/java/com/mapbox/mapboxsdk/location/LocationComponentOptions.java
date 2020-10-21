@@ -1867,6 +1867,8 @@ public class LocationComponentOptions implements Parcelable {
 
     /**
      * Sets the tracking animation duration multiplier.
+     * <p>
+     * <b>This value is ignored if {@link LocationUpdate.Builder#animationDuration(Long)} is provided.</b>
      *
      * @param trackingAnimationDurationMultiplier the tracking animation duration multiplier
      */

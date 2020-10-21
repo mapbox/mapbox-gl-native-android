@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.hardware.SensorManager;
 import android.location.Location;
+import android.os.Build;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.view.WindowManager;
@@ -41,6 +42,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.TimeUnit;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -185,7 +187,7 @@ public final class LocationComponent {
   private final CopyOnWriteArrayList<OnRenderModeChangedListener> onRenderModeChangedListeners
     = new CopyOnWriteArrayList<>();
   private final CopyOnWriteArrayList<OnIndicatorPositionChangedListener> onIndicatorPositionChangedListener
-      = new CopyOnWriteArrayList<>();
+    = new CopyOnWriteArrayList<>();
 
   // Workaround for too frequent updates, see https://github.com/mapbox/mapbox-gl-native/issues/13587
   private long fastestInterval;
@@ -236,6 +238,34 @@ public final class LocationComponent {
     this.compassEngine = compassEngine;
     this.internalLocationEngineProvider = internalLocationEngineProvider;
     this.useSpecializedLocationLayer = useSpecializedLocationLayer;
+    isComponentInitialized = true;
+  }
+
+  @VisibleForTesting
+  LocationComponent(@NonNull MapboxMap mapboxMap,
+                    @NonNull Transform transform,
+                    @NonNull List<MapboxMap.OnDeveloperAnimationListener> developerAnimationListeners,
+                    @NonNull LocationEngineCallback<LocationEngineResult> currentListener,
+                    @NonNull LocationLayerController locationLayerController,
+                    @NonNull LocationCameraController locationCameraController,
+                    @NonNull LocationAnimatorCoordinator locationAnimatorCoordinator,
+                    @NonNull StaleStateManager staleStateManager,
+                    @NonNull CompassEngine compassEngine,
+                    @NonNull InternalLocationEngineProvider internalLocationEngineProvider,
+                    boolean useSpecializedLocationLayer,
+                    @NonNull LocationEngineRequest locationEngineRequest) {
+    this.mapboxMap = mapboxMap;
+    this.transform = transform;
+    developerAnimationListeners.add(developerAnimationListener);
+    this.currentLocationEngineListener = currentListener;
+    this.locationLayerController = locationLayerController;
+    this.locationCameraController = locationCameraController;
+    this.locationAnimatorCoordinator = locationAnimatorCoordinator;
+    this.staleStateManager = staleStateManager;
+    this.compassEngine = compassEngine;
+    this.internalLocationEngineProvider = internalLocationEngineProvider;
+    this.useSpecializedLocationLayer = useSpecializedLocationLayer;
+    this.locationEngineRequest = locationEngineRequest;
     isComponentInitialized = true;
   }
 
@@ -885,19 +915,19 @@ public final class LocationComponent {
    * @param callback          The callback with finish/cancel information
    */
   public void paddingWhileTracking(double[] padding, long animationDuration,
-      @Nullable MapboxMap.CancelableCallback callback) {
+                                   @Nullable MapboxMap.CancelableCallback callback) {
     checkActivationState();
     if (!isLayerReady) {
       notifyUnsuccessfulCameraOperation(callback, null);
       return;
     } else if (getCameraMode() == CameraMode.NONE) {
       notifyUnsuccessfulCameraOperation(callback, String.format("%s%s",
-          "LocationComponent#paddingWhileTracking method can only be used",
-          " when a camera mode other than CameraMode#NONE is engaged."));
+        "LocationComponent#paddingWhileTracking method can only be used",
+        " when a camera mode other than CameraMode#NONE is engaged."));
       return;
     } else if (locationCameraController.isTransitioning()) {
       notifyUnsuccessfulCameraOperation(callback,
-          "LocationComponent#paddingWhileTracking method call is ignored because the camera mode is transitioning");
+        "LocationComponent#paddingWhileTracking method call is ignored because the camera mode is transitioning");
       return;
     }
 
@@ -996,7 +1026,9 @@ public final class LocationComponent {
    * updated.
    *
    * @param location where the location icon is placed on the map
+   * @deprecated use {@link #forceLocationUpdate(LocationUpdate)} instead
    */
+  @Deprecated
   public void forceLocationUpdate(@Nullable Location location) {
     checkActivationState();
     updateLocation(location, false);
@@ -1014,18 +1046,60 @@ public final class LocationComponent {
    * @param lookAheadUpdate If set to true, the last location's timestamp has to be greater than current timestamp and
    *                        should represent the time at which the animation should actually reach this position,
    *                        cutting out the time interpolation delay.
+   * @deprecated use {@link #forceLocationUpdate(LocationUpdate)} instead
    */
+  @Deprecated
   public void forceLocationUpdate(@Nullable List<Location> locations, boolean lookAheadUpdate) {
     checkActivationState();
     if (locations != null && locations.size() >= 1) {
+      Location targetLocation = locations.get(locations.size() - 1);
+      if (targetLocation == null) {
+        return;
+      }
+      LocationUpdate.Builder builder = new LocationUpdate.Builder()
+        .location(targetLocation)
+        .intermediatePoints(locations.subList(0, locations.size() - 1));
+
+      if (lookAheadUpdate) {
+        long currentTimestampNs;
+        long locationTimestampNs;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+          currentTimestampNs = SystemClock.elapsedRealtimeNanos();
+          locationTimestampNs = targetLocation.getElapsedRealtimeNanos();
+          if (locationTimestampNs == 0) {
+            // fallback in case the elapsed realtime is not set
+            currentTimestampNs = TimeUnit.MILLISECONDS.toNanos(System.currentTimeMillis());
+            locationTimestampNs = TimeUnit.MILLISECONDS.toNanos(targetLocation.getTime());
+          }
+        } else {
+          currentTimestampNs = TimeUnit.MILLISECONDS.toNanos(System.currentTimeMillis());
+          locationTimestampNs = TimeUnit.MILLISECONDS.toNanos(targetLocation.getTime());
+        }
+
+        if (currentTimestampNs > locationTimestampNs) {
+          builder.animationDuration(0L);
+          Logger.e("LocationAnimatorCoordinator",
+            "Lookahead enabled, but the target location's timestamp is smaller than current timestamp");
+        } else {
+          builder.animationDuration(locationTimestampNs - currentTimestampNs);
+        }
+      }
       updateLocation(
-        locations.get(locations.size() - 1), // target location
-        locations.subList(0, locations.size() - 1), // intermediate locations
-        false,
-        lookAheadUpdate);
-    } else {
-      updateLocation(null, false);
+        builder.build(),
+        false
+      );
     }
+  }
+
+  /**
+   * Use to either force a location update or to manually control when the user location gets
+   * updated.
+   *
+   * @param locationUpdate location update
+   * @see LocationUpdate.Builder
+   */
+  public void forceLocationUpdate(@NonNull LocationUpdate locationUpdate) {
+    updateLocation(locationUpdate, false);
   }
 
   /**
@@ -1515,15 +1589,19 @@ public final class LocationComponent {
    * @param location the latest user location
    */
   private void updateLocation(@Nullable final Location location, boolean fromLastLocation) {
-    updateLocation(location, null, fromLastLocation, false);
+    if (location != null) {
+      updateLocation(
+        new LocationUpdate.Builder()
+          .location(location)
+          .build(),
+        fromLastLocation
+      );
+    }
   }
 
-  private void updateLocation(@Nullable final Location location, @Nullable List<Location> intermediatePoints,
-                              boolean fromLastLocation, boolean lookAheadUpdate) {
-    if (location == null) {
-      return;
-    } else if (!isLayerReady) {
-      lastLocation = location;
+  private void updateLocation(@NonNull LocationUpdate locationUpdate, boolean fromLastLocation) {
+    if (!isLayerReady) {
+      lastLocation = locationUpdate.getLocation();
       return;
     } else {
       long currentTime = SystemClock.elapsedRealtime();
@@ -1541,17 +1619,13 @@ public final class LocationComponent {
     }
     CameraPosition currentCameraPosition = mapboxMap.getCameraPosition();
     boolean isGpsNorth = getCameraMode() == CameraMode.TRACKING_GPS_NORTH;
-    if (intermediatePoints != null) {
-      locationAnimatorCoordinator.feedNewLocation(
-        getTargetLocationWithIntermediates(location, intermediatePoints),
-        currentCameraPosition,
-        isGpsNorth,
-        lookAheadUpdate);
-    } else {
-      locationAnimatorCoordinator.feedNewLocation(location, currentCameraPosition, isGpsNorth);
-    }
-    updateAccuracyRadius(location, false);
-    lastLocation = location;
+    locationAnimatorCoordinator.feedNewLocation(
+      getTargetLocationWithIntermediates(locationUpdate.getLocation(), locationUpdate.getIntermediatePoints()),
+      currentCameraPosition,
+      isGpsNorth,
+      fromLastLocation ? Long.valueOf(0L) : locationUpdate.getAnimationDuration());
+    updateAccuracyRadius(locationUpdate.getLocation(), false);
+    lastLocation = locationUpdate.getLocation();
   }
 
   private Location[] getTargetLocationWithIntermediates(Location location, List<Location> intermediatePoints) {
@@ -1800,7 +1874,8 @@ public final class LocationComponent {
   @NonNull
   @VisibleForTesting
   OnIndicatorPositionChangedListener indicatorPositionChangedListener = new OnIndicatorPositionChangedListener() {
-    @Override public void onIndicatorPositionChanged(@NonNull Point point) {
+    @Override
+    public void onIndicatorPositionChanged(@NonNull Point point) {
       for (OnIndicatorPositionChangedListener listener : onIndicatorPositionChangedListener) {
         listener.onIndicatorPositionChanged(point);
       }
