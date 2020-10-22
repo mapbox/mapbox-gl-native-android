@@ -299,12 +299,6 @@ jobs:
               echo "${MAPBOX_DEVELOPER_CONFIG_XML}" > MapboxGLAndroidSDKTestApp/src/main/res/values/developer-config.xml
               make android
             fi
-      - run:
-          name: Generate javadoc and create PR for review
-          command: |
-            if [[ $CIRCLE_TAG == android-v* ]]; then
-              ./scripts/update-android-docs.sh -s ${CIRCLE_TAG:9} -a $ANDROID_DOCS_REPO -r $ANDROID_DOCS_REVIEWERS
-            fi
       - save-dependencies: { gradle: true }
       - login-google-cloud-platform
       - run:
