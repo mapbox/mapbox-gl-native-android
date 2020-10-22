@@ -2,6 +2,11 @@
 
 Mapbox welcomes participation and contributions from everyone. Please read [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) to get started.
 
+## 8.6.7 - October 22, 2020
+[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v8.6.6...android-v8.6.7) since [Mapbox Maps SDK for Android v8.6.6](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v8.6.6):
+### Bug fixes
+ - Compass, deprecate bitmap API, introduce drawable resource ID API instead ([#598](https://github.com/mapbox/mapbox-gl-native-android/pull/598))
+
 ## 9.6.0-alpha.1 - October 7, 2020
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.5.0...android-v9.6.0-alpha.1) since [Mapbox Maps SDK for Android 9.5.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.5.0)
 ### Dependencies
@@ -10,7 +15,7 @@ Mapbox welcomes participation and contributions from everyone. Please read [`Con
 
 ## 9.5.0 - September 25, 2020
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.4.0...android-v9.5.0) since [Mapbox Maps SDK for Android 9.4.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.4.0)
-### Improvements and bug fixes 
+### Improvements and bug fixes
  - Fix crash when converting screen coordinate as part of moveBy ([#555](https://github.com/mapbox/mapbox-gl-native-android/pull/555))
  - Upgrade MapView to manage multiple OnTouchListener-s ([#511](https://github.com/mapbox/mapbox-gl-native-android/pull/511))
  - Remove `LocalGlyphRasterizer`, now it's a part of core as pure C++ implementation. ([#548](https://github.com/mapbox/mapbox-gl-native-android/pull/548))
@@ -18,7 +23,7 @@ Mapbox welcomes participation and contributions from everyone. Please read [`Con
  - `LocationPropertyFactory`: `imageTiltDisplacement` methods are deprecated, `imagePitchDisplacement` are introduced for replacement. ([#548](https://github.com/mapbox/mapbox-gl-native-android/pull/548))
 ### Dependencies
  - Update core library to 5.0.0
- 
+
 ## 8.6.6 - September 25, 2020
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v8.6.5...android-v8.6.6) since [Mapbox Maps SDK for Android v8.6.5](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v8.6.5):
 ### Bug fixes
@@ -40,7 +45,7 @@ Mapbox welcomes participation and contributions from everyone. Please read [`Con
 ### Dependencies
  - Update telemetry to 6.1.0
  - Update core library to 3.1.0
- 
+
 ## 9.3.1 - July 25, 2020
 ### Bug fixes
  - Fix crash on old devices (Android 4.4) related to LLD linker.
