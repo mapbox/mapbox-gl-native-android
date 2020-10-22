@@ -8,11 +8,11 @@ import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
-import android.support.v4.content.res.ResourcesCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -48,6 +48,8 @@ public class MapboxMapOptions implements Parcelable {
   private boolean fadeCompassFacingNorth = true;
   private int compassGravity = Gravity.TOP | Gravity.END;
   private int[] compassMargins;
+  @DrawableRes
+  private int compassImageResource;
   private Drawable compassImage;
 
   private boolean logoEnabled = true;
@@ -112,6 +114,7 @@ public class MapboxMapOptions implements Parcelable {
     if (compassBitmap != null) {
       compassImage = new BitmapDrawable(compassBitmap);
     }
+    compassImageResource = in.readInt();
 
     logoEnabled = in.readByte() != 0;
     logoGravity = in.readInt();
@@ -219,12 +222,12 @@ public class MapboxMapOptions implements Parcelable {
           FOUR_DP * pxlRatio))});
       mapboxMapOptions.compassFadesWhenFacingNorth(typedArray.getBoolean(
         R.styleable.mapbox_MapView_mapbox_uiCompassFadeFacingNorth, true));
-      Drawable compassDrawable = typedArray.getDrawable(
-        R.styleable.mapbox_MapView_mapbox_uiCompassDrawable);
-      if (compassDrawable == null) {
-        compassDrawable = ResourcesCompat.getDrawable(context.getResources(), R.drawable.mapbox_compass_icon, null);
-      }
+
+      Drawable compassDrawable = typedArray.getDrawable(R.styleable.mapbox_MapView_mapbox_uiCompassDrawable);
       mapboxMapOptions.compassImage(compassDrawable);
+      mapboxMapOptions.compassImageResource(
+        typedArray.getInt(R.styleable.mapbox_MapView_mapbox_uiCompassDrawableRes, R.drawable.mapbox_compass_icon)
+      );
 
       mapboxMapOptions.logoEnabled(typedArray.getBoolean(R.styleable.mapbox_MapView_mapbox_uiLogo, true));
       mapboxMapOptions.logoGravity(typedArray.getInt(R.styleable.mapbox_MapView_mapbox_uiLogoGravity,
@@ -431,10 +434,26 @@ public class MapboxMapOptions implements Parcelable {
    *
    * @param compass the drawable to show as image compass
    * @return This
+   * @deprecated use {@link #compassImageResource} instead
    */
   @NonNull
   public MapboxMapOptions compassImage(Drawable compass) {
     this.compassImage = compass;
+    return this;
+  }
+
+  /**
+   * Specifies the image of the CompassView.
+   * <p>
+   * By default this value is R.drawable.mapbox_compass_icon.
+   * </p>
+   *
+   * @param compassImageResource the drawable resource id to show as image compass
+   * @return This
+   */
+  @NonNull
+  public MapboxMapOptions compassImageResource(@DrawableRes int compassImageResource) {
+    this.compassImageResource = compassImageResource;
     return this;
   }
 
@@ -877,8 +896,19 @@ public class MapboxMapOptions implements Parcelable {
    *
    * @return the drawable used as compass image
    */
+  @Deprecated
   public Drawable getCompassImage() {
     return compassImage;
+  }
+
+  /**
+   * Get the current configured CompassView image resource id.
+   *
+   * @return the resource id of the used as compass image
+   */
+  @DrawableRes
+  public int getCompassImageResource() {
+    return compassImageResource;
   }
 
   /**
@@ -1093,7 +1123,7 @@ public class MapboxMapOptions implements Parcelable {
     dest.writeByte((byte) (fadeCompassFacingNorth ? 1 : 0));
     dest.writeParcelable(compassImage != null
       ? BitmapUtils.getBitmapFromDrawable(compassImage) : null, flags);
-
+    dest.writeInt(compassImageResource);
     dest.writeByte((byte) (logoEnabled ? 1 : 0));
     dest.writeInt(logoGravity);
     dest.writeIntArray(logoMargins);
@@ -1150,6 +1180,9 @@ public class MapboxMapOptions implements Parcelable {
     if (compassImage != null
       ? !compassImage.equals(options.compassImage)
       : options.compassImage != null) {
+      return false;
+    }
+    if (compassImageResource != options.compassImageResource) {
       return false;
     }
     if (compassGravity != options.compassGravity) {
@@ -1249,6 +1282,7 @@ public class MapboxMapOptions implements Parcelable {
     result = 31 * result + (fadeCompassFacingNorth ? 1 : 0);
     result = 31 * result + compassGravity;
     result = 31 * result + (compassImage != null ? compassImage.hashCode() : 0);
+    result = 31 * result + compassImageResource;
     result = 31 * result + Arrays.hashCode(compassMargins);
     result = 31 * result + (logoEnabled ? 1 : 0);
     result = 31 * result + logoGravity;
