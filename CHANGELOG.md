@@ -2,6 +2,14 @@
 
 Mapbox welcomes participation and contributions from everyone. Please read [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) to get started.
 
+## 9.6.0-beta.1 - October 22, 2020
+[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.6.0-alpha.1...android-v9.6.0-beta.1) since [Mapbox Maps SDK for Android 9.6.0-alpha.1](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.6.0-alpha.1)
+### Improvements and bug fixes
+ - Compass, deprecate bitmap API, introduce drawable resource ID API instead ([#598](https://github.com/mapbox/mapbox-gl-native-android/pull/598))
+ - Expose LocationUpdate builder and immediate location animation when resuming the map ([#604](https://github.com/mapbox/mapbox-gl-native-android/pull/604))
+ - Add GlyphsRasterizationMode and API ([#601](https://github.com/mapbox/mapbox-gl-native-android/pull/601))
+ - Validate if style is sstill loading ([#591](https://github.com/mapbox/mapbox-gl-native-android/pull/591))
+
 ## 8.6.7 - October 22, 2020
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v8.6.6...android-v8.6.7) since [Mapbox Maps SDK for Android v8.6.6](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v8.6.6):
 ### Bug fixes
