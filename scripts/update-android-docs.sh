@@ -83,6 +83,7 @@ function generate_docs() {
 
 function prepare_branch_with_documentation() {
     INTERIM_BRANCH_WITH_DOCUMENTATION="${BRANCH_WITH_DOCUMENTATION}_${1}"
+    git stash --include-untracked
     git checkout $BRANCH_WITH_DOCUMENTATION
     mkdir -p $1
     cp -r $JAVADOC_OUTPUT_DIR/* $1
