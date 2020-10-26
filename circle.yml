@@ -303,6 +303,7 @@ jobs:
           name: Generate javadoc and create PR for review
           command: |
             if [[ $CIRCLE_TAG == android-v* ]]; then
+              git config --global user.email no-reply@mapbox.com && git config --global user.name MapboxCI
               ./scripts/update-android-docs.sh -s ${CIRCLE_TAG:9} -a $ANDROID_DOCS_REPO -r $ANDROID_DOCS_REVIEWERS
             fi
       - save-dependencies: { gradle: true }
