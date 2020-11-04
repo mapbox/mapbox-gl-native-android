@@ -2,24 +2,21 @@
 
 Mapbox welcomes participation and contributions from everyone. Please read [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) to get started.
 
-## 9.6.0-beta.1 - October 22, 2020
-[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.6.0-alpha.1...android-v9.6.0-beta.1) since [Mapbox Maps SDK for Android 9.6.0-alpha.1](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.6.0-alpha.1)
+## 9.6.0 - November 4, 2020
+[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.5.0...android-v9.6.0) since [Mapbox Maps SDK for Android 9.5.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.5.0)
 ### Improvements and bug fixes
  - Compass, deprecate bitmap API, introduce drawable resource ID API instead ([#598](https://github.com/mapbox/mapbox-gl-native-android/pull/598))
  - Expose LocationUpdate builder and immediate location animation when resuming the map ([#604](https://github.com/mapbox/mapbox-gl-native-android/pull/604))
  - Add GlyphsRasterizationMode and API ([#601](https://github.com/mapbox/mapbox-gl-native-android/pull/601))
  - Validate if style is sstill loading ([#591](https://github.com/mapbox/mapbox-gl-native-android/pull/591))
+### Dependencies
+ - Update telemetry to 6.2.0
+ - Update core library to 5.2.0
 
 ## 8.6.7 - October 22, 2020
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v8.6.6...android-v8.6.7) since [Mapbox Maps SDK for Android v8.6.6](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v8.6.6):
 ### Bug fixes
  - Compass, deprecate bitmap API, introduce drawable resource ID API instead ([#598](https://github.com/mapbox/mapbox-gl-native-android/pull/598))
-
-## 9.6.0-alpha.1 - October 7, 2020
-[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.5.0...android-v9.6.0-alpha.1) since [Mapbox Maps SDK for Android 9.5.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.5.0)
-### Dependencies
- - Update telemetry to 6.2.0
- - Update core library to 5.1.0
 
 ## 9.5.0 - September 25, 2020
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.4.0...android-v9.5.0) since [Mapbox Maps SDK for Android 9.4.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.4.0)
