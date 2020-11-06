@@ -97,7 +97,7 @@ public class SupportMapFragment extends Fragment implements OnMapReadyCallback {
     super.onCreateView(inflater, container, savedInstanceState);
     Context context = inflater.getContext();
     map = new MapView(context, MapFragmentUtils.resolveArgs(context, getArguments()));
-    map.attachLifeCycle(this);
+    map.attachLifeCycle(getViewLifecycleOwner());
     return map;
   }
 
