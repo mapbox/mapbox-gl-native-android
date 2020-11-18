@@ -27,6 +27,7 @@ import com.mapbox.mapboxsdk.R;
 import com.mapbox.mapboxsdk.annotations.Annotation;
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
 import com.mapbox.mapboxsdk.exceptions.MapboxConfigurationException;
+import com.mapbox.mapboxsdk.exceptions.MapboxLifecycleException;
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.maps.renderer.MapRenderer;
 import com.mapbox.mapboxsdk.maps.renderer.glsurfaceview.GLSurfaceViewMapRenderer;
@@ -77,6 +78,7 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
   private AttributionClickListener attributionClickListener;
   MapboxMapOptions mapboxMapOptions;
   private MapRenderer mapRenderer;
+  private boolean created;
   private boolean destroyed;
 
   @Nullable
@@ -299,6 +301,7 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
    */
   @UiThread
   public void onCreate(@Nullable Bundle savedInstanceState) {
+    created = true;
     if (savedInstanceState == null) {
       TelemetryDefinition telemetry = Mapbox.getTelemetry();
       if (telemetry != null) {
@@ -380,11 +383,16 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
    */
   @UiThread
   public void onStart() {
+    if (!created) {
+      throw new MapboxLifecycleException();
+    }
+
     if (!isStarted) {
       ConnectivityReceiver.instance(getContext()).activate();
       FileSource.getInstance(getContext()).activate();
       isStarted = true;
     }
+
     if (mapboxMap != null) {
       mapboxMap.onStart();
     }

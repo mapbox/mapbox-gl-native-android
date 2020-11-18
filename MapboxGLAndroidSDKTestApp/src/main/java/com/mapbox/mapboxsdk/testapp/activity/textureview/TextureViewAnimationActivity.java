@@ -56,6 +56,7 @@ public class TextureViewAnimationActivity extends AppCompatActivity {
 
   private void setupMapView(Bundle savedInstanceState) {
     mapView = (MapView) findViewById(R.id.mapView);
+    mapView.onCreate(savedInstanceState);
     mapView.getMapAsync(mapboxMap -> {
       TextureViewAnimationActivity.this.mapboxMap = mapboxMap;
 

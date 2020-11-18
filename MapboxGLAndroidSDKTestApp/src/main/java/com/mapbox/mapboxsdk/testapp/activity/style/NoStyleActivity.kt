@@ -26,6 +26,7 @@ class NoStyleActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_map_simple)
+    mapView.onCreate(savedInstanceState)
     mapView.getMapAsync { map ->
       map.moveCamera(CameraUpdateFactory.newLatLngZoom(cameraTarget, cameraZoom))
       map.setStyle(
