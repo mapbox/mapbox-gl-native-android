@@ -1017,6 +1017,7 @@
         </activity>
         <activity
             android:name=".activity.location.BasicLocationPulsingCircleActivity"
+            android:exported="true"
             android:description="@string/description_location_basic_pulsing_circle"
             android:label="@string/activity_basic_location_pulsing_circle">
             <meta-data
@@ -1028,6 +1029,7 @@
         </activity>
         <activity
             android:name=".activity.location.CustomizedLocationPulsingCircleActivity"
+            android:exported="true"
             android:description="@string/description_location_customized_pulsing_circle"
             android:label="@string/activity_customized_location_pulsing_circle">
             <meta-data
