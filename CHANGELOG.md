@@ -2,6 +2,15 @@
 
 Mapbox welcomes participation and contributions from everyone. Please read [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) to get started.
 
+## 9.6.1 - February 9, 2021
+[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.6.0...android-v9.6.1) since [Mapbox Maps SDK for Android 9.6.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.6.0)
+### Improvements and bug fixes
+ - Fix pulse circle opacity calculate error ([#625](https://github.com/mapbox/mapbox-gl-native-android/pull/625))
+ - Trigger exception when onCreate is not called ([#626](https://github.com/mapbox/mapbox-gl-native-android/pull/626))
+### Dependencies
+ - Update telemetry to 6.2.2
+ - Update core library to 5.2.2
+
 ## 9.6.0 - November 4, 2020
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.5.0...android-v9.6.0) since [Mapbox Maps SDK for Android 9.5.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.5.0)
 ### Improvements and bug fixes
