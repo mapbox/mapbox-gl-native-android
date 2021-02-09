@@ -286,9 +286,7 @@ jobs:
       - run:
           name: Update version name
           command: |
-            if [[ $CIRCLE_TAG == android-v* ]]; then
-              sed -i -e "s/^VERSION_NAME=.*/VERSION_NAME=${CIRCLE_TAG:9}/" MapboxGLAndroidSDK/gradle.properties
-            fi
+            sed -i -e "s/^VERSION_NAME=.*/VERSION_NAME=9.6.1/" MapboxGLAndroidSDK/gradle.properties
       - run:
           name: Build package
           command: make apackage
@@ -325,7 +323,5 @@ jobs:
       - deploy:
           name: Publish to SDK Registry
           command: |
-            if [[ $CIRCLE_TAG == android-v* ]]; then
-              make run-android-upload-to-sdk-registry
-            fi
+            make run-android-upload-to-sdk-registry
       - generate-api-javadoc
