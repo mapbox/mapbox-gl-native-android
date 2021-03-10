@@ -1800,7 +1800,7 @@ public class Expression {
    *
    * @param expression an expression object or expression string
    * @return expression
-   * @see <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-lenght">Style specification</a>
+   * @see <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-length">Style specification</a>
    */
   public static Expression length(@NonNull Expression expression) {
     return new Expression("length", expression);
@@ -1811,7 +1811,7 @@ public class Expression {
    *
    * @param input a string
    * @return expression
-   * @see <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-lenght">Style specification</a>
+   * @see <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-length">Style specification</a>
    */
   public static Expression length(@NonNull String input) {
     return length(literal(input));
