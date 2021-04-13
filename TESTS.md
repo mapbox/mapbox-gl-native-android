@@ -86,7 +86,8 @@ You can also have a run configuration:
 * Click on "Junit Tests"
 * Give a name to the configuration, e.g. `JUnit tests`
 * As "Test Kind", choose "All in directory"
-* As folder, choose the following folder: `mapbox-gl-native/android/java/MapboxGLAndroidSDKTestApp/src/test/java`
+* As folder, choose the following folder: `${PROJECT_DIR}/mapbox-gl-native/android/java/MapboxGLAndroidSDKTestApp/src/androidTest/java`
+* As "Use classpath of module", choose `mapbox-gl-native-android.MapboxGLAndroidSDKTestApp`
 * Click OK to save the new configuration
 
 You can also run the tests from the command line with:
