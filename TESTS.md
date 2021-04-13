@@ -90,6 +90,8 @@ You can also have a run configuration:
 * As "Use classpath of module", choose `mapbox-gl-native-android.MapboxGLAndroidSDKTestApp`
 * Click OK to save the new configuration
 
+![Screen Shot 2021-04-13 at 22 03 11](https://user-images.githubusercontent.com/6927131/114556852-140e8e80-9ca4-11eb-8b75-08ce2885a7c2.png)
+
 You can also run the tests from the command line with:
 
 ```
