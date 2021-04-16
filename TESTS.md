@@ -109,7 +109,6 @@ and then:
 $ adb shell monkey -p com.mapbox.mapboxgl.testapp -v 500
 ```
 
-
 [1]: ./art/tests/FirebaseTestsAS_1.png
 [2]: ./art/tests/FirebaseTestsAS_2.png
 [3]: ./art/tests/FirebaseTestsAS_3-5.png
