@@ -212,6 +212,9 @@ jobs:
       MBGL_ANDROID_STL: << parameters.stl >>
     steps:
       - install-dependencies: { gradle: true }
+      - add_ssh_keys:
+          fingerprints:
+            - "3b:cd:47:bf:57:9c:e5:36:b0:4d:5f:12:5e:d3:b3:3e"
       - run:
           name: Initialize vendor submodules
           command: git submodule update --init --recursive vendor
@@ -277,6 +280,9 @@ jobs:
       IS_LOCAL_DEVELOPMENT: false
     steps:
       - install-dependencies: { gradle: true }
+      - add_ssh_keys:
+          fingerprints:
+            - "3b:cd:47:bf:57:9c:e5:36:b0:4d:5f:12:5e:d3:b3:3e"
       - run:
           name: Initialize vendor submodules
           command: git submodule update --init --recursive vendor
