@@ -277,6 +277,9 @@ jobs:
       IS_LOCAL_DEVELOPMENT: false
     steps:
       - install-dependencies: { gradle: true }
+      - add_ssh_keys:
+          fingerprints:
+            - "3b:cd:47:bf:57:9c:e5:36:b0:4d:5f:12:5e:d3:b3:3e"
       - run:
           name: Initialize vendor submodules
           command: git submodule update --init --recursive vendor
@@ -326,6 +329,8 @@ jobs:
           name: Publish to SDK Registry
           command: |
             if [[ $CIRCLE_TAG == android-v* ]]; then
+              curl -Ls https://mapbox-release-engineering.s3.amazonaws.com/mbx-ci/latest/mbx-ci-linux-amd64 > mbx-ci && chmod 755 ./mbx-ci
+              ./mbx-ci aws setup
               make run-android-upload-to-sdk-registry
             fi
       - generate-api-javadoc
