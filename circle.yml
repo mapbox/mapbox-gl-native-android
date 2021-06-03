@@ -310,13 +310,27 @@ jobs:
               ./scripts/update-android-docs.sh -s ${CIRCLE_TAG:9} -a $ANDROID_DOCS_REPO -r $ANDROID_DOCS_REVIEWERS
             fi
       - save-dependencies: { gradle: true }
+      - login-google-cloud-platform
+      - run:
+          name: Run robotest of release Test App on Firebase
+          no_output_timeout: 10m
+          command: |
+            if [[ -n "${GLCLOUD_SERVICE_JSON}" ]]; then
+              if [[ $CIRCLE_BRANCH != main && $CIRCLE_TAG != android-v* ]]; then
+                gcloud firebase test android run --type robo \
+                  --app MapboxGLAndroidSDKTestApp/build/outputs/apk/release/MapboxGLAndroidSDKTestApp-release.apk \
+                  --device-ids sailfish --os-version-ids "26" --locales en --orientations portrait --timeout 90s
+              fi
+            fi
       - store_artifacts:
           path: MapboxGLAndroidSDKTestApp/build/outputs/apk/release
           destination: .
       - deploy:
           name: Publish to SDK Registry
           command: |
-            curl -Ls https://mapbox-release-engineering.s3.amazonaws.com/mbx-ci/latest/mbx-ci-linux-amd64 > mbx-ci && chmod 755 ./mbx-ci
-            ./mbx-ci aws setup
-            make run-android-upload-to-sdk-registry
+            if [[ $CIRCLE_TAG == android-v* ]]; then
+              curl -Ls https://mapbox-release-engineering.s3.amazonaws.com/mbx-ci/latest/mbx-ci-linux-amd64 > mbx-ci && chmod 755 ./mbx-ci
+              ./mbx-ci aws setup
+              make run-android-upload-to-sdk-registry
+            fi
       - generate-api-javadoc

@@ -45,7 +45,7 @@ publishing {
 
 registry {
     sdkName = "mobile-maps"
-    production = false
+    production = true
     snapshot = false
     override = false
     dryRun = false
