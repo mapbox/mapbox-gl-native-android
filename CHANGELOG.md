@@ -2,6 +2,11 @@
 
 Mapbox welcomes participation and contributions from everyone. Please read [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) to get started.
 
+## 9.6.2 - July 7, 2021
+[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.6.1...android-v9.6.2) since [Mapbox Maps SDK for Android 9.6.1](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.6.0)
+### Dependencies
+ - Update telemetry to 8.1.0 (okhttp3 variant) and events-core 5.0.0 to make project compatible with Android 12
+
 ## 9.6.1 - February 9, 2021
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.6.0...android-v9.6.1) since [Mapbox Maps SDK for Android 9.6.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.6.0)
 ### Improvements and bug fixes

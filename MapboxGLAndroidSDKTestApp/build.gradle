@@ -66,6 +66,8 @@ dependencies {
     implementation dependenciesList.supportDesign
     implementation dependenciesList.supportConstraintLayout
 
+    implementation dependenciesList.okio
+    implementation dependenciesList.okhttp3
     implementation dependenciesList.gmsLocation
     implementation dependenciesList.timber
     debugImplementation dependenciesList.leakCanaryDebug
