@@ -11,7 +11,7 @@ import com.mapbox.mapboxsdk.maps.TelemetryDefinition;
 import com.mapbox.mapboxsdk.testapp.utils.TileLoadingMeasurementUtils;
 import com.mapbox.mapboxsdk.testapp.utils.TimberLogger;
 import com.mapbox.mapboxsdk.testapp.utils.TokenUtils;
-import com.squareup.leakcanary.LeakCanary;
+//import com.squareup.leakcanary.LeakCanary;
 
 import timber.log.Timber;
 
@@ -43,12 +43,12 @@ public class MapboxApplication extends Application {
   }
 
   protected boolean initializeLeakCanary() {
-    if (LeakCanary.isInAnalyzerProcess(this)) {
-      // This process is dedicated to LeakCanary for heap analysis.
-      // You should not init your app in this process.
-      return false;
-    }
-    LeakCanary.install(this);
+//    if (LeakCanary.isInAnalyzerProcess(this)) {
+//      // This process is dedicated to LeakCanary for heap analysis.
+//      // You should not init your app in this process.
+//      return false;
+//    }
+//    LeakCanary.install(this);
     return true;
   }
 

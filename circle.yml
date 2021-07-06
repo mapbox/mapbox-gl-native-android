@@ -193,10 +193,10 @@ jobs:
         default: android-ndk-r21:78010c4d11
       firebase_device_id:
         type: string
-        default: sailfish
+        default: redfin
       firebase_device_os:
         type: string
-        default: "26"
+        default: "30"
       abi:
         type: string
         default: "arm-v8"

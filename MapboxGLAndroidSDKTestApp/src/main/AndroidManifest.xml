@@ -1198,21 +1198,27 @@
         <!-- For Instrumentation tests -->
         <activity
             android:name=".activity.style.RuntimeStyleTimingTestActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.espresso.EspressoTestActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.espresso.PixelTestActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.espresso.DeviceIndependentTestActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.style.FillExtrusionStyleTestActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.render.RenderTestActivity"
+            android:exported="false"
             android:screenOrientation="landscape" />
         <!-- Configuration Settings -->
         <meta-data
