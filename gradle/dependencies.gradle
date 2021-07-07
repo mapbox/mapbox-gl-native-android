@@ -8,8 +8,8 @@ ext {
 
     versions = [
             mapboxServices   : '5.3.0',
-            mapboxTelemetry  : '6.2.2',
-            mapboxCore       : '3.1.1',
+            mapboxTelemetry  : '8.1.0',
+            mapboxCore       : '5.0.0',
             mapboxGestures   : '0.7.0',
             mapboxAccounts   : '0.7.0',
             appCompat        : '1.0.0',
@@ -41,13 +41,15 @@ ext {
             commonsIO        : '2.6',
             mapboxSdkVersions: '1.1.0',
             mapboxSdkCore    : '5.2.2',
-            mapboxSdkRegistryPlugin: '0.3.0'
+            mapboxSdkRegistryPlugin: '0.3.0',
+            okio             : '2.4.3'
     ]
 
     dependenciesList = [
             mapboxSdkCore          : "com.mapbox.mapboxsdk:mapbox-android-sdk-gl-core:${versions.mapboxSdkCore}",
             mapboxJavaGeoJSON      : "com.mapbox.mapboxsdk:mapbox-sdk-geojson:${versions.mapboxServices}",
-            mapboxAndroidTelemetry : "com.mapbox.mapboxsdk:mapbox-android-telemetry:${versions.mapboxTelemetry}",
+            mapboxAndroidTelemetry : "com.mapbox.mapboxsdk:mapbox-android-telemetry-okhttp3:${versions.mapboxTelemetry}",
+            mapboxAndroidCore      : "com.mapbox.mapboxsdk:mapbox-android-core:${versions.mapboxCore}",
             mapboxAndroidGestures  : "com.mapbox.mapboxsdk:mapbox-android-gestures:${versions.mapboxGestures}",
             mapboxAndroidAccounts  : "com.mapbox.mapboxsdk:mapbox-android-accounts:${versions.mapboxAccounts}",
             mapboxJavaTurf         : "com.mapbox.mapboxsdk:mapbox-sdk-turf:${versions.mapboxServices}",
@@ -77,6 +79,7 @@ ext {
             gmsLocation            : "com.google.android.gms:play-services-location:${versions.gms}",
             timber                 : "com.jakewharton.timber:timber:${versions.timber}",
             okhttp3                : "com.squareup.okhttp3:okhttp:${versions.okhttp}",
+            okio                   : "com.squareup.okio:okio:${versions.okio}",
             leakCanaryDebug        : "com.squareup.leakcanary:leakcanary-android:${versions.leakCanary}",
             leakCanaryRelease      : "com.squareup.leakcanary:leakcanary-android-no-op:${versions.leakCanary}",
 
