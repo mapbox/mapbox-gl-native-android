@@ -166,7 +166,7 @@ License: [The Apache Software License, Version 2.0](http://www.apache.org/licens
 
 ===========================================================================
 
-Mapbox Maps SDK for Android uses portions of Gson.  
+Mapbox Maps SDK for Android uses portions of [Gson](https://github.com/google/gson).  
 License: [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
