@@ -207,7 +207,7 @@ License: [BSD](https://opensource.org/licenses/BSD-2-Clause)
 
 ===========================================================================
 
-Mapbox Maps SDK for Android uses portions of OkHttp.  
+Mapbox Maps SDK for Android uses portions of [OkHttp](https://square.github.io/okhttp/).  
 License: [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
