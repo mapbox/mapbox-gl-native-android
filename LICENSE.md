@@ -112,12 +112,6 @@ License: [The Apache Software License, Version 2.0](http://www.apache.org/licens
 
 ===========================================================================
 
-Mapbox Maps SDK for Android uses portions of Android Support Library Custom View.  
-URL: [http://developer.android.com/tools/extras/support-library.html](http://developer.android.com/tools/extras/support-library.html)  
-License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
-===========================================================================
-
 Mapbox Maps SDK for Android uses portions of Android Support Library Document File.  
 URL: [http://developer.android.com/tools/extras/support-library.html](http://developer.android.com/tools/extras/support-library.html)  
 License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
