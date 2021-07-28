@@ -201,12 +201,6 @@ License: [The Apache Software License, Version 2.0](http://www.apache.org/licens
 
 ===========================================================================
 
-Mapbox Maps SDK for Android uses portions of Mapbox Java SDK.  
-URL: [https://github.com/mapbox/mapbox-java](https://github.com/mapbox/mapbox-java)  
-License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
-===========================================================================
-
 Mapbox Maps SDK for Android uses portions of Mapbox Maps GL Core SDK for Android.  
 URL: [https://github.com/mapbox/mapbox-gl-native-android](https://github.com/mapbox/mapbox-gl-native-android)  
 License: [BSD](https://opensource.org/licenses/BSD-2-Clause)
