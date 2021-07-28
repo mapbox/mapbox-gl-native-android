@@ -212,7 +212,7 @@ License: [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
 
-Mapbox Maps SDK for Android uses portions of Okio.  
+Mapbox Maps SDK for Android uses portions of [Okio](https://github.com/square/okio).  
 License: [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ===========================================================================
