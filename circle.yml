@@ -196,7 +196,7 @@ jobs:
         default: sailfish
       firebase_device_os:
         type: string
-        default: "26"
+        default: "25"
       abi:
         type: string
         default: "arm-v8"
@@ -312,7 +312,7 @@ jobs:
               if [[ $CIRCLE_BRANCH != main && $CIRCLE_TAG != android-v* ]]; then
                 gcloud firebase test android run --type robo \
                   --app MapboxGLAndroidSDKTestApp/build/outputs/apk/release/MapboxGLAndroidSDKTestApp-release.apk \
-                  --device-ids sailfish --os-version-ids "26" --locales en --orientations portrait --timeout 90s
+                  --device-ids sailfish --os-version-ids "25" --locales en --orientations portrait --timeout 90s
               fi
             fi
       - store_artifacts:
