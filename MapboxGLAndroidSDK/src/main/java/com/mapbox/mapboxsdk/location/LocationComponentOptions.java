@@ -910,7 +910,7 @@ public class LocationComponentOptions implements Parcelable {
 
   /**
    * The pixel tolerance of the circle radius display updates.
-   * Updates causing less than this change won't be drawn.
+   * Location updates causing less than this change won't be drawn.
    *
    * @return the current pixel tolerance of the LocationComponent's radius circle display
    */
@@ -920,7 +920,7 @@ public class LocationComponentOptions implements Parcelable {
 
   /**
    * The pixel tolerance of the location symbol display updates.
-   * Updates causing less than this change won't be drawn.
+   * Location updates causing less than this change won't be drawn.
    *
    * @return the current pixel tolerance of the LocationComponent's location symbol display
    */
@@ -2038,7 +2038,7 @@ public class LocationComponentOptions implements Parcelable {
 
     /**
      * The pixel tolerance of the circle radius display updates.
-     * Updates causing less than this change won't be drawn.
+     * Location updates causing less than this change won't be drawn.
      *
      * @return the current pixel tolerance of the LocationComponent's radius circle display
      */
@@ -2049,7 +2049,7 @@ public class LocationComponentOptions implements Parcelable {
 
     /**
      * The pixel tolerance of the location symbol display updates.
-     * Updates causing less than this change won't be drawn.
+     * Location updates causing less than this change won't be drawn.
      *
      * @return the current pixel tolerance of the LocationComponent's location symbol display
      */
