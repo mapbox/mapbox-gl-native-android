@@ -176,4 +176,8 @@
     <public name="mapbox_pulsingLocationCircleAlpha" format="float" type="attr" />
     <public name="mapbox_pulsingLocationCircleInterpolator" format="string" type="attr" />
 
+    <!-- Location tolerances -->
+    <public name="mapbox_locationPixelTolerance" format="string" type="attr" />
+    <public name="mapbox_locationRadiusPixelTolerance" format="string" type="attr" />
+
 </resources>

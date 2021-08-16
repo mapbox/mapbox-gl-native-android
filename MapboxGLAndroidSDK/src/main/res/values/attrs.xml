@@ -204,5 +204,11 @@
         <attr name="mapbox_pulsingLocationCircleAlpha" format="float" />
         <attr name="mapbox_pulsingLocationCircleInterpolator" format="string" />
 
+        <!-- Location tolerances -->
+        <attr name="mapbox_locationPixelTolerance" format="string" />
+        <attr name="mapbox_locationRadiusPixelTolerance" format="string" />
+
+
+
     </declare-styleable>
 </resources>

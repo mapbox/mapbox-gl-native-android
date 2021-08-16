@@ -87,6 +87,20 @@ public class LocationComponentOptions implements Parcelable {
    */
   public static final float CIRCLE_PULSING_MAX_RADIUS_DEFAULT = 35f;
 
+
+  /**
+   * Default maximum pixel tolerance of the LocationComponent circle when received position is updated.
+   * Any location precision update causing less than this amount of display pixel difference between current and updated radius size won't be drawn.
+   */
+  public static final float CIRCLE_RADIUS_MAX_PIXEL_TOLERANCE_DEFAULT = 1f;
+
+
+  /**
+   * Default maximum pixel tolerance of the LocationComponent symbol when received position is updated.
+   * Any location precision update causing less than this amount of display pixel difference between current and updated location symbol won't be drawn.
+   */
+  public static final float LOCATION_MAX_PIXEL_TOLERANCE_DEFAULT = 1f;
+
   private float accuracyAlpha;
   private int accuracyColor;
   private int backgroundDrawableStale;
@@ -140,6 +154,8 @@ public class LocationComponentOptions implements Parcelable {
   private float pulseSingleDuration;
   private float pulseMaxRadius;
   private float pulseAlpha;
+  private float locationCircleRadiusPixelTolerance;
+  private float locationPixelTolerance;
   @Nullable
   private Interpolator pulseInterpolator;
 
@@ -184,6 +200,8 @@ public class LocationComponentOptions implements Parcelable {
     float pulseSingleDuration,
     float pulseMaxRadius,
     float pulseAlpha,
+    float locationCircleRadiusPixelTolerance,
+    float locationPixelTolerance,
     @Nullable Interpolator pulseInterpolator) {
     this.accuracyAlpha = accuracyAlpha;
     this.accuracyColor = accuracyColor;
@@ -229,6 +247,8 @@ public class LocationComponentOptions implements Parcelable {
     this.pulseMaxRadius = pulseMaxRadius;
     this.pulseAlpha = pulseAlpha;
     this.pulseInterpolator = pulseInterpolator;
+    this.locationCircleRadiusPixelTolerance = locationCircleRadiusPixelTolerance;
+    this.locationPixelTolerance = locationPixelTolerance;
   }
 
   /**
@@ -370,6 +390,14 @@ public class LocationComponentOptions implements Parcelable {
 
     builder.pulseAlpha = typedArray.getFloat(
       R.styleable.mapbox_LocationComponent_mapbox_pulsingLocationCircleAlpha, CIRCLE_PULSING_ALPHA_DEFAULT);
+
+    builder.locationCircleRadiusPixelTolerance = typedArray.getFloat(
+            R.styleable.mapbox_LocationComponent_mapbox_locationRadiusPixelTolerance, CIRCLE_RADIUS_MAX_PIXEL_TOLERANCE_DEFAULT
+    );
+
+    builder.locationPixelTolerance = typedArray.getFloat(
+            R.styleable.mapbox_LocationComponent_mapbox_locationPixelTolerance, LOCATION_MAX_PIXEL_TOLERANCE_DEFAULT
+    );
 
     typedArray.recycle();
 
@@ -881,6 +909,28 @@ public class LocationComponentOptions implements Parcelable {
   }
 
   /**
+   * The pixel tolerance of the circle radius display updates.
+   * Updates causing less than this change won't be drawn.
+   *
+   * @return the current pixel tolerance of the LocationComponent's radius circle display
+   */
+  public float locationCircleRadiusTolerance() {
+    return locationCircleRadiusPixelTolerance;
+  }
+
+  /**
+   * The pixel tolerance of the location symbol display updates.
+   * Updates causing less than this change won't be drawn.
+   *
+   * @return the current pixel tolerance of the LocationComponent's location symbol display
+   */
+  public float locationTolerance() {
+    return locationPixelTolerance;
+  }
+
+
+
+  /**
    * The interpolator type of animation for the movement of the LocationComponent's circle
    *
    * @return the current set type of animation interpolator for the pulsing circle
@@ -932,6 +982,8 @@ public class LocationComponentOptions implements Parcelable {
       + "pulseSingleDuration=" + pulseSingleDuration
       + "pulseMaxRadius=" + pulseMaxRadius
       + "pulseAlpha=" + pulseAlpha
+      + "locationCircleRadiusPixelTolerance=" + locationCircleRadiusPixelTolerance
+      + "locationPixelTolerance=" + locationPixelTolerance
       + "}";
   }
 
@@ -1079,6 +1131,15 @@ public class LocationComponentOptions implements Parcelable {
       return false;
     }
 
+    if (Float.compare(options.locationCircleRadiusPixelTolerance, locationCircleRadiusPixelTolerance) != 0) {
+      return false;
+    }
+
+    if (Float.compare(options.locationPixelTolerance, locationPixelTolerance) != 0) {
+      return false;
+    }
+
+
     return layerBelow != null ? layerBelow.equals(options.layerBelow) : options.layerBelow == null;
   }
 
@@ -1128,6 +1189,10 @@ public class LocationComponentOptions implements Parcelable {
     result = 31 * result + (pulseSingleDuration != +0.0f ? Float.floatToIntBits(pulseSingleDuration) : 0);
     result = 31 * result + (pulseMaxRadius != +0.0f ? Float.floatToIntBits(pulseMaxRadius) : 0);
     result = 31 * result + (pulseAlpha != +0.0f ? Float.floatToIntBits(pulseAlpha) : 0);
+    result = 31 * result + (locationCircleRadiusPixelTolerance != +0.0f ? Float.floatToIntBits(locationCircleRadiusPixelTolerance) : 0);
+    result = 31 * result + (locationPixelTolerance != +0.0f ? Float.floatToIntBits(locationPixelTolerance) : 0);
+
+
     return result;
   }
 
@@ -1178,6 +1243,9 @@ public class LocationComponentOptions implements Parcelable {
     dest.writeFloat(this.pulseSingleDuration);
     dest.writeFloat(this.pulseMaxRadius);
     dest.writeFloat(this.pulseAlpha);
+    dest.writeFloat(this.locationCircleRadiusPixelTolerance);
+    dest.writeFloat(this.locationPixelTolerance);
+
   }
 
   protected LocationComponentOptions(Parcel in) {
@@ -1221,6 +1289,8 @@ public class LocationComponentOptions implements Parcelable {
     this.pulseSingleDuration = in.readFloat();
     this.pulseMaxRadius = in.readFloat();
     this.pulseAlpha = in.readFloat();
+    this.locationCircleRadiusPixelTolerance = in.readFloat();
+    this.locationPixelTolerance = in.readFloat();
   }
 
   public static final Parcelable.Creator<LocationComponentOptions> CREATOR =
@@ -1280,6 +1350,9 @@ public class LocationComponentOptions implements Parcelable {
         }
         if (locationComponentOptions.pulseAlpha() >= 0 && locationComponentOptions.pulseAlpha() <= 1) {
           pulsingSetupError += " pulseAlpha";
+        }
+        if (locationComponentOptions.locationCircleRadiusTolerance() >= 0 && locationComponentOptions.locationCircleRadiusTolerance() <= 1) {
+          pulsingSetupError += " locationCircleRadiusPixelTolerance";
         }
         if (locationComponentOptions.pulseInterpolator() != null) {
           pulsingSetupError += " pulseInterpolator";
@@ -1345,6 +1418,8 @@ public class LocationComponentOptions implements Parcelable {
     private float pulseSingleDuration;
     private float pulseMaxRadius;
     private float pulseAlpha;
+    private float locationCircleRadiusPixelTolerance;
+    private float locationPixelTolerance;
     @Nullable
     private Interpolator pulseInterpolator;
 
@@ -1392,6 +1467,8 @@ public class LocationComponentOptions implements Parcelable {
       this.pulseSingleDuration = source.pulseSingleDuration;
       this.pulseMaxRadius = source.pulseMaxRadius;
       this.pulseAlpha = source.pulseAlpha;
+      this.locationCircleRadiusPixelTolerance = source.locationCircleRadiusPixelTolerance;
+      this.locationPixelTolerance = source.locationPixelTolerance;
       this.pulseInterpolator = source.pulseInterpolator;
     }
 
@@ -1963,6 +2040,29 @@ public class LocationComponentOptions implements Parcelable {
     }
 
     /**
+     * The pixel tolerance of the circle radius display updates.
+     * Updates causing less than this change won't be drawn.
+     *
+     * @return the current pixel tolerance of the LocationComponent's radius circle display
+     */
+    public LocationComponentOptions.Builder locationCircleRadiusTolerance(float circleRadiusPixelTolerance) {
+      this.locationCircleRadiusPixelTolerance = circleRadiusPixelTolerance;
+      return this;
+    }
+
+    /**
+     * The pixel tolerance of the location symbol display updates.
+     * Updates causing less than this change won't be drawn.
+     *
+     * @return the current pixel tolerance of the LocationComponent's location symbol display
+     */
+    public LocationComponentOptions.Builder locationTolerance(float locationPixelTolerance) {
+      this.locationPixelTolerance = locationPixelTolerance;
+      return this;
+    }
+
+
+    /**
      * Sets the pulsing circle's interpolator animation.
      *
      * @param pulseInterpolator the type of Android-system interpolator to use when
@@ -2075,6 +2175,8 @@ public class LocationComponentOptions implements Parcelable {
         this.pulseSingleDuration,
         this.pulseMaxRadius,
         this.pulseAlpha,
+        this.locationCircleRadiusPixelTolerance,
+        this.locationPixelTolerance,
         this.pulseInterpolator);
     }
   }

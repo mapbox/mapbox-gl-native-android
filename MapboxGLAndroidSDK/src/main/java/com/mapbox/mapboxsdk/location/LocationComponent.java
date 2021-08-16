@@ -2,6 +2,7 @@ package com.mapbox.mapboxsdk.location;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.PointF;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Build;
@@ -192,6 +193,9 @@ public final class LocationComponent {
   // Workaround for too frequent updates, see https://github.com/mapbox/mapbox-gl-native/issues/13587
   private long fastestInterval;
   private long lastUpdateTime;
+
+  // Workaround for too frequent / unnecessary redraw
+  private float previousRadius=0.0f;
 
   /**
    * Internal use.
@@ -1619,12 +1623,26 @@ public final class LocationComponent {
     }
     CameraPosition currentCameraPosition = mapboxMap.getCameraPosition();
     boolean isGpsNorth = getCameraMode() == CameraMode.TRACKING_GPS_NORTH;
-    locationAnimatorCoordinator.feedNewLocation(
-      getTargetLocationWithIntermediates(locationUpdate.getLocation(), locationUpdate.getIntermediatePoints()),
-      currentCameraPosition,
-      isGpsNorth,
-      fromLastLocation ? Long.valueOf(0L) : locationUpdate.getAnimationDuration());
-    updateAccuracyRadius(locationUpdate.getLocation(), false);
+
+
+    //Performance improvement: Check if new location requires a redraw to be performed, taking the pixel tolerance into account.
+    //By default, the tolerance is 1 pixel, meaning that the new location must impact at least a different pixel on the screen to justify a redraw.
+    boolean updateNeeded = (lastLocation == null);
+    if(updateNeeded == false) {
+      PointF lastPoint = this.mapboxMap.getProjection().toScreenLocation(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()));
+      PointF updatedPoint = this.mapboxMap.getProjection().toScreenLocation(new LatLng(locationUpdate.getLocation().getLatitude(), locationUpdate.getLocation().getLongitude()));
+
+      updateNeeded = ((Math.abs(updatedPoint.x -lastPoint.x) >= options.locationTolerance()) || (Math.abs(updatedPoint.y -lastPoint.y) >= options.locationTolerance()) );
+    }
+
+    if(updateNeeded ) {
+      locationAnimatorCoordinator.feedNewLocation(
+              getTargetLocationWithIntermediates(locationUpdate.getLocation(), locationUpdate.getIntermediatePoints()),
+              currentCameraPosition,
+              isGpsNorth,
+              fromLastLocation ? Long.valueOf(0L) : locationUpdate.getAnimationDuration());
+    }
+    updateAccuracyRadius(locationUpdate.getLocation(), false, false);
     lastLocation = locationUpdate.getLocation();
   }
 
@@ -1679,7 +1697,7 @@ public final class LocationComponent {
       lastCameraPosition = position;
       locationLayerController.cameraBearingUpdated(position.bearing);
       locationLayerController.cameraTiltUpdated(position.tilt);
-      updateAccuracyRadius(getLastKnownLocation(), true);
+      updateAccuracyRadius(getLastKnownLocation(), true, true);
       return;
     }
 
@@ -1690,12 +1708,13 @@ public final class LocationComponent {
       locationLayerController.cameraTiltUpdated(position.tilt);
     }
     if (position.zoom != lastCameraPosition.zoom) {
-      updateAccuracyRadius(getLastKnownLocation(), true);
+      updateAccuracyRadius(getLastKnownLocation(), true, false);
     }
     lastCameraPosition = position;
   }
 
-  private void updateAccuracyRadius(Location location, boolean noAnimation) {
+  private void updateAccuracyRadius(Location location, boolean noAnimation, boolean forceUpdate) {
+
     float radius;
     if (location == null) {
       radius = 0;
@@ -1704,7 +1723,18 @@ public final class LocationComponent {
     } else {
       radius = Utils.calculateZoomLevelRadius(mapboxMap, location);
     }
-    locationAnimatorCoordinator.feedNewAccuracyRadius(radius, noAnimation);
+    if(forceUpdate){
+      previousRadius = radius;
+      locationAnimatorCoordinator.feedNewAccuracyRadius(radius, noAnimation);
+    }else {
+
+      //Draw only if new radius size changes when taking pixel tolerance into account
+      float approximatedRadius = radius - (radius % options.locationCircleRadiusTolerance());
+      if (previousRadius != approximatedRadius) {
+        previousRadius = approximatedRadius;
+        locationAnimatorCoordinator.feedNewAccuracyRadius(approximatedRadius, noAnimation);
+      }
+    }
   }
 
   private void updateAnimatorListenerHolders() {

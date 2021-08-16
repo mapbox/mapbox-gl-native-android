@@ -42,5 +42,8 @@
     <item name="mapbox_pulsingLocationCircleAlpha">0.4</item>
     <item name="mapbox_pulsingLocationCircleInterpolator">decelerate</item>
 
+    <!-- Location tolerances -->
+    <item name="mapbox_locationPixelTolerance" >1.0</item>
+    <item name="mapbox_locationRadiusPixelTolerance">1.0</item>
   </style>
 </resources>
