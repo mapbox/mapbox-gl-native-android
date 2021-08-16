@@ -1351,9 +1351,6 @@ public class LocationComponentOptions implements Parcelable {
         if (locationComponentOptions.pulseAlpha() >= 0 && locationComponentOptions.pulseAlpha() <= 1) {
           pulsingSetupError += " pulseAlpha";
         }
-        if (locationComponentOptions.locationCircleRadiusTolerance() >= 0 && locationComponentOptions.locationCircleRadiusTolerance() <= 1) {
-          pulsingSetupError += " locationCircleRadiusPixelTolerance";
-        }
         if (locationComponentOptions.pulseInterpolator() != null) {
           pulsingSetupError += " pulseInterpolator";
         }
