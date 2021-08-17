@@ -1697,7 +1697,7 @@ public final class LocationComponent {
       lastCameraPosition = position;
       locationLayerController.cameraBearingUpdated(position.bearing);
       locationLayerController.cameraTiltUpdated(position.tilt);
-      updateAccuracyRadius(getLastKnownLocation(), true, true);
+      updateAccuracyRadius(getLastKnownLocation(), true, forceUpdate);
       return;
     }
 
@@ -1708,7 +1708,7 @@ public final class LocationComponent {
       locationLayerController.cameraTiltUpdated(position.tilt);
     }
     if (position.zoom != lastCameraPosition.zoom) {
-      updateAccuracyRadius(getLastKnownLocation(), true, false);
+      updateAccuracyRadius(getLastKnownLocation(), true, forceUpdate);
     }
     lastCameraPosition = position;
   }
