@@ -195,7 +195,7 @@ public final class LocationComponent {
   private long lastUpdateTime;
 
   // Workaround for too frequent / unnecessary redraw
-  private float previousRadius=0.0f;
+  private float previousRadius = 0.0f;
 
   /**
    * Internal use.
@@ -1625,17 +1625,22 @@ public final class LocationComponent {
     boolean isGpsNorth = getCameraMode() == CameraMode.TRACKING_GPS_NORTH;
 
 
-    //Performance improvement: Check if new location requires a redraw to be performed, taking the pixel tolerance into account.
-    //By default, the tolerance is 1 pixel, meaning that the new location must impact at least a different pixel on the screen to justify a redraw.
+    //Performance improvement: Check if new location requires a redraw to be performed,
+    //taking the pixel tolerance into account.
+    //By default, the tolerance is 1 pixel, meaning that the new location must impact at least
+    //a different pixel on the screen to justify a redraw.
     boolean updateNeeded = (lastLocation == null);
-    if(updateNeeded == false) {
-      PointF lastPoint = this.mapboxMap.getProjection().toScreenLocation(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()));
-      PointF updatedPoint = this.mapboxMap.getProjection().toScreenLocation(new LatLng(locationUpdate.getLocation().getLatitude(), locationUpdate.getLocation().getLongitude()));
+    if (updateNeeded == false) {
+      PointF lastPoint = this.mapboxMap.getProjection().toScreenLocation(
+              new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()));
+      PointF updatedPoint = this.mapboxMap.getProjection().toScreenLocation(
+              new LatLng(locationUpdate.getLocation().getLatitude(), locationUpdate.getLocation().getLongitude()));
 
-      updateNeeded = ((Math.abs(updatedPoint.x -lastPoint.x) >= options.locationTolerance()) || (Math.abs(updatedPoint.y -lastPoint.y) >= options.locationTolerance()) );
+      updateNeeded = ((Math.abs(updatedPoint.x - lastPoint.x) >= options.locationTolerance())
+                      || (Math.abs(updatedPoint.y - lastPoint.y) >= options.locationTolerance()) );
     }
 
-    if(updateNeeded ) {
+    if (updateNeeded ) {
       locationAnimatorCoordinator.feedNewLocation(
               getTargetLocationWithIntermediates(locationUpdate.getLocation(), locationUpdate.getIntermediatePoints()),
               currentCameraPosition,
@@ -1723,10 +1728,10 @@ public final class LocationComponent {
     } else {
       radius = Utils.calculateZoomLevelRadius(mapboxMap, location);
     }
-    if(forceUpdate){
+    if (forceUpdate) {
       previousRadius = radius;
       locationAnimatorCoordinator.feedNewAccuracyRadius(radius, noAnimation);
-    }else {
+    } else {
 
       //Draw only if new radius size changes when taking pixel tolerance into account
       float approximatedRadius = radius - (radius % options.locationCircleRadiusTolerance());

@@ -171,8 +171,7 @@ final class LocationAnimatorCoordinator {
     float previousAccuracyRadius = getPreviousAccuracyRadius();
 
     //Draw radius only if necessary
-    if(targetAccuracyRadius != 0.0 || targetAccuracyRadius != previousAccuracyRadius) {
-
+    if (targetAccuracyRadius != 0.0 || targetAccuracyRadius != previousAccuracyRadius) {
       updateAccuracyAnimators(targetAccuracyRadius, previousAccuracyRadius);
       playAnimators(
               noAnimation || !accuracyAnimationEnabled ? 0 : ACCURACY_RADIUS_ANIMATION_DURATION,

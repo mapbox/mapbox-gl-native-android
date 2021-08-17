@@ -90,14 +90,16 @@ public class LocationComponentOptions implements Parcelable {
 
   /**
    * Default maximum pixel tolerance of the LocationComponent circle when received position is updated.
-   * Any location precision update causing less than this amount of display pixel difference between current and updated radius size won't be drawn.
+   * Any location precision update causing less than this amount of display pixel difference
+   * between current and updated radius size won't be drawn.
    */
   public static final float CIRCLE_RADIUS_MAX_PIXEL_TOLERANCE_DEFAULT = 1f;
 
 
   /**
    * Default maximum pixel tolerance of the LocationComponent symbol when received position is updated.
-   * Any location precision update causing less than this amount of display pixel difference between current and updated location symbol won't be drawn.
+   * Any location precision update causing less than this amount of display pixel difference
+   * between current and updated location symbol won't be drawn.
    */
   public static final float LOCATION_MAX_PIXEL_TOLERANCE_DEFAULT = 1f;
 
@@ -392,8 +394,8 @@ public class LocationComponentOptions implements Parcelable {
       R.styleable.mapbox_LocationComponent_mapbox_pulsingLocationCircleAlpha, CIRCLE_PULSING_ALPHA_DEFAULT);
 
     builder.locationCircleRadiusPixelTolerance = typedArray.getFloat(
-            R.styleable.mapbox_LocationComponent_mapbox_locationRadiusPixelTolerance, CIRCLE_RADIUS_MAX_PIXEL_TOLERANCE_DEFAULT
-    );
+            R.styleable.mapbox_LocationComponent_mapbox_locationRadiusPixelTolerance,
+            CIRCLE_RADIUS_MAX_PIXEL_TOLERANCE_DEFAULT);
 
     builder.locationPixelTolerance = typedArray.getFloat(
             R.styleable.mapbox_LocationComponent_mapbox_locationPixelTolerance, LOCATION_MAX_PIXEL_TOLERANCE_DEFAULT
@@ -1187,9 +1189,11 @@ public class LocationComponentOptions implements Parcelable {
     result = 31 * result + (pulseFadeEnabled ? 1 : 0);
     result = 31 * result + (pulseColor != null ? pulseColor.hashCode() : 0);
     result = 31 * result + (pulseSingleDuration != +0.0f ? Float.floatToIntBits(pulseSingleDuration) : 0);
-    result = 31 * result + (pulseMaxRadius != +0.0f ? Float.floatToIntBits(pulseMaxRadius) : 0);
+    result = 31 * result + (pulseMaxRadius != +0.0f
+            ? Float.floatToIntBits(pulseMaxRadius) : 0);
     result = 31 * result + (pulseAlpha != +0.0f ? Float.floatToIntBits(pulseAlpha) : 0);
-    result = 31 * result + (locationCircleRadiusPixelTolerance != +0.0f ? Float.floatToIntBits(locationCircleRadiusPixelTolerance) : 0);
+    result = 31 * result + (locationCircleRadiusPixelTolerance != +0.0f
+            ? Float.floatToIntBits(locationCircleRadiusPixelTolerance) : 0);
     result = 31 * result + (locationPixelTolerance != +0.0f ? Float.floatToIntBits(locationPixelTolerance) : 0);
 
 
