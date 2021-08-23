@@ -1604,8 +1604,9 @@ public final class LocationComponent {
   }
 
   private void updateLocation(@NonNull LocationUpdate locationUpdate, boolean fromLastLocation) {
+    Location newLocation = locationUpdate.getLocation();
     if (!isLayerReady) {
-      lastLocation = locationUpdate.getLocation();
+      lastLocation = newLocation;
       return;
     } else {
       long currentTime = SystemClock.elapsedRealtime();
@@ -1634,7 +1635,7 @@ public final class LocationComponent {
       PointF lastPoint = this.mapboxMap.getProjection().toScreenLocation(
               new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()));
       PointF updatedPoint = this.mapboxMap.getProjection().toScreenLocation(
-              new LatLng(locationUpdate.getLocation().getLatitude(), locationUpdate.getLocation().getLongitude()));
+              new LatLng(newLocation.getLatitude(), newLocation.getLongitude()));
 
       updateNeeded = ((Math.abs(updatedPoint.x - lastPoint.x) >= options.locationTolerance())
                       || (Math.abs(updatedPoint.y - lastPoint.y) >= options.locationTolerance()) );
@@ -1642,13 +1643,16 @@ public final class LocationComponent {
 
     if (updateNeeded ) {
       locationAnimatorCoordinator.feedNewLocation(
-              getTargetLocationWithIntermediates(locationUpdate.getLocation(), locationUpdate.getIntermediatePoints()),
+              getTargetLocationWithIntermediates(newLocation, locationUpdate.getIntermediatePoints()),
               currentCameraPosition,
               isGpsNorth,
               fromLastLocation ? Long.valueOf(0L) : locationUpdate.getAnimationDuration());
+      lastLocation = newLocation;
     }
-    updateAccuracyRadius(locationUpdate.getLocation(), false, false);
-    lastLocation = locationUpdate.getLocation();
+
+    if (updateAccuracyRadius(newLocation, false, false)) {
+      lastLocation = newLocation;
+    }
   }
 
   private Location[] getTargetLocationWithIntermediates(Location location, List<Location> intermediatePoints) {
@@ -1718,7 +1722,10 @@ public final class LocationComponent {
     lastCameraPosition = position;
   }
 
-  private void updateAccuracyRadius(Location location, boolean noAnimation, boolean forceUpdate) {
+  /**
+   * Return true if the location accuracy or forceUpdate parameter caused the accuracy radius to be redraw
+   */
+  private boolean updateAccuracyRadius(Location location, boolean noAnimation, boolean forceUpdate) {
 
     float radius;
     if (location == null) {
@@ -1731,6 +1738,7 @@ public final class LocationComponent {
     if (forceUpdate) {
       previousRadius = radius;
       locationAnimatorCoordinator.feedNewAccuracyRadius(radius, noAnimation);
+      return true;
     } else {
 
       //Draw only if new radius size changes when taking pixel tolerance into account
@@ -1738,8 +1746,10 @@ public final class LocationComponent {
       if (previousRadius != approximatedRadius) {
         previousRadius = approximatedRadius;
         locationAnimatorCoordinator.feedNewAccuracyRadius(approximatedRadius, noAnimation);
+        return true;
       }
     }
+    return false;
   }
 
   private void updateAnimatorListenerHolders() {
