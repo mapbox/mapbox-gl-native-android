@@ -176,9 +176,9 @@ final class LocationAnimatorCoordinator {
       playAnimators(
               noAnimation || !accuracyAnimationEnabled ? 0 : ACCURACY_RADIUS_ANIMATION_DURATION,
               ANIMATOR_LAYER_ACCURACY);
+      this.previousAccuracyRadius = targetAccuracyRadius;
     }
 
-    this.previousAccuracyRadius = targetAccuracyRadius;
   }
 
   /**
