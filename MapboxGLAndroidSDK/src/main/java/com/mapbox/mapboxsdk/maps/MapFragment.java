@@ -198,6 +198,8 @@ public final class MapFragment extends Fragment implements OnMapReadyCallback {
   public void onDestroyView() {
     super.onDestroyView();
     map.onDestroy();
+    map = null;
+    mapboxMap = null;
   }
 
   /**
@@ -207,6 +209,17 @@ public final class MapFragment extends Fragment implements OnMapReadyCallback {
   public void onDestroy() {
     super.onDestroy();
     mapReadyCallbackList.clear();
+  }
+
+  /**
+   * Called when the context detaches from this fragment.
+   */
+  @Override
+  public void onDetach() {
+    super.onDetach();
+    if (mapViewReadyCallback == context) {
+      mapViewReadyCallback = null;
+    }
   }
 
   /**
