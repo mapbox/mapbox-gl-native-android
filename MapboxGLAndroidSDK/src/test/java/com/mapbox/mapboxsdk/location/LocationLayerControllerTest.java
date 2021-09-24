@@ -536,6 +536,7 @@ public class LocationLayerControllerTest {
     LayerBitmapProvider bitmapProvider = mock(LayerBitmapProvider.class);
     LocationComponentOptions options = mock(LocationComponentOptions.class);
     Feature locationFeature = mock(Feature.class);
+    when(locationFeature.toJson()).thenReturn("expected_geojson_string");
     LocationLayerController layer = new LocationLayerController(
       mapboxMap, mapboxMap.getStyle(), sourceProvider, buildFeatureProvider(locationFeature, options),
       bitmapProvider, options, internalRenderModeChangedListener, internalIndicatorPositionChangedListener, false);
@@ -543,7 +544,7 @@ public class LocationLayerControllerTest {
     getAnimationListener(ANIMATOR_LAYER_LATLNG, layer.getAnimationListeners()).onNewAnimationValue(new LatLng());
 
     // wanted twice (once for initialization)
-    verify(locationSource, times(2)).setGeoJson(locationFeature);
+    verify(locationSource, times(2)).setGeoJson("expected_geojson_string");
     verify(internalIndicatorPositionChangedListener).onIndicatorPositionChanged(any(Point.class));
   }
 
