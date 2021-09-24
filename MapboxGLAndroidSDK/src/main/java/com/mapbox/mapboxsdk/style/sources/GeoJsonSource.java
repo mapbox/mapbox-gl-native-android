@@ -256,6 +256,9 @@ public class GeoJsonSource extends Source {
    * Updates the GeoJson with a single feature. The update is performed asynchronously,
    * so the data won't be immediately visible or available to query when this method returns.
    *
+   * Note: This method is not thread-safe. The Feature is parsed on a worker thread, please make sure
+   * the Feature is immutable.
+   *
    * @param feature the GeoJSON {@link Feature} to set
    */
   public void setGeoJson(Feature feature) {
@@ -270,6 +273,9 @@ public class GeoJsonSource extends Source {
    * Updates the GeoJson with a single geometry. The update is performed asynchronously,
    * so the data won't be immediately visible or available to query when this method returns.
    *
+   * Note: This method is not thread-safe. The Geometry is parsed on a worker thread, please make sure
+   * the Geometry is immutable.
+   *
    * @param geometry the GeoJSON {@link Geometry} to set
    */
   public void setGeoJson(Geometry geometry) {
@@ -283,6 +289,9 @@ public class GeoJsonSource extends Source {
   /**
    * Updates the GeoJson. The update is performed asynchronously,
    * so the data won't be immediately visible or available to query when this method returns.
+   *
+   * Note: This method is not thread-safe. The FeatureCollection is parsed on a worker thread, please make sure
+   * the FeatureCollection is immutable.
    *
    * @param featureCollection the GeoJSON FeatureCollection
    */
