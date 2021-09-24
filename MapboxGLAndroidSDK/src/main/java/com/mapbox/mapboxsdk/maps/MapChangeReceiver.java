@@ -18,6 +18,8 @@ class MapChangeReceiver implements NativeMapView.StateCallback {
     = new CopyOnWriteArrayList<>();
   private final List<MapView.OnDidFailLoadingMapListener> onDidFailLoadingMapListenerList
     = new CopyOnWriteArrayList<>();
+  private final List<MapView.OnDidFailLoadingTileListener> onDidFailLoadingTileListenerList
+    = new CopyOnWriteArrayList<>();
   private final List<MapView.OnWillStartRenderingFrameListener> onWillStartRenderingFrameList
     = new CopyOnWriteArrayList<>();
   private final List<MapView.OnDidFinishRenderingFrameListener> onDidFinishRenderingFrameList
@@ -112,6 +114,20 @@ class MapChangeReceiver implements NativeMapView.StateCallback {
       if (!onDidFailLoadingMapListenerList.isEmpty()) {
         for (MapView.OnDidFailLoadingMapListener onDidFailLoadingMapListener : onDidFailLoadingMapListenerList) {
           onDidFailLoadingMapListener.onDidFailLoadingMap(error);
+        }
+      }
+    } catch (Throwable err) {
+      Logger.e(TAG, "Exception in onDidFailLoadingMap", err);
+      throw err;
+    }
+  }
+
+  @Override
+  public void onDidFailLoadingTile(String error) {
+    try {
+      if (!onDidFailLoadingTileListenerList.isEmpty()) {
+        for (MapView.OnDidFailLoadingTileListener onDidFailLoadingTileListener : onDidFailLoadingTileListenerList) {
+          onDidFailLoadingTileListener.onDidFailLoadingTile(error);
         }
       }
     } catch (Throwable err) {
@@ -303,6 +319,14 @@ class MapChangeReceiver implements NativeMapView.StateCallback {
     onDidFailLoadingMapListenerList.remove(listener);
   }
 
+  void addOnDidFailLoadingTileListener(MapView.OnDidFailLoadingTileListener listener) {
+    onDidFailLoadingTileListenerList.add(listener);
+  }
+
+  void removeOnDidFailLoadingTileListener(MapView.OnDidFailLoadingTileListener listener) {
+    onDidFailLoadingTileListenerList.remove(listener);
+  }
+
   void addOnWillStartRenderingFrameListener(MapView.OnWillStartRenderingFrameListener listener) {
     onWillStartRenderingFrameList.add(listener);
   }
@@ -382,6 +406,7 @@ class MapChangeReceiver implements NativeMapView.StateCallback {
     onWillStartLoadingMapListenerList.clear();
     onDidFinishLoadingMapListenerList.clear();
     onDidFailLoadingMapListenerList.clear();
+    onDidFailLoadingTileListenerList.clear();
     onWillStartRenderingFrameList.clear();
     onDidFinishRenderingFrameList.clear();
     onWillStartRenderingMapListenerList.clear();

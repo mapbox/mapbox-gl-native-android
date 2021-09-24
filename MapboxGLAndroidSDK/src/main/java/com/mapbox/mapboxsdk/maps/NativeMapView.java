@@ -1126,6 +1126,13 @@ final class NativeMapView implements NativeMap {
   }
 
   @Keep
+  private void onDidFailLoadingTile(String error) {
+    if (stateCallback != null) {
+      stateCallback.onDidFailLoadingTile(error);
+    }
+  }
+
+  @Keep
   private void onWillStartRenderingFrame() {
     if (stateCallback != null) {
       stateCallback.onWillStartRenderingFrame();
@@ -1644,6 +1651,8 @@ final class NativeMapView implements NativeMap {
     void onDidFinishLoadingMap();
 
     void onDidFailLoadingMap(String error);
+
+    void onDidFailLoadingTile(String error);
 
     void onWillStartRenderingFrame();
 
