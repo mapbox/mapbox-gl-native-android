@@ -131,7 +131,7 @@ class MapChangeReceiver implements NativeMapView.StateCallback {
         }
       }
     } catch (Throwable err) {
-      Logger.e(TAG, "Exception in onDidFailLoadingMap", err);
+      Logger.e(TAG, "Exception in onDidFailLoadingTile", err);
       throw err;
     }
   }
