@@ -2,8 +2,16 @@
 
 Mapbox welcomes participation and contributions from everyone. Please read [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) to get started.
 
+## 9.7.0 - September 24, 2021
+[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.6.2...android-v9.7.0) since [Mapbox Maps SDK for Android 9.6.2](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.6.2)
+### Improvements and bug fixes
+ - Fix the race condition when updating LocationCompoent's position. ([#703](https://github.com/mapbox/mapbox-gl-native-android/pull/703))
+ - Handle exceptions thrown at layout initialization (including those thrown from vector tile parsing) and add `OnDidFailLoadingTileListener`, which will be trigged when tile failed to load. ([#704](https://github.com/mapbox/mapbox-gl-native-android/pull/704))
+### Dependencies
+ - Update core library to 5.3.0
+
 ## 9.6.2 - July 7, 2021
-[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.6.1...android-v9.6.2) since [Mapbox Maps SDK for Android 9.6.1](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.6.0)
+[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.6.1...android-v9.6.2) since [Mapbox Maps SDK for Android 9.6.1](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.6.1)
 ### Dependencies
  - Update telemetry to 8.1.0 (okhttp3 variant) and events-core 5.0.0 to make project compatible with Android 12
 
