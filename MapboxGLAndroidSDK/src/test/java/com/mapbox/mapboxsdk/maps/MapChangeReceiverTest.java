@@ -44,6 +44,9 @@ public class MapChangeReceiverTest {
   private MapView.OnDidFailLoadingMapListener onDidFailLoadingMapListener;
 
   @Mock
+  private MapView.OnDidFailLoadingTileListener onDidFailLoadingTileListener;
+
+  @Mock
   private MapView.OnWillStartRenderingFrameListener onWillStartRenderingFrameListener;
 
   @Mock
@@ -308,6 +311,36 @@ public class MapChangeReceiverTest {
     doThrow(err).when(onDidFailLoadingMapListener).onDidFailLoadingMap(TEST_STRING);
     try {
       mapChangeEventManager.onDidFailLoadingMap(TEST_STRING);
+      Assert.fail("The exception should've been re-thrown.");
+    } catch (ExecutionError throwable) {
+      verify(loggerDefinition).e(anyString(), anyString(), eq(err));
+    }
+  }
+
+  @Test
+  public void testOnDidFailLoadingTileListener() {
+    mapChangeEventManager.addOnDidFailLoadingTileListener(onDidFailLoadingTileListener);
+    mapChangeEventManager.onDidFailLoadingTile(TEST_STRING);
+    verify(onDidFailLoadingTileListener).onDidFailLoadingTile(TEST_STRING);
+    mapChangeEventManager.removeOnDidFailLoadingTileListener(onDidFailLoadingTileListener);
+    mapChangeEventManager.onDidFailLoadingTile(TEST_STRING);
+    verify(onDidFailLoadingTileListener).onDidFailLoadingTile(TEST_STRING);
+
+    mapChangeEventManager.addOnDidFailLoadingTileListener(onDidFailLoadingTileListener);
+    Logger.setLoggerDefinition(loggerDefinition);
+    Exception exc = new RuntimeException();
+    doThrow(exc).when(onDidFailLoadingTileListener).onDidFailLoadingTile(TEST_STRING);
+    try {
+      mapChangeEventManager.onDidFailLoadingTile(TEST_STRING);
+      Assert.fail("The exception should've been re-thrown.");
+    } catch (RuntimeException throwable) {
+      verify(loggerDefinition).e(anyString(), anyString(), eq(exc));
+    }
+
+    Error err = new ExecutionError("", new Error());
+    doThrow(err).when(onDidFailLoadingTileListener).onDidFailLoadingTile(TEST_STRING);
+    try {
+      mapChangeEventManager.onDidFailLoadingTile(TEST_STRING);
       Assert.fail("The exception should've been re-thrown.");
     } catch (ExecutionError throwable) {
       verify(loggerDefinition).e(anyString(), anyString(), eq(err));

@@ -768,6 +768,24 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
   }
 
   /**
+   * Set a callback that's invoked when the tile failed to load.
+   *
+   * @param listener The callback that's invoked when the tile failed to load
+   */
+  public void addOnDidFailLoadingTileListener(@NonNull OnDidFailLoadingTileListener listener) {
+    mapChangeReceiver.addOnDidFailLoadingTileListener(listener);
+  }
+
+  /**
+   * Set a callback that's invoked when the tile failed to load.
+   *
+   * @param listener The callback that's invoked when the tile failed to load
+   */
+  public void removeOnDidFailLoadingTileListener(@NonNull OnDidFailLoadingTileListener listener) {
+    mapChangeReceiver.removeOnDidFailLoadingTileListener(listener);
+  }
+
+  /**
    * Set a callback that's invoked when the map will start rendering a frame.
    *
    * @param listener The callback that's invoked when the camera will start rendering a frame
@@ -1023,6 +1041,21 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
   }
 
   /**
+   * Interface definition for a callback to be invoked when the tile failed to load.
+   * <p>
+   * {@link MapView#addOnDidFailLoadingTileListener(OnDidFailLoadingTileListener)}
+   * </p>
+   */
+  public interface OnDidFailLoadingTileListener {
+    /**
+     * Called when the tile failed to load.
+     *
+     * @param errorMessage The reason why the tile failed to load
+     */
+    void onDidFailLoadingTile(String errorMessage);
+  }
+
+  /**
    * Interface definition for a callback to be invoked when the map will start rendering a frame.
    * <p>
    * {@link MapView#addOnWillStartRenderingFrameListener(OnWillStartRenderingFrameListener)}
@@ -1053,7 +1086,7 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
   /**
    * Interface definition for a callback to be invoked when the map will start rendering the map.
    * <p>
-   * {@link MapView#addOnDidFailLoadingMapListener(OnDidFailLoadingMapListener)}
+   * {@link MapView#addOnWillStartRenderingMapListener(OnWillStartRenderingMapListener)}
    * </p>
    */
   public interface OnWillStartRenderingMapListener {
@@ -1098,7 +1131,7 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
   /**
    * Interface definition for a callback to be invoked when the map has loaded the style.
    * <p>
-   * {@link MapView#addOnDidFailLoadingMapListener(OnDidFailLoadingMapListener)}
+   * {@link MapView#addOnDidFinishLoadingStyleListener(OnDidFinishLoadingStyleListener)}
    * </p>
    */
   public interface OnDidFinishLoadingStyleListener {
@@ -1111,7 +1144,7 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
   /**
    * Interface definition for a callback to be invoked when a map source has changed.
    * <p>
-   * {@link MapView#addOnDidFailLoadingMapListener(OnDidFailLoadingMapListener)}
+   * {@link MapView#addOnSourceChangedListener(OnSourceChangedListener)}
    * </p>
    */
   public interface OnSourceChangedListener {
