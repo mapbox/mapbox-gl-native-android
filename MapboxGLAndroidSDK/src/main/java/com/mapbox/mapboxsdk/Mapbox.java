@@ -216,7 +216,7 @@ public final class Mapbox {
     }
 
     accessToken = accessToken.trim().toLowerCase(MapboxConstants.MAPBOX_LOCALE);
-    return accessToken.length() != 0 && (accessToken.startsWith("pk.") || accessToken.startsWith("sk."));
+    return accessToken.length() > 0 && accessToken.matches("^(pk|sk|tk)\\..*");
   }
 
   /**
