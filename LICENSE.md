@@ -1,5 +1,5 @@
 <!-- This file was generated. Use `make android-license` to update. -->  
-mapbox-gl-native-android copyright 2014-2020 Mapbox. 
+mapbox-gl-native-android copyright 2014-2021 Mapbox. 
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:  
 
@@ -177,12 +177,6 @@ License: [Mapbox Terms of Service](https://www.mapbox.com/tos/)
 
 ===========================================================================
 
-Mapbox Maps SDK for Android uses portions of Mapbox Android Core Library.  
-URL: [https://github.com/mapbox/mapbox-events-android](https://github.com/mapbox/mapbox-events-android)  
-License: [The MIT License](https://opensource.org/licenses/MIT)
-
-===========================================================================
-
 Mapbox Maps SDK for Android uses portions of Mapbox Android Gestures Library.  
 URL: [https://github.com/mapbox/mapbox-gestures-android](https://github.com/mapbox/mapbox-gestures-android)  
 License: [BSD](https://opensource.org/licenses/BSD-2-Clause)
@@ -197,7 +191,7 @@ License: [The MIT License](https://opensource.org/licenses/MIT)
 
 Mapbox Maps SDK for Android uses portions of Mapbox Java SDK.  
 URL: [https://github.com/mapbox/mapbox-java](https://github.com/mapbox/mapbox-java)  
-License: [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
+License: [The MIT License](https://opensource.org/licenses/MIT)
 
 ===========================================================================
 
