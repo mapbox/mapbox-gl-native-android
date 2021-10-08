@@ -36,6 +36,7 @@ import com.mapbox.mapboxsdk.maps.renderer.textureview.TextureViewMapRenderer;
 import com.mapbox.mapboxsdk.maps.widgets.CompassView;
 import com.mapbox.mapboxsdk.net.ConnectivityReceiver;
 import com.mapbox.mapboxsdk.storage.FileSource;
+import com.mapbox.mapboxsdk.utils.AccessibilityUtils;
 import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
 import java.util.ArrayList;
@@ -313,7 +314,10 @@ public class MapView extends FrameLayout implements NativeMapView.ViewCallback {
   }
 
   private void initialiseDrawingSurface(MapboxMapOptions options) {
-    String localFontFamily = options.getLocalIdeographFontFamily();
+    String localFontFamily = null;
+    if (!AccessibilityUtils.isHighContrastEnabled(getContext())) {
+      localFontFamily = options.getLocalIdeographFontFamily();
+    }
     GlyphsRasterizationMode glyphsRasterizationMode = options.getGlyphsRasterizationMode();
     if (options.getTextureMode()) {
       TextureView textureView = new TextureView(getContext());
