@@ -1,6 +1,11 @@
 # Changelog for the Mapbox Maps SDK for Android
 
 Mapbox welcomes participation and contributions from everyone. Please read [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) to get started.
+## 9.7.1 - November 4, 2021
+### Improvements and bug fixes
+ - Fix android glyph drawing issue when 'high contrast' feature is turned on. ([#717](https://github.com/mapbox/mapbox-gl-native-android/pull/717))
+### Dependencies
+ - Update core library to 5.3.1
 
 ## 9.7.0 - September 24, 2021
 [Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.6.2...android-v9.7.0) since [Mapbox Maps SDK for Android 9.6.2](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.6.2)
