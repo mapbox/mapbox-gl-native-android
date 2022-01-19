@@ -432,6 +432,10 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
         Log.e(TAG, "mEglConfig not initialized");
         return false;
       }
+      if (mEglContext == null) {
+        Log.e(TAG, "mEglContext not initialized");
+        return false;
+      }
 
       /*
        *  The window size has changed, so we need to create a new
