@@ -1,7 +1,14 @@
 # Changelog for the Mapbox Maps SDK for Android
 
 Mapbox welcomes participation and contributions from everyone. Please read [`Contributing Guide`](https://github.com/mapbox/mapbox-gl-native/blob/master/CONTRIBUTING.md) to get started.
+
+## 9.7.2 - March 22, 2022
+[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.7.1...android-v9.7.2) since [Mapbox Maps SDK for Android 9.7.1](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.7.1)
+### Improvements and bug fixes
+ -  Fix an issue that results in IllegalArgumentException on the OS level, by adding an additional null check against eglContext to avoid having our GL context in an invalid state. ([#723](https://github.com/mapbox/mapbox-gl-native-android/pull/723))
+
 ## 9.7.1 - November 4, 2021
+[Changes](https://github.com/mapbox/mapbox-gl-native-android/compare/android-v9.7.0...android-v9.7.1) since [Mapbox Maps SDK for Android 9.7.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.7.0)
 ### Improvements and bug fixes
  - Fix android glyph drawing issue when 'high contrast' feature is turned on. ([#717](https://github.com/mapbox/mapbox-gl-native-android/pull/717))
 ### Dependencies
