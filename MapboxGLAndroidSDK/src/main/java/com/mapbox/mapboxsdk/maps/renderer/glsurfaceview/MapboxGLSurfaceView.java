@@ -2,6 +2,8 @@ package com.mapbox.mapboxsdk.maps.renderer.glsurfaceview;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -34,6 +36,7 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
 
   private static final String TAG = "GLSurfaceView";
   private static final GLThreadManager glThreadManager = new GLThreadManager();
+  private static final Handler mainHandler = new Handler(Looper.getMainLooper());
 
   private final WeakReference<MapboxGLSurfaceView> viewWeakReference = new WeakReference<>(this);
   private GLThread glThread;
@@ -74,11 +77,19 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
   @Override
   protected void finalize() throws Throwable {
     try {
-      if (glThread != null) {
-        // GLThread may still be running if this view was never
-        // attached to a window.
-        glThread.requestExitAndWait();
-      }
+      // called by system on dedicated finalizer thread that could cause race condition with
+      // View.onDetachedFromWindow called from main thread and result in the deadlock;
+      // in order to fix it explicitly schedule exiting render thread on Android main thread
+      mainHandler.post(new Runnable() {
+        @Override
+        public void run() {
+          if (glThread != null) {
+            // GLThread may still be running if this view was never
+            // attached to a window.
+            glThread.requestExitAndWait();
+          }
+        }
+      });
     } finally {
       super.finalize();
     }
