@@ -2,8 +2,6 @@ package com.mapbox.mapboxsdk.maps.renderer.glsurfaceview;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -35,8 +33,6 @@ import static android.opengl.GLSurfaceView.RENDERMODE_CONTINUOUSLY;
 public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Callback2 {
 
   private static final String TAG = "GLSurfaceView";
-  private static final GLThreadManager glThreadManager = new GLThreadManager();
-  private static final Handler mainHandler = new Handler(Looper.getMainLooper());
 
   private final WeakReference<MapboxGLSurfaceView> viewWeakReference = new WeakReference<>(this);
   private GLThread glThread;
@@ -77,19 +73,11 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
   @Override
   protected void finalize() throws Throwable {
     try {
-      // called by system on dedicated finalizer thread that could cause race condition with
-      // View.onDetachedFromWindow called from main thread and result in the deadlock;
-      // in order to fix it explicitly schedule exiting render thread on Android main thread
-      mainHandler.post(new Runnable() {
-        @Override
-        public void run() {
-          if (glThread != null) {
-            // GLThread may still be running if this view was never
-            // attached to a window.
-            glThread.requestExitAndWait();
-          }
-        }
-      });
+      if (glThread != null) {
+        // GLThread may still be running if this view was never
+        // attached to a window.
+        glThread.requestExitAndWait();
+      }
     } finally {
       super.finalize();
     }
@@ -565,6 +553,9 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
    * sGLThreadManager object. This avoids multiple-lock ordering issues.
    */
   static class GLThread extends Thread {
+
+    private final Object lock = new Object();
+
     GLThread(WeakReference<MapboxGLSurfaceView> glSurfaceViewWeakRef) {
       super();
       width = 0;
@@ -584,7 +575,10 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
       } catch (InterruptedException exception) {
         // fall thru and exit normally
       } finally {
-        glThreadManager.threadExiting(this);
+        synchronized (lock) {
+          exited = true;
+          lock.notifyAll();
+        }
       }
     }
 
@@ -607,7 +601,7 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
       if (haveEglContext) {
         eglHelper.finish();
         haveEglContext = false;
-        glThreadManager.releaseEglContextLocked(this);
+        lock.notifyAll();
       }
     }
 
@@ -633,7 +627,7 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
         Runnable finishDrawingRunnable = null;
 
         while (true) {
-          synchronized (glThreadManager) {
+          synchronized (lock) {
             while (true) {
               if (shouldExit) {
                 return;
@@ -649,7 +643,7 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
               if (paused != requestPaused) {
                 pausing = requestPaused;
                 paused = requestPaused;
-                glThreadManager.notifyAll();
+                lock.notifyAll();
               }
 
               // Do we need to give up the EGL context?
@@ -688,20 +682,20 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
                 }
                 waitingForSurface = true;
                 surfaceIsBad = false;
-                glThreadManager.notifyAll();
+                lock.notifyAll();
               }
 
               // Have we acquired the surface view surface?
               if (hasSurface && waitingForSurface) {
                 waitingForSurface = false;
-                glThreadManager.notifyAll();
+                lock.notifyAll();
               }
 
               if (doRenderNotification) {
                 this.wantRenderNotification = false;
                 doRenderNotification = false;
                 renderComplete = true;
-                glThreadManager.notifyAll();
+                lock.notifyAll();
               }
 
               if (this.finishDrawingRunnable != null) {
@@ -720,13 +714,13 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
                     try {
                       eglHelper.start();
                     } catch (RuntimeException exception) {
-                      glThreadManager.releaseEglContextLocked(this);
+                      lock.notifyAll();
                       return;
                     }
                     haveEglContext = true;
                     createEglContext = true;
 
-                    glThreadManager.notifyAll();
+                    lock.notifyAll();
                   }
                 }
 
@@ -750,7 +744,7 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
                     this.sizeChanged = false;
                   }
                   requestRender = false;
-                  glThreadManager.notifyAll();
+                  lock.notifyAll();
                   if (this.wantRenderNotification) {
                     wantRenderNotification = true;
                   }
@@ -765,7 +759,7 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
                 }
               }
               // By design, this is the only place in a GLThread thread where we wait().
-              glThreadManager.wait();
+              lock.wait();
             }
           } // end of synchronized(sGLThreadManager)
 
@@ -777,15 +771,15 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
 
           if (createEglSurface) {
             if (eglHelper.createSurface()) {
-              synchronized (glThreadManager) {
+              synchronized (lock) {
                 finishedCreatingEglSurface = true;
-                glThreadManager.notifyAll();
+                lock.notifyAll();
               }
             } else {
-              synchronized (glThreadManager) {
+              synchronized (lock) {
                 finishedCreatingEglSurface = true;
                 surfaceIsBad = true;
-                glThreadManager.notifyAll();
+                lock.notifyAll();
               }
               continue;
             }
@@ -836,9 +830,9 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
               // Log the error to help developers understand why rendering stopped.
               EglHelper.logEglErrorAsWarning(TAG, "eglSwapBuffers", swapError);
 
-              synchronized (glThreadManager) {
+              synchronized (lock) {
                 surfaceIsBad = true;
-                glThreadManager.notifyAll();
+                lock.notifyAll();
               }
               break;
           }
@@ -853,7 +847,7 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
         /*
          * clean-up everything...
          */
-        synchronized (glThreadManager) {
+        synchronized (lock) {
           stopEglSurfaceLocked();
           stopEglContextLocked();
         }
@@ -871,27 +865,27 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
     }
 
     public void setRenderMode(int renderMode) {
-      synchronized (glThreadManager) {
+      synchronized (lock) {
         this.renderMode = renderMode;
-        glThreadManager.notifyAll();
+        lock.notifyAll();
       }
     }
 
     public int getRenderMode() {
-      synchronized (glThreadManager) {
+      synchronized (lock) {
         return renderMode;
       }
     }
 
     public void requestRender() {
-      synchronized (glThreadManager) {
+      synchronized (lock) {
         requestRender = true;
-        glThreadManager.notifyAll();
+        lock.notifyAll();
       }
     }
 
     public void requestRenderAndNotify(Runnable finishDrawing) {
-      synchronized (glThreadManager) {
+      synchronized (lock) {
         // If we are already on the GL thread, this means a client callback
         // has caused reentrancy, for example via updating the SurfaceView parameters.
         // We will return to the client rendering code, so here we don't need to
@@ -905,20 +899,20 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
         renderComplete = false;
         finishDrawingRunnable = finishDrawing;
 
-        glThreadManager.notifyAll();
+        lock.notifyAll();
       }
     }
 
     public void surfaceCreated() {
-      synchronized (glThreadManager) {
+      synchronized (lock) {
         hasSurface = true;
         finishedCreatingEglSurface = false;
-        glThreadManager.notifyAll();
+        lock.notifyAll();
         while (waitingForSurface
           && !finishedCreatingEglSurface
           && !exited) {
           try {
-            glThreadManager.wait();
+            lock.wait();
           } catch (InterruptedException exception) {
             Thread.currentThread().interrupt();
           }
@@ -927,12 +921,12 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
     }
 
     public void surfaceDestroyed() {
-      synchronized (glThreadManager) {
+      synchronized (lock) {
         hasSurface = false;
-        glThreadManager.notifyAll();
+        lock.notifyAll();
         while ((!waitingForSurface) && (!exited)) {
           try {
-            glThreadManager.wait();
+            lock.wait();
           } catch (InterruptedException exception) {
             Thread.currentThread().interrupt();
           }
@@ -941,12 +935,12 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
     }
 
     public void onPause() {
-      synchronized (glThreadManager) {
+      synchronized (lock) {
         requestPaused = true;
-        glThreadManager.notifyAll();
+        lock.notifyAll();
         while ((!exited) && (!paused)) {
           try {
-            glThreadManager.wait();
+            lock.wait();
           } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
           }
@@ -955,14 +949,14 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
     }
 
     public void onResume() {
-      synchronized (glThreadManager) {
+      synchronized (lock) {
         requestPaused = false;
         requestRender = true;
         renderComplete = false;
-        glThreadManager.notifyAll();
+        lock.notifyAll();
         while ((!exited) && paused && (!renderComplete)) {
           try {
-            glThreadManager.wait();
+            lock.wait();
           } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
           }
@@ -971,7 +965,7 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
     }
 
     public void onWindowResize(int w, int h) {
-      synchronized (glThreadManager) {
+      synchronized (lock) {
         width = w;
         height = h;
         sizeChanged = true;
@@ -987,13 +981,13 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
           return;
         }
 
-        glThreadManager.notifyAll();
+        lock.notifyAll();
 
         // Wait for thread to react to resize and render a frame
         while (!exited && !paused && !renderComplete
           && ableToDraw()) {
           try {
-            glThreadManager.wait();
+            lock.wait();
           } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
           }
@@ -1004,12 +998,15 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
     public void requestExitAndWait() {
       // don't call this from GLThread thread or it is a guaranteed
       // deadlock!
-      synchronized (glThreadManager) {
+      synchronized (lock) {
+        if (shouldExit) {
+          return;
+        }
         shouldExit = true;
-        glThreadManager.notifyAll();
+        lock.notifyAll();
         while (!exited) {
           try {
-            glThreadManager.wait();
+            lock.wait();
           } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
           }
@@ -1019,7 +1016,7 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
 
     public void requestReleaseEglContextLocked() {
       shouldReleaseEglContext = true;
-      glThreadManager.notifyAll();
+      lock.notifyAll();
     }
 
     /**
@@ -1028,9 +1025,9 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
      * @param r the runnable to be run on the GL rendering thread.
      */
     public void queueEvent(@NonNull Runnable r) {
-      synchronized (glThreadManager) {
+      synchronized (lock) {
         eventQueue.add(r);
-        glThreadManager.notifyAll();
+        lock.notifyAll();
       }
     }
 
@@ -1106,22 +1103,6 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
   private void checkRenderThreadState() {
     if (glThread != null) {
       throw new IllegalStateException("setRenderer has already been called for this instance.");
-    }
-  }
-
-  private static class GLThreadManager {
-
-    synchronized void threadExiting(GLThread thread) {
-      thread.exited = true;
-      notifyAll();
-    }
-
-    /*
-     * Releases the EGL context. Requires that we are already in the
-     * sGLThreadManager monitor when this is called.
-     */
-    void releaseEglContextLocked(GLThread thread) {
-      notifyAll();
     }
   }
 
