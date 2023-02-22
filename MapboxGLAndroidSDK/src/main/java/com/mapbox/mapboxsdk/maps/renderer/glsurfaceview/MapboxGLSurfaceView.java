@@ -77,7 +77,9 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
       if (glThread != null) {
         // GLThread may still be running if this view was never
         // attached to a window.
+        Log.i(TAG, "Finalizer, requestExitAndWait");
         glThread.requestExitAndWait();
+        Log.i(TAG, "Finalizer, requestExitAndWait done");
       }
     } finally {
       super.finalize();
@@ -165,6 +167,7 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
     this.renderer = renderer;
     glThread = new GLThread(viewWeakReference);
     glThread.start();
+    Log.i(TAG, "GLThread " + glThread.getId() + " from setRenderer started.");
   }
 
   /**
@@ -244,7 +247,9 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
    * not normally called or subclassed by clients of GLSurfaceView.
    */
   public void surfaceCreated(SurfaceHolder holder) {
+    Log.i(TAG, "Surface created started");
     glThread.surfaceCreated();
+    Log.i(TAG, "Surface created done");
   }
 
   /**
@@ -253,7 +258,9 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
    */
   public void surfaceDestroyed(SurfaceHolder holder) {
     // Surface will be destroyed when we return
+    Log.i(TAG, "Surface destroyed started");
     glThread.surfaceDestroyed();
+    Log.i(TAG, "Surface destroyed done");
   }
 
   /**
@@ -293,7 +300,9 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
    * Must not be called before a renderer has been set.
    */
   public void onPause() {
+    Log.i(TAG, "onPause started");
     glThread.onPause();
+    Log.i(TAG, "onPause done");
   }
 
   /**
@@ -303,7 +312,9 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
    * Must not be called before a renderer has been set.
    */
   public void onResume() {
+    Log.i(TAG, "onResume started");
     glThread.onResume();
+    Log.i(TAG, "onResume done");
   }
 
   /**
@@ -324,6 +335,7 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
   @Override
   protected void onAttachedToWindow() {
     super.onAttachedToWindow();
+    Log.i(TAG, "onAttachedToWindow: detached = " + detached + "; render is null = " + (renderer != null));
     if (detached && (renderer != null)) {
       int renderMode = RENDERMODE_CONTINUOUSLY;
       if (glThread != null) {
@@ -334,12 +346,14 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
         glThread.setRenderMode(renderMode);
       }
       glThread.start();
+      Log.i(TAG, "GLThread " + glThread.getName() + " recreated and started.");
     }
     detached = false;
   }
 
   @Override
   protected void onDetachedFromWindow() {
+    Log.i(TAG, "onDetachedFromWindow started");
     if (detachedListener != null) {
       detachedListener.onGLSurfaceViewDetached();
     }
@@ -347,6 +361,7 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
       glThread.requestExitAndWait();
     }
     detached = true;
+    Log.i(TAG, "onDetachedFromWindow done");
     super.onDetachedFromWindow();
   }
 
@@ -625,6 +640,7 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
           synchronized (glThreadManager) {
             while (true) {
               if (shouldExit) {
+                Log.i(TAG, "guardedRun, shouldExit = true, returning");
                 return;
               }
 
@@ -754,7 +770,9 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
                 }
               }
               // By design, this is the only place in a GLThread thread where we wait().
+              Log.i(TAG, "guardedRun, inner loop wait");
               glThreadManager.wait();
+              Log.i(TAG, "guardedRun, inner loop wait passed");
             }
           } // end of synchronized(sGLThreadManager)
 
@@ -842,10 +860,12 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
         /*
          * clean-up everything...
          */
+        Log.i(TAG, "guardedRun, final cleanup");
         synchronized (glThreadManager) {
           stopEglSurfaceLocked();
           stopEglContextLocked();
         }
+        Log.i(TAG, "guardedRun, final cleanup done");
       }
     }
 
@@ -907,9 +927,12 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
           && !finishedCreatingEglSurface
           && !exited) {
           try {
+            Log.i(TAG, "surfaceCreated wait");
             glThreadManager.wait();
+            Log.i(TAG, "surfaceCreated wait passed");
           } catch (InterruptedException exception) {
             Thread.currentThread().interrupt();
+            Log.i(TAG, "surfaceCreated thread " + Thread.currentThread().getId() +" interrupted");
           }
         }
       }
@@ -921,9 +944,12 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
         glThreadManager.notifyAll();
         while ((!waitingForSurface) && (!exited)) {
           try {
+            Log.i(TAG, "surfaceDestroyed wait");
             glThreadManager.wait();
+            Log.i(TAG, "surfaceDestroyed wait passed");
           } catch (InterruptedException exception) {
             Thread.currentThread().interrupt();
+            Log.i(TAG, "surfaceDestroyed thread " + Thread.currentThread().getId() +" interrupted");
           }
         }
       }
@@ -935,9 +961,12 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
         glThreadManager.notifyAll();
         while ((!exited) && (!paused)) {
           try {
+            Log.i(TAG, "onPause wait");
             glThreadManager.wait();
+            Log.i(TAG, "onPause wait passed");
           } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
+            Log.i(TAG, "onPause thread " + Thread.currentThread().getId() +" interrupted");
           }
         }
       }
@@ -951,9 +980,12 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
         glThreadManager.notifyAll();
         while ((!exited) && paused && (!renderComplete)) {
           try {
+            Log.i(TAG, "onResume wait");
             glThreadManager.wait();
+            Log.i(TAG, "onResume wait passed");
           } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
+            Log.i(TAG, "onResume thread " + Thread.currentThread().getId() +" interrupted");
           }
         }
       }
@@ -982,9 +1014,12 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
         while (!exited && !paused && !renderComplete
           && ableToDraw()) {
           try {
+            Log.i(TAG, "onWindowResize wait");
             glThreadManager.wait();
+            Log.i(TAG, "onWindowResize wait passed");
           } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
+            Log.i(TAG, "onWindowResize thread " + Thread.currentThread().getId() +" interrupted");
           }
         }
       }
@@ -993,12 +1028,17 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
     public void requestExitAndWait() {
       // don't call this from GLThread thread or it is a guaranteed
       // deadlock!
+      Log.i(TAG, "requestExitAndWait");
       synchronized (glThreadManager) {
+        Log.i(TAG, "requestExitAndWait enter sync block");
         shouldExit = true;
         glThreadManager.notifyAll();
+        Log.i(TAG, "requestExitAndWait passed notifyAll, exited = " + exited);
         while (!exited) {
           try {
+            Log.i(TAG, "requestExitAndWait waiting...");
             glThreadManager.wait();
+            Log.i(TAG, "requestExitAndWait wait passed, exited = " + exited);
           } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
           }
@@ -1101,8 +1141,10 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
   private static class GLThreadManager {
 
     synchronized void threadExiting(GLThread thread) {
+      Log.i(TAG, "threadExiting for " + thread.getName());
       thread.exited = true;
       notifyAll();
+      Log.i(TAG, "threadExiting notifyAll() passed");
     }
 
     /*

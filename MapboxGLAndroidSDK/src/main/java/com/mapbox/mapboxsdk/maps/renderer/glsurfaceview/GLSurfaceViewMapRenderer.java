@@ -2,6 +2,7 @@ package com.mapbox.mapboxsdk.maps.renderer.glsurfaceview;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -46,7 +47,9 @@ public class GLSurfaceViewMapRenderer extends MapRenderer implements GLSurfaceVi
         // we need to ensure releasing the native renderer as well.
         // This avoids releasing it only when the view is being recreated, which is already on a new GL thread,
         // and leads to JNI crashes like https://github.com/mapbox/mapbox-gl-native/issues/14618
+        Log.i("GLSurfaceView", "Native reset");
         nativeReset();
+        Log.i("GLSurfaceView", "Native reset done");
       }
     });
   }
