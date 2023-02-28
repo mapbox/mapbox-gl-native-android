@@ -533,7 +533,11 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
       if (mEglContext != null) {
         MapboxGLSurfaceView view = mGLSurfaceViewWeakRef.get();
         if (view != null) {
+          Log.i(TAG, "eglMakeCurrent, making nothing current");
+          mEgl.eglMakeCurrent(mEglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT);
+          Log.i(TAG, "eglMakeCurrent, making nothing current done, destroying context");
           view.eglContextFactory.destroyContext(mEgl, mEglDisplay, mEglContext);
+          Log.i(TAG, "destroyContext finished!");
         }
         mEglContext = null;
       }
