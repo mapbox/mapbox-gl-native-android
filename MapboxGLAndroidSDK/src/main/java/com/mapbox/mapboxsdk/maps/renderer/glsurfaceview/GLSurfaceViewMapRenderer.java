@@ -39,7 +39,7 @@ public class GLSurfaceViewMapRenderer extends MapRenderer implements GLSurfaceVi
     glSurfaceView.setEGLConfigChooser(new EGLConfigChooser());
     glSurfaceView.setRenderer(this);
     glSurfaceView.setRenderMode(RENDERMODE_WHEN_DIRTY);
-    glSurfaceView.setPreserveEGLContextOnPause(true);
+    glSurfaceView.setPreserveEGLContextOnPause(false);
     glSurfaceView.setDetachedListener(new MapboxGLSurfaceView.OnGLSurfaceViewDetachedListener() {
       @Override
       public void onGLSurfaceViewDetached() {

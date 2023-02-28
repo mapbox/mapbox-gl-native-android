@@ -518,12 +518,16 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
 
     private void destroySurfaceImp() {
       if (mEglSurface != null && mEglSurface != EGL10.EGL_NO_SURFACE) {
+        Log.i(TAG, "Making no context current");
         mEgl.eglMakeCurrent(mEglDisplay, EGL10.EGL_NO_SURFACE,
           EGL10.EGL_NO_SURFACE,
           EGL10.EGL_NO_CONTEXT);
+        Log.i(TAG, "Making no context current done");
         MapboxGLSurfaceView view = mGLSurfaceViewWeakRef.get();
         if (view != null) {
+          Log.i(TAG, "Destroying surface");
           view.eglWindowSurfaceFactory.destroySurface(mEgl, mEglDisplay, mEglSurface);
+          Log.i(TAG, "Destroying surface done");
         }
         mEglSurface = null;
       }
@@ -533,9 +537,7 @@ public class MapboxGLSurfaceView extends SurfaceView implements SurfaceHolder.Ca
       if (mEglContext != null) {
         MapboxGLSurfaceView view = mGLSurfaceViewWeakRef.get();
         if (view != null) {
-          Log.i(TAG, "eglMakeCurrent, making nothing current");
-          mEgl.eglMakeCurrent(mEglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT);
-          Log.i(TAG, "eglMakeCurrent, making nothing current done, destroying context");
+          Log.i(TAG, "destroyContext started");
           view.eglContextFactory.destroyContext(mEgl, mEglDisplay, mEglContext);
           Log.i(TAG, "destroyContext finished!");
         }
