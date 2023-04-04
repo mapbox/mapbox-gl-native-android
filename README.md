@@ -1,8 +1,8 @@
 # [Mapbox Maps SDK for Android](https://www.mapbox.com/android-sdk/)
 
-Mapbox Maps SDK v10 is now available at [mapbox/mapbox-maps-android](https://github.com/mapbox/mapbox-maps-android). v10 offers superior performance, features, and developer experience, and is the recommended mobile SDK solution for all Mapbox customers.
+The latest version of Mapbox Maps SDK is now available at [mapbox/mapbox-maps-android](https://github.com/mapbox/mapbox-maps-android). This version offers superior performance, features, and developer experience, and is the recommended mobile SDK solution for all Mapbox customers. 
 
-Mapbox maintains this repo to address bug fixes and security vulnerabilities. Please note that this project will cease to receive updates, including compatibility and bugfixes, after April 4, 2023.
+Mapbox maintains this repo to address bug fixes and security vulnerabilities. Please note that this project will cease to receive updates, including compatibility and bugfixes, after April 4, 2023. [Here is a helpful guide](https://docs.mapbox.com/android/maps/guides/) about our latest SDK features and how to migrate to our latest version. 
 
 [![Circle CI build status](https://circleci.com/gh/mapbox/mapbox-gl-native-android/tree/master.svg?style=shield)](https://circleci.com/gh/mapbox/mapbox-gl-native-android/tree/master)
 
