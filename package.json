@@ -12,13 +12,14 @@
   },
   "license": "BSD-2-Clause",
   "dependencies": {
-    "@mapbox/cloudfriend": "^4.2.1"
+    "@mapbox/cloudfriend": "^6.0.0"
   },
   "devDependencies": {
-    "ejs": "^2.7.4",
+    "ejs": "^3.1.7",
     "esm": "~3.1.0",
-    "lodash": "^4.16.4",
-    "pixelmatch": "^4.0.2"
+    "lodash": "^4.17.21",
+    "pixelmatch": "^4.0.2",
+    "aws-sdk": "^2.814.0"
   },
   "engines": {
     "node": ">=6"
