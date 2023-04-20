@@ -12,6 +12,7 @@ class LatLngEvaluator implements TypeEvaluator<LatLng> {
   @NonNull
   @Override
   public LatLng evaluate(float fraction, @NonNull LatLng startValue, @NonNull LatLng endValue) {
+    fraction = Double.isNaN(fraction) ? 0f : fraction;
     latLng.setLatitude(startValue.getLatitude()
       + ((endValue.getLatitude() - startValue.getLatitude()) * fraction));
     latLng.setLongitude(startValue.getLongitude()
