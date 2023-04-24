@@ -68,6 +68,11 @@ public class MapboxTest {
   }
 
   @Test
+  public void testTkTokenValid() {
+    assertTrue(Mapbox.isAccessTokenValid("tk.0000000001"));
+  }
+
+  @Test
   public void testEmptyToken() {
     assertFalse(Mapbox.isAccessTokenValid(""));
   }
